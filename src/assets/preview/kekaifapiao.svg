@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="254px" height="186px" viewBox="0 0 254 186" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
+    <title>可开发票金额</title>
+    <defs>
+        <rect id="path-1" x="0.554338074" y="0.44381204" width="252.003937" height="184.005376" rx="8"></rect>
+        <ellipse id="path-3" cx="2.50821594" cy="-94.5513741" rx="204.235808" ry="206.357358"></ellipse>
+        <filter x="-1.7%" y="-1.2%" width="103.4%" height="103.4%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.01 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <ellipse id="path-5" cx="-8.16281692" cy="-104.353131" rx="140.178568" ry="141.63538"></ellipse>
+        <filter x="-2.5%" y="-1.8%" width="105.0%" height="104.9%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.01 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="概览页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="概览" transform="translate(-839.000000, -143.000000)">
+            <g id="可开发票金额" transform="translate(839.906000, 143.973999)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="矩形" stroke="#FFECEC" fill="#FFFAFA" xlink:href="#path-1"></use>
+                <g id="椭圆_9_拷贝_6" opacity="0.917910621" fill-rule="nonzero" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FFFDFD" xlink:href="#path-3"></use>
+                </g>
+                <g id="椭圆_9_拷贝_6-2" fill-rule="nonzero" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                    <use fill="#FFFFFF" xlink:href="#path-5"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

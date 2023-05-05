@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="266px" height="187px" viewBox="0 0 266 187" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 5</title>
+    <defs>
+        <path d="M9.83057778,0.280483871 L253.297244,0.280483871 C258.697362,0.280483871 263.075022,4.73356566 263.075022,10.2267204 L263.075022,174.319731 C263.075022,179.812886 258.697362,184.265968 253.297244,184.265968 L9.83057778,184.265968 C4.43046022,184.265968 0.0528,179.812886 0.0528,174.319731 L0.0528,10.2267204 C0.0528,4.73356566 4.43046022,0.280483871 9.83057778,0.280483871 Z" id="path-1"></path>
+        <ellipse id="path-3" cx="0.520177778" cy="-96.9449731" rx="205.853511" ry="209.399113"></ellipse>
+        <filter x="-1.7%" y="-1.2%" width="103.4%" height="103.3%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.02 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <ellipse id="path-5" cx="-10.2344" cy="-106.89121" rx="141.289867" ry="143.723118"></ellipse>
+        <filter x="-2.5%" y="-1.7%" width="105.0%" height="104.9%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.01 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="概览页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页-免费申请" transform="translate(-1125.000000, -143.000000)">
+            <g id="编组-5" transform="translate(1126.906000, 144.688000)">
+                <g id="椭圆_9_拷贝_7-+-椭圆_9_拷贝_7-2-蒙版" transform="translate(0.000000, 0.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="蒙版" stroke="#E0F5DB" fill="#FBFFFA" xlink:href="#path-1"></use>
+                    <g id="椭圆_9_拷贝_7" opacity="0.640253703" fill-rule="nonzero" mask="url(#mask-2)">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                        <use fill="#FFFFFF" xlink:href="#path-3"></use>
+                    </g>
+                    <g id="椭圆_9_拷贝_7-2" fill-rule="nonzero" mask="url(#mask-2)">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                        <use fill="#FFFFFF" xlink:href="#path-5"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="254px" height="186px" viewBox="0 0 254 186" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>优惠券</title>
+    <defs>
+        <rect id="path-1" x="0.0861020205" y="0.878824864" width="252.003937" height="184.005376" rx="8"></rect>
+        <path d="M2.03502066,-303.360215 C114.830748,-303.360215 206.269859,-210.112028 206.269859,-95.0859146 C206.269859,19.940199 114.830748,113.191354 2.03502066,113.191354 C-110.760707,113.191354 -202.200787,19.940199 -202.200787,-95.0859146 C-202.200787,-210.112028 -110.756827,-303.360215 2.03502066,-303.360215 Z" id="path-3"></path>
+        <filter x="-1.7%" y="-1.2%" width="103.4%" height="103.4%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 0.973500619   0 0 0 0 0.938168112  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M-8.6360122,-247.92909 C68.7824731,-247.92909 131.542556,-183.92801 131.542556,-104.978677 C131.542556,-26.0293435 68.7824731,37.9717366 -8.6360122,37.9717366 C-86.0544975,37.9717366 -148.81458,-26.0293435 -148.81458,-104.978677 C-148.81458,-183.92801 -86.0544975,-247.92909 -8.6360122,-247.92909 Z" id="path-5"></path>
+        <filter x="-2.5%" y="-1.7%" width="105.0%" height="104.9%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.01 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="概览页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="概览" transform="translate(-556.000000, -143.000000)">
+            <g id="优惠券" transform="translate(556.850495, 143.624537)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="矩形" stroke="#FFEFD0" fill="#FFFCF8" xlink:href="#path-1"></use>
+                <g id="椭圆_9_拷贝_5" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FFFDFB" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+                <g id="椭圆_9_拷贝_5-2" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

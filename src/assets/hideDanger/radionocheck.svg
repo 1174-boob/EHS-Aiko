@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>4.Input输入/2.Checkbox多选框/基础控件/未选中</title>
+    <g id="Symbol" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.9">
+        <g id="5.DataDisplay数据展示/8.Tree树结构/基础控件/三级选项/带选择框" transform="translate(-80.000000, -8.000000)" fill="#FFFFFF" stroke="#DCDCDC">
+            <g id="Rectangle" transform="translate(80.000000, 8.000000)">
+                <rect x="0.5" y="0.5" width="15" height="15" rx="2"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

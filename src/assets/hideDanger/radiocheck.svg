@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>4.Input输入/2.Ch</title>
+    <g id="Symbol" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="5.DataDisplay数据展示/8.Tree树结构/2.带选择框/嵌入穿梭框" transform="translate(-376.000000, -136.000000)">
+            <g id="右" transform="translate(288.000000, 0.000000)">
+                <g id="5.DataDisplay数据展示/8.Tree树结构/基础控件/三级选项/带选择框" transform="translate(8.000000, 128.000000)">
+                    <g id="编组" transform="translate(80.000000, 8.000000)">
+                        <rect id="Rectangle" fill="#0067CC" x="0" y="0" width="16" height="16" rx="2"></rect>
+                        <polyline id="路径" stroke="#FFFFFF" stroke-width="2" points="4 7.62206448 7.23006744 11 13 5"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

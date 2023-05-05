@@ -1,0 +1,80 @@
+.emailAndPhoneNumber-box {
+    // title
+    .title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+  
+      & > p {
+        margin: 0 10px;
+        color: #181818;
+        font-weight: bold;
+      }
+    }
+    // 步骤条
+    .steps {
+      color: #2c3e50;
+      box-sizing: border-box;
+      display: flex;
+      & > span {
+        width: 25%;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 10px;
+        margin-right: 20px;
+        background: #f1f2f9;
+        position: relative;
+        font-weight: 600;
+        &:before {
+          content: "";
+          width: 0;
+          height: 0;
+          border: 20px solid;
+          border-color: transparent transparent transparent #f1f2f9;
+          position: absolute;
+          right: -40px;
+        }
+        &:nth-child(2),
+        &:nth-child(3) {
+          padding-left: 30px;
+          &:after {
+            content: "";
+            width: 0;
+            height: 0;
+            border: 20px solid;
+            border-color: transparent transparent transparent #fff;
+            position: absolute;
+            left: 0px;
+          }
+        }
+      }
+      .active {
+        background: #e9f4ff;
+        color: #1890ff;
+        &:before {
+          border-color: transparent transparent transparent #e9f4ff;
+        }
+      }
+    }
+    // 警告-提醒
+    .warning {
+      display: flex;
+      align-items: center;
+      margin: 20px 3% 10px;
+      & > p {
+        margin: 0 10px;
+      }
+    }
+    // 验证的信息
+    .target-info {
+      margin: 20px 3%;
+      & > p {
+        margin: 0 0px;
+      }
+    }
+    // 自动返回
+    .auto-back {
+      margin: 30px 15px;
+      font-size: 16px;
+    }
+  }

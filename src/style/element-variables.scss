@@ -1,0 +1,8 @@
+/* 改变主题色变量 */
+$--color-primary: #0067cc;
+/* Input高度 */
+$--input-small-height: 38px;
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index"; // node_modules/element-ui/packages/theme-chalk/src/common/var.scss里有所有ele抛出的变量

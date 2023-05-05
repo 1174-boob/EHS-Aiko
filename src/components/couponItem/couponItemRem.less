@@ -1,0 +1,103 @@
+.coupon-item-box-rem {
+    display: flex;
+    justify-content: center;
+    flex: none;
+    .coupon-item {
+        // min-width: 4.42rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+        .title {
+            position: absolute;
+            top: -24px - 14px;
+            left: 5px;
+            color: #000;
+            font-size: 14px;
+        }
+        .pay-coupon-main-left {
+            padding: 0.32rem 0.05rem 0.33rem 0.28rem;
+            height: 100%;
+            color: #999999;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            &>img {
+                position: absolute;
+                z-index: -1;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
+            .pay-coupon-main-left-top {
+                margin-bottom: 8px;
+                .pay-coupon-main-left-top-amount {
+                    font-size: 0.34rem;
+                    line-height: 0.34rem;
+                    margin-bottom: 5px;
+                }
+                .pay-coupon-main-left-top-discount {
+                    font-size: 0.34rem;
+                    line-height: 0.34rem; // letter-spacing: 0.1em;
+                    &>span {
+                        font-size: 0.36rem;
+                        line-height: 0.36rem;
+                    }
+                }
+            }
+            .pay-coupon-main-left-bottom {
+                font-size: 0.14rem;
+                line-height: 0.14rem;
+            }
+        }
+        .pay-coupon-main-center {
+            width: 0.24rem;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+            &>img {
+                position: absolute;
+                z-index: -1;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
+        }
+        .pay-coupon-main-ritht {
+            padding: 0 0.38rem 0 0.05rem;
+            height: 100%;
+            color: #999999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 0.14rem;
+            position: relative;
+            z-index: 1; // 试用产品
+            .pay-coupon-main-ritht-pro {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            &>img {
+                position: absolute;
+                z-index: -1;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
+        }
+    }
+    .pay-coupon-main-active {
+        .pay-coupon-main-left {
+            color: #0067cc;
+        }
+        .pay-coupon-main-ritht {
+            color: #0067cc;
+        }
+    }
+}

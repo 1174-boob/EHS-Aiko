@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="49px" height="49px" viewBox="0 0 49 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>产品分拣</title>
+    <defs>
+        <linearGradient x1="86.8005863%" y1="49.8553035%" x2="17.20838%" y2="50.7510436%" id="linearGradient-1">
+            <stop stop-color="#0160E1" offset="23%"></stop>
+            <stop stop-color="#0F79E8" offset="45%"></stop>
+            <stop stop-color="#34B9F9" offset="93%"></stop>
+            <stop stop-color="#3AC2FC" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="概览页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="产品菜单2" transform="translate(-341.000000, -251.000000)">
+            <g id="编组-2" transform="translate(325.000000, 242.000000)">
+                <g id="产品分拣" transform="translate(16.340159, 9.982970)">
+                    <path d="M29.5151727,2.02985257 L46.5825636,18.8055618 C47.9094045,20.1078523 48.6569148,21.8889363 48.6569148,23.748094 C48.6569148,25.6072518 47.9094045,27.3883358 46.5825636,28.6906263 L29.0642703,45.9092099 C26.3104238,48.61568 21.8955887,48.61568 19.1417421,45.9092099 L2.07435125,29.1335008 C0.747510308,27.8312102 0,26.0501262 0,24.1909685 C0,22.3318107 0.747510308,20.5507267 2.07435125,19.2484362 L19.5926445,2.02985257 C22.346491,-0.676617522 26.7613262,-0.676617522 29.5151727,2.02985257 Z" id="圆角矩形_3" fill="#0067CC" opacity="0.1"></path>
+                    <polygon id="路径" fill="url(#linearGradient-1)" fill-rule="nonzero" points="32.088126 23.1192391 24.4696153 17.4889803 16.5687888 23.1192391 16.5687888 16.3476755 24.4696153 10.7160788 32.088126 16.3476755"></polygon>
+                    <polygon id="路径" fill="#C6000C" fill-rule="nonzero" points="32.088126 33.2906333 24.4696153 27.6603746 16.5687888 33.2906333 16.5687888 26.5190698 24.4696153 20.888811 32.088126 26.5190698"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="39px" viewBox="0 0 38 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>gongsi</title>
+    <defs>
+        <filter x="-60.0%" y="-60.0%" width="220.0%" height="220.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0.403921569   0 0 0 0 0.8  0 0 0 0.25 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="值班室监控" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="当前值班人员" transform="translate(-1609.000000, -262.000000)" fill="#0067CC" fill-rule="nonzero">
+            <g id="编组-15备份-4" transform="translate(1578.000000, 243.974000)">
+                <g id="gongsi" filter="url(#filter-1)" transform="translate(40.000000, 28.000000)">
+                    <path d="M0,2 L0,20 L13,20 L13,2 L10,0 L0,2 Z M7.5,17.8 L1.5,17.8 L1.5,16 L7.5,15.9 L7.5,17.8 Z M7.5,13.8 L1.5,13.9 L1.5,12.1 L7.5,11.7 L7.5,13.8 Z M7.5,9.5 L1.5,9.9 L1.5,8.1 L7.5,7.4 L7.5,9.5 Z M7.5,5.1 L1.5,5.9 L1.5,4 L7.5,2.8 L7.5,5.1 Z M18,18 L18,2 L15,0 L13.5,0 L15,1 L15,20 L20,20 L20,18 L18,18 Z" id="形状"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="187px" viewBox="0 0 256 187" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
+    <title>本月消费</title>
+    <defs>
+        <path d="M9.8595037,0.534112903 L243.181726,0.534112903 C248.356839,0.534112903 252.552096,4.98719469 252.552096,10.4803495 L252.552096,174.57336 C252.552096,180.066515 248.356839,184.519597 243.181726,184.519597 L9.8595037,184.519597 C4.68439105,184.519597 0.489133333,180.066515 0.489133333,174.57336 L0.489133333,10.4803495 C0.489133333,4.98719469 4.68439105,0.534112903 9.8595037,0.534112903 Z" id="path-1"></path>
+        <path d="M5.18275185,-305.349462 C114.134859,-305.349462 202.458096,-211.597231 202.458096,-95.9493548 C202.458096,19.6985215 114.134859,113.453737 5.18275185,113.453737 C-103.769356,113.453737 -192.092593,19.6985215 -192.092593,-95.9493548 C-192.092593,-211.597231 -103.765607,-305.349462 5.18275185,-305.349462 Z" id="path-3"></path>
+        <filter x="-1.8%" y="-1.2%" width="103.5%" height="103.3%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.01 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M-5.12465556,-249.61871 C69.6557223,-249.61871 130.277196,-185.271678 130.277196,-105.895591 C130.277196,-26.519505 69.6557223,37.8275269 -5.12465556,37.8275269 C-79.9050334,37.8275269 -140.526507,-26.519505 -140.526507,-105.895591 C-140.526507,-185.271678 -79.9050334,-249.61871 -5.12465556,-249.61871 Z" id="path-5"></path>
+        <filter x="-2.6%" y="-1.7%" width="105.2%" height="104.9%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.01 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="概览页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="概览" transform="translate(-272.000000, -143.000000)">
+            <g id="椭圆_9_拷贝_8-+-椭圆_9_拷贝_8-2-蒙版" transform="translate(273.488548, 143.973999)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="蒙版" stroke="#EFF4FF" fill="#F9FBFF" xlink:href="#path-1"></use>
+                <g id="椭圆_9_拷贝_8" opacity="0.642092169" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+                <g id="椭圆_9_拷贝_8-2" mask="url(#mask-2)">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-5"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

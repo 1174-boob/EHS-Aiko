@@ -1,0 +1,149 @@
+{
+	"list": [
+		{
+			"type": "textarea",
+			"label": "文本框",
+			"options": {
+				"width": "100%",
+				"maxLength": 0,
+				"defaultValue": "",
+				"rows": 4,
+				"clearable": false,
+				"tooptip": "",
+				"hidden": false,
+				"disabled": false,
+				"placeholder": "请输入",
+				"dynamicHide": false,
+				"dynamicHideValue": ""
+			},
+			"model": "textarea_1648541848673",
+			"key": "textarea_1648541848673",
+			"rules": [
+				{
+					"required": false,
+					"message": "必填项",
+					"trigger": [
+						"blur"
+					]
+				}
+			]
+		},
+		{
+			"type": "input",
+			"label": "输入框",
+			"options": {
+				"type": "text",
+				"width": "100%",
+				"defaultValue": "",
+				"placeholder": "请输入",
+				"clearable": false,
+				"maxLength": 0,
+				"prepend": "",
+				"append": "",
+				"tooptip": "",
+				"hidden": false,
+				"disabled": false,
+				"dynamicHide": false,
+				"dynamicHideValue": ""
+			},
+			"model": "input_1648541848673",
+			"key": "input_1648541848673",
+			"rules": [
+				{
+					"required": false,
+					"message": "必填项",
+					"trigger": [
+						"blur"
+					]
+				}
+			]
+		},
+		{
+			"type": "switch",
+			"label": "开关",
+			"options": {
+				"defaultValue": false,
+				"activeText": "",
+				"inactiveText": "",
+				"tooptip": "",
+				"hidden": false,
+				"disabled": false,
+				"dynamicHide": false,
+				"dynamicHideValue": ""
+			},
+			"model": "switch_1648541848673",
+			"key": "switch_1648541848673",
+			"rules": [
+				{
+					"required": false,
+					"message": "必填项",
+					"trigger": [
+						"change",
+						"blur"
+					]
+				}
+			]
+		},
+		{
+			"type": "importFile",
+			"label": "上传文件",
+			"options": {
+				"style": "width:70px;height:100px",
+				"maxSize": 5,
+				"fileLayout": []
+			},
+			"model": "importFile111",
+			"key": "importFile222",
+			"rules": [
+				{
+					"required": true,
+					"message": "必填项",
+					"trigger": [
+						"change",
+						"blur"
+					]
+				}
+			]
+		},
+		{
+			"type": "uploadimg",
+			"label": "上传图片",
+			"options": {
+				"style": "width:70px;height:100px",
+				"maxSize": 5,
+				"maxlength": 1
+			},
+			"model": "uploadimg",
+			"key": "uploadimg",
+			"rules": [
+				{
+					"required": false,
+					"message": "必填项",
+					"trigger": [
+						"change",
+						"blur"
+					]
+				}
+			]
+		}
+	],
+	"config": {
+		"labelPosition": "left",
+		"labelWidth": 100,
+		"size": "mini",
+		"outputHidden": true,
+		"hideRequiredMark": true,
+		"customStyle": "",
+		"showList": [
+			"textarea_1648541848673",
+			"input_1648541848673",
+			"switch_1648541848673",
+			"importFile111",
+			"uploadimg"
+		],
+		"queryList": [
+			"textarea_1648541848673",
+			"input_1648541848673"
+		]
+	}
+}
