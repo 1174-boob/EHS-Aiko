@@ -132,8 +132,6 @@ export const SelectDangerList = params => post(`${serviceNameList.danger}/api/eh
 export const SaveDictData = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/saveSysDictType`, params);
 //字典组分页查询
 export const DictTypePage = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/getSysDictTypePage`, params);
-//字典组查询单条数据
-// export const DictTypeDetail = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/detailSysDictTypeByDictType`, params);
 //字典编辑更新
 export const UpdateDictTypePage = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/updateSysDictType`, params);
 //字典组删除
@@ -206,6 +204,26 @@ export const updateOrgainizeList = params => post(`${serviceNameList.danger}/api
 export const getUserDetail = params => post(`${serviceNameList.danger}/api/ehs/company/user/detail`, params);
 export const updateUserDetail = params => post(`${serviceNameList.danger}/api/ehs/company/user/update`, params);
 export const getUserPageList = params => post(`${serviceNameList.danger}/api/ehs/company/user/pageList`, params);
+//获取列表
+export const GetLabelList = params => post(`${serviceNameList.customer}/api/label/list`, params);
+// 控制台角色--获取角色权限树
+export const getConsoleRoleTree = params => get(`${serviceNameList.customer}/api/resource/queryResourceTree`, params);
+//权限-角色授权-设置添加
+export const AddUserRole = params => post(`${serviceNameList.customer}/api/user/grant/role`, params);
+//权限-用户-角色授予-回显
+export const BackUserRole = params => get(`${serviceNameList.customer}/api/user/granted`, params);
+// 权限--部门 查看获取详情--表单信息
+export const getDepartmentDetails = params => get(`${serviceNameList.customer}/api/enterprise/dept/detail`, params);
+// 权限--用户 获取职位列表-不分页
+export const getPositionListApi = params => post(`${serviceNameList.customer}/api/position/list`, params);
+// 权限--用户 获取组织架构
+export const getTreeUserList = params => get(`${serviceNameList.customer}/api/user/tree`, params);
+// 权限--用户 获取列表
+export const getUserList = params => post(`${serviceNameList.customer}/api/user/pageList`, params);
+// 权限--用户 获取角色列表 分配使用
+export const getUserRoleList = params => post(`${serviceNameList.customer}/api/role/list`, params);
+// 权限--用户 保存部门及职位
+export const saveDeptAndPositionApi = params => post(`${serviceNameList.customer}/api/enterprise/dept/allocating/dept`, params);
 // 同步组织
 export const syncOrgainize = params => get(`${serviceNameList.danger}/api/ehs/company/dept/sync/boeplat`, params);
 

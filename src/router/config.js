@@ -1697,6 +1697,60 @@ const options = {
               },
               component: resolve => require(['@/pages/menuDataPermission/index.vue'], resolve)
             },
+            {
+              path: 'labelManagement',
+              name: '标签组管理',
+              meta: {
+                title: '标签组管理',
+                isPage: true,
+              },
+              component: resolve => require(['@/pages/system/labelManagement/index.vue'], resolve),
+            },
+            {
+              path: 'business',
+              name: '业务组织管理',
+              meta: {
+                title: '业务组织管理',
+                isPage: true,
+              },
+              component: resolve => require(['@/pages/system/business/index.vue'], resolve),
+            },
+            {
+              path: 'department',
+              name: '部门管理',
+              meta: {
+                title: '部门管理',
+                isPage: true,
+              },
+              component: resolve => require(['@/pages/system/department/department.vue'], resolve),
+            },
+            {
+              path: 'role',
+              name: '角色管理',
+              meta: {
+                title: '角色管理',
+                isPage: true,
+              },
+              component: resolve => require(['@/pages/system/role/role.vue'], resolve),
+            },
+            {
+              path: 'positionManagement',
+              name: '职位管理',
+              meta: {
+                title: '职位管理',
+                isPage: true,
+              },
+              component: resolve => require(['@/pages/system/positionManagement/index.vue'], resolve),
+            },
+            {
+              path: 'user',
+              name: '用户管理',
+              meta: {
+                title: '用户管理',
+                isPage: true,
+              },
+              component: resolve => require(['@/pages/system/user/user.vue'], resolve),
+            },
           ]
         },
       ]
