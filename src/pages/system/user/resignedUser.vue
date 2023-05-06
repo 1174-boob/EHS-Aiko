@@ -324,7 +324,7 @@ export default {
           return this.$message.info("请先选择一条数据");
         }
       }
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content: `${"确认删除？"}`,
         cancelText: "取消",

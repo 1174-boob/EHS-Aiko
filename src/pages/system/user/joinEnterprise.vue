@@ -215,7 +215,7 @@ export default {
     },
     //重新生成
     regenerate() {
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content: "重新生成后，之前的邀请信息自动失效，是否重新生成？",
         cancelText: "取消",
@@ -226,7 +226,7 @@ export default {
     },
     //停用
     deactivate() {
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content: "停用后，他人无法再通过该邀请链接和邀请码加入。确定停用吗？",
         cancelText: "取消",

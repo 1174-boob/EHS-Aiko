@@ -464,7 +464,7 @@ export default {
     async delall() {
       if (this.canClickBtnMixin("department-2")) {
         if (this.selectedRowKeys.length) {
-          this.$confirm({
+          this.$antConfirm({
             title: "删除",
             content: "是否要批量删除？",
             okText: "确认",
@@ -705,7 +705,7 @@ export default {
         let postData = {
           deptId: row.deptId,
         };
-        this.$confirm({
+        this.$antConfirm({
           title: "删除",
           icon: () => (
             <a-icon type="delete" class="confirm-icon-rm" theme="filled" />

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <CommonModal :title="'部门及职位'" :visible="depAndPosModelShow" :cancelFn="closeModel" class="principal-dialog">
+    <CommonModal :title="'标签'" :visible="depAndPosModelShow" :cancelFn="closeModel" class="principal-dialog">
       <a-spin :spinning="spinning" wrapperClassName="a-spin">
         <div class="filter-form-box">
-          <div class="filter-form-tips">分配部门及职位</div>
+          <div class="filter-form-tips">分配标签</div>
           <a-form-model v-for="(item,index) in userDeptRelsList" :key="item.guid" ref="filterForm" class="filter-form" :model="item" :rules="rulesAuth" layout="inline">
             <a-form-model-item ref="deptId" prop="deptId" class="filter-form-item filter-form-left">
               <a-tree-select
@@ -28,11 +28,11 @@
             <div class="filter-form-btn-box">
               <img class="btn-icon add-btn" @click="addUserDeptRels" v-if="index == userDeptRelsList.length-1" src="@/assets/depAndPosModel/add-icon.svg" />
               <img class="btn-icon btn-rm" v-if="userDeptRelsList.length > 1" @click="rmUserDeptRels(item)" src="@/assets/depAndPosModel/rm-icon.svg" />
-              <div class="check-btn-box" @click="changeAdminDept(item)">
+              <!-- <div class="check-btn-box" @click="changeAdminDept(item)">
                 <img class="btn-icon check-btn" v-if="item.adminDept == 1" src="@/assets/depAndPosModel/check-icon-active.svg" />
                 <img class="btn-icon check-btn" v-else src="@/assets/depAndPosModel/check-icon.svg" />
                 <span class="check-btn-test">设为主部门</span>
-              </div>
+              </div> -->
             </div>
           </a-form-model>
         </div>
@@ -69,7 +69,7 @@ export default {
       default: () => [],
     },
     // 选择的列数据
-    depAndPosModelData: {
+    labelModelData: {
       type: Object,
       default: () => {
         return {
@@ -134,7 +134,7 @@ export default {
     },
     // 部门及职位-弹窗
     openDepAndPosModel() {
-      let apiData = { companyUserInfoId: this.depAndPosModelData.companyUserInfoId }
+      let apiData = { companyUserInfoId: this.labelModelData.companyUserInfoId }
       return UserDetailInterFace(apiData)
         .then((res) => {
           let dataObj = res.data
@@ -180,11 +180,11 @@ export default {
       }
       this.handleLoading()
       this.userDeptRelsList.forEach(item => {
-        item.userId = this.depAndPosModelData.userId
-        item.companyId = this.depAndPosModelData.companyId
+        item.userId = this.labelModelData.userId
+        item.companyId = this.labelModelData.companyId
       })
       let apiData = {
-        userId: this.depAndPosModelData.userId,
+        userId: this.labelModelData.userId,
         userDeptRels: this.userDeptRelsList
       }
       saveDeptAndPositionApi(apiData)
@@ -230,7 +230,7 @@ export default {
       }
       this.userDeptRelsList.push(userDeptRelsItem)
     },
-    // 删除部门及职位
+    // 删除标签
     rmUserDeptRels(item) {
       this.$antConfirm({
         title: "删除",
@@ -288,7 +288,7 @@ export default {
     .filter-form-item {
       flex: 1;
       width: 0;
-      margin-right: 20px;
+      margin-right: 60px;
       ::v-deep .ant-form-item-control-wrapper {
         width: 100%;
       }

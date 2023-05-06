@@ -13,6 +13,11 @@
               placeholder="请输入标签组名称"
             ></a-input>
           </a-form-model-item>
+          <a-form-model-item style="width: 358px" label="标签组类型">
+            <a-select style="width:200px" v-model="formInline.labelLevel" placeholder="请选择">
+              <a-select-option style="width:200px" :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
+            </a-select>
+          </a-form-model-item>
           <a-form-model-item class="float-right">
             <a-button type="primary" :loading="loadingTwo" @click="iSearch"
               >查询</a-button
@@ -79,6 +84,11 @@
               v-model="formData.labelName" 
               :maxLength="20"
               placeholder="请输入标签组名称" />
+          </a-form-model-item>
+          <a-form-model-item label="标签组类型" prop="labelLevel">
+            <a-select v-model="formInline.labelLevel" placeholder="请选择标签组类型">
+              <a-select-option :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
+            </a-select>
           </a-form-model-item>
           <a-form-model-item label="标签组描述" prop="labelDescription">
             <a-textarea 
@@ -214,6 +224,7 @@ export default {
       formData: {
         labelCode: "",
         labelName: "",
+        labelLevel:'',
         labelDescription: "",
       },
       // 表单验证
@@ -233,6 +244,13 @@ export default {
             trigger: "blur" 
           },
         ],
+        labelLevel: [
+          { 
+            required: true,
+            message: "标签组类型不能为空",
+            trigger: "blur" 
+          },
+        ],
         labelDescription: [
           {
             // validator: formValidator.texTonlyNumberNine,
@@ -248,6 +266,7 @@ export default {
       // 搜索表单
       formInline: {
         labelName: undefined,
+        labelLevel: undefined,
       },
       // 页码
       page: {
@@ -269,6 +288,12 @@ export default {
           width: 360
         },
         {
+          title: "标签组类型",
+          dataIndex: "labelLevel",
+          key: "labelLevel",
+          width: 360
+        },
+        {
           title: "标签组描述",
           dataIndex: "labelDescription",
           key: "labelDescription",
@@ -281,6 +306,16 @@ export default {
         },
       ],
       dataList: [],
+      orgLevelList:[
+        {
+          itemCode:1,
+          itemName:"个人标签"
+        },
+        {
+          itemCode:2,
+          itemName:"部门标签"
+        }
+      ],
       //编辑时禁用输入框
       InpDis: false,
       //弹窗title
@@ -385,7 +420,7 @@ export default {
     // 重置
     iRest: debounce(
       function () {
-        this.formInline = { labelName: undefined };
+        this.formInline = { labelName: undefined ,labelLevel: undefined};
         this.getTableList();
       },
       250,
@@ -407,6 +442,7 @@ export default {
       this.formData = {
         labelCode: item.labelCode,
         labelName: item.labelName,
+        labelLevel: item.labelLevel,
         labelDescription: item.labelDescription,
       };
       this.InpDis = true;
@@ -477,7 +513,7 @@ export default {
       let postData = {
         labelId: row.labelId,
       };
-      this.$confirm({
+      this.$antConfirm({
         title: "确定删除？",
         icon: () => (
           <a-icon type="delete" class="confirm-icon-rm" theme="filled" />
@@ -528,6 +564,7 @@ export default {
       this.formData={
         labelCode: "",
         labelName: "",
+        labelLevel:'',
         labelDescription: "",
       }
     },

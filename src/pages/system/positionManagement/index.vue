@@ -307,7 +307,7 @@ export default {
       let postData = {
         positionId: row.positionId,
       };
-      this.$confirm({
+      this.$antConfirm({
         title: "确定删除？",
         icon: () => (
           <a-icon type="delete" class="confirm-icon-rm" theme="filled" />

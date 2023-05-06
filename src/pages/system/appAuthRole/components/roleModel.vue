@@ -3,6 +3,9 @@
   <CommonModal :title="modelTitle" :visible="roleModelShow" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formRole" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model-item ref="productName" prop="productName" class="modal-form-text" label="所属应用">
+          <span>{{ formRole.productName }}</span>
+        </a-form-model-item>
         <a-form-model-item ref="roleCode" label="角色编码" prop="roleCode">
           <a-input :disabled="formRole.roleId?true:false" :maxLength="nameMaxLength" v-model="formRole.roleCode" placeholder="请输入角色编码" />
         </a-form-model-item>
@@ -10,16 +13,17 @@
           <a-input :maxLength="codeMaxLength" v-model="formRole.roleName" placeholder="请输入角色名称" />
         </a-form-model-item>
         <a-form-model-item ref="description" label="角色描述" prop="description">
-          <a-textarea :maxLength="roleDescriptionMaxLength" v-model="formRole.description" placeholder="请输入角色描述" />
+          <a-textarea :maxLength="descriptionMaxLength" v-model="formRole.description" placeholder="请输入角色描述" />
         </a-form-model-item>
         <a-form-model-item ref="resourceIdList" label="角色权限" prop="resourceIdList">
           <a-tree
+            v-if="roleModelShow"
             v-model="formRole.resourceIdList"
             :selectable="false"
             :defaultExpandAll="false"
             checkable
             :replace-fields="{ title: 'resourceName', key: 'resourceId' }"
-            :tree-data="roleTree"
+            :tree-data="roleModeltree"
             @check="onCheck"
           />
         </a-form-model-item>
@@ -33,7 +37,7 @@
 </template>
 
 <script>
-import { addConsoleRole, changeConsoleRole } from "@/services/role.js";
+import { addAppAuthRole, changeAppAuthRole, } from "@/services/api";
 import treeMixin from "@/mixin/tree";
 import fromMaxLength from "@/mixin/fromMaxLength";
 import cancelLoading from "@/mixin/cancelLoading";
@@ -45,13 +49,14 @@ export default {
   model: {
     prop: 'roleModelShow',
   },
-  props: ['roleModelShow', 'roleModelData', 'roleTree', 'resourceIdListAll'],
+  props: ['roleModelShow', 'roleModelData', 'roleModeltree', 'appAuthRoleList', 'resourceIdListAll'],
   data() {
     return {
       labelCol: { span: 4 },
       wrapperCol: { span: 20 },
       // 新增、修改表单
       formRole: {
+        productName: '',
         roleCode: "",
         roleName: "",
         description: "",
@@ -59,6 +64,7 @@ export default {
       },
       // 表单验证
       rules: {
+        productName: [{ required: true, message: "不能为空", trigger: "blur" }],
         roleCode: [{ required: true, message: "角色编码不能为空", trigger: "blur" }],
         roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
         description: [
@@ -93,7 +99,7 @@ export default {
       let methodsName = this.formRole.roleId ? 'changeAppAuthRoleApiFn' : 'addAppAuthRoleApiFn'
       this[methodsName]()
         .then(res => {
-          this.$emit('getTableList')
+          this.$emit('getAppAuthRoleListFn', this.appAuthRoleList.length == 0)
           this.closeModel()
         })
         .finally(() => {
@@ -104,7 +110,7 @@ export default {
     addAppAuthRoleApiFn() {
       let apiData = { ...this.formRole, roleType: 1 }
       apiData.resourceIdList = [...apiData.resourceIdList, ...this.halfCheckedKeys]
-      return addConsoleRole(apiData)
+      return addAppAuthRole(apiData)
         .then((res) => {
           this.$message.success("新增成功");
           return res
@@ -117,7 +123,7 @@ export default {
     changeAppAuthRoleApiFn() {
       let apiData = { ...this.formRole, roleType: 1 }
       apiData.resourceIdList = [...apiData.resourceIdList, ...this.halfCheckedKeys]
-      return changeConsoleRole(apiData)
+      return changeAppAuthRole(apiData)
         .then((res) => {
           this.$message.success("修改成功");
           return res

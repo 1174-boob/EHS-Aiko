@@ -226,7 +226,28 @@ export const getUserRoleList = params => post(`${serviceNameList.customer}/api/r
 export const saveDeptAndPositionApi = params => post(`${serviceNameList.customer}/api/enterprise/dept/allocating/dept`, params);
 // 同步组织
 export const syncOrgainize = params => get(`${serviceNameList.danger}/api/ehs/company/dept/sync/boeplat`, params);
-
+// 应用角色授权管理--新增授权用户
+export const addGrantUser = params => post(`${serviceNameList.customer}/api/userRoleRel/bindProduct`, params);
+// 应用角色授权管理--新增角色
+export const addAppAuthRole = params => post(`${serviceNameList.customer}/api/role/addOrUpdate`, params);
+// 应用角色授权管理--修改角色
+export const changeAppAuthRole = params => post(`${serviceNameList.customer}/api/role/addOrUpdate`, params);
+// 应用角色授权管理--修改角色--获取详情
+export const getAppAuthRoleDetail = params => get(`${serviceNameList.customer}/api/role/detail`, params);
+// 应用角色授权管理--获取用户列表
+export const getAppAuthRoleUserList = params => post(`${serviceNameList.customer}/api/userRoleRel/product/pageList`, params);
+// 权限--部门 获取组织架构
+export const getDepartmentTree = params => get(`${serviceNameList.customer}/api/enterprise/dept/tree`, params);
+// 应用角色授权管理--获取授权用户时可选择的用户列表
+export const getGrantModelTreeData = params => post(`${serviceNameList.customer}/api/userRoleRel/product/authUserList`, params);
+// 应用角色授权管理--获取当前产品的菜单权限树
+export const getGrantTreeList = params => get(`${serviceNameList.customer}/api/setResourceRel/getResourceTree`, params);
+// 应用角色授权管理--删除角色
+export const rmAppAuthRole = params => post(`${serviceNameList.customer}/api/role/delete`, params);
+// 应用角色授权管理--删除授权用户
+export const rmGrantUser = params => post(`${serviceNameList.customer}/api/userRoleRel/product/deleteAuth`, params);
+// 应用角色授权管理--获取角色列表
+export const getAppAuthRoleList = params => post(`${serviceNameList.customer}/api/role/list`, params);
 // 部门和人员均可以选中
 export const CompanyUserTree = params => post(`${serviceNameList.danger}/api/ehs/company/dept/companyUserTree`, params);
 // 上传文件

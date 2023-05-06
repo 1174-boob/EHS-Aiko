@@ -43,8 +43,8 @@
           <a-button class="clx-btn-margin-right" type="dashed" @click="addUser">
             <a-icon type="plus" />创建用户
           </a-button>
-          <a-button class="clx-btn-margin-right" type="dashed" @click="joinUser">邀请用户加入企业</a-button>
-          <a-button class="clx-btn-margin-right btn-text-margin" type="dashed" @click="openApplicant">申请人列表</a-button>
+          <!-- <a-button class="clx-btn-margin-right" type="dashed" @click="joinUser">邀请用户加入企业</a-button> -->
+          <!-- <a-button class="clx-btn-margin-right btn-text-margin" type="dashed" @click="openApplicant">申请人列表</a-button> -->
           <span class="field-management btn-text-margin" @click="selectModelShow">字段管理</span>
           <span class="field-management field-management-grey" @click="leavingUser">已离职用户</span>
         </div>
@@ -80,8 +80,9 @@
             </div>
             <div slot="action" slot-scope="text, record">
               <span class="color-0067cc table-btn cursor-pointer" :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="editDict(record)">编辑</span>
-              <span class="color-0067cc table-btn cursor-pointer" :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="setDepartStaff(record, '1')">分配角色</span>
+              <span class="color-0067cc table-btn cursor-pointer" @click="actionShare(record)">业务组织</span>
               <span class="color-0067cc table-btn cursor-pointer" @click="openDepAndPosModel(record)">部门及职位</span>
+              <span class="color-0067cc table-btn cursor-pointer" @click="openLabelModel(record)">标签</span>
               <TableMoreBtn>
                 <li v-if="record.status == 1" :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="freezeOrDeparture('freeze', record)">冻结</li>
                 <li v-else :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="freezeOrDeparture('activation', record)">激活</li>
@@ -233,6 +234,21 @@
 
     <!-- 部门及职位弹窗 -->
     <DepAndPosModel v-model="depAndPosModelShow" :depAndPosModelData="depAndPosModelData" :treeDataG="treeDataG" @getTableList="getTableList" />
+       
+    <!-- 标签弹窗 -->
+    <LabelModel v-model="labelModelShow" :labelModelData="labelModelData" :treeDataG="treeDataG" @getTableList="getTableList" />
+
+    <!-- 业务组织弹窗 -->
+    <CommonModal title="业务组织" :visible="shareVisible" :cancelFn="shareCancle">
+      <div class="check-all">
+        <a-checkbox v-model="isCheckAll" @change="checkAll">全选</a-checkbox>
+      </div>
+      <a-tree v-model="divideCheckedKeys" :selected-keys="selectedBusinessKeys" checkable :tree-data="divideTreeData" :replaceFields="replaceFields" @check="checkChange" />
+      <template slot="btn">
+        <a-button @click="shareCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="shareConfirm">确定</a-button>
+      </template>
+    </CommonModal>
   </div>
 </template>
 
@@ -241,6 +257,8 @@ import {
   getTreeUserList,
   getUserRoleList,
   GetLabelList,
+  getCorporationTree,
+  divideCorporation
 } from "@/services/api";
 import {
   FreezeThing,
@@ -274,18 +292,31 @@ import SetAuth from "./setAuth.vue";
 import TableMoreBtn from '@/components/tableMoreBtn/tableMoreBtn.vue'
 import SelTable from './userComponents/selTable.vue'
 import DepAndPosModel from './userComponents/depAndPosModel.vue'
+import LabelModel from './userComponents/labelModel.vue'
+
+
 export default {
-  components: { uploadHeader, JoinEnterprise, CustomFormDetail, SetAuth, TableMoreBtn, SelTable, DepAndPosModel },
+  components: { uploadHeader, JoinEnterprise, CustomFormDetail, SetAuth, TableMoreBtn, SelTable, DepAndPosModel, LabelModel },
   mixins: [treeMixin, fromMaxLength, teableSelected, cancelLoading,],
   data() {
     return {
       depAndPosModelShow: false,
+      labelModelShow: false,
       depAndPosModelData: undefined,
       emptyText: <a-empty />,
       getDictionaryItemObj,
       selectedKeys: [],
       treeData: [],
+      shareVisible: false,
+      isCheckAll: false,
+      divideCheckedKeys: [],
+      selectedBusinessKeys: [],
+      divideTreeData: [],
+      replaceFields: { children: 'corporationList' },
+      centerCodeList: [],
+      codeListLength: 0,
       addUserRulesT: {},
+      labelModelData: undefined,
       dictTitle: "创建用户",
       addLoading: false,
       dataList: [],
@@ -473,7 +504,7 @@ export default {
           dataIndex: "action",
           key: "action",
           title: "操作",
-          width: 270,
+          width: 310,
           fixed: "right",
           scopedSlots: { customRender: "action" },
         },
@@ -482,7 +513,7 @@ export default {
         delete columnsDefaultData[0].width
         delete columnsDefaultData[0].fixed
       } else {
-        columnsDefaultData[0].width = 270
+        columnsDefaultData[0].width = 310
         columnsDefaultData[0].fixed = "right"
       }
       this.tableScroll = this.seltableColumnList.length * 166
@@ -500,6 +531,96 @@ export default {
     },
   },
   methods: {
+    // 分配机构
+    async actionShare(record) {
+      // 获取分配法人机构列表 
+      this.currentMsg = { ...record };
+      this.shareVisible = true;
+      getCorporationTree().then(res => {
+        this.divideTreeData = res.data || [];
+        this.resolveData(this.divideTreeData);
+        this.centerCodeList = [];
+        this.codeListLength = 0;
+        for (let i = 0; i < this.divideTreeData.length; i++) {
+          let itemLength = this.divideTreeData[i].corporationList ? this.divideTreeData[i].corporationList.length : 0;
+
+          this.codeListLength += itemLength;
+          if (!(this.divideTreeData[i].corporationList && this.divideTreeData[i].corporationList.length > 0)) {
+            this.divideTreeData[i].disableCheckbox = true;
+            this.divideTreeData[i].disabled = true;
+          } else {
+            this.centerCodeList.push(this.divideTreeData[i].corporationCode);
+          }
+        }
+        this.divideCheckedKeys = record.corporationListId;
+        //console.log(this.codeListLength)
+        if (record.corporationListName == "全部") {
+          this.divideCheckedKeys = this.centerCodeList;
+          this.isCheckAll = true;
+        }
+      }).catch(err => { })
+    },
+    resolveData(arr, flag) {
+      for (let i = 0; i < arr.length; i++) {
+        if (flag) {
+          arr[i].key = arr[i].id;
+          arr[i].value = arr[i].deptId;
+          arr[i].title = arr[i].orgName;
+        } else {
+          arr[i].key = arr[i].value = arr[i].corporationCode;
+          arr[i].title = arr[i].corporationName;
+        }
+        if (arr[i].corporationList && arr[i].corporationList.length > 0) {
+          this.resolveData(arr[i].corporationList, true);
+        }
+      }
+    },
+    checkChange(checkedKeys, e) {
+      if (!e.checked) {
+        this.isCheckAll = false;
+      } else {
+        let divideCheckedKeys = this.divideCheckedKeys.filter(item => {
+          return this.centerCodeList.indexOf(item) == -1;
+        })
+        //console.log(divideCheckedKeys,)
+        if (divideCheckedKeys.length >= this.codeListLength) {
+          this.isCheckAll = true;
+        }
+      }
+    },
+    // 全选
+    checkAll(e) {
+      this.divideCheckedKeys = [];
+      this.isCheckAll = false;
+      if (e.target.checked) {
+        this.isCheckAll = true;
+        this.divideCheckedKeys = [...this.centerCodeList];
+      }
+    },
+    shareCancle() {
+      this.shareVisible = false;
+    },
+    shareConfirm() {
+      //console.log(this.divideCheckedKeys);
+      this.shareVisible = false;
+      let para = {
+        userId: this.currentMsg.userId,
+        corporationType: this.isCheckAll ? 0 : 1
+      }
+      if (!this.isCheckAll) {
+        para.corporationIdList = this.divideCheckedKeys.filter(item => {
+          return this.centerCodeList.indexOf(item) == -1;
+        })
+      }
+      divideCorporation(para).then(res => {
+        //console.log(res);
+        this.$antMessage.success("分配成功！");
+        if (this.currentMsg.userId == JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId) { // 如果是自己给自己分配调用当前登录人接口
+          this.getLoginCorporation();
+        }
+        this.getTableList();
+      })
+    },
     // 是否有按钮权限
     btnAuthDisable(row) {
       let isDisable = false
@@ -518,6 +639,11 @@ export default {
     openDepAndPosModel(row) {
       this.depAndPosModelData = row
       this.depAndPosModelShow = true
+    },
+    // 标签-弹窗
+    openLabelModel(row) {
+      this.labelModelData = row
+      this.labelModelShow = true
     },
     // 从本地获取表头显示信息
     setColumnsDataFormLoc() {
@@ -727,7 +853,7 @@ export default {
     },
     //停用事件
     reEnable() {
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content: "邀请信息已停用",
         cancelText: "取消",
@@ -739,7 +865,7 @@ export default {
     },
     //重新启用
     toEnable() {
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content:
           "重新启用后，仍然是您停用前使用的邀请信息，员工可以继续加入到您的企业。",
@@ -954,7 +1080,7 @@ export default {
           return;
         }
       }
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content: `${type == "freeze"
           ? "确定冻结该用户？"
@@ -999,7 +1125,7 @@ export default {
     },
     //关闭用户弹框
     cancelThing() {
-      this.$confirm({
+      this.$antConfirm({
         title: "提示",
         content: "取消后信息将不会保存，确定取消吗？",
         cancelText: "取消",
@@ -1135,29 +1261,6 @@ export default {
       250,
       { leading: true, trailing: false }
     ),
-    // 分配角色
-    setDepartStaff(data, num) {
-      if (this.btnAuthDisable(data)) {
-        return
-      }
-      if (this.canClickBtnMixin("user-1")) {
-        // this.getTreeUserTreeFn();
-        this.currentUserId = data.userId;
-        this.selItem = data;
-        if (num == 1) {
-          //角色
-          this.getUserIdentityList(); //添加用户-角色树 数据
-          this.setAuthVisible = true;
-        } else {
-          DeptGranted({ userId: data.userId })
-            .then((res) => {
-              this.distriDepartVis = true;
-              this.upDeptIds = res.data || [];
-            })
-            .catch((err) => { });
-        }
-      }
-    },
     cancelAuthModel() {
       this.setAuthVisible = false;
     },

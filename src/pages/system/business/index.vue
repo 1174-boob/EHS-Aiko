@@ -8,11 +8,11 @@
         <SearchTerm>
           <div class="role-console-search-left">
             <a-form-model layout="inline" :model="formInline" :colon="false">
-              <a-form-model-item style="width: 358px" label="业务层级">
+              <!-- <a-form-model-item style="width: 358px" label="业务层级">
                 <a-select style="width:200px" v-model="formInline.orgLevel" placeholder="请选择业务层级">
                   <a-select-option style="width:200px" :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
                 </a-select>
-              </a-form-model-item>
+              </a-form-model-item> -->
               <a-form-model-item style="width: 358px" label="上级业务组织">
                 <a-input
                   class="role-console-search-left-item"
@@ -221,7 +221,7 @@
               placeholder="请输入业务组织全称" />
           </a-form-model-item>
           
-          <a-form-model-item label="业务组织地址" prop="addressList">
+          <!-- <a-form-model-item label="业务组织地址" prop="addressList">
             <a-cascader
               v-model="formData.addressList"
               :options="city"
@@ -233,7 +233,7 @@
               :maxLength="100"
               v-model="formData.addressDetail" 
               placeholder="请输入详细地址" />
-          </a-form-model-item>
+          </a-form-model-item> -->
         </a-form-model>
       </template>
       <template slot="btn">
@@ -296,8 +296,8 @@ export default {
         description: "",
         orgLabelList:[],
         orgAllName: "",
-        addressList: [],
-        addressDetail: '',
+        // addressList: [],
+        // addressDetail: '',
         bossId: undefined,
         parentOrgIds: [],
         parentName:'',
@@ -365,13 +365,13 @@ export default {
             text: "业务组织描述",
           },
         ],
-        addressList: [
-          {
-            trigger: "blur",
-            text: "业务组织描述",
-            type: 'array'
-          },
-        ],
+        // addressList: [
+        //   {
+        //     trigger: "blur",
+        //     text: "业务组织描述",
+        //     type: 'array'
+        //   },
+        // ],
       },
       // 弹窗model-显示隐藏
       roleModelShow: false,
@@ -429,11 +429,11 @@ export default {
           dataIndex: "addressAll",
           key: "addressAll",
         },
-        {
-          title: "描述",
-          dataIndex: "description",
-          key: "description",
-        },
+        // {
+        //   title: "描述",
+        //   dataIndex: "description",
+        //   key: "description",
+        // },
         {
           dataIndex: "action",
           title: "操作",
@@ -621,7 +621,7 @@ export default {
             parentOrgId,
             parentName,
             parentOrgName,
-            addressList,
+            // addressList,
             orgName,
             description,
             orgLevel,
@@ -629,7 +629,7 @@ export default {
             bossId,
             orgAllName,
             orgCode,
-            addressDetail,
+            // addressDetail,
           } = res.data;
           this.formData = {
             deptIds,
@@ -637,7 +637,7 @@ export default {
             parentOrgId,
             parentName,
             parentOrgName,
-            addressList,
+            // addressList,
             orgName,
             description,
             orgLevel,
@@ -645,7 +645,7 @@ export default {
             bossId,
             orgAllName,
             orgCode,
-            addressDetail
+            // addressDetail
           };
           this.sendParentId = [this.formData.parentOrgId]
           this.sendDeptId = [this.formData.deptIds]
@@ -674,7 +674,7 @@ export default {
       let postData = {
         orgId: row.orgId,
       };
-      this.$confirm({
+      this.$antConfirm({
         title: "确定删除？",
         icon: () => (
           <a-icon type="delete" class="confirm-icon-rm" theme="filled" />
@@ -745,7 +745,7 @@ export default {
         description: "",
         orgLabelList: [],
         orgAllName: "",
-        addressList: [],
+        // addressList: [],
         deptIds: []
       }
     },

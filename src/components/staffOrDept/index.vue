@@ -134,7 +134,7 @@ export default {
     // 校验规则
     treeRoles: {
       type: Object,
-      default: () => { }
+      default: () => {}
     },
     // 接收校验参数
     propKey: {
@@ -224,7 +224,7 @@ export default {
   created() {
     this.treeType == 'user' ? this.treeTypeName = '选择人员' : this.treeTypeName = '选择部门';
     // 如果有已勾选的数据,则请求渲染数据
-    if (this.propKey) {
+    if (this.propKey && this.treeRoles) {
       this.treeRoles[this.propKey] = [{ required: true, validator: this.userIdValidator, trigger: 'change' }];
     }
   },
@@ -516,9 +516,6 @@ export default {
     },
     // 勾选树的复选框事件,在左侧渲染
     checkTreeNode(checkedKeys, { checkedNodes, node, event }) {
-      console.log(checkedKeys, 'wolong')
-      console.log(checkedNodes, 'fengchu')
-      console.log(node, 'zhonghu')
       // 1:外面传值到内部,组件用数组A接,里面只有ID
 
       // 2:使用数组A调接口,得到数组B,里面啥都有,使用类似computed方法或者临时变量渲染左侧页面 和 INPUT框里

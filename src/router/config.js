@@ -1731,7 +1731,7 @@ const options = {
                 title: '角色管理',
                 isPage: true,
               },
-              component: resolve => require(['@/pages/system/role/role.vue'], resolve),
+              component: resolve => require(['@/pages/system/appAuthRole/appAuthRole.vue'], resolve),
             },
             {
               path: 'positionManagement',
