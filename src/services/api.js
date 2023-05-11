@@ -133,7 +133,7 @@ export const SelectDangerList = params => post(`${serviceNameList.danger}/api/eh
 //字典组新增
 export const SaveDictData = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/saveSysDictType`, params);
 //字典组分页查询
-export const DictTypePage = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/getSysDictTypePage`, params);
+export const DictTypePage = params => post(`${serviceNameList.customer}/api/ehs/sysDictType/getSysDictTypePage`, params);
 //字典编辑更新
 export const UpdateDictTypePage = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/updateSysDictType`, params);
 //字典组删除
