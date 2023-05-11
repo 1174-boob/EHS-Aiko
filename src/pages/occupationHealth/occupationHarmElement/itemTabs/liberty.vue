@@ -279,9 +279,10 @@ export default {
                               width: 120,
                         },
                         {
-                              title: "检测项目",
+                              title: "危害因素",
                               dataIndex: "checkProjectName",
                               key: "checkProjectName",
+                              width: 120,
                         },
                         {
                               title: "检测结果",

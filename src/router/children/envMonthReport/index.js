@@ -11,7 +11,7 @@ export const envMonthReport = [
       component: resolve => require(['@/pages/envMonthReport/collect/index.vue'], resolve),
   },{
     path: 'terrain',
-    name: '环境能源月报-现地',
+    name: '环境能源月报',
     meta: {
         title: '环境能源月报',
         routerCode:'terrain',

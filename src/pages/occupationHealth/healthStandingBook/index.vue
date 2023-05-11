@@ -319,7 +319,7 @@ export default {
     this.columns.splice(1, 0, this.addCommonColumnItem(150));
     this.columns.splice(2, 0, this.addCommonColumnDepartment({
       width: 150,
-      title: "使用部门"
+      title: "所属部门"
     }))
     this.initConfigPage()
     this.getChemicalList();

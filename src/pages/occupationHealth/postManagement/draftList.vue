@@ -131,11 +131,11 @@ export default {
           dataIndex: 'applicationTime',
           width: 200
         },
-        {
-          title: '审核通过时间',
-          dataIndex: 'approvalTime',
-          minWidth: 200
-        },
+        // {
+        //   title: '审核通过时间',
+        //   dataIndex: 'approvalTime',
+        //   minWidth: 200
+        // },
         {
           title: '操作',
           scopedSlots: { customRender: 'action' },

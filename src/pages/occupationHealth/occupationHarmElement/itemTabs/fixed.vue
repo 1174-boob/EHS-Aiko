@@ -14,7 +14,7 @@
                               :hasDepartment="true"
                               :CommonFormInline="formInline"
                         ></CommonSearchItem>
-                        <a-form-model-item label="检测项目">
+                        <a-form-model-item label="危害因素">
                               <a-select
                                     v-model="formInline.checkProjectName"
                                     placeholder="请选择"

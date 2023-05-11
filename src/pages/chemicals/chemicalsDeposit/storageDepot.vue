@@ -182,7 +182,7 @@ export default {
           scopedSlots: { customRender: 'chemicalName' },
         },
         {
-          title: "库房二维码",
+          title: "柜架",
           scopedSlots: { customRender: 'qrcode' },
           key: "qrcode",
           width: 160

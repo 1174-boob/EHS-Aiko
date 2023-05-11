@@ -6,16 +6,18 @@ export const getRoutesConfig = params => get('/routes', params);
 // 登录登出相关
 export const getToken = (params, headers) => get(serviceNameList.authehs + '/api/token/getToken', params, headers);
 export const getUserInfo = (params) => post(serviceNameList.authehs + '/api/token/getUserMessage', params);
-export const getPublicKey = params => get(serviceNameList.customer + '/api/rsa/publicKey', params);
+// export const getPublicKey = params => get(serviceNameList.customer + '/api/rsa/publicKey', params);
+export const getPublicKey = params => get('ehs-customer/api/rsa/publicKey', params);
 export const getDevToken = (params, headers) => post(serviceNameList.auth + '/oauth/token', params, headers);
+export const getApiToken = (params, headers) => post('ehs-auth/api/login', params, headers);
 export const getTokenApi = (params, headers) => get(serviceNameList.authehs + '/api/token/getToken', params, headers);
 export const getDevCompany = (params, headers) => get(serviceNameList.customer + '/api/userRoleRel/getCompany', params, headers);
 export const getDevMessage = (params, headers) => post(serviceNameList.authehs + '/api/token/getUserMessage', params, headers);
-export const getDevMessageBOE = (params, headers) => post(serviceNameList.customer + '/api/application/getUserInfo', params, headers);
+export const getDevMessageBOE = (params, headers) => post('ehs-customer/api/user/getUserInfo', params, headers);
 export const logout = (params, headers) => get(serviceNameList.auth + '/api/auth/logout', params, headers);
 export const checkToken = (params, headers) => post(serviceNameList.auth + '/oauth/check_token', params, headers);
 export const checkTokenEHS = (params, headers) => post(serviceNameList.authehs + '/api/token/checkToken', params, headers);
-export const getMenuTree = (params) => get(serviceNameList.customer + '/api/role/getLoginMenu', params);
+export const getMenuTree = (params) => get('ehs-customer/api/role/getLoginMenu', params);
 // export const changeCompany = (params, headers) => get(serviceNameList.auth + '/api/auth/changeCompany', params, headers);
 export const changeCompany = (params, headers) => get(process.env.VUE_APP_ZICONSOLE_AUTH + '/api/auth/changeCompany', params, headers);
 export const getPortraitUrlt = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
@@ -818,7 +820,7 @@ export const getLoginCorporation = params => get(`${serviceNameList.danger}/api/
 // 分配法人机构
 export const divideCorporation = params => post(`${serviceNameList.danger}/api/ehs/company/user/divideCorporation`, params);
 // 获取菜单配置列表
-export const getMenuAuthList = params => get(`${serviceNameList.danger}/api/ehs/menuDataAuth/getMenuAuthList`, params);
+export const getMenuAuthList = params => get(`ehs-customer/api/ehs/menuDataAuth/getMenuAuthList`, params);
 // 更新菜单权限
 export const updateDataAuth = params => post(`${serviceNameList.danger}/api/ehs/menuDataAuth/updateDataAuth`, params);
 // 校验菜单权限
@@ -826,7 +828,7 @@ export const getloginUserDataAuth = (params) => {
   if (sessionStorage.getItem("hasGetloginUserDataAuth")) {
     return Promise.resolve();
   }
-  return post(`${serviceNameList.danger}/api/ehs/menuDataAuth/getloginUserDataAuth`, params)
+  return post(`ehs-customer/api/ehs/menuDataAuth/getloginUserDataAuth`, params)
 };
 
 // 获取组织下的部门树

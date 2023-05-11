@@ -85,16 +85,16 @@
       </FormPage>
     </div>
     <div class="m-t-20 border-b-e7">
-      <PageTitle>考试</PageTitle>
+      <PageTitle>试卷</PageTitle>
     </div>
     <div class="m-t-20">
       <FormPage ref="testForm" :formPageModal="testForm">
         <template slot="left">
-          <a-form-model-item v-show="!testForm.paperId" class="test-form-item" label="关联考试">
+          <a-form-model-item v-show="!testForm.paperId" class="test-form-item" label="关联试卷">
             <div>
               <DashBtn>
                 <div>
-                  <a-button type="dashed" @click="relatedTestPaper">+ 关联考试</a-button>
+                  <a-button type="dashed" @click="relatedTestPaper">+ 关联试卷</a-button>
                 </div>
               </DashBtn>
             </div>
@@ -322,7 +322,7 @@ export default {
           { required: true, text: "排序序号", validator: formValidator.texTonlyNumber, trigger: "blur" },
         ]
       },
-      // 关联试卷 考试
+      // 关联试卷 试卷
       testForm: {},
       testVisible: false,
       testColumns: [

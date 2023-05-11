@@ -31,7 +31,7 @@
                   <vxe-column field="nowTime" :min-width="150" title="监控时间"></vxe-column>
                   <vxe-column field="rtd" :min-width="120" title="实时值"></vxe-column>
                   <vxe-column field="warningDown" :min-width="120" title="下限预警值"></vxe-column>
-                  <vxe-column field="warningUp" :min-width="120" title="上线预警值"></vxe-column>
+                  <vxe-column field="warningUp" :min-width="120" title="上限预警值"></vxe-column>
                   <vxe-column field="alarmDown" :min-width="120" title="下限报警值"></vxe-column>
                   <vxe-column field="alarmUp" :min-width="120" title="上限报警值"></vxe-column>
                   <vxe-column field="flagName" :min-width="120" title="标记"></vxe-column>
@@ -85,7 +85,7 @@
                   <vxe-column field="nowTime" :min-width="150" title="监控时间"></vxe-column>
                   <vxe-column field="rtd" :min-width="120" title="实时值(mg/L)"></vxe-column>
                   <vxe-column field="warningDown" :min-width="120" title="下限预警值"></vxe-column>
-                  <vxe-column field="warningUp" :min-width="120" title="上线预警值"></vxe-column>
+                  <vxe-column field="warningUp" :min-width="120" title="上限预警值"></vxe-column>
                   <vxe-column field="alarmDown" :min-width="120" title="下限报警值"></vxe-column>
                   <vxe-column field="alarmUp" :min-width="120" title="上限报警值"></vxe-column>
                   <vxe-column field="flagName" :min-width="120" title="标记"></vxe-column>

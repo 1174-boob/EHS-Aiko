@@ -87,13 +87,13 @@
       </a-form>
     </div>
     <!-- 选择公司模块 -->
-    <div v-if="showCompany">
+    <!-- <div v-if="showCompany">
       <a-page-header title="选择业务所在组织" @back="() => showCompany=false" style="width: 4.28rem;margin: 0 auto;">
         <div v-for="(item, index) in companyList" :key="index">
           <a-button key="1" type="primary" @click="handlSelectOrg(item)">{{ item.companyName }}</a-button>
         </div>
       </a-page-header>
-    </div>
+    </div> -->
   </common-layout>
 </template>
 
@@ -101,7 +101,7 @@
 import CommonLayout from "@/layouts/CommonLayout";
 import { loadRoutes } from "@/utils/routerUtil";
 import { mapMutations, mapActions } from "vuex";
-import { getPublicKey, getDevToken, getDevCompany, getDevMessageBOE } from '@/services/api'
+import { getPublicKey, getDevToken, getApiToken,getDevCompany, getDevMessageBOE } from '@/services/api'
 import JSEncrypt from 'jsencrypt'
 
 export default {
@@ -152,26 +152,25 @@ export default {
         username: _this.form.getFieldValue("name"),
         password: _this.encrypt.encrypt(this.form.getFieldValue('password')),
         clientId: process.env.VUE_APP_CLIENTID,
-        grant_type: 'password',
-        scope: 'all',
-        loginType: 0,
+        grantType: 'password',
       }
-      const formData = new FormData();
-      Object.keys(params).forEach((key) => {
-        formData.append(key, params[key]);
-      });
-      this.formData = formData;
+      // const formData = new FormData();
+      const para = JSON.stringify(params);
+      // Object.keys(params).forEach((key) => {
+      //   formData.append(key, params[key]);
+      // });
+      // this.formData = formData;
       try {
-        let result = await getDevToken(formData);
+        let result = await getApiToken(para);
+        console.log(result, 'result')
         if (result.code == 20000) {
           // 存储跳转系统页的相关信息
-          sessionStorage.setItem('access_token', result.access_token);
-          sessionStorage.setItem('refresh_token', result.refresh_token);
-          sessionStorage.setItem('token_type', result.token_type);
-          sessionStorage.setItem('userName', result.userName);
-          sessionStorage.setItem('userId', result.userId);
+          sessionStorage.setItem('access_token', result.data.accessToken);
+          sessionStorage.setItem('token_type', result.data.tokenType);
+          sessionStorage.setItem('userId', result.data.expireIn);
           // 查询系统list
-          this.getCompanyList();
+          // this.getCompanyList();
+          this.getUserMessage()
         } else if (result.code == 20004) {
           // 暂时提示
           //注册
@@ -194,6 +193,7 @@ export default {
         }
         this.logging = false
       } catch (e) {
+        console.log(e, 'eee')
         this.logging = false
       }
       // this.afterLogin(res)
@@ -223,40 +223,39 @@ export default {
       this.$antMessage.success(loginRes.message, 3)
     },
     // 获取系统list
-    async getCompanyList() {
-      let resultCompany = await getDevCompany();
-      if (resultCompany.code == 20000) {
-        if (resultCompany.data.length >= 1) {
-          this.companyList = resultCompany.data;
-          this.showCompany = true;
-        } else {
-          this.showCompany = false;
-          //企业认证，去控制台登录
-          this.$antMessage.error('暂无租户，可去控制台登录进行企业认证绑定租户')
-        }
-      } else {
-        this.showCompany = false;
-      }
-    },
+    // async getCompanyList() {
+    //   let resultCompany = await getDevCompany();
+    //   if (resultCompany.code == 20000) {
+    //     if (resultCompany.data.length >= 1) {
+    //       this.companyList = resultCompany.data;
+    //       this.showCompany = true;
+    //     } else {
+    //       this.showCompany = false;
+    //       //企业认证，去控制台登录
+    //       this.$antMessage.error('暂无租户，可去控制台登录进行企业认证绑定租户')
+    //     }
+    //   } else {
+    //     this.showCompany = false;
+    //   }
+    // },
     handlSelectOrg(item) {
-      this.getUserMessage(item.companyId, item.type)
+      // this.getUserMessage(item.companyId, item.type)
+      this.getUserMessage(item.companyId)
     },
     async getUserMessage(companyId, type) {
-      let userId = sessionStorage.getItem('userId');
+      // let userId = sessionStorage.getItem('userId');
       let params = {
-        companyId: companyId,
-        userId: userId,
-        type: type,
+        // companyId: companyId,
+        // userId: userId,
+        // type: type,
         clientId: process.env.VUE_APP_CLIENTID,
         isFindAdminInfo: false,
       };
-      let result = await getDevMessageBOE(params);
+      let result = await getDevMessageBOE({});
       if (result.code == 20000) {
         sessionStorage.setItem('zconsole_userInfo', JSON.stringify(result.data));
         sessionStorage.setItem('userName', result.data.userName);
         this.$router.push("/overview/preview");
-      } else {
-
       }
     }
   },

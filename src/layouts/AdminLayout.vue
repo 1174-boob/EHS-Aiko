@@ -289,25 +289,25 @@ export default {
     },
     // 产品方块下拉列表搜索关键字
     searchKeyword(val) {
-      this.getHeaderListFn(val);
+      // this.getHeaderListFn(val);
     },
     // 请求列表
-    getHeaderListFn(val) {
-      let params = { productName: val ? val : "" };
-      getHeaderList(params)
-        .then((res) => {
-          let applicationList = res.data;
-          applicationList = applicationList.filter((item) => {
-            return (
-              (item.children && item.children.length) ||
-              (item.products && item.products.length)
-            );
-          });
+    // getHeaderListFn(val) {
+    //   let params = { productName: val ? val : "" };
+    //   getHeaderList(params)
+    //     .then((res) => {
+    //       let applicationList = res.data;
+    //       applicationList = applicationList.filter((item) => {
+    //         return (
+    //           (item.children && item.children.length) ||
+    //           (item.products && item.products.length)
+    //         );
+    //       });
 
-          this.applicationList = applicationList;
-        })
-        .catch((err) => { });
-    },
+    //       this.applicationList = applicationList;
+    //     })
+    //     .catch((err) => { });
+    // },
     //切换
     switchRole() {
       changeCompany().then((res) => {

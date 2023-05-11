@@ -13,8 +13,8 @@
             <a-form-model-item label="试卷名称" prop="name" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input v-model="policyForm.name" placeholder="请输入试卷名称"></a-input>
             </a-form-model-item>
-            <a-form-model-item label="试卷分类" prop="subjectId" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-select v-model="policyForm.subjectId" placeholder="请选择试卷分类" allowClear>
+            <a-form-model-item label="科目" prop="subjectId" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-select v-model="policyForm.subjectId" placeholder="请选择科目" allowClear>
                 <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
               </a-select>
             </a-form-model-item>
@@ -58,10 +58,10 @@ export default {
           { required: true, maxLength: 45, minLength: 2, text: "试卷名称", validator: formValidator.limitLength, trigger: "blur" },
         ],
         subjectId: [
-          { required: true, message: "试卷分类不能为空", trigger: "change" },
+          { required: true, message: "科目不能为空", trigger: "change" },
         ],
       },
-      policyLowType: [], //试卷分类数组
+      policyLowType: [], //科目数组
       sujectList: [],
       paperId: undefined,
       type: undefined,
@@ -82,7 +82,7 @@ export default {
     }
   },
   created() {
-    // this.subjectsDataList(); //试卷分类列表
+    // this.subjectsDataList(); //科目列表
     let sessObj = JSON.parse(sessionStorage.getItem("examinaObj_xt"));
 
     //刷新则返回列表
@@ -150,7 +150,7 @@ export default {
         }
       );
     },
-    //试卷分类
+    //科目
     subjectsDataList() {
       SubjectsDataList({
         corporationId: this.policyForm.corporationId
@@ -158,7 +158,7 @@ export default {
         .then((res) => {
           this.sujectList = res.data || [];
           if (this.sujectList.length == 0) {
-            this.$antMessage.warn("该组织下暂无试卷分类");
+            this.$antMessage.warn("该组织下暂无科目");
           }
         })
         .catch((err) => {

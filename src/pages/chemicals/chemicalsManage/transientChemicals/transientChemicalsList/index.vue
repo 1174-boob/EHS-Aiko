@@ -97,13 +97,13 @@ export default {
           },
         },
         {
-          title: "计划入场日期",
+          title: "计划入厂日期",
           dataIndex: "intoFactoryDate",
           key: "intoFactoryDate",
           width: 140,
         },
         {
-          title: "实际入场日期",
+          title: "实际入厂日期",
           dataIndex: "actualIntoFactoryDate",
           key: "actualIntoFactoryDate",
           width: 140,

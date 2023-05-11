@@ -7,7 +7,7 @@
         <a-form-model-item label="试卷名称">
           <a-input v-model="formInline.name" placeholder="试卷名称搜索" allowClear></a-input>
         </a-form-model-item>
-        <a-form-model-item label="试卷分类">
+        <a-form-model-item label="科目">
           <a-select v-model="formInline.subjectId" placeholder="请选择" allowClear>
             <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
           </a-select>
@@ -103,7 +103,7 @@ export default {
           key: "topicNum",
         },
         {
-          title: "试卷分类",
+          title: "科目",
           dataIndex: "subjectName",
           key: "subjectName",
         },
@@ -127,7 +127,7 @@ export default {
       ],
       dictList: [],
       productId: undefined,
-      sujectList: [], //试卷分类
+      sujectList: [], //科目
     };
   },
   created() {
@@ -167,7 +167,7 @@ export default {
       });
     },
 
-    //试卷分类
+    //科目
     subjectsDataList() {
       SubjectsDataList({
         corporationId: this.formInline.corporationId

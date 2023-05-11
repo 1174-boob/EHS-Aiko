@@ -33,7 +33,7 @@ export default {
   props: {
     labelTitle: {
       type: String,
-      default: '关联组织'
+      default: ''
     },
     placeholder: {
       type: String,

@@ -98,7 +98,7 @@
           </div>
         </div>
         <div class="post-main">
-          <h3 class="font-16 color-000 m-t-20 pd-t-22 pd-b-20 border-b-f6 m-b-20">调岗信息填写</h3>
+          <h3 class="font-16 color-000 m-t-20 pd-t-22 pd-b-20 border-b-f6 m-b-20">变岗信息填写</h3>
           <a-form-model ref="ruleForm" :model="form" :rules="rulesChangePost" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-row>
               <a-col :span="20">

@@ -6,12 +6,12 @@
         <a-row>
           <a-col :span="12">
             <CommonSearchItem :CommonFormInline="policyForm" :rules="policyRules" :notTablePage="true" :labelCol="labelCol" :wrapperCol="wrapperCol" labelAlign="right" @corporationChange="corporationChange"></CommonSearchItem>
-            <a-form-model-item label="类型" prop="topicType" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <a-form-model-item label="题型" prop="topicType" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select v-model="policyForm.topicType" placeholder="请选择类型" @change="topicTypeSelect">
                 <a-select-option v-for="policy of policyLowType" :value="policy.key" :key="policy.id">{{ policy.value }}</a-select-option>
               </a-select>
             </a-form-model-item>
-            <a-form-model-item label="题目分类" prop="sujectId" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <a-form-model-item label="科目" prop="sujectId" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select v-model="policyForm.sujectId" placeholder="请选择类型">
                 <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
               </a-select>

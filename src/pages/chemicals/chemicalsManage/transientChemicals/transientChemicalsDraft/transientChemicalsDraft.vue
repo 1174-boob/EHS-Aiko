@@ -120,7 +120,7 @@ export default {
           width: 130,
         },
         {
-          title: "化学品入场日期",
+          title: "化学品入厂日期",
           dataIndex: "intoFactoryDate",
           key: "intoFactoryDate",
           width: 140,

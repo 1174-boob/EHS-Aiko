@@ -127,10 +127,10 @@
           </a-row>
         </template>
 
-        <template title="BOE现场监护人">
+        <template title="现场监护人">
           <div>
             <div class="ttile border-b-e7">
-              <PageTitle class="ttile-text">BOE现场监护人</PageTitle>
+              <PageTitle class="ttile-text">现场监护人</PageTitle>
               <DashBtn class="ttile-bbtn">
                 <div>
                   <a-button type="dashed" @click="openAddCasNoModel()">
@@ -249,7 +249,7 @@
       </FixedBottom>
     </div>
 
-    <!-- 添加BOE现场监护人弹窗 -->
+    <!-- 添加现场监护人弹窗 -->
     <AddCasNoModel v-model="addCasNoModelShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian" :deptTreeId="deptTreeId" @changeModuleList="changeModuleList" />
     <!-- 添加特种作业员弹窗 -->
     <AddSpecialModel v-model="addSpecialModelShow" :addSpecialModelData="addSpecialModelData" :moduleList="iFrom.dangerSpecialPerson" @changeSpecialModuleList="changeSpecialModuleList" />
@@ -292,7 +292,7 @@ export default {
         isNight: [{ required: true, message: "是否跨夜不能为空", trigger: "change" },],
         dayDate: [{ required: true, message: "作业日期不能为空", trigger: "change" },],
         dayTime: [{ required: true, message: "每日作业时间不能为空", trigger: "change" },],
-        dangerGuardian: [{ required: true, message: "BOE现场监护人不能为空", trigger: "change" },],
+        dangerGuardian: [{ required: true, message: "现场监护人不能为空", trigger: "change" },],
         isMust: [{ required: true, message: "作业形式不能为空", trigger: "change" },],
         outCompany: [{ required: true, message: "外协厂商名称不能为空", trigger: "blur" },],
         outPrincipal: [{ required: true, message: "负责人不能为空", trigger: "blur" },],
@@ -304,7 +304,7 @@ export default {
       // 主要成分table
       columns: [
         {
-          title: "BOE现场监护人",
+          title: "现场监护人",
           dataIndex: "guardianName",
           key: "guardianName",
           customRender: (text) => {
@@ -528,7 +528,7 @@ export default {
       this.$set(this.iFrom, 'applyUserCode', undefined)
       this.$set(this.iFrom, 'applyUserName', undefined)
       this.checkedTreeNode = []
-      // BOE现场监护人
+      // 现场监护人
       this.$set(this.iFrom, 'dangerGuardian', [])
     },
     // 获取页面详情
@@ -709,7 +709,7 @@ export default {
         return v.toString(16);
       });
     },
-    // BOE现场监护人-打开窗口-新增、编辑
+    // 现场监护人-打开窗口-新增、编辑
     openAddCasNoModel(row) {
       if (this.iFrom.corporationId) {
         this.addCasNoModelData = row ? row : {}
@@ -718,12 +718,12 @@ export default {
         this.$antMessage.warn('请先选择所属组织')
       }
     },
-    // BOE现场监护人-添加、修改一行
+    // 现场监护人-添加、修改一行
     changeModuleList(moduleDataList) {
       this.$set(this.iFrom, 'dangerGuardian', moduleDataList)
       formValidator.formItemValidate(this, 'dangerGuardian', 'ruleForm')
     },
-    // BOE现场监护人-删除一行
+    // 现场监护人-删除一行
     tableRowRm(row) {
       this.$antConfirm({
         title: "确定删除吗?",
