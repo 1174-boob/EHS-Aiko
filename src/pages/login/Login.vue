@@ -254,7 +254,7 @@ export default {
       let result = await getDevMessageBOE({});
       if (result.code == 20000) {
         sessionStorage.setItem('zconsole_userInfo', JSON.stringify(result.data));
-        sessionStorage.setItem('userName', result.data.userName);
+        sessionStorage.setItem('userName', result.data.user.name);
         this.$router.push("/overview/preview");
       }
     }

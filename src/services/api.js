@@ -24,7 +24,7 @@ export const getPortraitUrlt = params => post(`${serviceNameList.btpFile}/api/fi
 //获取头像下拉右侧数字接口
 export const GetUpcomingNum = params => get(`${serviceNameList.customer}/api/over/view/getUpcomingNum`, params);
 // 公共 字典 
-export const getDictionary = params => post(`${serviceNameList.danger}/api/dict/list`, params);
+export const getDictionary = params => post(`${serviceNameList.customer}/api/dict/list`, params);
 // 获取所有按钮权限 ---------------------------此处需要替换为ehs的权限接口
 export const getAllButtonCodeList = params => get(`${serviceNameList.customer}/api/role/getLoginButtonCode`, params);
 // 查询用户部门组织树
@@ -275,7 +275,7 @@ export const DeleteFormData = params => post(`${serviceNameList.form}/api/ehs/fo
 // 自定义组件字典，获取字典列表 + 获取列表每一项对象对应的具体字典项数据
 export const getDictTypeAll = params => get(`${serviceNameList.danger}/api/ehs/sysDictType/list/all`, params);
 export const getDictDataAll = params => post(`${serviceNameList.danger}/api/ehs/sysDictData/list/all`, params);
-export const getDictTree = params => get(`${serviceNameList.danger}/api/ehs/sysDictType/dictTree`, params);
+export const getDictTree = params => get(`${serviceNameList.customer}/api/ehs/sysDictType/dictTree`, params);
 // 根据tempID查部署ID
 export const GetId = params => post(`${serviceNameList.btp}/api/process/template/detailByForm`, params);
 // 获取第一个节点信息
@@ -531,7 +531,7 @@ export const preAlarmPageList = params => post(`${serviceNameList.danger}/api/eh
 export const getLowpowerDept = params => post(`${serviceNameList.customer}/api/lowpower/dept`, params);
 
 // 获取法人机构全量列表
-export const getCorporationListAll = params => post(`${serviceNameList.danger}/api/ehs/corporation/dict`, params);
+export const getCorporationListAll = params => post(`${serviceNameList.customer}/api/ehs/corporation/dict`, params);
 // 法人机构列表查询-增-删-改
 export const getCorporationList = params => post(`${serviceNameList.danger}/api/ehs/corporation/list`, params);
 export const saveCorporationList = params => post(`${serviceNameList.danger}/api/ehs/corporation/save`, params);
@@ -814,9 +814,9 @@ export const proposalAnalyseLevel = params => post(`${serviceNameList.proposal}/
 
 // 数据权限
 // 获取当前租户的法人机构树
-export const getCorporationTree = params => get(`${serviceNameList.danger}/api/ehs/corporation/getCorporationTree`, params);
+export const getCorporationTree = params => get(`${serviceNameList.customer}/api/ehs/corporation/getCorporationTree`, params);
 // 获取当前登录用户所属的法人机构树
-export const getLoginCorporation = params => get(`${serviceNameList.danger}/api/ehs/corporation/getLoginCorporation`, params);
+export const getLoginCorporation = params => get(`${serviceNameList.customer}/api/ehs/corporation/getLoginCorporation`, params);
 // 分配法人机构
 export const divideCorporation = params => post(`${serviceNameList.danger}/api/ehs/company/user/divideCorporation`, params);
 // 获取菜单配置列表
