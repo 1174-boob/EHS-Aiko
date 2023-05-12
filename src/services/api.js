@@ -813,12 +813,14 @@ export const proposalAnalyseLevelDownLoad = params => postExcel(`${serviceNameLi
 export const proposalAnalyseLevel = params => post(`${serviceNameList.proposal}/api/ehs/improve/proposal/data/analyse/statistics/level`, params);
 
 // 数据权限
+// 获取已勾选数据
+export const getAllotOrg = params => post(`ehs-customer/api/company/user/info/getAllotOrg`, params);
 // 获取当前租户的法人机构树
-export const getCorporationTree = params => get(`ehs-customer/api/ehs/corporation/getCorporationTree`, params);
+export const getCorporationTree = params => get(`ehs-customer/api/org/condition/list`, params);
 // 获取当前登录用户所属的法人机构树
 export const getLoginCorporation = params => get(`ehs-customer/api/ehs/corporation/getLoginCorporation`, params);
 // 分配法人机构
-export const divideCorporation = params => post(`${serviceNameList.danger}/api/ehs/company/user/divideCorporation`, params);
+export const divideCorporation = params => post(`${serviceNameList.customer}/api/company/user/info/allotOrg`, params);
 // 获取菜单配置列表
 export const getMenuAuthList = params => get(`ehs-customer/api/ehs/menuDataAuth/getMenuAuthList`, params);
 // 更新菜单权限

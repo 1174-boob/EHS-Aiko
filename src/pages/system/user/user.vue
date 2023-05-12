@@ -245,6 +245,7 @@ import {
   getTreeUserList,
   getUserRoleList,
   GetLabelList,
+  getAllotOrg,
   getCorporationTree,
   divideCorporation
 } from "@/services/api";
@@ -300,7 +301,7 @@ export default {
       divideCheckedKeys: [],
       selectedBusinessKeys: [],
       divideTreeData: [],
-      replaceFields: { children: 'corporationList' },
+      replaceFields: { title: 'orgName', key:'orgId' },
       centerCodeList: [],
       codeListLength: 0,
       addUserRulesT: {},
@@ -515,29 +516,38 @@ export default {
       // 获取分配法人机构列表 
       this.currentMsg = { ...record };
       this.shareVisible = true;
-      getCorporationTree().then(res => {
-        this.divideTreeData = res.data || [];
-        this.resolveData(this.divideTreeData);
-        this.centerCodeList = [];
-        this.codeListLength = 0;
-        for (let i = 0; i < this.divideTreeData.length; i++) {
-          let itemLength = this.divideTreeData[i].corporationList ? this.divideTreeData[i].corporationList.length : 0;
+      var _this = this;
+      getAllotOrg({ userId: _this.userId }).then(checkRes => {
+        console.log(checkRes.data)
+        getCorporationTree().then(res => {
+          this.divideTreeData = [
+            // res?.data?.allOrg?.company,
+            //   ...res?.data?.allOrg?.cause,
+            //   ...res?.data?.allOrg?.center,
+              ...res?.data?.allOrg?.cor,
+            ] || [];
+          this.resolveData(this.divideTreeData);
+          // this.centerCodeList = [];
+          this.codeListLength = this.divideTreeData.length;
+          // for (let i = 0; i < this.divideTreeData.length; i++) {
+          //   let itemLength = this.divideTreeData[i].corporationList ? this.divideTreeData[i].corporationList.length : 0;
 
-          this.codeListLength += itemLength;
-          if (!(this.divideTreeData[i].corporationList && this.divideTreeData[i].corporationList.length > 0)) {
-            this.divideTreeData[i].disableCheckbox = true;
-            this.divideTreeData[i].disabled = true;
-          } else {
-            this.centerCodeList.push(this.divideTreeData[i].corporationCode);
-          }
-        }
-        this.divideCheckedKeys = record.corporationListId;
-        //console.log(this.codeListLength)
-        if (record.corporationListName == "全部") {
-          this.divideCheckedKeys = this.centerCodeList;
-          this.isCheckAll = true;
-        }
-      }).catch(err => { })
+          //   this.codeListLength += itemLength;
+          //   if (!(this.divideTreeData[i].corporationList && this.divideTreeData[i].corporationList.length > 0)) {
+          //     this.divideTreeData[i].disableCheckbox = true;
+          //     this.divideTreeData[i].disabled = true;
+          //   } else {
+          //     this.centerCodeList.push(this.divideTreeData[i].corporationCode);
+          //   }
+          // }
+          // this.divideCheckedKeys = record.corporationListId;
+          this.divideCheckedKeys = checkRes.data;
+          // if (record.corporationListName == "全部") {
+          //   this.divideCheckedKeys = this.centerCodeList;
+          //   this.isCheckAll = true;
+          // }
+        }).catch(err => { })
+      })
     },
     resolveData(arr, flag) {
       for (let i = 0; i < arr.length; i++) {
@@ -584,10 +594,10 @@ export default {
       this.shareVisible = false;
       let para = {
         userId: this.currentMsg.userId,
-        corporationType: this.isCheckAll ? 0 : 1
+        // corporationType: this.isCheckAll ? 0 : 1
       }
       if (!this.isCheckAll) {
-        para.corporationIdList = this.divideCheckedKeys.filter(item => {
+        para.orgIdList = this.divideCheckedKeys.filter(item => {
           return this.centerCodeList.indexOf(item) == -1;
         })
       }
@@ -687,7 +697,7 @@ export default {
         this.recordObj = record;
         this.getUserIdentityList(); //添加用户-角色树 数据
         this.getLabelList();//添加标签
-        this.customField(); //添加用户-获取自定义字段接口
+        // this.customField(); //添加用户-获取自定义字段接口
         UserDetailInterFace({ companyUserInfoId: record.companyUserInfoId })
           .then((res) => {
             this.formCustom = res.data.userFields || []; //自定义字段
@@ -732,7 +742,7 @@ export default {
       // if (this.canClickBtnMixin("user-1")) {
         this.getUserIdentityList(); //添加用户-角色树 数据
         this.getLabelList();//添加标签
-        this.customField(); //添加用户-获取自定义字段接口
+        // this.customField(); //添加用户-获取自定义字段接口
         this.addUserFlag = true;
         this.addOrChangeUser = "add"; //区分新增还是修改
         this.dictTitle = "新增用户";
