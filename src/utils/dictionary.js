@@ -10,7 +10,7 @@ export default function getDictionaryItemObj(type, key, isValue = true) {
   // store.state.setting.dictConfigData --配置管理字典
   let dictionaryData = store.state.setting.dictionaryData
   // console.log(dictionaryData, '...dictionaryData我是公共方法');
-  let errObj = { value: '1字典数据异常！' }
+  let errObj = { value: '字典数据异常！' }
   // 字典不存在
   if (isEmpty(dictionaryData)) return isValue ? '字典数据异常！' : errObj
   // 字典存在

@@ -135,7 +135,7 @@
               <a-input
                 :disabled="disabled"
                 v-model="handleForm.alarmLevel"
-                placeholder="请选择报警级别"
+                placeholder="请输入..."
                 :maxLength="30"
               />
             </a-form-model-item>

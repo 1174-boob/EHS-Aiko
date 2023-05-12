@@ -15,7 +15,7 @@
           </a-form-model-item>
           <a-form-model-item style="width: 358px" label="标签组类型">
             <a-select style="width:200px" v-model="formInline.labelType" placeholder="请选择">
-              <a-select-option style="width:200px" :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
+              <a-select-option style="width:200px" :key="item.id" :value="item.key" v-for="item in orgLevelList">{{item.value}}</a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item class="float-right">
@@ -87,7 +87,7 @@
           </a-form-model-item>
           <a-form-model-item label="标签组类型" prop="labelType">
             <a-select style="display: block;"  v-model="formData.labelType" placeholder="请选择标签组类型">
-              <a-select-option :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
+              <a-select-option :key="item.id" :value="item.key" v-for="item in orgLevelList">{{item.value}}</a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item label="标签组描述" prop="labelDescription">
@@ -209,6 +209,7 @@ import {
 import fromMaxLength from "@/mixin/fromMaxLength";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
+import getDictionaryItemObj from "@/utils/dictionary";
 import { debounce } from "lodash";
 import { formValidator } from "@/utils/clx-form-validator.js";
 export default {
@@ -227,6 +228,7 @@ export default {
         labelType: "",
         labelDescription: "",
       },
+      getDictionaryItemObj,
       // 表单验证
       rules: {
         labelCode: [
@@ -307,16 +309,7 @@ export default {
         },
       ],
       dataList: [],
-      orgLevelList:[
-        {
-          itemCode:'1',
-          itemName:"个人标签"
-        },
-        {
-          itemCode:'2',
-          itemName:"部门标签"
-        }
-      ],
+      orgLevelList:[],
       //编辑时禁用输入框
       InpDis: false,
       //弹窗title
@@ -358,6 +351,8 @@ export default {
     };
   },
   created() {
+    this.orgLevelList = getDictionaryItemObj('labelType');
+    console.log(this.orgLevelList,'this.orgLevelList');
     this.getTableList();
   },
   methods: {
