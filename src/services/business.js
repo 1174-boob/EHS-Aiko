@@ -6,7 +6,7 @@ import serviceNameList from '@/config/default/service.config'
 export const GetOrgPageList = params => post(`ehs-customer/api/org/page/list`, params);
 
 //获取全部组织信息
-export const GetOrgGroup = params => get(`ehs-customer/api/org/group/list`, params);
+export const GetOrgGroup = params => get(`ehs-customer/api/org/condition/list`, params);
 
 //新增业务组织
 export const AddOrg = params => post(`ehs-customer/api/org/insert`, params);

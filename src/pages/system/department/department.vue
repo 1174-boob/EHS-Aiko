@@ -531,10 +531,10 @@ export default {
     },
     // 获取列表
     getTableList() {
-      let id = this.selectedKeys.length ? this.selectedKeys[0] : "-1";
+      let deptId = this.selectedKeys.length ? this.selectedKeys[0] : "-1";
       let selObj = { ...this.formInline };
       // id = selObj.name ? "-1" : id;
-      let postData = { id, companyId: this.companyId, ...this.page, ...selObj };
+      let postData = { deptId, companyId: this.companyId, ...this.page, ...selObj };
       return getDepartmentList(postData)
         .then((res) => {
           let { list: dataList, total } = res.data
@@ -634,7 +634,7 @@ export default {
       { leading: true, trailing: false }
     ),
     iAdd() {
-      if (this.canClickBtnMixin("department-1")) {
+      // if (this.canClickBtnMixin("department-1")) {
         this.getAllUserByCompanyIdFn()
           .then((res) => {
             //获取默认部门编码
@@ -650,7 +650,7 @@ export default {
             // });
           })
           .catch(() => {});
-      }
+      // }
     },
     // 获取详情
     getRoleItemDetailsFn(apiData) {

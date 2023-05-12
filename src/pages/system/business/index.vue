@@ -8,11 +8,6 @@
         <SearchTerm>
           <div class="role-console-search-left">
             <a-form-model layout="inline" :model="formInline" :colon="false">
-              <!-- <a-form-model-item style="width: 358px" label="业务层级">
-                <a-select style="width:200px" v-model="formInline.orgLevel" placeholder="请选择业务层级">
-                  <a-select-option style="width:200px" :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
-                </a-select>
-              </a-form-model-item> -->
               <a-form-model-item style="width: 358px" label="上级业务组织">
                 <a-input
                   class="role-console-search-left-item"
@@ -134,7 +129,7 @@
           </a-form-model-item>
           <a-form-model-item label="业务层级" prop="orgLevel">
             <a-select v-model="formData.orgLevel" placeholder="请选择业务层级">
-              <a-select-option :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
+              <a-select-option :key="item.id" :value="item.key" v-for="item in orgLevelList">{{item.value}}</a-select-option>
             </a-select>
           </a-form-model-item>
           <!-- <orgTreeModal 
@@ -147,21 +142,18 @@
           /> -->
           <a-form-model-item label="上级业务组织" prop="parentOrgIds">
             <a-select mode="multiple" v-model="formData.parentOrgIds" placeholder="请选择上级业务组织">
-              <a-select-opt-group  label="现地">
-                <a-select-option :key="index" v-for="(item, index) in companyList" :value="item.orgId">
-                  {{ item.orgName }}
-                </a-select-option>
-              </a-select-opt-group>
-              <a-select-opt-group label="事业">
-                <a-select-option :key="index" v-for="(item, index) in causeList" :value="item.orgId">
-                  {{ item.orgName }}
-                </a-select-option>
-              </a-select-opt-group>
-              <a-select-opt-group label="中心">
-                <a-select-option :key="index" v-for="(item, index) in centerList" :value="item.orgId">
-                  {{ item.orgName }}
-                </a-select-option>
-              </a-select-opt-group>
+              <a-select-option :key="index" v-for="(item, index) in companyList" :value="item.orgId">
+                {{ item.orgName }}
+              </a-select-option>
+              <a-select-option :key="index" v-for="(item, index) in causeList" :value="item.orgId">
+                {{ item.orgName }}
+              </a-select-option>
+              <a-select-option :key="index" v-for="(item, index) in centerList" :value="item.orgId">
+                {{ item.orgName }}
+              </a-select-option>
+              <a-select-option :key="index" v-for="(item, index) in corList" :value="item.orgId">
+                {{ item.orgName }}
+              </a-select-option>
             </a-select>
           </a-form-model-item>
           <!-- <a-form-model-item label="关联组织" prop="deptIds"> -->
@@ -313,6 +305,7 @@ export default {
       companyList: [],
       causeList: [],
       centerList: [],
+      corList: [],
       // 表单验证
       rules: {
         orgCode: [
@@ -461,6 +454,7 @@ export default {
   },
   created() {
     this.orgLevelList = getDictionaryItemObj('orgLevel');
+    console.log(this.orgLevelList,'this.orgLevelList111');
     this.companyId = JSON.parse(
       sessionStorage.getItem("zconsole_userInfo")
     ).company.companyId;
@@ -556,10 +550,12 @@ export default {
     // 获取全部组织信息
     getOrgGroupFn() {
       return GetOrgGroup().then((res) => {
-        this.searchTreeList = res.data;
+        console.log(res.data.allOrg,'cccccccc');
+        this.searchTreeList = res.data.allOrg;
         this.companyList = this.searchTreeList.company
         this.causeList = this.searchTreeList.cause
         this.centerList = this.searchTreeList.center
+        this.corList = this.searchTreeList.cor
       }).catch((err) => {
         console.log(err);
       });
