@@ -104,7 +104,7 @@ const copyTextMixin = {
         // 按钮是否可以点击
         canClickBtnMixin(btnId) {
             if (!this.allButtonCodeList.includes(btnId)) {
-                this.$antMessage.warn('暂无权限，请联系管理员开通权限后再操作！')
+                this.$antMessage.warn('暂无权限，请联系管理员开通权限后再操作！1')
             }
             return this.allButtonCodeList.includes(btnId)
         },

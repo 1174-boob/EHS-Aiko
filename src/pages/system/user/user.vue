@@ -26,11 +26,6 @@
             <a-form-model-item label="工号">
               <a-input v-model="formInline.jobNumber" placeholder="请输入工号" :maxLength="jobNumberMaxLength" allowClear></a-input>
             </a-form-model-item>
-            <a-form-model-item label="状态">
-              <a-select v-model="formInline.status" placeholder="请输入状态">
-                <a-select-option v-for="item in userInfoStatus" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
-              </a-select>
-            </a-form-model-item>
             <a-form-model-item class="float-right">
               <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
               <a-button @click="iRest" :loading="loadingFour">重置</a-button>
@@ -46,7 +41,6 @@
           <!-- <a-button class="clx-btn-margin-right" type="dashed" @click="joinUser">邀请用户加入企业</a-button> -->
           <!-- <a-button class="clx-btn-margin-right btn-text-margin" type="dashed" @click="openApplicant">申请人列表</a-button> -->
           <span class="field-management btn-text-margin" @click="selectModelShow">字段管理</span>
-          <span class="field-management field-management-grey" @click="leavingUser">已离职用户</span>
         </div>
         <!-- 表格 -->
         <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange" v-if="columns.length">
@@ -83,12 +77,6 @@
               <span class="color-0067cc table-btn cursor-pointer" @click="actionShare(record)">业务组织</span>
               <span class="color-0067cc table-btn cursor-pointer" @click="openDepAndPosModel(record)">部门及职位</span>
               <span class="color-0067cc table-btn cursor-pointer" @click="openLabelModel(record)">标签</span>
-              <TableMoreBtn>
-                <li v-if="record.status == 1" :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="freezeOrDeparture('freeze', record)">冻结</li>
-                <li v-else :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="freezeOrDeparture('activation', record)">激活</li>
-                <li :class="btnAuthDisable(record)? 'table-btn-back-disable':''" @click="freezeOrDeparture('departure', record)">离职</li>
-                <li @click="detailUser(record)">详情</li>
-              </TableMoreBtn>
             </div>
           </a-table>
         </CommonTable>
@@ -328,7 +316,6 @@ export default {
       recordObj: {},
       fileList: [],
       imageUrl: "", //头像回显
-      userInfoStatus: [], //搜索状态下拉
       addUserFormT: {}, //自定义字段
       formCustomNew: [], //自定义字段列表转换后
       formCustom: [], //自定义字段列表
@@ -438,7 +425,6 @@ export default {
         name: undefined,
         phone: undefined,
         jobNumber: undefined,
-        status: undefined,
       },
       // 全部表头
       tableColumnAllList: [
@@ -470,12 +456,6 @@ export default {
           key: "adminDeptAndPosition",
           scopedSlots: { customRender: "adminDeptAndPosition" },
         },
-        {
-          title: "状态",
-          dataIndex: "status",
-          key: "status",
-          scopedSlots: { customRender: "status" },
-        },
       ],
       // 显示的表头
       seltableColumnList: [],
@@ -489,7 +469,6 @@ export default {
     };
   },
   created() {
-    this.userInfoStatus = getDictionaryItemObj("companyUserInfoFindStatus"); //状态-激活/冻结
     this.userId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.userId
     this.getTreeUserTreeFn(true); // 获取组织架构-树结构
     // 从本地获取表头显示信息
@@ -750,7 +729,7 @@ export default {
     },
     //创建用户事件
     addUser() {
-      if (this.canClickBtnMixin("user-1")) {
+      // if (this.canClickBtnMixin("user-1")) {
         this.getUserIdentityList(); //添加用户-角色树 数据
         this.getLabelList();//添加标签
         this.customField(); //添加用户-获取自定义字段接口
@@ -758,7 +737,7 @@ export default {
         this.addOrChangeUser = "add"; //区分新增还是修改
         this.dictTitle = "新增用户";
         this.imageUrl = "";
-      }
+      // }
     },
     //提交事件
     submitAddModel(type) {
@@ -1220,10 +1199,6 @@ export default {
       //获取列表
       this.getTableList();
     },
-    //离职用户-跳转页面
-    leavingUser() {
-      this.$router.push("resignedUser");
-    },
     // 查询
     iSearch() {
       this.handleLoading();
@@ -1251,7 +1226,6 @@ export default {
           name: undefined,
           phone: undefined,
           jobNumber: undefined,
-          status: undefined,
         };
         this.selectedKeysOld = [];
         this.selectedKeys = [];

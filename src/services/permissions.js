@@ -33,7 +33,7 @@ export const GetUserInfoList = params => post(`${serviceNameList.customer}/api/c
 export const DelUserInfoList = params => post(`${serviceNameList.customer}/api/company/user/info/delete`, params);
 
 //用户新增/详情弹框中自定义字段接口
-export const CustomField = params => get(`${serviceNameList.customer}/api/custome/fields/list`, params);
+export const CustomField = params => get(`ehs-customer/api/custome/fields/list`, params);
 
 //生成邀请码
 export const AddCode = params => get(`${serviceNameList.customer}/api/company/invite/code/create`, params);

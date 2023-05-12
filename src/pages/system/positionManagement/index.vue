@@ -148,9 +148,9 @@ export default {
         positionLevel: [
           {
             required: true,
-            validator: formValidator.texTonlyNumberNine,
+            // validator: formValidator.texTonlyNumberNine,
             trigger: "blur",
-            text: "职位等级",
+            message: "职位等级不能为空",
           },
         ],
       },

@@ -442,7 +442,7 @@ export default {
     // this.userInfo.username = userInfo.user.name;
     this.correctPageMinHeight(this.minHeight - 24);
     this.setActivated(this.$route);
-    this.getHeaderListFn();
+    // this.getHeaderListFn();
     this.getheaderlist();
     this.getUserDetail();
   },

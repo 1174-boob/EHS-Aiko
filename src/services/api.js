@@ -7,7 +7,7 @@ export const getRoutesConfig = params => get('/routes', params);
 export const getToken = (params, headers) => get(serviceNameList.authehs + '/api/token/getToken', params, headers);
 export const getUserInfo = (params) => post(serviceNameList.authehs + '/api/token/getUserMessage', params);
 // export const getPublicKey = params => get(serviceNameList.customer + '/api/rsa/publicKey', params);
-export const getPublicKey = params => get('ehs-customer/api/rsa/publicKey', params);
+export const getPublicKey = params => get('ehs-customer/api/customer/rsa/publicKey', params);
 export const getDevToken = (params, headers) => post(serviceNameList.auth + '/oauth/token', params, headers);
 export const getApiToken = (params, headers) => post('ehs-auth/api/login', params, headers);
 export const getTokenApi = (params, headers) => get(serviceNameList.authehs + '/api/token/getToken', params, headers);
@@ -22,84 +22,84 @@ export const getMenuTree = (params) => get('ehs-customer/api/role/getLoginMenu',
 export const changeCompany = (params, headers) => get(process.env.VUE_APP_ZICONSOLE_AUTH + '/api/auth/changeCompany', params, headers);
 export const getPortraitUrlt = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
 //获取头像下拉右侧数字接口
-export const GetUpcomingNum = params => get(`${serviceNameList.customer}/api/over/view/getUpcomingNum`, params);
+export const GetUpcomingNum = params => get(`ehs-customer/api/over/view/getUpcomingNum`, params);
 // 公共 字典 
-export const getDictionary = params => post(`${serviceNameList.customer}/api/dict/list`, params);
+export const getDictionary = params => post(`ehs-customer/api/dict/list`, params);
 // 获取所有按钮权限 ---------------------------此处需要替换为ehs的权限接口
-export const getAllButtonCodeList = params => get(`${serviceNameList.customer}/api/role/getLoginButtonCode`, params);
+export const getAllButtonCodeList = params => get(`ehs-customer/api/role/getLoginButtonCode`, params);
 // 查询用户部门组织树
-export const getDeptUserTree = params => post(`${serviceNameList.customer}/api/lowpower/deptUser/step`, params);
+export const getDeptUserTree = params => post(`ehs-customer/api/lowpower/deptUser/step`, params);
 //省市区接口
-// export const GetProvincesList = params => get(`${serviceNameList.customer}/api/city/get/city`, params);
+// export const GetProvincesList = params => get(`ehs-customer/api/city/get/city`, params);
 // 公共 上传文件 getSTS 
-export const getUploadSTS = params => post(`${serviceNameList.customer}/api/bps/file/getSTS`, params);
+export const getUploadSTS = params => post(`ehs-customer/api/bps/file/getSTS`, params);
 // 公共 保存文件  
-export const saveUploadFile = params => post(`${serviceNameList.customer}/api/bps/file/upload`, params);
+export const saveUploadFile = params => post(`ehs-customer/api/bps/file/upload`, params);
 // 公共 获取上传结果(获取文件、图片上传成功的结果)
-export const getUrlApi = params => get(`${serviceNameList.customer}/api/bps/file/upload/process`, params);
+export const getUrlApi = params => get(`ehs-customer/api/bps/file/upload/process`, params);
 // 公共 根据用户获取用户主部门信息
-export const getInsidePeopleInfoApi = params => post(`${serviceNameList.customer}/api/feign/getAdminDeptByCompanyIdAndUserId`, params);
+export const getInsidePeopleInfoApi = params => post(`ehs-customer/api/feign/getAdminDeptByCompanyIdAndUserId`, params);
 
 
 // header 菜单
-export const getHeaderList = params => get(`${serviceNameList.customer}/api/category/product/list`, params);
+export const getHeaderList = params => get(`ehs-customer/api/category/product/list`, params);
 // header 角色切换-获取角色列表
-export const getCompany = params => get(`${serviceNameList.customer}/api/userRoleRel/getCompany`, params);
+export const getCompany = params => get(`ehs-customer/api/userRoleRel/getCompany`, params);
 // 合同管理 获取列表
 export const getContractTableList = params => post(`${serviceNameList.contract}/api/contract/page/list`, params);
 // 合同管理 撤销
 export const changeContractItemStatus = params => post(`${serviceNameList.contract}/api/contract/status/canceled`, params);
-export const contractAddAddress = params => post(`${serviceNameList.customer}/api/address/insert`, params);
+export const contractAddAddress = params => post(`ehs-customer/api/address/insert`, params);
 // 合同管理--填写信息 获取地址列表
-export const contractGetAddressAll = params => post(`${serviceNameList.customer}/api/address/list/page`, params);
+export const contractGetAddressAll = params => post(`ehs-customer/api/address/list/page`, params);
 // 修改手机号-发送验证码
-export const sendPhoneCode = params => get(`${serviceNameList.customer}/api/send/sendPhoneCode`, params);
+export const sendPhoneCode = params => get(`ehs-customer/api/send/sendPhoneCode`, params);
 // 修改手机号-验证验证码
-export const checkPhoneCode = params => post(`${serviceNameList.customer}/api/send/checkPhoneCode`, params);
+export const checkPhoneCode = params => post(`ehs-customer/api/send/checkPhoneCode`, params);
 // 修改手机号-确定修改
-export const changePhone = params => post(`${serviceNameList.customer}/api/user/bindPhone`, params);
+export const changePhone = params => post(`ehs-customer/api/user/bindPhone`, params);
 // 修改邮箱-发送验证码
-export const sendEmailCode = params => post(`${serviceNameList.customer}/api/user/getEmailCode`, params);
+export const sendEmailCode = params => post(`ehs-customer/api/user/getEmailCode`, params);
 // 修改邮箱-验证验证码
-export const checkEmailCode = params => post(`${serviceNameList.customer}/api/user/checkCode`, params);
+export const checkEmailCode = params => post(`ehs-customer/api/user/checkCode`, params);
 // 修改邮箱-确定修改
-export const changeEmail = params => post(`${serviceNameList.customer}/api/user/bindEmail`, params);
+export const changeEmail = params => post(`ehs-customer/api/user/bindEmail`, params);
 // 绑定邮箱-确定
-export const AddEmail = params => post(`${serviceNameList.customer}/api/user/bindEmail`, params);
+export const AddEmail = params => post(`ehs-customer/api/user/bindEmail`, params);
 // 修改密码
-export const ChangePassword = params => post(`${serviceNameList.customer}/api/user/changePassword`, params);
+export const ChangePassword = params => post(`ehs-customer/api/user/changePassword`, params);
 // 获取组织部门和组织人员的新接口-2022-10-17
-export const getDeptAndUser = params => post(`${serviceNameList.customer}/api/enterprise/dept/getDeptAndUser`, params);
+export const getDeptAndUser = params => post(`ehs-customer/api/enterprise/dept/getDeptAndUser`, params);
 // 获取组织部门和组织人员的子节点新接口-2022-10-17
-export const getDeptAndUserByDeptId = params => post(`${serviceNameList.customer}/api/enterprise/dept/getDeptAndUserByDeptId`, params);
+export const getDeptAndUserByDeptId = params => post(`ehs-customer/api/enterprise/dept/getDeptAndUserByDeptId`, params);
 // 部门树结构改成key(部门id):value(部门中文名)，供表格回显部门使用
-export const getDeptCache = params => get(`${serviceNameList.customer}/api/enterprise/dept/getDeptCache`, params);
+export const getDeptCache = params => get(`ehs-customer/api/enterprise/dept/getDeptCache`, params);
 // 获取组织人员的组合名称新接口-2022-10-17
-export const getUserAndJobNumber = params => post(`${serviceNameList.customer}/api/user/getUserAndJobNumber`, params);
+export const getUserAndJobNumber = params => post(`ehs-customer/api/user/getUserAndJobNumber`, params);
 // 搜索部门名称新接口-2022-10-17
-export const searchDept = params => post(`${serviceNameList.customer}/api/company/dept/searchDept`, params);
+export const searchDept = params => post(`ehs-customer/api/company/dept/searchDept`, params);
 // 搜索人员名称新接口-2022-10-17
-export const searchUser = params => post(`${serviceNameList.customer}/api/company/dept/searchUser`, params);
+export const searchUser = params => post(`ehs-customer/api/company/dept/searchUser`, params);
 
 // 公共-获取审批日志
 export const getFlowLogApi = params => post(`${serviceNameList.danger}/api/ehs/flow/getTaskComments`, params);
 // 公共-根据部门获取责任人
-export const getLiablePeopleByDeptId = params => post(`${serviceNameList.customer}/api/enterprise/dept/findDeptBoss`, params);
+export const getLiablePeopleByDeptId = params => post(`ehs-customer/api/enterprise/dept/findDeptBoss`, params);
 
 // 优惠券管理-激活优惠券
 export const couponActiveApi = params => get(`${serviceNameList.coupon}/api/coupon/born`, params);
 // 优惠券管理-获取产品列表
 // 获取角色
-export const roleList = params => post(`${serviceNameList.customer}/api/role/list`, params);
+export const roleList = params => post(`ehs-customer/api/role/list`, params);
 
 //总览页-接口
 //获取管理绩效评价
 export const getPreviewPerformanceAppraisalApi = params => post(`${serviceNameList.kpi}/api/ehs/kpi/data/analysis/index`, params);
 
 //获取团队列表
-export const GetTeamList = params => get(`${serviceNameList.customer}/api/over/view/team/statistics`, params);
+export const GetTeamList = params => get(`ehs-customer/api/over/view/team/statistics`, params);
 //获取钱数
-export const GetCostList = params => get(`${serviceNameList.customer}/api/company/product/seven/pay`, params);
+export const GetCostList = params => get(`ehs-customer/api/company/product/seven/pay`, params);
 //获取信息接口
 export const GetCostInformationList = params => get(`${serviceNameList.payment}/api/order/todo/costInformation`, params);
 //获取下拉框信息接口
@@ -107,13 +107,13 @@ export const GetSelectByCompanyList = params => get(`${serviceNameList.coupon}/a
 //获取工作订单接口
 export const GettoWorkOrderList = params => get(`${serviceNameList.worklist}/api/workList/toWorkOrder`, params);
 //获取产品接口
-export const GettoProductList = params => get(`${serviceNameList.customer}/api/over/view/product/list`, params);
+export const GettoProductList = params => get(`ehs-customer/api/over/view/product/list`, params);
 //获取认证接口
-export const IsCertification = params => get(`${serviceNameList.customer}/api/company/product/update/show`, params);
+export const IsCertification = params => get(`ehs-customer/api/company/product/update/show`, params);
 //获取是否免费接口
-export const ApplyFree = params => get(`${serviceNameList.customer}/api/company/product/show/free/product`, params);
+export const ApplyFree = params => get(`ehs-customer/api/company/product/show/free/product`, params);
 //获取详情
-export const GetIsCompany = params => get(`${serviceNameList.customer}/api/company/detail`, params);
+export const GetIsCompany = params => get(`ehs-customer/api/company/detail`, params);
 //获取合同订单数量
 export const GetContractCount = params => get(`${serviceNameList.contract}/api/contract/open/contractSize`, params);
 //获取新闻公告列表总览页-右下角
@@ -131,21 +131,21 @@ export const SelectPolicylawDetail = params => post(`${serviceNameList.danger}/a
 //ehs危险工作查询列表
 export const SelectDangerList = params => post(`${serviceNameList.danger}/api/ehs/danger/selectDangerPage`, params);
 //字典组新增
-export const SaveDictData = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/saveSysDictType`, params);
+export const SaveDictData = params => post(`ehs-customer/api/ehs/sysDictType/saveSysDictType`, params);
 //字典组分页查询
-export const DictTypePage = params => post(`${serviceNameList.customer}/api/ehs/sysDictType/getSysDictTypePage`, params);
+export const DictTypePage = params => post(`ehs-customer/api/ehs/sysDictType/getSysDictTypePage`, params);
 //字典编辑更新
-export const UpdateDictTypePage = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/updateSysDictType`, params);
+export const UpdateDictTypePage = params => post(`ehs-customer/api/ehs/sysDictType/updateSysDictType`, params);
 //字典组删除
-export const RemoveDictType = params => post(`${serviceNameList.danger}/api/ehs/sysDictType/removeSysDictType`, params);
+export const RemoveDictType = params => post(`ehs-customer/api/ehs/sysDictType/removeSysDictType`, params);
 //字典数据详情分页查询
-export const DictDataPage = params => post(`${serviceNameList.danger}/api/ehs/sysDictData/getSysDictDataPage`, params);
+export const DictDataPage = params => post(`ehs-customer/api/ehs/sysDictData/getSysDictDataPage`, params);
 //字典数据新增
-export const SaveSysDictData = params => post(`${serviceNameList.danger}/api/ehs/sysDictData/saveSysDictData`, params);
+export const SaveSysDictData = params => post(`ehs-customer/api/ehs/sysDictData/saveSysDictData`, params);
 //移除字典项值
-export const RemoveSysDictData = params => post(`${serviceNameList.danger}/api/ehs/sysDictData/removeSysDictData`, params);
+export const RemoveSysDictData = params => post(`ehs-customer/api/ehs/sysDictData/removeSysDictData`, params);
 //更新字典项值
-export const UpdateSysDictData = params => post(`${serviceNameList.danger}/api/ehs/sysDictData/updateSysDictData`, params);
+export const UpdateSysDictData = params => post(`ehs-customer/api/ehs/sysDictData/updateSysDictData`, params);
 //分页查询发出企业邀请
 export const SelectIssueInvitationPage = params => post(`${serviceNameList.danger}/api/ehs/invitation/selectIssueInvitationPage`, params);
 //分页查询企业收到的邀请
@@ -196,7 +196,7 @@ export const deleteStandingBookList = params => post(`${serviceNameList.danger}/
 export const detailStandingBookList = params => post(`${serviceNameList.danger}/api/ehs/hiddeenDangerCheck/detail`, params);
 
 // 组织机构
-// export const getOrganizeList = params => post(`${serviceNameList.customer}/api/lowpower/dept/tree`, params);
+// export const getOrganizeList = params => post(`ehs-customer/api/lowpower/dept/tree`, params);
 export const getOrganizeList = params => post(`${serviceNameList.danger}/api/ehs/company/dept/tree`, params);
 // 机构层级列表
 export const ParentDeptList = params => post(`${serviceNameList.danger}/api/ehs/company/dept/parentDeptList`, params);
@@ -207,49 +207,49 @@ export const getUserDetail = params => post(`${serviceNameList.danger}/api/ehs/c
 export const updateUserDetail = params => post(`${serviceNameList.danger}/api/ehs/company/user/update`, params);
 export const getUserPageList = params => post(`${serviceNameList.danger}/api/ehs/company/user/pageList`, params);
 //获取列表
-export const GetLabelList = params => post(`${serviceNameList.customer}/api/label/list`, params);
+export const GetLabelList = params => post(`ehs-customer/api/label/list`, params);
 // 控制台角色--获取角色权限树
-export const getConsoleRoleTree = params => get(`${serviceNameList.customer}/api/resource/queryResourceTree`, params);
+export const getConsoleRoleTree = params => get(`ehs-customer/api/resource/queryResourceTree`, params);
 //权限-角色授权-设置添加
-export const AddUserRole = params => post(`${serviceNameList.customer}/api/user/grant/role`, params);
+export const AddUserRole = params => post(`ehs-customer/api/user/grant/role`, params);
 //权限-用户-角色授予-回显
-export const BackUserRole = params => get(`${serviceNameList.customer}/api/user/granted`, params);
+export const BackUserRole = params => get(`ehs-customer/api/user/granted`, params);
 // 权限--部门 查看获取详情--表单信息
-export const getDepartmentDetails = params => get(`${serviceNameList.customer}/api/enterprise/dept/detail`, params);
+export const getDepartmentDetails = params => get(`ehs-customer/api/enterprise/dept/detail`, params);
 // 权限--用户 获取职位列表-不分页
-export const getPositionListApi = params => post(`${serviceNameList.customer}/api/position/list`, params);
+export const getPositionListApi = params => post(`ehs-customer/api/position/list`, params);
 // 权限--用户 获取组织架构
-export const getTreeUserList = params => get(`${serviceNameList.customer}/api/user/tree`, params);
+export const getTreeUserList = params => get(`ehs-customer/api/user/tree`, params);
 // 权限--用户 获取列表
-export const getUserList = params => post(`${serviceNameList.customer}/api/user/pageList`, params);
+export const getUserList = params => post(`ehs-customer/api/user/pageList`, params);
 // 权限--用户 获取角色列表 分配使用
-export const getUserRoleList = params => post(`${serviceNameList.customer}/api/role/list`, params);
+export const getUserRoleList = params => post(`ehs-customer/api/role/list`, params);
 // 权限--用户 保存部门及职位
-export const saveDeptAndPositionApi = params => post(`${serviceNameList.customer}/api/enterprise/dept/allocating/dept`, params);
+export const saveDeptAndPositionApi = params => post(`ehs-customer/api/enterprise/dept/allocating/dept`, params);
 // 同步组织
 export const syncOrgainize = params => get(`${serviceNameList.danger}/api/ehs/company/dept/sync/boeplat`, params);
 // 应用角色授权管理--新增授权用户
-export const addGrantUser = params => post(`${serviceNameList.customer}/api/userRoleRel/bindProduct`, params);
+export const addGrantUser = params => post(`ehs-customer/api/userRoleRel/bindProduct`, params);
 // 应用角色授权管理--新增角色
-export const addAppAuthRole = params => post(`${serviceNameList.customer}/api/role/addOrUpdate`, params);
+export const addAppAuthRole = params => post(`ehs-customer/api/role/addOrUpdate`, params);
 // 应用角色授权管理--修改角色
-export const changeAppAuthRole = params => post(`${serviceNameList.customer}/api/role/addOrUpdate`, params);
+export const changeAppAuthRole = params => post(`ehs-customer/api/role/addOrUpdate`, params);
 // 应用角色授权管理--修改角色--获取详情
-export const getAppAuthRoleDetail = params => get(`${serviceNameList.customer}/api/role/detail`, params);
+export const getAppAuthRoleDetail = params => get(`ehs-customer/api/role/detail`, params);
 // 应用角色授权管理--获取用户列表
-export const getAppAuthRoleUserList = params => post(`${serviceNameList.customer}/api/userRoleRel/product/pageList`, params);
+export const getAppAuthRoleUserList = params => post(`ehs-customer/api/role/getUserListPageByRoleId`, params);
 // 权限--部门 获取组织架构
-export const getDepartmentTree = params => get(`${serviceNameList.customer}/api/enterprise/dept/tree`, params);
+export const getDepartmentTree = params => get(`ehs-customer/api/enterprise/dept/tree`, params);
 // 应用角色授权管理--获取授权用户时可选择的用户列表
-export const getGrantModelTreeData = params => post(`${serviceNameList.customer}/api/userRoleRel/product/authUserList`, params);
+export const getGrantModelTreeData = params => post(`ehs-customer/api/userRoleRel/product/authUserList`, params);
 // 应用角色授权管理--获取当前产品的菜单权限树
-export const getGrantTreeList = params => get(`${serviceNameList.customer}/api/setResourceRel/getResourceTree`, params);
+export const getGrantTreeList = params => get(`ehs-customer/api/resource/getResourceTree`, params);
 // 应用角色授权管理--删除角色
-export const rmAppAuthRole = params => post(`${serviceNameList.customer}/api/role/delete`, params);
+export const rmAppAuthRole = params => post(`ehs-customer/api/role/delete`, params);
 // 应用角色授权管理--删除授权用户
-export const rmGrantUser = params => post(`${serviceNameList.customer}/api/userRoleRel/product/deleteAuth`, params);
+export const rmGrantUser = params => post(`ehs-customer/api/userRoleRel/product/deleteAuth`, params);
 // 应用角色授权管理--获取角色列表
-export const getAppAuthRoleList = params => post(`${serviceNameList.customer}/api/role/list`, params);
+export const getAppAuthRoleList = params => post(`ehs-customer/api/role/list`, params);
 // 部门和人员均可以选中
 export const CompanyUserTree = params => post(`${serviceNameList.danger}/api/ehs/company/dept/companyUserTree`, params);
 // 上传文件
@@ -275,7 +275,7 @@ export const DeleteFormData = params => post(`${serviceNameList.form}/api/ehs/fo
 // 自定义组件字典，获取字典列表 + 获取列表每一项对象对应的具体字典项数据
 export const getDictTypeAll = params => get(`${serviceNameList.danger}/api/ehs/sysDictType/list/all`, params);
 export const getDictDataAll = params => post(`${serviceNameList.danger}/api/ehs/sysDictData/list/all`, params);
-export const getDictTree = params => get(`${serviceNameList.customer}/api/ehs/sysDictType/dictTree`, params);
+export const getDictTree = params => get(`ehs-customer/api/ehs/sysDictType/dictTree`, params);
 // 根据tempID查部署ID
 export const GetId = params => post(`${serviceNameList.btp}/api/process/template/detailByForm`, params);
 // 获取第一个节点信息
@@ -528,10 +528,10 @@ export const retestEquip = params => post(`${serviceNameList.danger}/api/ehs/eve
 export const preAlarmPageList = params => post(`${serviceNameList.danger}/api/ehs/event/alarm/preAlarm/page/list`, params);
 
 // 获取组织机构-平台
-export const getLowpowerDept = params => post(`${serviceNameList.customer}/api/lowpower/dept`, params);
+export const getLowpowerDept = params => post(`ehs-customer/api/lowpower/dept`, params);
 
 // 获取法人机构全量列表
-export const getCorporationListAll = params => post(`${serviceNameList.customer}/api/ehs/corporation/dict`, params);
+export const getCorporationListAll = params => post(`ehs-customer/api/ehs/corporation/dict`, params);
 // 法人机构列表查询-增-删-改
 export const getCorporationList = params => post(`${serviceNameList.danger}/api/ehs/corporation/list`, params);
 export const saveCorporationList = params => post(`${serviceNameList.danger}/api/ehs/corporation/save`, params);
@@ -607,7 +607,7 @@ export const chemicalsIntoExport = params => postExcel(`${serviceNameList.chemic
 // 化学品存储管理-导入模板下载
 export const warehouseTemplateExport = params => postExcel(`${serviceNameList.chemicals}/api/ehs/chemical/warehouse/inventory/template/export`, params);
 //获取城市
-export const getCityOptions = params => get(`${serviceNameList.customer}/api/city/get/city`, params);
+export const getCityOptions = params => get(`ehs-customer/api/city/get/city`, params);
 // 危化品车辆管理分页查询
 export const chemicalsCarPageList = params => post(`${serviceNameList.danger}/api/ehs/chemicalsCar/page`, params);
 // 危化品车辆详情查看
@@ -814,9 +814,9 @@ export const proposalAnalyseLevel = params => post(`${serviceNameList.proposal}/
 
 // 数据权限
 // 获取当前租户的法人机构树
-export const getCorporationTree = params => get(`${serviceNameList.customer}/api/ehs/corporation/getCorporationTree`, params);
+export const getCorporationTree = params => get(`ehs-customer/api/ehs/corporation/getCorporationTree`, params);
 // 获取当前登录用户所属的法人机构树
-export const getLoginCorporation = params => get(`${serviceNameList.customer}/api/ehs/corporation/getLoginCorporation`, params);
+export const getLoginCorporation = params => get(`ehs-customer/api/ehs/corporation/getLoginCorporation`, params);
 // 分配法人机构
 export const divideCorporation = params => post(`${serviceNameList.danger}/api/ehs/company/user/divideCorporation`, params);
 // 获取菜单配置列表
@@ -832,7 +832,7 @@ export const getloginUserDataAuth = (params) => {
 };
 
 // 获取组织下的部门树
-export const queryDeptTree = params => post(`${serviceNameList.customer}/api/company/dept/queryDeptTree`, params);
+export const queryDeptTree = params => post(`ehs-customer/api/company/dept/queryDeptTree`, params);
 /** 应急演练管理 start*/
 // 数据库新增预案
 export const planAddPrep = params => post(`${serviceNameList.danger}/api/ehs/emergent/plan/addPrep`, params);

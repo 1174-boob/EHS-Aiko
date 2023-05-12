@@ -14,7 +14,7 @@
             ></a-input>
           </a-form-model-item>
           <a-form-model-item style="width: 358px" label="标签组类型">
-            <a-select style="width:200px" v-model="formInline.labelLevel" placeholder="请选择">
+            <a-select style="width:200px" v-model="formInline.labelType" placeholder="请选择">
               <a-select-option style="width:200px" :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
             </a-select>
           </a-form-model-item>
@@ -85,8 +85,8 @@
               :maxLength="20"
               placeholder="请输入标签组名称" />
           </a-form-model-item>
-          <a-form-model-item label="标签组类型" prop="labelLevel">
-            <a-select v-model="formInline.labelLevel" placeholder="请选择标签组类型">
+          <a-form-model-item label="标签组类型" prop="labelType">
+            <a-select style="display: block;"  v-model="formData.labelType" placeholder="请选择标签组类型">
               <a-select-option :key="index" :value="item.itemCode" v-for="(item, index) in orgLevelList">{{item.itemName}}</a-select-option>
             </a-select>
           </a-form-model-item>
@@ -224,7 +224,7 @@ export default {
       formData: {
         labelCode: "",
         labelName: "",
-        labelLevel:'',
+        labelType: "",
         labelDescription: "",
       },
       // 表单验证
@@ -244,8 +244,9 @@ export default {
             trigger: "blur" 
           },
         ],
-        labelLevel: [
+        labelType: [
           { 
+            // validator: formValidator.onlyNumber,
             required: true,
             message: "标签组类型不能为空",
             trigger: "blur" 
@@ -266,7 +267,7 @@ export default {
       // 搜索表单
       formInline: {
         labelName: undefined,
-        labelLevel: undefined,
+        labelType: undefined,
       },
       // 页码
       page: {
@@ -289,8 +290,8 @@ export default {
         },
         {
           title: "标签组类型",
-          dataIndex: "labelLevel",
-          key: "labelLevel",
+          dataIndex: "labelType",
+          key: "labelType",
           width: 360
         },
         {
@@ -308,11 +309,11 @@ export default {
       dataList: [],
       orgLevelList:[
         {
-          itemCode:1,
+          itemCode:'1',
           itemName:"个人标签"
         },
         {
-          itemCode:2,
+          itemCode:'2',
           itemName:"部门标签"
         }
       ],
@@ -420,18 +421,14 @@ export default {
     // 重置
     iRest: debounce(
       function () {
-        this.formInline = { labelName: undefined ,labelLevel: undefined};
+        this.formInline = { labelName: undefined ,labelType: undefined};
         this.getTableList();
       },
       250,
       { leading: true, trailing: false }
     ),
     // 新增
-    addConsoleRole(res) {
-      this.roleModelData = {
-        companyId: this.companyId,
-      };
-      this.formData.labelCode = res.data
+    addConsoleRole() {
       this.modelTitle = "创建标签组";
       this.InpDis = false;
       this.roleModelShow = true;
@@ -442,7 +439,7 @@ export default {
       this.formData = {
         labelCode: item.labelCode,
         labelName: item.labelName,
-        labelLevel: item.labelLevel,
+        labelType: item.labelType,
         labelDescription: item.labelDescription,
       };
       this.InpDis = true;
@@ -564,7 +561,7 @@ export default {
       this.formData={
         labelCode: "",
         labelName: "",
-        labelLevel:'',
+        labelType:'',
         labelDescription: "",
       }
     },

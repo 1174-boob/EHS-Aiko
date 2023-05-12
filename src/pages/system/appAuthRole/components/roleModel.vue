@@ -3,9 +3,6 @@
   <CommonModal :title="modelTitle" :visible="roleModelShow" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formRole" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item ref="productName" prop="productName" class="modal-form-text" label="所属应用">
-          <span>{{ formRole.productName }}</span>
-        </a-form-model-item>
         <a-form-model-item ref="roleCode" label="角色编码" prop="roleCode">
           <a-input :disabled="formRole.roleId?true:false" :maxLength="nameMaxLength" v-model="formRole.roleCode" placeholder="请输入角色编码" />
         </a-form-model-item>
@@ -56,7 +53,6 @@ export default {
       wrapperCol: { span: 20 },
       // 新增、修改表单
       formRole: {
-        productName: '',
         roleCode: "",
         roleName: "",
         description: "",
@@ -64,7 +60,6 @@ export default {
       },
       // 表单验证
       rules: {
-        productName: [{ required: true, message: "不能为空", trigger: "blur" }],
         roleCode: [{ required: true, message: "角色编码不能为空", trigger: "blur" }],
         roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
         description: [

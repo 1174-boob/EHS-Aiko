@@ -37,7 +37,7 @@
               <a-input class="app-auth-rolesearch-left-item" :maxLength="nameMaxLength" v-model="formInline.name" placeholder="请输入姓名"></a-input>
             </a-form-model-item>
             <a-form-model-item label="工号">
-              <a-input class="app-auth-rolesearch-left-item" :maxLength="nameMaxLength" v-model="formInline.userNo" placeholder="请输入工号"></a-input>
+              <a-input class="app-auth-rolesearch-left-item" :maxLength="nameMaxLength" v-model="formInline.jobNumber" placeholder="请输入工号"></a-input>
             </a-form-model-item>
             <a-form-model-item label="手机号">
               <a-input class="app-auth-rolesearch-left-item" :maxLength="phoneMaxLength" v-model="formInline.phone" placeholder="请输入手机号"></a-input>
@@ -153,7 +153,7 @@ export default {
       formInline: {
         name: undefined,
         phone: undefined,
-        userNo: undefined,
+        jobNumber: undefined,
       },
       // 页码
       page: {
@@ -169,8 +169,8 @@ export default {
         },
         {
           title: "工号",
-          dataIndex: "userNo",
-          key: "userNo",
+          dataIndex: "jobNumber",
+          key: "jobNumber",
         },
         {
           title: "姓名",
@@ -387,7 +387,7 @@ export default {
       this.formInline = {
         name: undefined,
         phone: undefined,
-        userNo: undefined,
+        jobNumber: undefined,
       };
       this.getTableList();
     }, 250, { leading: true, trailing: false }),

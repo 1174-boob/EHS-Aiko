@@ -2,7 +2,7 @@ import { get, post, postExcel } from '@/utils/request.js';
 import serviceNameList from '@/config/default/service.config'
 let danger = serviceNameList['danger']
 let course = serviceNameList['course']
-let customer = serviceNameList['customer']
+// let customer = serviceNameList['customer']
 
 //报警联网管控模块：
 //获取报警规则时间
@@ -64,7 +64,7 @@ export const AddsConfigList = params => post(danger + '/api/ehs/config/add', par
 //编辑配置
 export const ChangeConfigList = params => post(danger + '/api/ehs/config/update', params);
 //获取字典
-export const GetDictConfigList = params => post(customer + '/api/ehs/config/list', params, { 'routerCode': 'preview' });
+export const GetDictConfigList = params => post('ehs-customer/api/ehs/config/list', params, { 'routerCode': 'preview' });
 
 //获取总蓝页教育培训数量接口
 export const GetStaticalaAllNum = params => post(course + '/api/ehs/statical/allNum', params);
