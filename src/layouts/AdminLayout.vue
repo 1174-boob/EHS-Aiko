@@ -314,9 +314,10 @@ export default {
         // 清空本地存储，举例中为全部清除，如需要保留所需数据，请自行处理
         localStorage.clear();
         sessionStorage.clear();
-        let replaceUrl = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" +process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + 
-        process.env.VUE_APP_REDIRECT_URI;
-        window.location.replace(replaceUrl)
+        // let replaceUrl = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" +process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + 
+        // process.env.VUE_APP_REDIRECT_URI;
+        // window.location.replace(replaceUrl)
+        this.$router.push("/login");
       }).catch(err=>{})
     },
     onMenuSelect() {
@@ -341,15 +342,16 @@ export default {
     logoutFn() {
       sessionStorage.clear();
       if (process.env.NODE_ENV === "production") {
-        window.location.href =
-          process.env.VUE_APP_LOGIN_URL +
-          "client_id=" +
-          process.env.VUE_APP_CLIENTID +
-          "&response_type=" +
-          process.env.VUE_APP_RESPONSE_TYPE +
-          "&redirect_uri=" +
-          process.env.VUE_APP_REDIRECT_URI +
-          "&isLogout=true";
+        this.$router.push("/login");
+        // window.location.href =
+        //   process.env.VUE_APP_LOGIN_URL +
+        //   "client_id=" +
+        //   process.env.VUE_APP_CLIENTID +
+        //   "&response_type=" +
+        //   process.env.VUE_APP_RESPONSE_TYPE +
+        //   "&redirect_uri=" +
+        //   process.env.VUE_APP_REDIRECT_URI +
+        //   "&isLogout=true";
       } else {
         this.$router.push("/login");
       }

@@ -44,7 +44,8 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
       case 401:
         if (process.env.NODE_ENV === "production") {
           sessionStorage.clear();
-          window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+          currentRouter.push("/login");
+          // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
         } else {
           sessionStorage.clear();
           console.log("currentRouter", currentRouter)
@@ -58,7 +59,8 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
       case 500:
         if (err.response.config.url.indexOf('check_token') > -1) {
           sessionStorage.clear();
-          window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+          currentRouter.push("/login");
+          // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
         } else {
           Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员');
           return
