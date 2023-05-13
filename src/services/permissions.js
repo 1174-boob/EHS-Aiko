@@ -80,5 +80,3 @@ export const okDeparture = params => post(`${serviceNameList.customer}/api/compa
 //根据文件id获取文件url
 export const getPortraitUrl = params => post(`${serviceNameList.customer}/api/bps/file/getPath/byId`, params);
 
-//获取头像下拉右侧数字接口
-export const GetUpcomingNum = params => get(`${serviceNameList.customer}/api/over/view/getUpcomingNum`, params);

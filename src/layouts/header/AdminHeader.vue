@@ -9,14 +9,14 @@
           @click="goUrlOut"
         />
         <!-- <h1 class="admin-header-left-title" @click="goUrlOut">工业互联网控制台</h1> -->
-        <div
+        <!-- <div
           class="admin-header-left-menu"
           @click="drawerOpen"
           @mouseenter="advEnter"
           @mouseleave="advOut"
         >
           <div ref="refMenu" id="refMenu"></div>
-        </div>
+        </div> -->
 
         <!-- <span class="admin-header-left-menu-title">点击您要查找的产品...</span> -->
       </div>

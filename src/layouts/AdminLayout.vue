@@ -4,17 +4,14 @@
       <boeplat-header
         :nodeEnv="nodeEnv"
         :dropDownShow="dropDownShow"
-        :headerMenuList="headerMenuList"
         :userInfo="userInfo"
         :logoObjCustom="logoObjCustom"
-        :loginInfos="loginInfos"
         :showTitleAndIdTips="false"
         :promote="false"
         :applicationList="applicationList"
         :showSwitch="showSwitch"
         @logout="logoutFn"
         @hoverIn="hoverIn"
-        @switchRole="switchRole"
         @searchKeyword="searchKeyword"
       ></boeplat-header>
       <a-layout class="admin-layout-main-main">
@@ -82,60 +79,60 @@ export default {
       // userInfo: {
         // portrait: this.avatarUrl,
       // },
-      loginInfos: [],
+      // loginInfos: [],
       // id匹配title规则：1：BOE工业互联网平台; 2：控制台;3：工单;4：文档;5：消息;6：用户
-      headerMenuList: [
-        {
-          id: 1,
-          title: "BOE工业互联网平台",
-          url: process.env.VUE_APP_API_BASE_URL,
-          path: "",
-        },
-        {
-          id: 2,
-          title: "控制台",
-          url:process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_ZICONSOLE_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_ZICONSOLE_REDIRECT_URI,
-          path: "",
-        },
-        {
-          id: 3,
-          title: "工单",
-          url:process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_ZICONSOLE_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
-            "&route_url=" +
-            "/work/workOrder",
-          path: "",
-        },
-        {
-          id: 4,
-          title: "文档",
-          url:process.env.VUE_APP_API_BASE_URL +'#/documentCenter',
-          path: "",
-        },
-        // {
-        //   id: 5,
-        //   title: "消息",
-        //   url:process.env.VUE_APP_API_BASE_URL + '/html/ziconsole/preview' +'#/news/newsList',
-        //   path: "",
-        // },
-        // {
-        //   id: 6,
-        //   title: "用户",
-        //   url:'',
-        //   path: "/systemManagement/organization",
-        // },
-      ],
+      // headerMenuList: [
+      //   {
+      //     id: 1,
+      //     title: "BOE工业互联网平台",
+      //     url: process.env.VUE_APP_API_BASE_URL,
+      //     path: "",
+      //   },
+      //   {
+      //     id: 2,
+      //     title: "控制台",
+      //     url:process.env.VUE_APP_LOGIN_URL +
+      //       "client_id=" +
+      //       process.env.VUE_APP_ZICONSOLE_CLIENTID +
+      //       "&response_type=" +
+      //       process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+      //       "&redirect_uri=" +
+      //       process.env.VUE_APP_ZICONSOLE_REDIRECT_URI,
+      //     path: "",
+      //   },
+      //   {
+      //     id: 3,
+      //     title: "工单",
+      //     url:process.env.VUE_APP_LOGIN_URL +
+      //       "client_id=" +
+      //       process.env.VUE_APP_ZICONSOLE_CLIENTID +
+      //       "&response_type=" +
+      //       process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+      //       "&redirect_uri=" +
+      //       process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
+      //       "&route_url=" +
+      //       "/work/workOrder",
+      //     path: "",
+      //   },
+      //   {
+      //     id: 4,
+      //     title: "文档",
+      //     url:process.env.VUE_APP_API_BASE_URL +'#/documentCenter',
+      //     path: "",
+      //   },
+      //   // {
+      //   //   id: 5,
+      //   //   title: "消息",
+      //   //   url:process.env.VUE_APP_API_BASE_URL + '/html/ziconsole/preview' +'#/news/newsList',
+      //   //   path: "",
+      //   // },
+      //   // {
+      //   //   id: 6,
+      //   //   title: "用户",
+      //   //   url:'',
+      //   //   path: "/systemManagement/organization",
+      //   // },
+      // ],
     };
   },
   provide() {
@@ -248,21 +245,21 @@ export default {
     },
     hoverIn() {
       let obj = JSON.parse(sessionStorage.getItem("zconsole_userInfo"));
-      if (obj.user && obj.user.type == "0") {
-        GetUpcomingNum().then((res) => {
-          this.loginInfos.forEach((item) => {
-            if (item.name == "订单") {
-              item.amount = res.data.orderNum;
-            }
-            if (item.name == "优惠券") {
-              item.amount = res.data.couponNum;
-            }
-            if (item.name == "企链") {
-              item.amount = res.data.partnerNum;
-            }
-          });
-        });
-      }
+      // if (obj.user && obj.user.type == "0") {
+      //   GetUpcomingNum().then((res) => {
+      //     this.loginInfos.forEach((item) => {
+      //       if (item.name == "订单") {
+      //         item.amount = res.data.orderNum;
+      //       }
+      //       if (item.name == "优惠券") {
+      //         item.amount = res.data.couponNum;
+      //       }
+      //       if (item.name == "企链") {
+      //         item.amount = res.data.partnerNum;
+      //       }
+      //     });
+      //   });
+      // }
     },
     // 根据工号查询个人台账id
     getUserDetail() {
@@ -280,7 +277,7 @@ export default {
               amount: "",
               iconUrl: "account",
             };
-            this.loginInfos.push(obj);
+            // this.loginInfos.push(obj);
           }
         }).catch(err=>{
           console.log(err);
@@ -309,17 +306,17 @@ export default {
     //     .catch((err) => { });
     // },
     //切换
-    switchRole() {
-      changeCompany().then((res) => {
-        // 清空本地存储，举例中为全部清除，如需要保留所需数据，请自行处理
-        localStorage.clear();
-        sessionStorage.clear();
-        // let replaceUrl = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" +process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + 
-        // process.env.VUE_APP_REDIRECT_URI;
-        // window.location.replace(replaceUrl)
-        this.$router.push("/login");
-      }).catch(err=>{})
-    },
+    // switchRole() {
+    //   changeCompany().then((res) => {
+    //     // 清空本地存储，举例中为全部清除，如需要保留所需数据，请自行处理
+    //     localStorage.clear();
+    //     sessionStorage.clear();
+    //     // let replaceUrl = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" +process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + 
+    //     // process.env.VUE_APP_REDIRECT_URI;
+    //     // window.location.replace(replaceUrl)
+    //     this.$router.push("/login");
+    //   }).catch(err=>{})
+    // },
     onMenuSelect() {
       this.toggleCollapse();
     },
@@ -357,84 +354,84 @@ export default {
       }
     },
     //获取头部下拉菜单权限
-    getheaderlist() {
-      let userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"));
-      let loginInfos = [
-        {
-          name: "账号",
-          path: "",
-          url:
-            process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_ZICONSOLE_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
-            "&route_url=" +
-            "/account/accountInfo",
-          amount: "",
-          iconUrl: "account",
-        },
-        {
-          name: "订单",
-          path: "",
-          url: process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_ZICONSOLE_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
-            "&route_url=" +
-            "/orderManage/orderList",
-          amount: "",
-          iconUrl: "order",
-        },
-        {
-          name: "企链",
-          path: "/cooperationPartner/partnerList",
-          url: process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_ZICONSOLE_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
-            "&route_url=" +
-            "/cooperation/cooperationPartner",
-          amount: "",
-          iconUrl: "parter",
-        },
-        {
-          name: "优惠券",
-          path: "",
-          url: process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_ZICONSOLE_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
-            "&route_url=" +
-            "/couponManage/couponManageList",
-          amount: "",
-          iconUrl: "coupon",
-        },
-        {
-          name: "帮助",
-          path: "",
-          url: process.env.VUE_APP_API_BASE_URL +'#/documentCenter',
-          amount: "",
-          iconUrl: "help",
-        },
-      ];
-      if (userInfo.user.type === '0') { //管理员全部能查看
-        this.loginInfos = loginInfos;
-      } else {
-        this.loginInfos = loginInfos.slice(0,1);
-      }
-    },
+    // getheaderlist() {
+    //   let userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"));
+    //   let loginInfos = [
+    //     {
+    //       name: "账号",
+    //       path: "",
+    //       url:
+    //         process.env.VUE_APP_LOGIN_URL +
+    //         "client_id=" +
+    //         process.env.VUE_APP_ZICONSOLE_CLIENTID +
+    //         "&response_type=" +
+    //         process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+    //         "&redirect_uri=" +
+    //         process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
+    //         "&route_url=" +
+    //         "/account/accountInfo",
+    //       amount: "",
+    //       iconUrl: "account",
+    //     },
+    //     {
+    //       name: "订单",
+    //       path: "",
+    //       url: process.env.VUE_APP_LOGIN_URL +
+    //         "client_id=" +
+    //         process.env.VUE_APP_ZICONSOLE_CLIENTID +
+    //         "&response_type=" +
+    //         process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+    //         "&redirect_uri=" +
+    //         process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
+    //         "&route_url=" +
+    //         "/orderManage/orderList",
+    //       amount: "",
+    //       iconUrl: "order",
+    //     },
+    //     {
+    //       name: "企链",
+    //       path: "/cooperationPartner/partnerList",
+    //       url: process.env.VUE_APP_LOGIN_URL +
+    //         "client_id=" +
+    //         process.env.VUE_APP_ZICONSOLE_CLIENTID +
+    //         "&response_type=" +
+    //         process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+    //         "&redirect_uri=" +
+    //         process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
+    //         "&route_url=" +
+    //         "/cooperation/cooperationPartner",
+    //       amount: "",
+    //       iconUrl: "parter",
+    //     },
+    //     {
+    //       name: "优惠券",
+    //       path: "",
+    //       url: process.env.VUE_APP_LOGIN_URL +
+    //         "client_id=" +
+    //         process.env.VUE_APP_ZICONSOLE_CLIENTID +
+    //         "&response_type=" +
+    //         process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+    //         "&redirect_uri=" +
+    //         process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
+    //         "&route_url=" +
+    //         "/couponManage/couponManageList",
+    //       amount: "",
+    //       iconUrl: "coupon",
+    //     },
+    //     {
+    //       name: "帮助",
+    //       path: "",
+    //       url: process.env.VUE_APP_API_BASE_URL +'#/documentCenter',
+    //       amount: "",
+    //       iconUrl: "help",
+    //     },
+    //   ];
+    //   if (userInfo.user.type === '0') { //管理员全部能查看
+    //     this.loginInfos = loginInfos;
+    //   } else {
+    //     this.loginInfos = loginInfos.slice(0,1);
+    //   }
+    // },
   },
   created() {
     // const userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"));
@@ -445,7 +442,7 @@ export default {
     this.correctPageMinHeight(this.minHeight - 24);
     this.setActivated(this.$route);
     // this.getHeaderListFn();
-    this.getheaderlist();
+    // this.getheaderlist();
     this.getUserDetail();
   },
   beforeDestroy() {

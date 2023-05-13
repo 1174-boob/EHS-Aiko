@@ -24,7 +24,7 @@
 
 <script>
 import MenuDrawerList from "./MenuDrawer-list.vue";
-import { getHeaderList } from "@/services/api";
+// import { getHeaderList } from "@/services/api";
 import { debounce } from "lodash";
 export default {
   components: { MenuDrawerList },
@@ -75,30 +75,30 @@ export default {
     },
     // 搜索
     onSearch: debounce(function () {
-      this.getHeaderListFn();
+      // this.getHeaderListFn();
     }, 250),
     // 请求列表
-    getHeaderListFn() {
-      let params = { productName: this.productName };
-      getHeaderList(params)
-        .then((res) => {
-          let applicationList = res.data;
-          // console.log(applicationList);
-          applicationList = applicationList.filter((item) => {
-            return (
-              (item.children && item.children.length) ||
-              (item.products && item.products.length)
-            );
-          });
+    // getHeaderListFn() {
+    //   let params = { productName: this.productName };
+    //   getHeaderList(params)
+    //     .then((res) => {
+    //       let applicationList = res.data;
+    //       // console.log(applicationList);
+    //       applicationList = applicationList.filter((item) => {
+    //         return (
+    //           (item.children && item.children.length) ||
+    //           (item.products && item.products.length)
+    //         );
+    //       });
 
-          this.applicationList = applicationList;
-        })
-        .catch((err) => { });
-    },
+    //       this.applicationList = applicationList;
+    //     })
+    //     .catch((err) => { });
+    // },
   },
   watch: {
     visible(newVal) {
-      if (newVal) this.getHeaderListFn();
+      // if (newVal) this.getHeaderListFn();
     },
   },
 };

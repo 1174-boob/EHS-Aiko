@@ -19,10 +19,8 @@ export const checkToken = (params, headers) => post(serviceNameList.auth + '/oau
 export const checkTokenEHS = (params, headers) => post(serviceNameList.authehs + '/api/token/checkToken', params, headers);
 export const getMenuTree = (params) => get('ehs-customer/api/role/getLoginMenu', params);
 // export const changeCompany = (params, headers) => get(serviceNameList.auth + '/api/auth/changeCompany', params, headers);
-export const changeCompany = (params, headers) => get(process.env.VUE_APP_ZICONSOLE_AUTH + '/api/auth/changeCompany', params, headers);
+// export const changeCompany = (params, headers) => get(process.env.VUE_APP_ZICONSOLE_AUTH + '/api/auth/changeCompany', params, headers);
 export const getPortraitUrlt = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
-//获取头像下拉右侧数字接口
-export const GetUpcomingNum = params => get(`ehs-customer/api/over/view/getUpcomingNum`, params);
 // 公共 字典 
 export const getDictionary = params => post(`ehs-customer/api/dict/list`, params);
 // 获取所有按钮权限 ---------------------------此处需要替换为ehs的权限接口
@@ -42,7 +40,7 @@ export const getInsidePeopleInfoApi = params => post(`ehs-customer/api/feign/get
 
 
 // header 菜单
-export const getHeaderList = params => get(`ehs-customer/api/category/product/list`, params);
+// export const getHeaderList = params => get(`ehs-customer/api/category/product/list`, params);
 // header 角色切换-获取角色列表
 export const getCompany = params => get(`ehs-customer/api/userRoleRel/getCompany`, params);
 // 合同管理 获取列表
