@@ -335,10 +335,11 @@ export default {
     };
   },
   created() {
-    let list1 = this.setLoginCorporation; //当前登录人的所属中心列表
+    // let list1 = this.setLoginCorporation; //当前登录人的所属中心列表
     let list2 = this.getCommonAddOrgnizeList; //当前登录人的组织列表
-    if (list1.length == 1 && list2.length == 1) {
-      this.formInline.centerId = list1[0].corporationCode;
+    // if (list1.length == 1 && list2.length == 1) {
+    if (list2.length == 1) {
+      // this.formInline.centerId = list1[0].corporationCode;
       this.formInline.corporationId = list2[0].id;
     }
 

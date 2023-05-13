@@ -1,11 +1,11 @@
 <template>
   <div id="centerOrganize" :class="{'none-events': record.options.disabled}" :title="record.options.disabled ? '禁用状态' : ''">
     <div v-if="$route.path.split('/')[this.$route.path.split('/').length - 1].indexOf('standbook') > -1">
-      <div>
+      <!-- <div>
         <a-select :disabled="record.options.disabled" v-model="models[record.model]" placeholder="请选择所属中心" @change="handleChange">
           <a-select-option v-for="item in dictOptions" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
         </a-select>
-      </div>
+      </div> -->
       <div>
         <a-select :disabled="record.options.disabled" v-model="models[record.model]" placeholder="请选择所属组织" @change="handleChange">
           <a-select-option v-for="item in dictOptions" :key="item.key" :value="item.key">{{item.value}}</a-select-option>

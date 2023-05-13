@@ -378,10 +378,10 @@ export default {
     validEvent: debounce(function (n) {
       console.log('保存、提交', n);
       // console.log(this.tableData)
-      if (!this.searchFormData.centerId) {
-        this.$antMessage.error("请选择所属中心！");
-        return false
-      }
+      // if (!this.searchFormData.centerId) {
+      //   this.$antMessage.error("请选择所属中心！");
+      //   return false
+      // }
       if (!this.searchFormData.corporationId) {
         this.$antMessage.error("请选择组织！");
         return false

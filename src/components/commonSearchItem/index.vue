@@ -1,11 +1,11 @@
 <template>
   <div style="margin-bottom: 0" :class="{'m-r-15': !notTablePage, 'width-100': notTablePage}">
     <template v-if="!notTablePage">
-      <a-form-model-item class="flex" label="所属中心" :colon="false">
+      <!-- <a-form-model-item class="flex" label="所属中心" :colon="false">
         <a-select :disabled="disabled" v-model="CommonFormInline.centerId" placeholder="请选择所属中心" @change="centerIdChange">
           <a-select-option v-for="item in commonCenterAreaList" :key="item.corporationCode" :value="item.corporationCode">{{item.corporationName}}</a-select-option>
         </a-select>
-      </a-form-model-item>
+      </a-form-model-item> -->
       <a-form-model-item class="flex" label="所属组织" :colon="false">
         <a-select :disabled="disabled" v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange">
           <a-select-option v-for="item in commonOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
@@ -156,7 +156,7 @@ export default {
     return {
       commonOrgnizeList: [],
       deptData: [],
-      commonCenterAreaList: []
+      // commonCenterAreaList: []
     }
   },
   computed: {
@@ -197,7 +197,7 @@ export default {
       }
       if (arr && arr.length == 1 && Array.isArray(arr[0].corporationList) && arr[0].corporationList.length == 1) { // 列表页只有一个组织的时候查询条件默认填充上所属中心所属组织
         this.commonOrgnizeList = arr[0].corporationList;
-        this.$set(this.CommonFormInline, "centerId", arr[0].corporationList[0].centerId);
+        // this.$set(this.CommonFormInline, "centerId", arr[0].corporationList[0].centerId);
         this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
         this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
         this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
@@ -209,20 +209,20 @@ export default {
       }
     },
     // 所属中心改变-获取所属组织
-    centerIdChange(val) {
-      this.commonOrgnizeList = this.getMappingValue(this.commonCenterAreaList, "corporationCode", val).corporationList;
-      this.$set(this.CommonFormInline, "corporationId", undefined);
-      if (this.departmentMultiple) {
-        this.$set(this.CommonFormInline, "deptIds", undefined);
-      } else {
-        this.$set(this.CommonFormInline, "deptId", undefined);
-      }
-      this.$emit('centerChange',val)
-    },
+    // centerIdChange(val) {
+    //   this.commonOrgnizeList = this.getMappingValue(this.commonCenterAreaList, "corporationCode", val).corporationList;
+    //   this.$set(this.CommonFormInline, "corporationId", undefined);
+    //   if (this.departmentMultiple) {
+    //     this.$set(this.CommonFormInline, "deptIds", undefined);
+    //   } else {
+    //     this.$set(this.CommonFormInline, "deptId", undefined);
+    //   }
+    //   this.$emit('centerChange',val)
+    // },
     // 所属组织改变-获取所属部门
     corporationChange(val, rebackDept) { // rebackDept有这个参数的时候，说明是编辑页面需要回显部门
       if (this.notTablePage) { // 新增编辑的时候加组织对应的centerId
-        this.$set(this.CommonFormInline, "centerId", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerId);
+        // this.$set(this.CommonFormInline, "centerId", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerId);
         if (this.needCenterName) {
           this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerName);
         }

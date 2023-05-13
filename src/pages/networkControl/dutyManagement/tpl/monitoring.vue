@@ -20,10 +20,10 @@
           <img src="@/assets/img/gongsi.svg" alt />
           <span>{{ item.deptName }}</span>
         </div>
-        <div class="item_two">
+        <!-- <div class="item_two">
           <span>所属中心：</span>
           <span>{{ item.centerName }}</span>
-        </div>
+        </div> -->
         <div class="item_two">
           <span>部门：</span>
           <a-popover autoAdjustOverflow>

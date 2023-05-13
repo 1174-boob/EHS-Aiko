@@ -453,9 +453,9 @@ export default {
       dataSource: [],
       addForm: {},
       addFormRules: {
-        operationLine: [
-          { required: true, message: "所属中心不能为空", trigger: "change" },
-        ],
+        // operationLine: [
+          // { required: true, message: "所属中心不能为空", trigger: "change" },
+        // ],
         deptId: [
           { required: true, message: "组织编码不能为空", trigger: "change" },
         ],
