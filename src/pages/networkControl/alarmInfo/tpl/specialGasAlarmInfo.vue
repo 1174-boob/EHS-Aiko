@@ -238,7 +238,7 @@ export default {
           width: 100,
         },
         {
-          title: "报警描述",
+          title: "预警描述",
           dataIndex: "description",
           width: 150,
           customRender: (text) => {

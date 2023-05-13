@@ -80,39 +80,39 @@ export const chemicalsMsds = [
     },
     component: resolve => require(['@/pages/chemicals/chemicalsIdentification/msdsStore/index.vue'], resolve),
   },
-  {
-    path: 'trainingDatabase',
-    name: '化学品培训资料库',
-    meta: {
-      title: '化学品培训资料库',
-      routerCode:'trainingDatabase',
-      isKeepalive:true,
-      isPage: true,
-    },
-    component: resolve => require(['@/pages/chemicals/chemicalsIdentification/trainingDatabase/index.vue'], resolve),
-  },
-  {
-    path: 'trainingDatabaseCreate',
-    name: '化学品培训资料库新建',
-    meta: {
-      title: '化学品培训资料库新建',
-      routerCode:'trainingDatabase',
-      isPage: true,
-      invisible: true
-    },
-    component: resolve => require(['@/pages/chemicals/chemicalsIdentification/trainingDatabase/create.vue'], resolve),
-  },
-  {
-    path: 'trainingDatabaseEdit',
-    name: '化学品培训资料库编辑',
-    meta: {
-      title: '化学品培训资料库编辑',
-      routerCode:'trainingDatabase',
-      isPage: true,
-      invisible: true
-    },
-    component: resolve => require(['@/pages/chemicals/chemicalsIdentification/trainingDatabase/create.vue'], resolve),
-  },
+  // {
+  //   path: 'trainingDatabase',
+  //   name: '化学品培训资料库',
+  //   meta: {
+  //     title: '化学品培训资料库',
+  //     routerCode:'trainingDatabase',
+  //     isKeepalive:true,
+  //     isPage: true,
+  //   },
+  //   component: resolve => require(['@/pages/chemicals/chemicalsIdentification/trainingDatabase/index.vue'], resolve),
+  // },
+  // {
+  //   path: 'trainingDatabaseCreate',
+  //   name: '化学品培训资料库新建',
+  //   meta: {
+  //     title: '化学品培训资料库新建',
+  //     routerCode:'trainingDatabase',
+  //     isPage: true,
+  //     invisible: true
+  //   },
+  //   component: resolve => require(['@/pages/chemicals/chemicalsIdentification/trainingDatabase/create.vue'], resolve),
+  // },
+  // {
+  //   path: 'trainingDatabaseEdit',
+  //   name: '化学品培训资料库编辑',
+  //   meta: {
+  //     title: '化学品培训资料库编辑',
+  //     routerCode:'trainingDatabase',
+  //     isPage: true,
+  //     invisible: true
+  //   },
+  //   component: resolve => require(['@/pages/chemicals/chemicalsIdentification/trainingDatabase/create.vue'], resolve),
+  // },
   {
     path: 'trainingDatabaseView',
     name: '化学品培训资料库查看',

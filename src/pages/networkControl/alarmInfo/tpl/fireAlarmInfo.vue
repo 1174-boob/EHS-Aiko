@@ -307,7 +307,7 @@ export default {
           },
         },
         {
-          title: "报警描述",
+          title: "预警描述",
           dataIndex: "description",
           width: 200,
           customRender: (text) => {

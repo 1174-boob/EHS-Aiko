@@ -131,7 +131,7 @@
               }"
             ></a-tree-select>
           </a-form-model-item>
-          <a-form-model-item label="标签" prop="labelId">
+          <!-- <a-form-model-item label="标签" prop="labelId">
             <a-tree-select
               v-model="addUserForm.labelIds"
               placeholder="请选择标签"
@@ -149,7 +149,7 @@
                 value: 'labelId',
               }"
             ></a-tree-select>
-          </a-form-model-item>
+          </a-form-model-item> -->
           <a-form-model-item label="工号" prop="jobNumber">
             <a-input v-model.trim="addUserForm.jobNumber" placeholder="请输入工号" :maxLength="jobNumberMaxLength" />
           </a-form-model-item>
@@ -418,7 +418,7 @@ export default {
         phone: undefined,
         email: undefined,
         roleIds: [],
-        labelIds: [],
+        // labelIds: [],
         jobNumber: undefined,
       },
       formInline: {
@@ -484,7 +484,7 @@ export default {
           dataIndex: "action",
           key: "action",
           title: "操作",
-          width: 310,
+          width: 270,
           fixed: "right",
           scopedSlots: { customRender: "action" },
         },
@@ -711,7 +711,7 @@ export default {
               expireTime,
               phone,
               roleIds,
-              labelIds,
+              // labelIds,
               profilePath,
               email,
               jobNumber,
@@ -725,7 +725,7 @@ export default {
             this.addUserForm.birthday = birthday || undefined;
             this.addUserForm.email = email || undefined;
             this.addUserForm.roleIds = roleIds || [];
-            this.addUserForm.labelIds = labelIds || [];
+            // this.addUserForm.labelIds = labelIds || [];
             this.addUserForm.expireTime = expireTime || null;
             this.addUserForm.jobNumber = jobNumber || undefined;
             this.imageUrl = profilePath;
@@ -835,7 +835,7 @@ export default {
         expireTime: undefined,
         phone: undefined,
         roleIds: [],
-        labelIds: [],
+        // labelIds: [],
         jobNumber: undefined,
       };
     },

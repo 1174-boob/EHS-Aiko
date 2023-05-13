@@ -98,6 +98,7 @@
           >
             <a-form-model-item ref="code" label="部门编码" prop="code">
               <a-input
+                :disabled="disabled"
                 :maxLength="6"
                 v-model.trim="formDepartment.code"
                 placeholder="请输入部门编码"
@@ -250,6 +251,7 @@ export default {
   ],
   data() {
     return {
+      disabled:false,
       //负责人列表
       treeDataPerson: [],
       //负责人
@@ -597,6 +599,7 @@ export default {
     // 关闭model
     handleCancel() {
       this.visible = false;
+      this.disabled = false,
       this.defaultCheckedKeysTop = [];
     },
     // 打开弹窗
@@ -634,7 +637,7 @@ export default {
       { leading: true, trailing: false }
     ),
     iAdd() {
-      // if (this.canClickBtnMixin("department-1")) {
+      if (this.canClickBtnMixin("department-1")) {
         this.getAllUserByCompanyIdFn()
           .then((res) => {
             //获取默认部门编码
@@ -650,7 +653,7 @@ export default {
             // });
           })
           .catch(() => {});
-      // }
+      }
     },
     // 获取详情
     getRoleItemDetailsFn(apiData) {
@@ -686,6 +689,7 @@ export default {
     },
     // 修改
     iChange(item) {
+      this.disabled = true
       if (this.canClickBtnMixin("department-1")) {
         let apiData = { id: item.deptId };
         Promise.all([
