@@ -516,8 +516,7 @@ export default {
       // 获取分配法人机构列表 
       this.currentMsg = { ...record };
       this.shareVisible = true;
-      var _this = this;
-      getAllotOrg({ userId: _this.userId }).then(checkRes => {
+      getAllotOrg({ userId: record.userId }).then(checkRes => {
         console.log(checkRes.data)
         getCorporationTree().then(res => {
           this.divideTreeData = [
