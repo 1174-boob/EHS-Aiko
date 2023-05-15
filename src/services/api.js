@@ -229,7 +229,7 @@ export const saveDeptAndPositionApi = params => post(`ehs-customer/api/enterpris
 // 同步组织
 export const syncOrgainize = params => get(`${serviceNameList.danger}/api/ehs/company/dept/sync/boeplat`, params);
 // 应用角色授权管理--新增授权用户
-export const addGrantUser = params => post(`ehs-customer/api/userRoleRel/bindProduct`, params);
+export const addGrantUser = params => post(`ehs-customer/api/userRoleRel/bindRole`, params);
 // 应用角色授权管理--新增角色
 export const addAppAuthRole = params => post(`ehs-customer/api/role/addOrUpdate`, params);
 // 应用角色授权管理--修改角色
