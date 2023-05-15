@@ -294,7 +294,10 @@ export default {
           title: "标签组类型",
           dataIndex: "labelType",
           key: "labelType",
-          width: 360
+          width: 360,
+          customRender: (text) => {
+            return (text == 1 ? '个人标签' : '部门标签');
+          },
         },
         {
           title: "标签组描述",

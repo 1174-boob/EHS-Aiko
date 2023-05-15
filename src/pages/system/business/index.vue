@@ -417,11 +417,11 @@ export default {
           dataIndex: "orgAllName",
           key: "orgAllName",
         },
-        {
-          title: "业务组织地址",
-          dataIndex: "addressAll",
-          key: "addressAll",
-        },
+        // {
+        //   title: "业务组织地址",
+        //   dataIndex: "addressAll",
+        //   key: "addressAll",
+        // },
         // {
         //   title: "描述",
         //   dataIndex: "description",
@@ -476,6 +476,7 @@ export default {
       let postData = {
         ...this.page,
         ...this.formInline,
+        companyId: this.companyId
       };
       return GetLabelList(postData)
         .then((res) => {

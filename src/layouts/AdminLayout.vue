@@ -3,13 +3,16 @@
     <a-layout class="admin-layout-main beauty-scroll">
       <boeplat-header
         :nodeEnv="nodeEnv"
-        :dropDownShow="dropDownShow"
         :userInfo="userInfo"
+        :headerMenuShow="false"
+        :showSwitch="false"
+        :dropDownShow="false"
+        :headerMenuList="headerMenuList"
         :logoObjCustom="logoObjCustom"
+        :loginInfos="loginInfos"
         :showTitleAndIdTips="false"
         :promote="false"
         :applicationList="applicationList"
-        :showSwitch="showSwitch"
         @logout="logoutFn"
         @hoverIn="hoverIn"
         @searchKeyword="searchKeyword"
@@ -79,60 +82,60 @@ export default {
       // userInfo: {
         // portrait: this.avatarUrl,
       // },
-      // loginInfos: [],
+      loginInfos: [],
       // id匹配title规则：1：BOE工业互联网平台; 2：控制台;3：工单;4：文档;5：消息;6：用户
-      // headerMenuList: [
-      //   {
-      //     id: 1,
-      //     title: "BOE工业互联网平台",
-      //     url: process.env.VUE_APP_API_BASE_URL,
-      //     path: "",
-      //   },
-      //   {
-      //     id: 2,
-      //     title: "控制台",
-      //     url:process.env.VUE_APP_LOGIN_URL +
-      //       "client_id=" +
-      //       process.env.VUE_APP_ZICONSOLE_CLIENTID +
-      //       "&response_type=" +
-      //       process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-      //       "&redirect_uri=" +
-      //       process.env.VUE_APP_ZICONSOLE_REDIRECT_URI,
-      //     path: "",
-      //   },
-      //   {
-      //     id: 3,
-      //     title: "工单",
-      //     url:process.env.VUE_APP_LOGIN_URL +
-      //       "client_id=" +
-      //       process.env.VUE_APP_ZICONSOLE_CLIENTID +
-      //       "&response_type=" +
-      //       process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
-      //       "&redirect_uri=" +
-      //       process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
-      //       "&route_url=" +
-      //       "/work/workOrder",
-      //     path: "",
-      //   },
-      //   {
-      //     id: 4,
-      //     title: "文档",
-      //     url:process.env.VUE_APP_API_BASE_URL +'#/documentCenter',
-      //     path: "",
-      //   },
-      //   // {
-      //   //   id: 5,
-      //   //   title: "消息",
-      //   //   url:process.env.VUE_APP_API_BASE_URL + '/html/ziconsole/preview' +'#/news/newsList',
-      //   //   path: "",
-      //   // },
-      //   // {
-      //   //   id: 6,
-      //   //   title: "用户",
-      //   //   url:'',
-      //   //   path: "/systemManagement/organization",
-      //   // },
-      // ],
+      headerMenuList: [
+        // {
+        //   id: 1,
+        //   title: "BOE工业互联网平台",
+        //   url: process.env.VUE_APP_API_BASE_URL,
+        //   path: "",
+        // },
+        // {
+        //   id: 2,
+        //   title: "控制台",
+        //   url:process.env.VUE_APP_LOGIN_URL +
+        //     "client_id=" +
+        //     process.env.VUE_APP_ZICONSOLE_CLIENTID +
+        //     "&response_type=" +
+        //     process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+        //     "&redirect_uri=" +
+        //     process.env.VUE_APP_ZICONSOLE_REDIRECT_URI,
+        //   path: "",
+        // },
+        // {
+        //   id: 3,
+        //   title: "工单",
+        //   url:process.env.VUE_APP_LOGIN_URL +
+        //     "client_id=" +
+        //     process.env.VUE_APP_ZICONSOLE_CLIENTID +
+        //     "&response_type=" +
+        //     process.env.VUE_APP_ZICONSOLE_RESPONSE_TYPE +
+        //     "&redirect_uri=" +
+        //     process.env.VUE_APP_ZICONSOLE_REDIRECT_URI +
+        //     "&route_url=" +
+        //     "/work/workOrder",
+        //   path: "",
+        // },
+        // {
+        //   id: 4,
+        //   title: "文档",
+        //   url:process.env.VUE_APP_API_BASE_URL +'#/documentCenter',
+        //   path: "",
+        // },
+        // {
+        //   id: 5,
+        //   title: "消息",
+        //   url:process.env.VUE_APP_API_BASE_URL + '/html/ziconsole/preview' +'#/news/newsList',
+        //   path: "",
+        // },
+        // {
+        //   id: 6,
+        //   title: "用户",
+        //   url:'',
+        //   path: "/systemManagement/organization",
+        // },
+      ],
     };
   },
   provide() {

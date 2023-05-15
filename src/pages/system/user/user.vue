@@ -1176,8 +1176,8 @@ export default {
         companyId: this.company.companyId,
         pageNo: this.page.pageNo,
         pageSize: this.page.pageSize,
-        jobStatus: 0,
-        statusList: [1, 2],
+        // jobStatus: 0,
+        // statusList: [1, 2],
         ...selObj,
         deptId: this.selectedKeysOld[0],
       };
