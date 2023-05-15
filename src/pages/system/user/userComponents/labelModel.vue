@@ -14,25 +14,19 @@
                   zIndex: 9999,
                 }"
                 allow-clear
-                placeholder="请选择部门"
+                placeholder="请选择标签组"
                 :tree-data="treeDataG"
                 :replace-fields="{ title: 'name', key: 'id', value: 'id' }"
-                @change="deptIdChange($event,item)"
               ></a-tree-select>
             </a-form-model-item>
             <a-form-model-item ref="positionId" prop="positionId" class="filter-form-item filter-form-right">
-              <a-select v-model="item.positionId" allow-clear placeholder="请选择职位" @change="positionIdChange($event,item)">
+              <a-select v-model="item.positionId" allow-clear placeholder="请选择标签">
                 <a-select-option v-for="item in positionList" :key="item.positionId" :value="item.positionId">{{ item.positionName }}</a-select-option>
               </a-select>
             </a-form-model-item>
             <div class="filter-form-btn-box">
               <img class="btn-icon add-btn" @click="addUserDeptRels" v-if="index == userDeptRelsList.length-1" src="@/assets/depAndPosModel/add-icon.svg" />
               <img class="btn-icon btn-rm" v-if="userDeptRelsList.length > 1" @click="rmUserDeptRels(item)" src="@/assets/depAndPosModel/rm-icon.svg" />
-              <!-- <div class="check-btn-box" @click="changeAdminDept(item)">
-                <img class="btn-icon check-btn" v-if="item.adminDept == 1" src="@/assets/depAndPosModel/check-icon-active.svg" />
-                <img class="btn-icon check-btn" v-else src="@/assets/depAndPosModel/check-icon.svg" />
-                <span class="check-btn-test">设为主部门</span>
-              </div> -->
             </div>
           </a-form-model>
         </div>
@@ -86,10 +80,10 @@ export default {
       loading: false,
       rulesAuth: {
         deptId: [
-          { required: false, message: `部门不能为空`, trigger: "change" },
+          { required: false, message: `标签组不能为空`, trigger: "change" },
         ],
         positionId: [
-          { required: false, message: `职位不能为空`, trigger: "change" },
+          { required: false, message: `标签不能为空`, trigger: "change" },
         ],
       },
       // 条件列表
@@ -100,7 +94,7 @@ export default {
           deptId: undefined,
           positionId: undefined,
           // 是否主部门 1.是，2.否
-          adminDept: 2,
+          // adminDept: 2,
         },
       ],
       // 部门及职位列表
@@ -154,6 +148,7 @@ export default {
     getPositionList() {
       return getPositionListApi()
         .then(res => {
+          console.log(res.data,'ccccc');
           this.positionList = res.data
           return Promise.resolve()
         })
@@ -173,11 +168,11 @@ export default {
       // if (!formValidator.formAllArr(this, "filterForm")) {
       //   return
       // }
-      let hasAdminDept = this.userDeptRelsList.some(item => item.adminDept == 1)
-      if (!hasAdminDept) {
-        this.$message.warn('请设置主部门')
-        return
-      }
+      // let hasAdminDept = this.userDeptRelsList.some(item => item.adminDept == 1)
+      // if (!hasAdminDept) {
+      //   this.$message.warn('请设置主部门')
+      //   return
+      // }
       this.handleLoading()
       this.userDeptRelsList.forEach(item => {
         item.userId = this.labelModelData.userId
@@ -198,27 +193,9 @@ export default {
           this.cancelLoading()
         })
     },
-    // 部门改变
-    deptIdChange(e, item) {
-      if (!e && !item.positionId) {
-        item.adminDept = 2
-      }
-    },
-    // 职位改变
-    positionIdChange(e, item) {
-      if (!e && !item.deptId) {
-        item.adminDept = 2
-      }
-    },
     // 取消-关闭model
     closeModel() {
       this.$emit("input", false);
-    },
-    // 修改主部门
-    changeAdminDept(item) {
-      this.userDeptRelsList.forEach(item1 => {
-        item1.adminDept = item1.guid == item.guid ? 1 : 2
-      })
     },
     // 新增部门及职位
     addUserDeptRels() {

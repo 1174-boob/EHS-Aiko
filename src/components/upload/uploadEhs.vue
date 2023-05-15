@@ -15,7 +15,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.btpFile}/api/file/resource/upload`,
+      default: `ehs-customer/api/file/uploadFile`,
     },
     fileLists: {
       type: Array,

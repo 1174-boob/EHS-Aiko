@@ -397,7 +397,7 @@ export default {
       let apiData = {
         roleId: item.roleId,
       };
-      this.$confirm({
+      this.$antConfirm({
         title: "确定删除?",
         icon: () => <a-icon type="delete" class="confirm-icon-rm" theme="filled" />,
         content: "确定后所有被赋予该角色的用户将失去对应的功能权限",
@@ -421,7 +421,7 @@ export default {
         userId: row.userId,
         productId: this.selAppAuthItem.productId,
       };
-      this.$confirm({
+      this.$antConfirm({
         title: "删除",
         icon: () => <a-icon type="delete" class="confirm-icon-rm" theme="filled" />,
         content: "确定删除该用户的角色权限？",

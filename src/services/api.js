@@ -77,7 +77,7 @@ export const getUserAndJobNumber = params => post(`ehs-customer/api/user/getUser
 // 搜索部门名称新接口-2022-10-17
 export const searchDept = params => post(`ehs-customer/api/company/dept/searchDept`, params);
 // 搜索人员名称新接口-2022-10-17
-export const searchUser = params => post(`ehs-customer/api/company/dept/searchUser`, params);
+export const searchUser = params => post(`ehs-customer/api/enterprise/dept/searchUser`, params);
 
 // 公共-获取审批日志
 export const getFlowLogApi = params => post(`${serviceNameList.danger}/api/ehs/flow/getTaskComments`, params);
@@ -121,7 +121,7 @@ export const InsertPolicyLaw = params => post(`${serviceNameList.danger}/api/ehs
 //ehs政策法规编辑
 export const UpdatePolicyLaw = params => post(`${serviceNameList.danger}/api/ehs/policylaw/updatePolicyLaw`, params);
 //ehs政策法规查询列表
-export const SelectPolicylaw = params => post(`${serviceNameList.danger}/api/ehs/policylaw/selectPolicylawPage`, params);
+export const SelectPolicylaw = params => post(`ehs-customer/api/ehs/policylaw/selectPolicylawPage`, params);
 //ehs政策法规删除
 export const DeletePolicylaw = params => post(`${serviceNameList.danger}/api/ehs/policylaw/deletePolicylawById`, params);
 //ehs政策法规详情
@@ -206,6 +206,8 @@ export const updateUserDetail = params => post(`${serviceNameList.danger}/api/eh
 export const getUserPageList = params => post(`${serviceNameList.danger}/api/ehs/company/user/pageList`, params);
 //获取列表
 export const GetLabelList = params => post(`ehs-customer/api/label/list`, params);
+//获取用户标签列表
+export const GetUserLabelList = params => post(`ehs-customer/api/label/user/list`, params);
 // 控制台角色--获取角色权限树
 export const getConsoleRoleTree = params => get(`ehs-customer/api/resource/queryResourceTree`, params);
 //权限-角色授权-设置添加
