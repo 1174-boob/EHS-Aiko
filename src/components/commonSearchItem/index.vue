@@ -188,7 +188,7 @@ export default {
     }
     if(sessionStorage.getItem('zconsole_userInfo')) {
       if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList) {
-        let orgList = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList;
+        let orgList = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.bindOrgList;
         for(let i = 0;i < orgList.length;i++) {
           this.commonOrgnizeList.push(orgList[i])
         }

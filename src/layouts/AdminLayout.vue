@@ -446,7 +446,7 @@ export default {
     this.setActivated(this.$route);
     // this.getHeaderListFn();
     // this.getheaderlist();
-    this.getUserDetail();
+    // this.getUserDetail();
   },
   beforeDestroy() {
     this.correctPageMinHeight(-this.minHeight + 24);

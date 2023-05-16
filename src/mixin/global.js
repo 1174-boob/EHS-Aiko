@@ -22,7 +22,13 @@ const copyTextMixin = {
                 return {
                     title: '所属组织',
                     customRender: (text, row, index) => {
-                        return this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", row.corporationId).orgAbbrName ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", row.corporationId).orgAbbrName : "--";
+                        if(row.orgId) {
+                            return this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", row.orgId).orgName ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", row.orgId).orgName : "--";
+                        } else if(row.corporationId) {
+                            return this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", row.corporationId).orgName ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", row.corporationId).orgName : "--";
+                        } else if(row.organizationId) {
+                            return this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", row.organizationId).orgName ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", row.organizationId).orgName : "--";
+                        }
                     },
                     align: "center",
                     ellipsis: true,
@@ -31,7 +37,7 @@ const copyTextMixin = {
             } else {
                 return {
                     title: '所属组织',
-                    dataIndex: "corporationName",
+                    dataIndex: "orgName",
                     align: "center",
                     ellipsis: true,
                     width: width

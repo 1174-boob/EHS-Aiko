@@ -202,8 +202,8 @@ export default {
       let commonAddOrgnizeListAll = [];
       if (setCorporationTree) {
         for (let i = 0; i < setCorporationTree.length; i++) {
-          if (setCorporationTree[i].corporationList) {
-            commonAddOrgnizeListAll.push(...setCorporationTree[i].corporationList);
+          if (setCorporationTree) {
+            commonAddOrgnizeListAll.push(...setCorporationTree);
           }
         }
       }
@@ -687,6 +687,7 @@ export default {
     // 获取ehs字典列表
     getDictTree({ commit }) {
       return getDictTree().then(res => {
+        console.log(res, 'huigang')
         commit('setDictTypeData', res.data);
       }).catch(err => {
         console.log(err);
@@ -703,17 +704,22 @@ export default {
     // 数据权限
     // 获取当前租户的法人机构树
     getCorporationTree({ commit }) {
-      return getCorporationTree().then(res => {
-        commit('setCorporationTree', res.data);
-      }).catch(err => {
-        console.log(err);
-      })
+      // return getCorporationTree().then(res => {
+      //   commit('setCorporationTree', res.data);
+      // }).catch(err => {
+      //   console.log(err);
+      // })
+      if(sessionStorage.getItem('zconsole_userInfo')) {
+        if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList) {
+          commit('setCorporationTree', JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList);
+        }
+      }
     },
     // 获取当前登录用户所属的法人机构树
     getLoginCorporation({ commit }) {
       if(sessionStorage.getItem('zconsole_userInfo')) {
-        if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList) {
-          commit('setLoginCorporation', JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList);
+        if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.bindOrgList) {
+          commit('setLoginCorporation', JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.bindOrgList);
         }
       }
       // return getLoginCorporation().then(res => {

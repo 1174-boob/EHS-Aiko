@@ -8,14 +8,14 @@
       </a-form-model-item> -->
       <a-form-model-item class="flex" label="所属组织" :colon="false">
         <a-select :disabled="disabled" v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange">
-          <a-select-option v-for="item in commonOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+          <a-select-option v-for="item in commonOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
         </a-select>
       </a-form-model-item>
     </template>
     <template class="width-100" v-else>
       <a-form-model-item v-show="!justNeedDepartment" class="flex" label="所属组织" :colon="isColon" :label-col="labelCol" :wrapper-col="wrapperCol" prop="corporationId" :label-align="labelAlign">
         <a-select v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange" :disabled="disabled">
-          <a-select-option v-for="item in getCommonAddOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+          <a-select-option v-for="item in getCommonAddOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
         </a-select>
       </a-form-model-item>
     </template>
@@ -53,6 +53,16 @@ export default {
       type: String,
       default: 'right'
     },
+    // 是否是自定义表单
+    isNgForm: {
+      type: Boolean,
+      default: false
+    },
+    // 自定义表单模板配置
+    config: {
+      type: Object,
+      default: () => { }
+    },
     // 是否有部门
     hasDepartment: {
       type: Boolean,
@@ -89,6 +99,10 @@ export default {
     needDefaultValue: {
       type: Boolean,
       default: true
+    },
+    deptLabel: {
+      type: String,
+      default: "部门"
     },
     //是否展示label的冒号
     isColon: {
@@ -141,12 +155,12 @@ export default {
       if (!this.needDefaultValue) {
         return;
       }
-      if (arr && arr.length == 1 && Array.isArray(arr[0].corporationList) && arr[0].corporationList.length == 1) { // 列表页只有一个组织的时候查询条件默认填充上所属中心所属组织
-        this.commonOrgnizeList = arr[0].corporationList;
+      if (arr && arr.length == 1 && Array.isArray(arr) && arr.length == 1) { // 列表页只有一个组织的时候查询条件默认填充上所属中心所属组织
+        this.commonOrgnizeList = arr;
         // this.$set(this.CommonFormInline, "centerId", arr[0].corporationList[0].centerId);
-        this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
-        this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
-        this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
+        // this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
+        // this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
+        // this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
         let deptId = this.getMappingValue(arr[0].corporationList, "id", arr[0].corporationList[0].id).deptId;
         this.$emit('corporationChange', this.CommonFormInline.corporationId, deptId);
         if (this.hasDepartment) { // 有部门
@@ -170,10 +184,10 @@ export default {
       if (this.notTablePage) { // 新增编辑的时候加组织对应的centerId
         // this.$set(this.CommonFormInline, "centerId", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerId);
         if (this.needCenterName) {
-          this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerName);
+          this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).centerName);
         }
         if (this.needCorporationName) {
-          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).orgAbbrName);
+          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).orgAbbrName);
         }
       }
       let list = this.notTablePage ? this.getCommonAddOrgnizeList : this.commonOrgnizeList;
