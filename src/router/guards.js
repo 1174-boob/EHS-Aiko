@@ -187,7 +187,7 @@ const authorityGuard = (to, from, next, options) => {
               store.dispatch('guard/getAllButtonCodeListFn'),
               // store.dispatch('setting/getCorporationList'),
               // store.dispatch('setting/getCorporationTree'),
-              // store.dispatch('setting/getLoginCorporation'),
+              store.dispatch('setting/getLoginCorporation'),
               store.dispatch('setting/getDeptCache'),
               store.dispatch('setting/getMenuAuthList'),
             ]).finally(() => {
@@ -203,7 +203,7 @@ const authorityGuard = (to, from, next, options) => {
               store.dispatch('guard/getAllButtonCodeListFn'),
               // store.dispatch('setting/getCorporationList'),
               // store.dispatch('setting/getCorporationTree'),
-              // store.dispatch('setting/getLoginCorporation'),
+              store.dispatch('setting/getLoginCorporation'),
               store.dispatch('setting/getDeptCache'),
               store.dispatch('setting/getMenuAuthList'),
             ]).finally(() => {
@@ -233,7 +233,7 @@ const authorityGuard = (to, from, next, options) => {
                   store.dispatch('guard/getAllButtonCodeListFn'),
                   // store.dispatch('setting/getCorporationList'),
                   // store.dispatch('setting/getCorporationTree'),
-                  // store.dispatch('setting/getLoginCorporation'),
+                  store.dispatch('setting/getLoginCorporation'),
                   store.dispatch('setting/getDeptCache'),
                   store.dispatch('setting/getMenuAuthList'),
                 ]).finally(() => {
@@ -270,7 +270,7 @@ const authorityGuard = (to, from, next, options) => {
                   store.dispatch('guard/getAllButtonCodeListFn'),
                   // store.dispatch('setting/getCorporationList'),
                   // store.dispatch('setting/getCorporationTree'),
-                  // store.dispatch('setting/getLoginCorporation'),
+                  store.dispatch('setting/getLoginCorporation'),
                   store.dispatch('setting/getDeptCache'),
                   store.dispatch('setting/getMenuAuthList'),
                 ]).finally(() => {

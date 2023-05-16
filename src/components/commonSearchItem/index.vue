@@ -8,7 +8,7 @@
       </a-form-model-item> -->
       <a-form-model-item class="flex" label="所属组织" :colon="false">
         <a-select :disabled="disabled" v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange">
-          <a-select-option v-for="item in commonOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+          <a-select-option v-for="item in commonOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
         </a-select>
       </a-form-model-item>
       <a-form-model-item class="flex" v-if="hasDepartment && !departmentMultiple" :label="deptLabel" :colon="false">
@@ -23,7 +23,7 @@
     <template class="width-100" v-else>
       <a-form-model-item v-show="!justNeedDepartment" class="flex" :class="{'ngform-commonItem': isNgForm}" label="所属组织" :colon="isColon" :label-col="labelCol"  :wrapper-col="wrapperCol" prop="corporationId" :label-align="labelAlign">
         <a-select v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange" :disabled="disabled">
-          <a-select-option v-for="item in getCommonAddOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+          <a-select-option v-for="item in getCommonAddOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
         </a-select>
         <p class="error-item" v-show="isNgForm && !CommonFormInline.corporationId">所属组织不能为空</p>
       </a-form-model-item>
@@ -176,7 +176,6 @@ export default {
       }
     }
     let arr = [];
-    console.log(this.currentCorporationObj)
     let currentRouterCodeMsg = this.currentCorporationObj[sessionStorage.getItem("routerCode")];
     if (currentRouterCodeMsg && (currentRouterCodeMsg.checkedValues != undefined)) {
       if (currentRouterCodeMsg.checkedValues == 1) {// 1法人机构 0： 全部
@@ -187,6 +186,14 @@ export default {
     } else {
       arr = this.setLoginCorporation || []; // 没有这个值就是取默认的-法人机构
     }
+    if(sessionStorage.getItem('zconsole_userInfo')) {
+      if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList) {
+        let orgList = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList;
+        for(let i = 0;i < orgList.length;i++) {
+          this.commonOrgnizeList.push(orgList[i])
+        }
+      }
+    }
     this.commonCenterAreaList = arr;
     this.isNeedDefaultValue(arr);
   },
@@ -195,12 +202,13 @@ export default {
       if (!this.needDefaultValue) {
         return;
       }
-      if (arr && arr.length == 1 && Array.isArray(arr[0].corporationList) && arr[0].corporationList.length == 1) { // 列表页只有一个组织的时候查询条件默认填充上所属中心所属组织
-        this.commonOrgnizeList = arr[0].corporationList;
+      if (arr && arr.length == 1 && Array.isArray(arr) && arr.length == 1) { // 列表页只有一个组织的时候查询条件默认填充上所属中心所属组织
+        // this.commonOrgnizeList = arr[0].corporationList;
+        this.commonOrgnizeList = arr;
         // this.$set(this.CommonFormInline, "centerId", arr[0].corporationList[0].centerId);
-        this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
-        this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
-        this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
+        // this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
+        // this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
+        // this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
         let deptId = this.getMappingValue(arr[0].corporationList, "id", arr[0].corporationList[0].id).deptId;
         this.$emit('corporationChange', this.CommonFormInline.corporationId, deptId);
         if (this.hasDepartment) { // 有部门
@@ -211,23 +219,23 @@ export default {
     // 所属中心改变-获取所属组织
     // centerIdChange(val) {
     //   this.commonOrgnizeList = this.getMappingValue(this.commonCenterAreaList, "corporationCode", val).corporationList;
-    //   this.$set(this.CommonFormInline, "corporationId", undefined);
-    //   if (this.departmentMultiple) {
-    //     this.$set(this.CommonFormInline, "deptIds", undefined);
-    //   } else {
-    //     this.$set(this.CommonFormInline, "deptId", undefined);
-    //   }
-    //   this.$emit('centerChange',val)
+      // this.$set(this.CommonFormInline, "corporationId", undefined);
+      // if (this.departmentMultiple) {
+      //   this.$set(this.CommonFormInline, "deptIds", undefined);
+      // } else {
+      //   this.$set(this.CommonFormInline, "deptId", undefined);
+      // }
+      // this.$emit('centerChange',val)
     // },
     // 所属组织改变-获取所属部门
     corporationChange(val, rebackDept) { // rebackDept有这个参数的时候，说明是编辑页面需要回显部门
       if (this.notTablePage) { // 新增编辑的时候加组织对应的centerId
         // this.$set(this.CommonFormInline, "centerId", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerId);
         if (this.needCenterName) {
-          this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).centerName);
+          this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).centerName);
         }
         if (this.needCorporationName) {
-          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "id", val).orgAbbrName);
+          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).orgAbbrName);
         }
       }
       let list = this.notTablePage ? this.getCommonAddOrgnizeList : this.commonOrgnizeList;

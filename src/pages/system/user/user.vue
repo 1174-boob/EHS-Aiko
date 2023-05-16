@@ -517,34 +517,41 @@ export default {
       this.currentMsg = { ...record };
       this.shareVisible = true;
       getAllotOrg({ userId: record.userId }).then(checkRes => {
-        console.log(checkRes.data)
         getCorporationTree().then(res => {
-          this.divideTreeData = [
-            // res?.data?.allOrg?.company,
-            //   ...res?.data?.allOrg?.cause,
-            //   ...res?.data?.allOrg?.center,
+          this.divideTreeData = (res.data.allOrg && res.data.allOrg.company) ? [
+            res.data.allOrg.company,
+              ...res.data.allOrg.cause?res.data.allOrg.cause:[],
+              ...res.data.allOrg.center?res.data.allOrg.center:[],
               ...res?.data?.allOrg?.cor,
-            ] || [];
+            ] : [
+              ...res.data.allOrg.cause?res.data.allOrg.cause:[],
+              ...res.data.allOrg.center?res.data.allOrg.center:[],
+              ...res?.data?.allOrg?.cor
+            ];
           this.resolveData(this.divideTreeData);
-          // this.centerCodeList = [];
+          this.centerCodeList = [];
           this.codeListLength = this.divideTreeData.length;
-          // for (let i = 0; i < this.divideTreeData.length; i++) {
-          //   let itemLength = this.divideTreeData[i].corporationList ? this.divideTreeData[i].corporationList.length : 0;
+          for (let i = 0; i < this.divideTreeData.length; i++) {
+            // let itemLength = this.divideTreeData[i].corporationList ? this.divideTreeData[i].corporationList.length : 0;
 
-          //   this.codeListLength += itemLength;
-          //   if (!(this.divideTreeData[i].corporationList && this.divideTreeData[i].corporationList.length > 0)) {
-          //     this.divideTreeData[i].disableCheckbox = true;
-          //     this.divideTreeData[i].disabled = true;
-          //   } else {
-          //     this.centerCodeList.push(this.divideTreeData[i].corporationCode);
-          //   }
-          // }
+            // this.codeListLength += itemLength;
+            this.centerCodeList.push(this.divideTreeData[i].orgId);
+            // if (!(this.divideTreeData[i].corporationList && this.divideTreeData[i].corporationList.length > 0)) {
+            //   this.divideTreeData[i].disableCheckbox = true;
+            //   this.divideTreeData[i].disabled = true;
+            // } else {
+            //   this.centerCodeList.push(this.divideTreeData[i].orgId);
+            // }
+          }
           // this.divideCheckedKeys = record.corporationListId;
           this.divideCheckedKeys = checkRes.data;
+          if(this.divideTreeData.length == this.divideCheckedKeys.length) {
           // if (record.corporationListName == "全部") {
-          //   this.divideCheckedKeys = this.centerCodeList;
-          //   this.isCheckAll = true;
-          // }
+            this.divideCheckedKeys = this.centerCodeList;
+            this.isCheckAll = true;
+          } else {
+            this.isCheckAll = false;
+          }
         }).catch(err => { })
       })
     },
@@ -567,10 +574,10 @@ export default {
       if (!e.checked) {
         this.isCheckAll = false;
       } else {
-        let divideCheckedKeys = this.divideCheckedKeys.filter(item => {
+        this.divideCheckedKeys.filter(item => {
           return this.centerCodeList.indexOf(item) == -1;
         })
-        //console.log(divideCheckedKeys,)
+        let divideCheckedKeys = this.divideCheckedKeys
         if (divideCheckedKeys.length >= this.codeListLength) {
           this.isCheckAll = true;
         }
@@ -582,26 +589,32 @@ export default {
       this.isCheckAll = false;
       if (e.target.checked) {
         this.isCheckAll = true;
-        this.divideCheckedKeys = [...this.centerCodeList];
+        // this.divideCheckedKeys = [...this.centerCodeList];
+        let divideTreeData = this.divideTreeData.map(item => {
+          return item.orgId;
+        })
+        this.divideCheckedKeys = divideTreeData;
       }
     },
     shareCancle() {
       this.shareVisible = false;
     },
     shareConfirm() {
-      //console.log(this.divideCheckedKeys);
       this.shareVisible = false;
       let para = {
         userId: this.currentMsg.userId,
+        orgIdList: []
         // corporationType: this.isCheckAll ? 0 : 1
       }
       if (!this.isCheckAll) {
-        para.orgIdList = this.divideCheckedKeys.filter(item => {
+        this.divideCheckedKeys.filter(item => {
           return this.centerCodeList.indexOf(item) == -1;
-        })
+        });
+        para.orgIdList = this.divideCheckedKeys
+      } else {
+        para.orgIdList = this.divideCheckedKeys;
       }
       divideCorporation(para).then(res => {
-        //console.log(res);
         this.$antMessage.success("分配成功！");
         if (this.currentMsg.userId == JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId) { // 如果是自己给自己分配调用当前登录人接口
           this.getLoginCorporation();
@@ -638,9 +651,10 @@ export default {
       let seltableColumnListArr = JSON.parse(localStorage.getItem('console_user_seltableColumnList')) || []
       if (seltableColumnListArr.length) {
         let userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
-        let selectedRowKeysArr = seltableColumnListArr.filter(item => {
+        seltableColumnListArr.filter(item => {
           return item.userId == userId
         })
+        let selectedRowKeysArr = seltableColumnListArr
         if (selectedRowKeysArr.length && selectedRowKeysArr[0].version == this.seltableColumnVersion) {
           // 根据筛选的显示对应表头
           this.setTableColumn(selectedRowKeysArr[0].selectedRowKeys)
@@ -667,7 +681,6 @@ export default {
         });
         if (result.code == "20000") {
           this.detailForm = result.data;
-          console.log(this.detailForm,'1231231231 ');
           this.detailFormCustomNew = result.data
             ? result.data.userFields
               ? result.data.userFields
@@ -948,7 +961,6 @@ export default {
       let result = await getUserRoleList({ companyId, productId });
       if (result.code == 20000) {
         this.treeDataRoles = result.data;
-        console.log(this.treeDataRoles,'2111212');
       }
     },
     //获取用户添加弹框-用户标签列表
@@ -965,7 +977,6 @@ export default {
           this.labelList = labelList ? labelList : [];
           this.page.total = total;
           this.labelList = res.data;
-          console.log(labelList , "dasda");
         })
         .catch((err) => {});
     },

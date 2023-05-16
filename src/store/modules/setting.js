@@ -188,11 +188,12 @@ export default {
       const { setLoginCorporation } = state;
       let commonAddOrgnizeList = [];
       if (setLoginCorporation) {
-        for (let i = 0; i < setLoginCorporation.length; i++) {
-          if (setLoginCorporation[i].corporationList) {
-            commonAddOrgnizeList.push(...setLoginCorporation[i].corporationList);
-          }
-        }
+        // for (let i = 0; i < setLoginCorporation.length; i++) {
+          // if (setLoginCorporation[i].corporationList) {
+            // commonAddOrgnizeList.push(...setLoginCorporation[i].corporationList);
+          // }
+        // }
+        commonAddOrgnizeList = setLoginCorporation;
       }
       return commonAddOrgnizeList;
     },
@@ -710,12 +711,16 @@ export default {
     },
     // 获取当前登录用户所属的法人机构树
     getLoginCorporation({ commit }) {
-      return getLoginCorporation().then(res => {
-        console.log(res.data, 'res data')
-        commit('setLoginCorporation', res.data);
-      }).catch(err => {
-        console.log(err);
-      })
+      if(sessionStorage.getItem('zconsole_userInfo')) {
+        if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList) {
+          commit('setLoginCorporation', JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.orgList);
+        }
+      }
+      // return getLoginCorporation().then(res => {
+      //   console.log(res.data, 'res data')
+      // }).catch(err => {
+      //   console.log(err);
+      // })
     },
     // 菜单数据权限
     getMenuAuthList({ commit }) {
