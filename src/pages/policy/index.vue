@@ -14,6 +14,12 @@
            
           </a-range-picker>
         </a-form-model-item>
+        <!-- 公告类型 -->
+        <a-form-model-item label="公告类型">
+          <a-select v-model="formInline.policyLowType" placeholder="请选择公告类型" allowClear>
+            <a-select-option v-for="notice of policyLowType" :value="notice.key" :key="notice.id">{{notice.value}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -68,6 +74,7 @@ export default {
   mixins: [teableCenterEllipsis, cancelLoading, dragTable],
   data() {
     return {
+      policyLowType: [],
       tableSpinning:false,
       timeArr: [],
       condition: {},
@@ -120,6 +127,8 @@ export default {
     this.columns.splice(1, 0, this.addCommonColumnItem());
     this.initConfigPage()
     this.getPolicylawList();
+    // 法律法规类型
+    this.policyLowType = dictionary('policyLowType');
   },
   activated() {
     setTimeout(() => {

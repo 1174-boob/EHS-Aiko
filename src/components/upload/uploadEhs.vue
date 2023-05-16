@@ -1,6 +1,6 @@
 <template>
   <!-- :default-file-list="defaultFileList" -->
-  <a-upload :accept="accept" :action="action" :headers="headers" :default-file-list="defaultFileList" :before-upload="beforeUpload" :file-list="fileList" :remove="removeFile" @change="handleChange" multiple>
+  <a-upload :accept="accept" name="multipartFile" :action="action" :headers="headers" :default-file-list="defaultFileList" :before-upload="beforeUpload" :file-list="fileList" :remove="removeFile" @change="handleChange" multiple>
     <a-button>
       <a-icon type="upload" />上传文件
     </a-button>

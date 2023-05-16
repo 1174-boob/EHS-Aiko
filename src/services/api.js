@@ -117,15 +117,15 @@ export const GetContractCount = params => get(`${serviceNameList.contract}/api/c
 //获取新闻公告列表总览页-右下角
 export const GetNewsBulletin = params => post(`${serviceNameList.notice}/api/notice/publish/page/list`, params);
 //ehs政策法规新增
-export const InsertPolicyLaw = params => post(`${serviceNameList.danger}/api/ehs/policylaw/insertPolicyLaw`, params);
+export const InsertPolicyLaw = params => post(`ehs-customer/api/ehs/policylaw/insertPolicyLaw`, params);
 //ehs政策法规编辑
-export const UpdatePolicyLaw = params => post(`${serviceNameList.danger}/api/ehs/policylaw/updatePolicyLaw`, params);
+export const UpdatePolicyLaw = params => post(`ehs-customer/api/ehs/policylaw/updatePolicyLaw`, params);
 //ehs政策法规查询列表
 export const SelectPolicylaw = params => post(`ehs-customer/api/ehs/policylaw/selectPolicylawPage`, params);
 //ehs政策法规删除
-export const DeletePolicylaw = params => post(`${serviceNameList.danger}/api/ehs/policylaw/deletePolicylawById`, params);
+export const DeletePolicylaw = params => post(`ehs-customer/api/ehs/policylaw/deletePolicylawById`, params);
 //ehs政策法规详情
-export const SelectPolicylawDetail = params => post(`${serviceNameList.danger}/api/ehs/policylaw/selectPolicylawDetail`, params);
+export const SelectPolicylawDetail = params => post(`ehs-customer/api/ehs/policylaw/selectPolicylawDetail`, params);
 //ehs危险工作查询列表
 export const SelectDangerList = params => post(`${serviceNameList.danger}/api/ehs/danger/selectDangerPage`, params);
 //字典组新增
@@ -459,7 +459,7 @@ export const onlineMothorTime = params => post(`${serviceNameList.danger}/api/eh
 // 环境数据监测-查看更多
 export const onlineDataInfo = params => post(`${serviceNameList.danger}/api/ehs/online/dataInfo`, params);
 // 环境数据监测-查看更多
-export const selectPolicy = params => post(`${serviceNameList.danger}/api/ehs/policylaw/selectPolicylawByStatistics`, params);
+export const selectPolicy = params => post(`ehs-customer/api/ehs/policylaw/selectPolicylawByStatistics`, params);
 
 // 添加待办推送到BOE平台
 export const PushTask = params => post(`${serviceNameList.danger}/api/ehs/task/pushTask`, params);
@@ -828,7 +828,7 @@ export const divideCorporation = params => post(`${serviceNameList.customer}/api
 // 获取菜单配置列表
 export const getMenuAuthList = params => get(`ehs-customer/api/ehs/menuDataAuth/getMenuAuthList`, params);
 // 更新菜单权限
-export const updateDataAuth = params => post(`${serviceNameList.danger}/api/ehs/menuDataAuth/updateDataAuth`, params);
+export const updateDataAuth = params => post(`ehs-customer/api/ehs/menuDataAuth/updateDataAuth`, params);
 // 校验菜单权限
 export const getloginUserDataAuth = (params) => {
   if (sessionStorage.getItem("hasGetloginUserDataAuth")) {
