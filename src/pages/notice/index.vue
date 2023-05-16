@@ -16,6 +16,12 @@
             <a-icon slot="suffixIcon" type="calendar" />
           </a-range-picker>
         </a-form-model-item>
+        <!-- 公告类型 -->
+        <a-form-model-item label="公告类型">
+          <a-select v-model="formInline.noticeType" placeholder="请选择类型" allowClear>
+            <a-select-option v-for="notice of noticeType" :value="notice.key" :key="notice.id">{{notice.value}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -71,13 +77,8 @@ export default {
   mixins: [teableCenterEllipsis, cancelLoading, dragTable],
   data() {
     return {
-      formInline: {
-        noticeType: [],
-        policyLawSubject: '',
-        timeArr: [],
-        releaseTimeStart: '',
-        releaseTimeEnd: ''
-      },
+      noticeType: [],
+      formInline: {},
       typeObj: {},
       condition: {},
       tableSpinning:false,
@@ -125,6 +126,8 @@ export default {
     this.columns.splice(1, 0, this.addCommonColumnItem());
     this.initConfigPage()
     this.getPolicylawList();
+    this.noticeType = dictionary('noticeType');
+    console.log(this.noticeType,'cvcv');
   },
   activated() {
     setTimeout(() => {
@@ -137,7 +140,7 @@ export default {
   methods: {
     initConfigPage(){
       this.initListPage()
-      this.noticeType = dictionary('noticeType');
+      // this.noticeType = dictionary('noticeType');
       const type = {};
       for (let index = 0; index < this.noticeType.length; index++) {
         type[this.noticeType[index].key] = this.noticeType[index].value;
@@ -151,6 +154,7 @@ export default {
     getPolicylawList(param = {}) {
       const params = {
         organizationId: param.organizationId ? param.organizationId : '',
+        noticeType: param.noticeType ? param.noticeType : '',
         policyLawSubject: param.policyLawSubject ? param.policyLawSubject : '',
         releaseTimeStart: param.releaseTimeStart ? param.releaseTimeStart : '',
         releaseTimeEnd: param.releaseTimeEnd ? param.releaseTimeEnd : '',
@@ -179,7 +183,7 @@ export default {
     },
     // 查询
     iSearch() {
-      console.log(this.formInline)
+      console.log(this.formInline,'查询项')
       this.handleLoading();
       this.getPolicylawList(this.formInline);
     },
@@ -236,6 +240,7 @@ export default {
         total: 0,
       }
       this.formInline = {
+        noticeType:'',
         organizationId: undefined,
         policyLawSubject: undefined,
         releaseTimeStart: '',
