@@ -240,7 +240,7 @@ export default {
         total: 0,
       }
       this.formInline = {
-        noticeType:'',
+        noticeType:undefined,
         organizationId: undefined,
         policyLawSubject: undefined,
         releaseTimeStart: '',
