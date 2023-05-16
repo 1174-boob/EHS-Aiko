@@ -828,7 +828,7 @@ export const divideCorporation = params => post(`${serviceNameList.customer}/api
 // 获取菜单配置列表
 export const getMenuAuthList = params => get(`ehs-customer/api/ehs/menuDataAuth/getMenuAuthList`, params);
 // 更新菜单权限
-export const updateDataAuth = params => post(`${serviceNameList.danger}/api/ehs/menuDataAuth/updateDataAuth`, params);
+export const updateDataAuth = params => post(`ehs-customer/api/ehs/menuDataAuth/updateDataAuth`, params);
 // 校验菜单权限
 export const getloginUserDataAuth = (params) => {
   if (sessionStorage.getItem("hasGetloginUserDataAuth")) {

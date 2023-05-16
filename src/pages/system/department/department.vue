@@ -100,7 +100,7 @@
             <a-form-model-item ref="code" label="部门编码" prop="code">
               <a-input
                 :disabled="disabled"
-                :maxLength="6"
+                :maxLength="10"
                 v-model.trim="formDepartment.code"
                 placeholder="请输入部门编码"
               />
