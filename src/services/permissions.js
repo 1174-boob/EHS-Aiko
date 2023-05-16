@@ -59,6 +59,9 @@ export const AddUserOrEditInterface = params => post(`${serviceNameList.customer
 //用户回显
 export const UserDetailInterFace = params => get(`${serviceNameList.customer}/api/company/user/info/echo`, params);
 
+//用户回显
+export const DeptDetailInterFace = params => get(`${serviceNameList.customer}/api/enterprise/dept/echo`, params);
+
 //查询分配部门
 export const DeptGranted = params => get(`${serviceNameList.customer}/api/user/dept/granted`, params);
 

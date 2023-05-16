@@ -207,7 +207,7 @@ export const getUserPageList = params => post(`${serviceNameList.danger}/api/ehs
 //获取列表
 export const GetLabelList = params => post(`ehs-customer/api/label/list`, params);
 //获取用户标签列表
-export const GetUserLabelList = params => post(`ehs-customer/api/label/user/list`, params);
+export const GetUserLabelList = params => get(`ehs-customer/api/label/user/list`, params);
 // 控制台角色--获取角色权限树
 export const getConsoleRoleTree = params => get(`ehs-customer/api/resource/queryResourceTree`, params);
 //权限-角色授权-设置添加
@@ -226,6 +226,10 @@ export const getUserList = params => post(`ehs-customer/api/user/pageList`, para
 export const getUserRoleList = params => post(`ehs-customer/api/role/list`, params);
 // 权限--用户 保存部门及职位
 export const saveDeptAndPositionApi = params => post(`ehs-customer/api/enterprise/dept/allocating/dept`, params);
+// 权限--用户 保存标签
+export const saveDeptAndLabelApi = params => post(`ehs-customer/api/label/allocating/label`, params);
+// 权限--部门 保存标签
+export const saveDeptAndGroupApi = params => post(`ehs-customer/api/label/allocating/dept/label`, params);
 // 同步组织
 export const syncOrgainize = params => get(`${serviceNameList.danger}/api/ehs/company/dept/sync/boeplat`, params);
 // 应用角色授权管理--新增授权用户

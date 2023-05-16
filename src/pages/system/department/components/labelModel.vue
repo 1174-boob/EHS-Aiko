@@ -13,7 +13,6 @@
                   overflow: 'auto',
                   zIndex: 9999,
                 }"
-                allow-clear
                 @select="onSearchSelect" 
                 placeholder="请选择标签组"
                 :tree-data="treeData"
@@ -21,8 +20,8 @@
               ></a-tree-select>
             </a-form-model-item>
             <a-form-model-item ref="labelItemId" prop="labelItemId" class="filter-form-item filter-form-right">
-              <a-select v-model="item.labelItemId" allow-clear placeholder="请选择标签">
-                <a-select-option v-for="item in labelItemList" :key="item.labelItemId" :value="item.labelItemId">{{ item.labelItemName }}</a-select-option>
+              <a-select v-model="item.labelItemName" placeholder="请选择标签" @change="getSelectLabel">
+                <a-select-option v-for="item in labelItemList" :key="item.labelItemId" :value="JSON.stringify(item)">{{ item.labelItemName }}</a-select-option>
               </a-select>
             </a-form-model-item>
             <div class="filter-form-btn-box">
@@ -44,8 +43,8 @@
 // 自定义表单验证的class类
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { cloneDeep } from "lodash";
-import { GetUserLabelList, saveDeptAndLabelApi } from "@/services/api";
-import { UserDetailInterFace, } from "@/services/permissions";
+import { GetUserLabelList, saveDeptAndGroupApi } from "@/services/api";
+import { DeptDetailInterFace, } from "@/services/permissions";
 import cancelLoading from "@/mixin/cancelLoading";
 export default {
   mixins: [cancelLoading],
@@ -68,7 +67,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          userId: '',
+          deptId: '',
           companyId: '',
           companyUserInfoId: '',
         }
@@ -78,9 +77,9 @@ export default {
   data() {
     return {
       spinning: false,
-       // 在子组件中定义一个 data 属性
-      treeData: [],
       loading: false,
+      // 在子组件中定义一个 data 属性
+      treeData: [],
       rulesAuth: {
         labelId: [
           { required: false, message: `标签组不能为空`, trigger: "change" },
@@ -96,8 +95,8 @@ export default {
           guid: 1,
           labelId: undefined,
           labelItemId: undefined,
-          // 是否主标签组 1.是，2.否
-          // adminDept: 2,
+          labelItemName: undefined,
+          labelName: undefined,
         },
       ],
       // 标签组及标签列表
@@ -123,10 +122,24 @@ export default {
     },
   },
   methods: {
+    getSelectLabel(data){
+      const dataLabel = JSON.parse(data)
+      console.log(dataLabel,'dataLabel');
+      // 如果被替换的标签与当前选中的标签labelId相同 则替换
+      // 如果被替换的标签与当前选中的标签labelId不同或者为空 则push
+      if(dataLabel.labelId == this.userDeptRelsListInit.labelId){
+        // this.userDeptRelsListInit = dataLabel
+      } else if(dataLabel.labelId != this.userDeptRelsListInit.labelId){
+        this.userDeptRelsListInit.push(dataLabel)
+      }
+
+    },
     onSearchSelect(value, node, extra){
-      // console.log(value,node);
+      // console.log(value);
       // console.log(node.$options,'node.$options');
       // console.log(node.$options.propsData.dataRef,'node.$options.propsData.dataRef');
+      this.userDeptRelsListInit.labelId = value
+      console.log(this.userDeptRelsListInit.labelId,'this.userDeptRelsListInit.labelId');
       this.labelItemList = node.$options.propsData.dataRef.labelItemList
     },
     // 初始化弹窗数据
@@ -141,16 +154,17 @@ export default {
     },
     // 标签组及标签-弹窗
     openDepAndPosModel() {
-      let apiData = { companyUserInfoId: this.labelModelData.companyUserInfoId }
-      return UserDetailInterFace(apiData)
+      // console.log(this.labelModelData,'this.labelModelData');
+      let apiData = { deptId: this.labelModelData.deptId }
+      return DeptDetailInterFace(apiData)
         .then((res) => {
           let dataObj = res.data
-          dataObj.deptAndLabelDtos = dataObj.deptAndLabelDtos ? dataObj.deptAndLabelDtos : []
+          dataObj.deptLabelDtos = dataObj.deptLabelDtos ? dataObj.deptLabelDtos : []
           // 添加id唯一标识
-          dataObj.deptAndLabelDtos.forEach(item => {
+          dataObj.deptLabelDtos.forEach(item => {
             item.guid = this.guid()
           })
-          this.userDeptRelsList = dataObj.deptAndLabelDtos.length ? dataObj.deptAndLabelDtos : cloneDeep(this.userDeptRelsListInit)
+          this.userDeptRelsList = dataObj.deptLabelDtos.length ? dataObj.deptLabelDtos : cloneDeep(this.userDeptRelsListInit)
           return Promise.resolve()
         })
         .catch((err) => {
@@ -159,7 +173,7 @@ export default {
     },
     // 获取标签api
     getPositionList() {
-      return GetUserLabelList({labelType:'1'})
+      return GetUserLabelList({labelType:'2'})
         .then(res => {
           console.log(res.data,'ccccc');
           this.treeData = res.data
@@ -178,24 +192,15 @@ export default {
     },
     // 选择字段弹框-确定
     submitBtn() {
-      // if (!formValidator.formAllArr(this, "filterForm")) {
-      //   return
-      // }
-      // let hasAdminDept = this.userDeptRelsList.some(item => item.adminDept == 1)
-      // if (!hasAdminDept) {
-      //   this.$message.warn('请设置主标签组')
-      //   return
-      // }
-      this.handleLoading()
       this.userDeptRelsList.forEach(item => {
-        item.userId = this.labelModelData.userId
+        item.deptId = this.labelModelData.deptId
         item.companyId = this.labelModelData.companyId
       })
       let apiData = {
-        userId: this.labelModelData.userId,
-        userLabelRels: this.userDeptRelsList
+        deptId: this.labelModelData.deptId,
+        deptLabelRels: this.userDeptRelsListInit
       }
-      saveDeptAndLabelApi(apiData)
+      saveDeptAndGroupApi(apiData)
         .then(res => {
           this.$message.success("提交成功");
           this.$emit("getTableList");
@@ -216,6 +221,8 @@ export default {
         guid: this.guid(),
         labelId: undefined,
         labelItemId: undefined,
+        labelItemName: undefined,
+        labelName: undefined,
       }
       this.userDeptRelsList.push(userDeptRelsItem)
     },

@@ -74,6 +74,7 @@
             >
               <div class="table-btn" slot="action" slot-scope="text, record">
                 <span @click="iChange(record)">修改</span>
+                <span class="color-0067cc table-btn cursor-pointer" @click="openLabelModel(record)">标签</span>
                 <span class="table-btn-rm" @click="iRm(record)">删除</span>
               </div>
             </a-table>
@@ -214,6 +215,9 @@
         >
       </div>
     </CommonModal>
+
+    <!-- 标签弹窗 -->
+    <LabelModel v-model="labelModelShow" :labelModelData="labelModelData"  @getTableList="getTableList" />
   </div>
 </template>
 
@@ -230,6 +234,7 @@ import {
   getAllUserByCompanyId,
   GetDepartCode,
 } from "@/services/company.js";
+import LabelModel from './components/labelModel.vue'
 import treeMixin from "@/mixin/tree";
 import fromMaxLength from "@/mixin/fromMaxLength";
 import { formValidator } from "@/utils/clx-form-validator.js";
@@ -240,7 +245,8 @@ import { cloneDeep, debounce } from "lodash";
 import staffOrDept from "@/components/staffOrDept";
 export default {
   components: {
-    staffOrDept
+    staffOrDept,
+    LabelModel
   },
   mixins: [
     treeMixin,
@@ -252,6 +258,7 @@ export default {
   data() {
     return {
       disabled:false,
+      labelModelShow: false,
       //负责人列表
       treeDataPerson: [],
       //负责人
@@ -354,7 +361,7 @@ export default {
         {
           dataIndex: "action",
           title: "操作",
-          width: 120,
+          width: 150,
           align: "center",
           scopedSlots: { customRender: "action" },
         },
@@ -414,6 +421,7 @@ export default {
       companyName: "",
       // 所有可选择为负责人的用户
       allUserList: [],
+      labelModelData: undefined,
       sendParentId: [],
       sendBossId: [],
       sendSecondBossId: []
@@ -437,6 +445,11 @@ export default {
     },
   },
   methods: {
+    // 标签-弹窗
+    openLabelModel(row) {
+      this.labelModelData = row
+      this.labelModelShow = true
+    },
     // 获取负责人选择列表
     getAllUserByCompanyIdFn() {
       return getAllUserByCompanyId().then((res) => {

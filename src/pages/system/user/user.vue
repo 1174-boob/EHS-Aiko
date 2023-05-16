@@ -224,7 +224,7 @@
     <DepAndPosModel v-model="depAndPosModelShow" :depAndPosModelData="depAndPosModelData" :treeDataG="treeDataG" @getTableList="getTableList" />
        
     <!-- 标签弹窗 -->
-    <LabelModel v-model="labelModelShow" :labelModelData="labelModelData" :treeDataG="treeDataG" @getTableList="getTableList" />
+    <LabelModel v-model="labelModelShow" :labelModelData="labelModelData"  @getTableList="getTableList" />
 
     <!-- 业务组织弹窗 -->
     <CommonModal title="业务组织" :visible="shareVisible" :cancelFn="shareCancle">
