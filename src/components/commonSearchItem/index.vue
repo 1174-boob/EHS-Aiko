@@ -235,7 +235,7 @@ export default {
           this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).centerName);
         }
         if (this.needCorporationName) {
-          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).orgAbbrName);
+          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).orgName);
         }
       }
       let list = this.notTablePage ? this.getCommonAddOrgnizeList : this.commonOrgnizeList;

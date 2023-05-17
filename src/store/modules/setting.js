@@ -167,13 +167,13 @@ export default {
     getCorporationName: (state) => (code) => {
       const { setCorporationTree } = state
       let commonAddOrgnizeList = (setCorporationTree || []).reduce((prev, item) => {
-        if (item.corporationList && item.corporationList.length > 0) {
-          prev = prev.concat(item.corporationList)
+        if (item) {
+          prev = prev.concat(item)
         }
         return prev
       }, [])
       return (commonAddOrgnizeList.find(item => {
-        return item.id === code
+        return item.orgId === code
       }) || {}).orgName
     },
     subMenu(state) {
