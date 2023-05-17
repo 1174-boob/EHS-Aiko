@@ -20,8 +20,8 @@
           <a-select v-model="formInline.corporationId" placeholder="请选择">
             <a-select-option
               v-for="item in organizationListO"
-              :key="item.corporationId"
-              :value="item.corporationId"
+              :key="item.orgId"
+              :value="item.orgId"
               >{{ item.orgAbbrName }}</a-select-option
             >
           </a-select>
@@ -102,12 +102,12 @@
               >
             </a-select>
           </a-form-model-item>
-          <a-form-model-item class="flex" label="所属组织" prop="corporationId">
-            <a-select v-model="addForm.corporationId" placeholder="请选择">
+          <a-form-model-item class="flex" label="所属组织" prop="orgId">
+            <a-select v-model="addForm.orgId" placeholder="请选择">
               <a-select-option
                 v-for="(item, index) in organizationList"
                 :key="index"
-                :value="item.id"
+                :value="item.orgId"
                 >{{ item.orgName }}</a-select-option
               >
             </a-select>
@@ -161,7 +161,7 @@ export default {
         classificationCode: [
           { required: true, message: "所属分类不能为空", trigger: "change" },
         ],
-        corporationId: [
+        orgId: [
           { required: true, message: "所属组织不能为空", trigger: "change" },
         ],
       },
@@ -209,6 +209,7 @@ export default {
     };
   },
   created() {
+    console.log(123)
     this.getDataList(); //获取列表
     this.allClassList(); //获取所有所属分类
     this.getOrganizationList(); //获取所有组织列表
@@ -229,8 +230,8 @@ export default {
       let list = this.setLoginCorporation;
       let list2 = [];
       list.forEach((item) => {
-        if (item.corporationList && item.corporationList.length) {
-          list2.push(...item.corporationList);
+        if (item) {
+          list2.push(item);
         }
       });
       this.organizationList = list2;
