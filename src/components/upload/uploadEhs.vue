@@ -15,7 +15,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `ehs-customer/api/file/uploadFile`,
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
     },
     fileLists: {
       type: Array,
