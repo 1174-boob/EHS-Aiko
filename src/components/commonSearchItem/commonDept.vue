@@ -167,9 +167,9 @@ export default {
         this.commonOrgnizeList = arr;
         // this.$set(this.CommonFormInline, "centerId", arr[0].corporationList[0].centerId);
         // this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
-        // this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
-        // this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
-        let deptId = this.getMappingValue(arr[0].corporationList, "id", arr[0].corporationList[0].id).deptId;
+        this.$set(this.CommonFormInline, "corporationId", arr[0].orgId);
+        this.$set(this.CommonFormInline, "corporationName", arr[0].orgName);
+        let deptId = this.getMappingValue(arr[0], "id", arr[0].orgId).deptId;
         this.$emit('corporationChange', this.CommonFormInline.corporationId, deptId);
         // if (this.hasDepartment) { // 有部门
         //   this.getDeptTree(deptId);
@@ -195,7 +195,7 @@ export default {
           this.$set(this.CommonFormInline, "centerName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).centerName);
         }
         if (this.needCorporationName) {
-          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).orgAbbrName);
+          this.$set(this.CommonFormInline, "corporationName", this.getMappingValue(this.getCommonAddOrgnizeList, "orgId", val).orgName);
         }
       }
       let list = this.notTablePage ? this.getCommonAddOrgnizeList : this.commonOrgnizeList;
