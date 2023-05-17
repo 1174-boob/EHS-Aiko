@@ -26,7 +26,7 @@
                         whitespace: true,
                       },
                     ],
-                    initialValue: '13801010103',
+                    initialValue: '18303017471',
                   },
                 ]"
               >
@@ -49,7 +49,7 @@
                         whitespace: true,
                       },
                     ],
-                    initialValue: 'a123456',
+                    initialValue: 'Aa123456',
                   },
                 ]"
               >
@@ -57,7 +57,7 @@
               </a-input-password>
             </a-form-item>
           </a-tab-pane>
-          <a-tab-pane tab="手机号登录" key="2">
+          <!-- <a-tab-pane tab="手机号登录" key="2">
             <a-form-item>
               <a-input size="large" placeholder="mobile number">
                 <a-icon slot="prefix" type="mobile" />
@@ -75,12 +75,12 @@
                 </a-col>
               </a-row>
             </a-form-item>
-          </a-tab-pane>
+          </a-tab-pane> -->
         </a-tabs>
-        <div>
+        <!-- <div>
           <a style="float: left">忘记密码</a>
           <router-link style="float: right" to="/dashboard/workplace">注册账户</router-link>
-        </div>
+        </div> -->
         <a-form-item>
           <a-button :loading="logging" style="width: 100%; margin-top: 24px" size="large" htmlType="submit" type="primary">登录</a-button>
         </a-form-item>
