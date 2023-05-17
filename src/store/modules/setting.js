@@ -201,11 +201,12 @@ export default {
       const { setCorporationTree } = state;
       let commonAddOrgnizeListAll = [];
       if (setCorporationTree) {
-        for (let i = 0; i < setCorporationTree.length; i++) {
-          if (setCorporationTree) {
-            commonAddOrgnizeListAll.push(...setCorporationTree);
-          }
-        }
+        // for (let i = 0; i < setCorporationTree.length; i++) {
+        //   if (setCorporationTree) {
+        //     commonAddOrgnizeListAll.push(...setCorporationTree);
+        //   }
+        // }
+        commonAddOrgnizeListAll = setCorporationTree;
       }
       // 排序
       commonAddOrgnizeListAll = commonAddOrgnizeListAll.sort((a, b) => a.orderNum - b.orderNum)

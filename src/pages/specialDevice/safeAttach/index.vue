@@ -174,7 +174,7 @@ export default {
       ],
       tableDataList: [],
       // 导入文件地址
-      importAction: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/danger/importFile`:`${serviceNameList.safe}/api/ehs/safe/danger/importFile`,
+      importAction: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.ehsEquip}/api/ehs/equip/safeAnnexExcel/importFile` : `/api/ehs/equip/safeAnnexExcel/importFile`,
     }
   },
   created() {

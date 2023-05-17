@@ -111,7 +111,7 @@ const mixin = {
       this.$set(this.newlyForm, 'saveDept', undefined)
       this.$set(this.newlyForm, 'saveDeptCode', undefined)
       // this.deptTreeId = id
-      let saveCorporation = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", id).orgAbbrName
+      let saveCorporation = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", id).orgName
       this.$set(this.newlyForm, 'saveCorporation', saveCorporation)
       let list = this.getCommonAddOrgnizeListAll
       let deptId = this.getMappingValue(list, 'id', id).deptId
