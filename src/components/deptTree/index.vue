@@ -5,7 +5,7 @@
     :allow-clear="allowClear"
     :show-search="showSearch"
     style="width: 100%"
-    :tree-data="deptData"
+    :tree-data="deptUseData"
     :multiple="multiple"
     :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
     :placeholder="placeholder"
@@ -83,7 +83,7 @@ export default {
       companyId: null,
       companyName: "",
       replaceFields: { title: 'name',value:'id',key:'id'},
-      deptData: [],
+      deptUseData: [],
     }
   },
   watch: {
@@ -113,7 +113,7 @@ export default {
         companyName: JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyName,
       };
       return getDepartmentTree(apiData).then((res) => {
-        this.deptData = res.data ? [res.data] : [];
+        this.deptUseData = res.data ? [res.data] : [];
       })
     },
   }
