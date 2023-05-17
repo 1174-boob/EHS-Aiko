@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     initConfigPage(){
-      this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-科室级 2-部门级 3-公司级 4-事业级
+      this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-部门级 2-工厂级 3-基地级 4-集团级
       this.proposalGrade = dictionary('proposalGrade'); //分档 1-不通过 2-普通 3-良好 4-优秀
     },
     // 组织改变
