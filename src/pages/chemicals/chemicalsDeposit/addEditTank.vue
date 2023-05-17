@@ -393,8 +393,8 @@ export default {
       shelfDetail({shelfId}).then(res=>{
         this.tankForm = res.data;
         this.dataSource = res.data.chemicalList;
-        this.$refs.commonSearchItem.corporationChange(this.tankForm.corporationId, this.tankForm.deptIds).then(res => {})
         this.checkedTreeNode = this.tankForm.personList || [];
+        this.$refs.commonSearchItem.corporationChange(this.tankForm.corporationId, this.tankForm.deptIds).then(res => {})
       }).catch(err=>{
         console.log(err);
       })

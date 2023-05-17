@@ -36,7 +36,6 @@
                 :labelTitle="'责任担当'"
                 :treeRoles="iRules"
                 :propKey="'applyUserCode'"
-                :onPreview="!deptTreeId"
                 :treePlaceholder="deptTreeId?'请选择' : '请先选择所属组织'"
                 :checkedTreeNode="checkedTreeNode"
                 :deptTreeId="deptTreeId"
