@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width }" class="upload-dragger-box" :class="imageUrl?'no-border':''">
-    <a-upload-dragger name="file" :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="showUploadList" @change="handleChange">
+    <a-upload-dragger name='multipartFile' :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="showUploadList" @change="handleChange">
       <div :style="{ height: minHeight }" class="upload-dragger-box-main" v-if="!imageUrl">
         <a-icon class="upload-solt-ico" :type="loading?'loading':'plus'" />
         <span style="margin-top:10px;">{{typeText}}</span>
@@ -44,7 +44,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.danger}/api/file/resource/upload`,
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
     },
     // 文件类型
     fileTypeArr: {

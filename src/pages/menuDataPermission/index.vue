@@ -20,7 +20,7 @@
           <div>
             <a-radio-group v-model="item.checkedValues" @change="(checkedValues) => {onChange(checkedValues, item.path)}">
               <a-radio :value="0">全部数据</a-radio>
-              <a-radio :value="1">当前法人机构</a-radio>
+              <a-radio :value="1">当前组织数据</a-radio>
             </a-radio-group>
           </div>
         </a-col>

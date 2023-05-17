@@ -1,6 +1,6 @@
 <template>
   <div class="upload-can-remove-box">
-    <a-upload :action="action" list-type="picture-card" :disabled="loading || disabled" :headers="headers" :before-upload="beforeUpload" :file-list="fileList" @preview="handlePreview" @change="handleChange">
+    <a-upload name='multipartFile' :action="action" list-type="picture-card" :disabled="loading || disabled" :headers="headers" :before-upload="beforeUpload" :file-list="fileList" @preview="handlePreview" @change="handleChange">
       <div class="upload-can-remove-box-main" v-if="fileList.length < limit">
         <a-icon class="ant-upload-icon" :type="loading ? 'loading' : 'plus'" />
         <span class="ant-upload-text">文件上传</span>

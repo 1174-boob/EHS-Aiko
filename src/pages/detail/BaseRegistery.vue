@@ -33,7 +33,7 @@
         <a-form-item label="数据导入">
           <a-upload-dragger
             class="upload-s"
-            name="file"
+            name='multipartFile'
             method="post"
             :disabled="loading"
             :headers="headers"

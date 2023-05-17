@@ -3,7 +3,7 @@
     <a-modal :visible="visible" title="数据批量导入" :maskClosable="false" @cancel="cancelFn" destroyOnClose :footer="null">
       <a-form-model :model="uploadForm" :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false" labelAlign="right">
         <a-form-model-item label="选择文件" prop="companyName">
-          <a-upload :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="{showRemoveIcon:false}" @change="handleChange">
+          <a-upload name='multipartFile' :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="{showRemoveIcon:false}" @change="handleChange">
             <a-button>
               <a-icon type="upload" />上传文件
             </a-button>
@@ -29,7 +29,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.danger}/api/file/resource/upload`,
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
     },
   },
   data() {

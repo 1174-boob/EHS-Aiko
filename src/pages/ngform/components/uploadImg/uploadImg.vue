@@ -5,6 +5,7 @@
         :disabled="loading"
         accept=".jpg, .png, .jpeg"
         :action="action"
+        name='multipartFile'
         list-type="picture-card"
         :headers="headers"
         :before-upload="beforeUpload"

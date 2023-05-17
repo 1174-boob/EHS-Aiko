@@ -1,6 +1,6 @@
 <template>
   <div class="clearfix">
-    <a-upload :action="action" list-type="picture-card" :file-list="fileList" @preview="handlePreview" @change="handleChange">
+    <a-upload :action="action" name='multipartFile' list-type="picture-card" :file-list="fileList" @preview="handlePreview" @change="handleChange">
       <div v-if="fileList.length < 1">
         <a-icon type="plus" />
         <div class="ant-upload-text">Upload</div>
@@ -26,7 +26,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.btpFile}/api/file/resource/upload`,
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
     },
   },
   data() {

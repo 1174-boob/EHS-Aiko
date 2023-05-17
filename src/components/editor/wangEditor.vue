@@ -68,7 +68,7 @@ export default {
       this.editor = new E(this.$refs.toolbar, this.$refs.editor)
       this.editor.config.uploadImgShowBase64 = false // base 64 存储图片
       // this.editor.config.uploadImgServer = 'http://otp.cdinfotech.top/file/upload_images'// 配置服务器端地址
-      this.editor.config.uploadImgServer = `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.btpFile}/api/file/resource/upload`// 配置服务器端地址
+      this.editor.config.uploadImgServer = window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`// 配置服务器端地址
       this.editor.config.uploadImgHeaders.Authorization = token_type + " " + token; // 自定义 header
       this.editor.config.uploadFileName = 'file' // 后端接受上传文件的参数名
       this.editor.config.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为 2M

@@ -14,6 +14,7 @@
         <a-upload
           class="up-load load"
           :action="action"
+          name='multipartFile'
           :headers="headers"
           :data="data"
           accept=".xlsx,.xls"

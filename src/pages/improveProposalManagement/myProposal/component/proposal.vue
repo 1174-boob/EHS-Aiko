@@ -345,16 +345,17 @@ export default {
       if(this.action == 'edit') {
         delete this.emForm.recordsVoList;
       }
-      if(this.action == 'edit') {
-        this.emForm.jahbb = this.getChemicalDictText('jahbb', this.emForm.corporationId);
-        this.emForm.factoryCenter = this.getChemicalDictText('factoryCenter', 'deptId');
-      }
+      // if(this.action == 'edit') {
+        // this.emForm.jahbb = this.getChemicalDictText('jahbb', this.emForm.corporationId);
+        // this.emForm.factoryCenter = this.getChemicalDictText('factoryCenter', 'deptId');
+      // }
       api(this.emForm).then(res=>{
-        let proposalId = res.data.proposalId;
-        this.proposalId = proposalId;
-        let handlerList = res.data.handlerList;
-        this.proposalCode = res.data.proposalCode;
-        this.pushTask(proposalId, handlerList);
+        // let proposalId = res.data.proposalId;
+        // this.proposalId = proposalId;
+        // let handlerList = res.data.handlerList;
+        // this.proposalCode = res.data.proposalCode;
+        // this.pushTask(proposalId, handlerList);
+        // this.pushTask(handlerList);
         this.$antMessage.success("操作成功");
         this.loading = false;
         this.$router.replace("/safeManage/securityThinkTank/improveProposalManagement/myProposal")
