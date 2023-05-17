@@ -3,7 +3,7 @@
     <div>
       <a-upload
         :disabled="record.options.disabled"
-        name="file"
+        name='multipartFile'
         :accept="fileLayoutStr"
         @change="handleChange"
         :before-upload="beforeUpload"

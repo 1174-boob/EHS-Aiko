@@ -1,6 +1,6 @@
 <template>
   <!-- :default-file-list="defaultFileList" -->
-  <a-upload :default-file-list="defaultFileList" :before-upload="beforeUpload" :file-list="fileList" :remove="removeFile" multiple>
+  <a-upload :default-file-list="defaultFileList" name='multipartFile' :before-upload="beforeUpload" :file-list="fileList" :remove="removeFile" multiple>
     <a-button>
       <a-icon type="upload" />
       {{btnText}}

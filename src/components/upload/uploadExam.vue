@@ -1,6 +1,6 @@
 <template>
   <div class="clearfix">
-    <a-upload :action="action" list-type="picture-card" :file-list="fileList" @preview="handlePreview" @change="handleChange">
+    <a-upload :action="action" name='multipartFile' list-type="picture-card" :file-list="fileList" @preview="handlePreview" @change="handleChange">
       <div v-if="fileList.length < 1">
         <a-icon type="plus" />
         <div class="ant-upload-text">Upload</div>

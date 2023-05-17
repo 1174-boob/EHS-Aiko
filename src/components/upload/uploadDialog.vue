@@ -3,7 +3,7 @@
     <a-modal :visible="visible" title="数据批量导入" :maskClosable="false" @cancel="cancelFn" destroyOnClose :footer="null">
       <a-form-model :model="uploadForm" :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false" labelAlign="right">
         <a-form-model-item label="选择文件" prop="companyName">
-          <a-upload :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="{showRemoveIcon:false}" @change="handleChange">
+          <a-upload name='multipartFile' :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="{showRemoveIcon:false}" @change="handleChange">
             <a-button>
               <a-icon type="upload" />上传文件
             </a-button>

@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width }" class="upload-dragger-box">
-    <a-upload-dragger name="file" :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="showUploadList">
+    <a-upload-dragger name='multipartFile' :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="showUploadList">
       <div :style="{ height: minHeight }" class="upload-dragger-box-main" v-if="!imageUrl">
         <p class="ant-upload-drag-icon">
           <a-icon :type="loading ? 'loading' : 'cloud-upload'" />

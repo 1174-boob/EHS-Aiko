@@ -8,7 +8,7 @@
     </a-upload>
     <span class="ecertificateFileId-main-tishi">注：每个附件大小不超过{{maxSize}}M，支持格式：{{fileTypeArr.join("、")}}</span>-->
     <div>
-      <a-upload name="file" @change="handleChange" :before-upload="beforeUpload" :file-list="fileList" :action="action" :headers="headers">
+      <a-upload name='multipartFile' @change="handleChange" :before-upload="beforeUpload" :file-list="fileList" :action="action" :headers="headers">
         <a-button type="primary">
           <a-icon type="upload" />导入文件
         </a-button>

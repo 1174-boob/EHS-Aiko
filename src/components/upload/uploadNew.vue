@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-upload name="file" :action="action" :headers="headers" :before-upload="beforeUpload" @change="handleChange">
+    <a-upload name='multipartFile' :action="action" :headers="headers" :before-upload="beforeUpload" @change="handleChange">
       <a-button :loading="loading">
         <a-icon type="upload" />上传
       </a-button>

@@ -1,6 +1,7 @@
 <template>
   <div class="upload_btn_header">
     <a-upload
+      name='multipartFile'
       list-type="picture-card"
       class="avatar-uploader"
       :show-upload-list="false"

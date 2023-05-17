@@ -21,7 +21,7 @@
       <div class="right">
         <a-button @click="showModal('add')" type="primary">新增</a-button>
 
-        <a-upload style name="file" :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :multiple="false" :showUploadList="false">
+        <a-upload style name='multipartFile' :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :multiple="false" :showUploadList="false">
           <a-button type="primary">导入</a-button>
         </a-upload>
         <Downs :templateId="dataobj.templateId" type="dashed" :texts="labels" text="模版下载" url="http://dev.boeplat.com.cn/boeplat-ziid/api/annex/download/example" />

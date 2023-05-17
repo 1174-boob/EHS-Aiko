@@ -3,6 +3,7 @@
     <a-upload
       :accept="accept.toString()"
       :action="action"
+      name='multipartFile'
       :headers="headers"
       :before-upload="beforeUpload"
       :file-list="fileList"

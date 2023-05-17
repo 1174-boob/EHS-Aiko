@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width }" class="upload-dragger-box" :class="imageUrl?'no-border':''">
-    <a-upload-dragger name="file" :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="showUploadList" :remove="removeFile" :file-list="fileList">
+    <a-upload-dragger name='multipartFile' :disabled="loading" :headers="headers" :action="action" :before-upload="beforeUpload" :showUploadList="showUploadList" :remove="removeFile" :file-list="fileList">
       <div :style="{ height: minHeight }" class="upload-dragger-box-main" v-if="!imageUrl">
         <slot></slot>
       </div>
