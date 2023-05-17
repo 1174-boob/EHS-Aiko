@@ -147,7 +147,7 @@ export default {
         proposalLevel: '1',
         deptId: undefined
       },
-      comment: "说明：至少选择3名评委，需要包括起草人的科长、部长，其他评委需要Band8以上",
+      comment: "说明：至少选择3名评委",
       comment1:'说明：所在部门部长及科室科长为评委',
       portalStatus: "",
       deptData:[],
