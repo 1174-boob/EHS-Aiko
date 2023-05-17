@@ -32,6 +32,7 @@ import fixedBottom from "@/components/commonTpl/fixedBottom"; //底部按钮
 import commonSearchItem from "@/components/commonSearchItem/index.vue"; // 弹框
 import commonDept from "@/components/commonSearchItem/commonDept.vue"; // 弹框
 import deptTree from "@/components/deptTree/index.vue"; //选择组织下部门树
+import deptOrgTree from "@/components/deptOrgTree/index.vue"; //选择平台组织下部门树
 import global from '@/mixin/global.js'
 import '@/utils/ployfill.js'
 Vue.mixin(global)
@@ -237,6 +238,7 @@ Vue.component('CommonSearchItem', commonSearchItem);
 Vue.component('CommonDept', commonDept);
 
 Vue.component('DeptTree', deptTree);
+Vue.component('DeptOrgTree', deptOrgTree);
 // msg提示的最大数量
 Vue.prototype.$antMessage = message;
 Vue.prototype.$antMessage.warn = ()=>{}

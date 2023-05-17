@@ -78,7 +78,7 @@
           :wrapper-col="wrapperCol"
         >
           <!-- <a-form-model-item label="关联组织" prop="deptIds"> -->
-            <dept-tree
+            <dept-org-tree
               :placeholder="'请选择关联组织'" 
               v-model="formInlineDeptId" 
               :propKey="'deptIds'" 
@@ -157,7 +157,7 @@
             </a-select>
           </a-form-model-item>
           <!-- <a-form-model-item label="关联组织" prop="deptIds"> -->
-            <dept-tree
+            <dept-org-tree
               :labelTitle="'关联组织'" 
               :placeholder="'请选择关联组织'" 
               v-model="formData.deptIds" 
@@ -264,13 +264,13 @@ import { debounce } from "lodash";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import staffOrDept from "@/components/staffOrDept";
 // import orgTreeModal from "@/components/orgTreeModal";
-import deptTree from "@/components/deptTree";
+import deptOrgTree from "@/components/deptOrgTree";
 import city from "@/components/company/cities.js";
 export default {
   mixins: [fromMaxLength, teableCenterEllipsis, cancelLoading],
   components: {
     staffOrDept,
-    deptTree,
+    deptOrgTree,
     // orgTreeModal
   },
   data() {
