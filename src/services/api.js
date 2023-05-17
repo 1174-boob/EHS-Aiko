@@ -20,7 +20,7 @@ export const checkTokenEHS = (params, headers) => post(serviceNameList.authehs +
 export const getMenuTree = (params) => get('ehs-customer/api/role/getLoginMenu', params);
 // export const changeCompany = (params, headers) => get(serviceNameList.auth + '/api/auth/changeCompany', params, headers);
 // export const changeCompany = (params, headers) => get(process.env.VUE_APP_ZICONSOLE_AUTH + '/api/auth/changeCompany', params, headers);
-export const getPortraitUrlt = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
+export const getPortraitUrlt = params => post(`${serviceNameList.customer}/api/ehs/file/getFilePathList`, params);
 // 公共 字典 
 export const getDictionary = params => post(`ehs-customer/api/dict/list`, params);
 // 获取所有按钮权限 ---------------------------此处需要替换为ehs的权限接口
@@ -319,7 +319,7 @@ export const messageSelectPage = params => post(`${serviceNameList.message}/api/
 export const messageUpdate = params => post(`${serviceNameList.message}/api/message/updateManagement`, params);
 // 讲师管理
 // 根据id拿上传图片信息
-export const GetfileMsgList = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
+export const GetfileMsgList = params => post(`${serviceNameList.customer}/api/ehs/file/getFilePathList`, params);
 // 讲师列表
 export const GetLecturerlist = params => post(`${serviceNameList.course}/api/course/lecturer/list/page`, params);
 // 查看
@@ -343,7 +343,7 @@ export const UpdateCourseware = params => post(`${serviceNameList.course}/api/co
 // 删除
 export const DeleteCourseware = params => post(`${serviceNameList.course}/api/course/courseware/delete`, params);
 // 下载课件
-export const DownLoadCourseware = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
+export const DownLoadCourseware = params => post(`${serviceNameList.customer}/api/ehs/file/getFilePathList`, params);
 
 // 课程管理
 // 所有讲师列表
