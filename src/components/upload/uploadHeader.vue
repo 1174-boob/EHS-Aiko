@@ -41,7 +41,7 @@ export default {
       // 列表最多保留几项
       limit: 1,
       //请求地址
-      action: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.customer}/api/bps/file/resource/upload`,
+      action: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
       // 文件类型
       fileTypeArr: ["image/jpeg", "image/jpg", "image/png"],
       // 类型错误提示文字

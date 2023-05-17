@@ -44,7 +44,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.danger}/api/file/resource/upload`,
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
     },
     // 文件类型
     fileTypeArr: {

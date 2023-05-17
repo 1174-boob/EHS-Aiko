@@ -51,7 +51,7 @@ export default {
     return {
       uploadUrl: process.env.VUE_APP_API_BASE_URL + `${serviceNameList.btpFile}/api/file/resource/upload`,//需要代理
       fileLayoutStr: "",
-      action: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.btpFile}/api/file/resource/upload`,
+      action: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
       loading: false,
       fileSize: 1048576,
       headers: { Authorization: "", },

@@ -257,7 +257,7 @@ export const getAppAuthRoleList = params => post(`ehs-customer/api/role/list`, p
 // 部门和人员均可以选中
 export const CompanyUserTree = params => post(`${serviceNameList.danger}/api/ehs/company/dept/companyUserTree`, params);
 // 上传文件
-export const importFile = params => post(`${serviceNameList.btpFile}/api/file/resource/upload`, params);
+export const importFile = params => post(`ehs-customer/api/file/uploadFile`, params);
 // 获取自定义表单模板列表
 export const GetNgformList = params => post(`${serviceNameList.form}/api/ehs/formtemplate/selectFormTemplate`, params);
 // 更改是否需要流程状态
@@ -462,7 +462,7 @@ export const onlineDataInfo = params => post(`${serviceNameList.danger}/api/ehs/
 export const selectPolicy = params => post(`ehs-customer/api/ehs/policylaw/selectPolicylawByStatistics`, params);
 
 // 添加待办推送到BOE平台
-export const PushTask = params => post(`${serviceNameList.danger}/api/ehs/task/pushTask`, params);
+export const PushTask = params => post(`ehs-customer/api/ehs/task/pushTask`, params);
 
 // 设备信息维护
 // 火灾-分页查-增-改-删
