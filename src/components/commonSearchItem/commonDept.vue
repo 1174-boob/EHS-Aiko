@@ -146,6 +146,14 @@ export default {
       } else {
         arr = this.setLoginCorporation || []; // 没有这个值就是取默认的-法人机构
       }
+    if(sessionStorage.getItem('zconsole_userInfo')) {
+      if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList) {
+        let orgList = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList;
+        for(let i = 0;i < orgList.length;i++) {
+          this.commonOrgnizeList.push(orgList[i])
+        }
+      }
+    }
       this.commonCenterAreaList = arr;
       this.isNeedDefaultValue(arr);
     }
