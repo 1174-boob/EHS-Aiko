@@ -73,14 +73,14 @@
       </a-form-model>
       <div v-if="Object.keys(recordsVo1).length !=0">
         <div class="m-t-20 border-b-e7">
-          <PageTitle>科室级评审记录</PageTitle>
+          <PageTitle>部门级评审记录</PageTitle>
         </div>
         <div class="m-t-20"></div>
         <ReviewRecord :recordsVo="recordsVo1"></ReviewRecord>
       </div>
       <div v-if="Object.keys(recordsVo2).length !=0">
         <div class="m-t-20 border-b-e7">
-          <PageTitle>部门级评审记录</PageTitle>
+          <PageTitle>工厂级评审记录</PageTitle>
         </div>
         <div class="m-t-20"></div>
         <ReviewRecord :recordsVo="recordsVo2"></ReviewRecord>
@@ -88,14 +88,14 @@
       <!-- <div v-if="(!reviewStatus && Object.keys(recordsVo3).length !=0 ) || (reviewStatus && recordsVo3.reviewStatus )"> -->
       <div v-if="Object.keys(recordsVo3).length !=0">
         <div class="m-t-20 border-b-e7">
-          <PageTitle>公司级评审记录</PageTitle>
+          <PageTitle>基地级评审记录</PageTitle>
         </div>
         <div class="m-t-20"></div>
         <ReviewRecord :recordsVo="recordsVo3"></ReviewRecord>
       </div>
       <div v-if="Object.keys(recordsVo4).length !=0">
         <div class="m-t-20 border-b-e7">
-          <PageTitle>事业级评审记录</PageTitle>
+          <PageTitle>集团级评审记录</PageTitle>
         </div>
         <div class="m-t-20"></div>
         <ReviewRecord :recordsVo="recordsVo4"></ReviewRecord>
@@ -147,7 +147,7 @@ export default {
         proposalLevel: '1',
         deptId: undefined
       },
-      comment: "说明：至少选择3名评委，需要包括起草人的科长、部长，其他评委需要Band8以上",
+      comment: "说明：至少选择3名评委",
       comment1:'说明：所在部门部长及科室科长为评委',
       portalStatus: "",
       deptData:[],
@@ -205,7 +205,7 @@ export default {
   },
   
   created() {
-    this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-科室级 2-部门级 3-公司级 4-事业级
+    this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-部门级 2-工厂级 3-基地级 4-集团级
     this.initProposal();
   },
   methods: {

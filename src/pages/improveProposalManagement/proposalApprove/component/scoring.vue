@@ -215,7 +215,7 @@ export default {
   },
 
   created() {
-    this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-科室级 2-部门级 3-公司级 4-事业级
+    this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-部门级 2-工厂级 3-基地级 4-集团级
     this.initProposal();
     const user = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
     this.reviewerId = user.userId ? user.userId : ''; //评审人id

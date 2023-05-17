@@ -171,7 +171,7 @@ export default {
     // 创建时间默认当前月份
     this.formInline.auditTime = [moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')]
     this.initOption()
-    this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-科室级 2-部门级 3-公司级 4-事业级
+    this.proposalLevel = dictionary('proposalLevel'); //提案级别 1-部门级 2-工厂级 3-基地级 4-集团级
   },
   mounted() {
     this.iSearch(false)

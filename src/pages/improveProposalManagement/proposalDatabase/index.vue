@@ -26,16 +26,16 @@
       </a-form-model>
     </SearchTerm>
     <a-tabs default-active-key="1" @change="tabChange">
-      <a-tab-pane key="1" tab="科室级">
+      <a-tab-pane key="1" tab="部门级">
         <DataBaseTable v-if="tabKey=='1'" :tableSpinning="tableSpinning" :tabKey="tabKey" :dataSource="dataSource" @getPage="getPage"></DataBaseTable>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="部门级">
+      <a-tab-pane key="2" tab="工厂级">
         <DataBaseTable v-if="tabKey=='2'" :tableSpinning="tableSpinning" :tabKey="tabKey" :dataSource="dataSource" @getPage="getPage"></DataBaseTable>
       </a-tab-pane>
-      <a-tab-pane key="3" tab="公司级">
+      <a-tab-pane key="3" tab="基地级">
         <DataBaseTable v-if="tabKey=='3'" :tableSpinning="tableSpinning" :tabKey="tabKey" :dataSource="dataSource" @getPage="getPage"></DataBaseTable>
       </a-tab-pane>
-      <a-tab-pane key="4" tab="事业级">
+      <a-tab-pane key="4" tab="集团级">
         <DataBaseTable v-if="tabKey=='4'" :tableSpinning="tableSpinning" :tabKey="tabKey" :dataSource="dataSource" @getPage="getPage"></DataBaseTable>
       </a-tab-pane>
     </a-tabs>
