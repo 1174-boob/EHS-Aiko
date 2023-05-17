@@ -103,7 +103,7 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="所属组织" prop="orgId">
-            <a-select v-model="addForm.orgId" placeholder="请选择">
+            <a-select v-model="addForm.corporationId" placeholder="请选择">
               <a-select-option
                 v-for="(item, index) in organizationList"
                 :key="index"
