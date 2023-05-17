@@ -152,7 +152,7 @@ export default {
       selectShowList: [],
       dictionary,
       // 导入文件地址
-      action: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_BASE_URL}${serviceNameList.safe}/api/ehs/safe/danger/importFile`:`${serviceNameList.safe}/api/ehs/safe/danger/importFile`,
+      action: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/danger/importFile`:`${serviceNameList.safe}/api/ehs/safe/danger/importFile`,
       page: {
         pageNo: 1,
         pageSize: 10,
