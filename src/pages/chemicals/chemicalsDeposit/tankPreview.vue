@@ -111,8 +111,8 @@ export default {
       storageIndex: null,
       chemicalDict: {},
       usage: [
-        { value: 1, label: "是" },
-        { value: 2, label: "否" },
+        { value: "1", label: "是" },
+        { value: "2", label: "否" },
       ],
       tankForm: {
         personList: undefined,

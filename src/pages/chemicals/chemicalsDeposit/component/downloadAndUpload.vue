@@ -58,7 +58,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.chemicals}/api/ehs/chemical/warehouse/inventory/import`,
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/${serviceNameList.chemicals}/api/ehs/chemical/warehouse/inventory/import` : `${serviceNameList.chemicals}/api/ehs/chemical/warehouse/inventory/import`
     },
     // 文件类型
     fileTypeArr: {
