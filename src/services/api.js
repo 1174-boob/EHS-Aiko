@@ -319,7 +319,7 @@ export const messageSelectPage = params => post(`${serviceNameList.message}/api/
 export const messageUpdate = params => post(`${serviceNameList.message}/api/message/updateManagement`, params);
 // 讲师管理
 // 根据id拿上传图片信息
-export const GetfileMsgList = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
+export const GetfileMsgList = params => post(`${serviceNameList.customer}/api/ehs/file/getFilePathList`, params);
 // 讲师列表
 export const GetLecturerlist = params => post(`${serviceNameList.course}/api/course/lecturer/list/page`, params);
 // 查看
@@ -343,7 +343,7 @@ export const UpdateCourseware = params => post(`${serviceNameList.course}/api/co
 // 删除
 export const DeleteCourseware = params => post(`${serviceNameList.course}/api/course/courseware/delete`, params);
 // 下载课件
-export const DownLoadCourseware = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
+export const DownLoadCourseware = params => post(`${serviceNameList.customer}/api/ehs/file/getFilePathList`, params);
 
 // 课程管理
 // 所有讲师列表
