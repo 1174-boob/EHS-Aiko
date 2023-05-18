@@ -70,7 +70,7 @@ export const exportPpeDepositoryApi = params => postExcel(`${serviceNameList.hea
 // PPE职业健康流程审批获取人员
 export const ppeSelectNodeUser = params => post(`${serviceNameList.health}/api/chemical/user/selectNodeUser`, params);
 // PPE-获取审批日志
-export const getFlowLogApi = params => post(`${serviceNameList.danger}/api/ehs/flow/getTaskComments`, params);
+export const getFlowLogApi = params => post(`ehs-customer/api/ehs/flow/getTaskComments`, params);
 
 // PPE领用管理-列表数据-查询
 export const getPpeClaimListApi = params => post(`${serviceNameList.health}/api/ehs/ppe/receive/page/list`, params);

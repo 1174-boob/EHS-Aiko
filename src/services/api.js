@@ -80,7 +80,7 @@ export const searchDept = params => post(`ehs-customer/api/company/dept/searchDe
 export const searchUser = params => post(`ehs-customer/api/enterprise/dept/searchUser`, params);
 
 // 公共-获取审批日志
-export const getFlowLogApi = params => post(`${serviceNameList.danger}/api/ehs/flow/getTaskComments`, params);
+export const getFlowLogApi = params => post(`ehs-customer/api/ehs/flow/getTaskComments`, params);
 // 公共-根据部门获取责任人
 export const getLiablePeopleByDeptId = params => post(`ehs-customer/api/enterprise/dept/findDeptBoss`, params);
 
@@ -283,9 +283,9 @@ export const getDictTree = params => get(`ehs-customer/api/ehs/sysDictType/dictT
 // 根据tempID查部署ID
 export const GetId = params => post(`${serviceNameList.btp}/api/process/template/detailByForm`, params);
 // 获取第一个节点信息
-export const GetFirstNode = params => post(`ehs-flow/api/camunda/firstNode`, params);
+export const GetFirstNode = params => post(`${serviceNameList.btp}/api/camunda/firstNode`, params);
 // 创建业务数据后发起流程接口
-export const CreateProcess = params => post(`ehs-flow//api/camunda/createProcess`, params);
+export const CreateProcess = params => post(`${serviceNameList.btp}/api/camunda/createProcess`, params);
 // 保存业务流程
 export const SaveBusinessProcess = params => post(`${serviceNameList.danger}/api/ehs/process/business/save`, params);
 // 获取下一个节点信息
@@ -301,7 +301,7 @@ export const SelectTemplateByNode = params => post(`${serviceNameList.form}/api/
 // 获取业务流程信息
 export const GetBusinessDetail = params => post(`${serviceNameList.danger}/api/ehs/process/business/detail`, params);
 // 流程配置信息
-export const GetNodeDetail = params => post(`${serviceNameList.danger}/api/ehs/process/template/node/detail`, params);
+export const GetNodeDetail = params => post(`ehs-customer/api/ehs/process/template/node/detail`, params);
 // 驳回接口
 export const RejectedTask = params => post(`${serviceNameList.btp}/api/camunda/rejectedTask`, params);
 // 驳回接口

@@ -430,6 +430,7 @@ export default {
         let para = {
           node: infoStatus,
           userId: this.createUserId,
+          createUserId:this.createUserId,
           corporationId:this.newlyForm.corporationId || undefined
         }
         return msdsApproveNodeUser(para)

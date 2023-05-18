@@ -333,6 +333,9 @@ export default {
     console.log()
     if (this.$route.query.id) {
       this.getNewlyDetail(this.$route.query.id);
+    }else{
+      this.userInfo = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
+      this.userId = this.userInfo.userId;
     }
   },
   methods: {
@@ -514,7 +517,7 @@ export default {
       console.log('infoStatus', infoStatus);
       let para = {
         node: infoStatus,
-        createUserId:this.newlyForm.createUserId || undefined,
+        createUserId:this.newlyForm.createUserId ? this.newlyForm.createUserId: this.userId,
         corporationId:this.newlyForm.corporationId || undefined
       }
       console.log(para,'paraaa');

@@ -266,7 +266,7 @@ export default {
         return
       }
       list.filter(item => {
-        if (item.id == corporationId) {
+        if (item.orgId == corporationId) {
           this.flag = true
           return
         } else {

@@ -419,6 +419,8 @@ export default {
     // console.log('是否出厂字典', this.requiredList);
     // 流程key
     this.DEPLOYID = this.getChemicalDictValue("approvalType", 'TEMPAPPROVAL');
+    this.userInfo = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
+    this.userId = this.userInfo.userId;
   },
   computed: {
     // 当前页面是否为新增
@@ -599,6 +601,7 @@ export default {
       console.log('infoStatus', infoStatus);
       let para = {
         node: infoStatus,
+        createUserId:this.iFrom.createUserId ? this.iFrom.createUserId: this.userId,
         corporationId:this.iFrom.corporationId || undefined
       }
       return msdsApproveNodeUser(para)
