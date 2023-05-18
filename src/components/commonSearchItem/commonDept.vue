@@ -8,7 +8,7 @@
       </a-form-model-item> -->
       <a-form-model-item class="flex" label="所属组织" :colon="false">
         <a-select :disabled="disabled" v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange">
-          <a-select-option v-for="item in commonOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
+          <a-select-option v-for="item in getCommonAddOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
         </a-select>
       </a-form-model-item>
     </template>

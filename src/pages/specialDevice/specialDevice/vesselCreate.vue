@@ -13,7 +13,7 @@
             </a-form-model-item>
             <a-form-model-item label="保管属地" prop="saveCorporationId" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select :disabled="disabled" v-model="newlyForm.saveCorporationId" placeholder="请选择保管属地" @change="handleSaveCorporationIdChange">
-                <a-select-option v-for="item of getCommonAddOrgnizeListAll" :value="item.id" :key="item.id">{{item.orgAbbrName}}</a-select-option>
+                <a-select-option v-for="item of getCommonAddOrgnizeListAll" :value="item.orgId" :key="item.orgId">{{item.orgName}}</a-select-option>
               </a-select>
             </a-form-model-item>
             <a-form-model-item class="flex" label="保管部门" prop="saveDeptCode" :label-col="labelCol" :wrapper-col="wrapperCol">
