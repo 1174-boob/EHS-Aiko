@@ -23,7 +23,7 @@ export const msdsApproveReject = (params, headers) => post(serviceNameList.chemi
 //化学品msds审批存草稿
 export const msdsApproveSavaDraft = (params, headers) => post(serviceNameList.chemicals + '/api/ehs/chemical/msds/saveDraft', params, headers)
 //化学品msds查询对应节点人员
-export const msdsApproveNodeUser = (params, headers) => post(serviceNameList.chemicals + '/api/ehs/chemical/user/selectNodeUser', params, headers)
+export const msdsApproveNodeUser = (params, headers) => post('ehs-customer/api/ehs/process/node/selectNodeUser', params, headers)
 
 //分页查询msds信息列表
 export const msdsStoreList = (params, headers) => post(serviceNameList.chemicals + '/api/ehs/chemical/msds/selectFiling', params, headers)

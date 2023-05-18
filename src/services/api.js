@@ -283,9 +283,9 @@ export const getDictTree = params => get(`ehs-customer/api/ehs/sysDictType/dictT
 // 根据tempID查部署ID
 export const GetId = params => post(`${serviceNameList.btp}/api/process/template/detailByForm`, params);
 // 获取第一个节点信息
-export const GetFirstNode = params => post(`${serviceNameList.btp}/api/camunda/firstNode`, params);
+export const GetFirstNode = params => post(`ehs-flow/api/camunda/firstNode`, params);
 // 创建业务数据后发起流程接口
-export const CreateProcess = params => post(`${serviceNameList.btp}/api/camunda/createProcess`, params);
+export const CreateProcess = params => post(`ehs-flow//api/camunda/createProcess`, params);
 // 保存业务流程
 export const SaveBusinessProcess = params => post(`${serviceNameList.danger}/api/ehs/process/business/save`, params);
 // 获取下一个节点信息

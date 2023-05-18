@@ -226,7 +226,7 @@ export default {
       riskClassList: dictionary("riskLevel"), //风险分级
       //导入弹窗开关
       addVisible: false,
-      actions: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.risk}/api/ehs/risk/detail/public/importUser`,
+      actions: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.risk}/api/ehs/risk/detail/public/importUser` : `${serviceNameList.risk}/api/ehs/risk/detail/public/importUser`,
       formInline: {
         classificationCode: undefined,
         corporationId: undefined,
