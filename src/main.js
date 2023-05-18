@@ -241,7 +241,7 @@ Vue.component('DeptTree', deptTree);
 Vue.component('DeptOrgTree', deptOrgTree);
 // msg提示的最大数量
 Vue.prototype.$antMessage = message;
-// Vue.prototype.$antMessage.warn = ()=>{}
+Vue.prototype.$antMessage.warn = ()=>{}
 Vue.prototype.$antMessage.config({
   maxCount: 2,
 });

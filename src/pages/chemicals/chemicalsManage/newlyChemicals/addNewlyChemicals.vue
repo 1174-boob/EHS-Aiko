@@ -514,8 +514,10 @@ export default {
       console.log('infoStatus', infoStatus);
       let para = {
         node: infoStatus,
+        createUserId:this.newlyForm.createUserId || undefined,
         corporationId:this.newlyForm.corporationId || undefined
       }
+      console.log(para,'paraaa');
       return msdsApproveNodeUser(para)
         .then(res => {
           const { data } = res
