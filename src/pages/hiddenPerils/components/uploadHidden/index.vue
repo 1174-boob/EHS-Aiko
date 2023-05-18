@@ -142,7 +142,7 @@ export default {
     //下载模板
     downTemplate() {
       window.open(
-        `${process.env.VUE_APP_API_BASE_URL}/file/template/upload.xlsx`
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/upload.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/upload.xlsx`
       );
     },
   },

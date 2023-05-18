@@ -475,9 +475,7 @@ export default {
     },
     // 下载模板
     downloadTem() {
-      // http://dev.boeplat.com.cn/file/resource/danger.xlsx
-      let tarUrl = `${process.env.VUE_APP_API_BASE_URL}/file/resource/danger.xlsx`
-      window.open(tarUrl)
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/danger.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/danger.xlsx`)
     },
     // 批量导出
     exportAll() {

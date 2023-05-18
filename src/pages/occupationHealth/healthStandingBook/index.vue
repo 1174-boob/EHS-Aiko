@@ -466,7 +466,7 @@ export default {
     // 下载模板
     uploadTemplate() {
       window.open(
-        `${process.env.VUE_APP_API_BASE_URL}/file/resource/人员信息模板.xlsx`
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/人员信息模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/人员信息模板.xlsx`
       );
     },
     // 批量导出模板下载

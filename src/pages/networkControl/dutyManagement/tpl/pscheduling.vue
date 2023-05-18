@@ -1013,7 +1013,7 @@ export default {
     // 导入模板下载
     downTpl() {
       window.open(
-        `${process.env.VUE_APP_API_BASE_URL}/file/template/报警联网排班表导入模板.xlsx`
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/报警联网排班表导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/报警联网排班表导入模板.xlsx`
       );
     },
   },

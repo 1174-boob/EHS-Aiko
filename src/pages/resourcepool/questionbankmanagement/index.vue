@@ -268,7 +268,9 @@ export default {
         })
     },
     downloadTemplate() {
-      window.open(`${process.env.VUE_APP_API_BASE_URL}/file/resource/试题导入模板.xlsx`);
+      window.open(
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/试题导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/试题导入模板.xlsx`
+      );
     },
     //批量上传
     handleSuccess(fileList) {

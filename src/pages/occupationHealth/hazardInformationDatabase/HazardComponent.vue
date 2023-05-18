@@ -709,7 +709,9 @@ export default {
     async templateDownload() {
       this.templateLoad = true;
       if (this.tabKey == 2) {
-        window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/危害岗位导入模板.xlsx`);
+        window.open(
+          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/危害岗位导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/危害岗位导入模板.xlsx`
+        );
         this.templateLoad = false;
       } else {
         const name = '危害因素导入模板'
