@@ -539,7 +539,7 @@ export default {
           .then(res => {
             let iFrom = res.data
             iFrom.dangerGuardian = this.addGuid(iFrom.dangerGuardian)
-            iFrom.dangerSpecialPerson = this.addGuid(iFrom.dangerSpecialPerson)
+            iFrom.dangerSpecialPerson = this.addGuid(iFrom.dangerSpecialPerson == null? [] : iFrom.dangerSpecialPerson)
             this.operateTypeChange(iFrom.operateType, false)
             // 部门回显
             this.$refs.corporationId.corporationChange(iFrom.corporationId, iFrom.deptId)
