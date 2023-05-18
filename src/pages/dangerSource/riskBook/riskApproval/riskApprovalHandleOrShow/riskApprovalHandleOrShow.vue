@@ -305,6 +305,8 @@ export default {
     this.columns.splice(2, 0, this.addCommonColumnDepartment(130));
     // 主键id
     this.riskPointApprovalId = this.$route.query.riskPointApprovalId || getQueryVariable('riskPointApprovalId')
+    this.userInfo = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
+    this.userId = this.userInfo.userId;
   },
   mounted() {
     // 页面初始化
@@ -351,6 +353,7 @@ export default {
       } else {
         let para = {
           node: infoStatus,
+          createUserId:this.detailObj.createUserId?this.detailObj.createUserId:this.userId,
           riskPointApprovalId: this.detailObj.riskPointApprovalId
         }
         if (infoStatus == 'POSITION_SECTION_CHIEF__2') {

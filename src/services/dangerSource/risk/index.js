@@ -33,7 +33,7 @@ export const changeRiskApprovalApi = params => post(`${serviceNameList.risk}/api
 // 风险点审批-列表数据-删除
 export const rmRiskApprovalItemApi = params => post(`${serviceNameList.risk}/api/ehs/risk/point/approval/delete`, params);
 // 风险点审批-获取审批人
-export const getRiskUserNodeInfo = params => post(`${serviceNameList.risk}/api/ehs/risk/point/approval/selectNodeApprovalUser`, params);
+export const getRiskUserNodeInfo = params => post(`${serviceNameList.risk}/api/ehs/process/node/selectNodeUser`, params);
 // 风险点审批-处理-驳回
 export const riskApprovalHandleRejectApi = params => post(`${serviceNameList.risk}/api/ehs/risk/point/approval/fail`, params);
 // 风险点审批-处理-通过

@@ -265,14 +265,15 @@ export default {
       if (!corporationId) {
         return
       }
-      list.filter(item => {
-        if (item.orgId == corporationId) {
+      for(let i = 0;i < list.length;i++) {
+        if (list[i].orgId == corporationId) {
           this.flag = true
           return
         } else {
           this.flag = false
+          return
         }
-      })
+      }
     },
 
     //处理列表list方法
