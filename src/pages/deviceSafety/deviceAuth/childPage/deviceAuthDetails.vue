@@ -562,6 +562,8 @@ export default {
     if (this.type > 1) {
       this.approvalId = this.$route.query.approvalId || getQueryVariable('approvalId')
       this.initData();
+    } else {
+      this.spinning = false
     }
   },
   mounted() { },

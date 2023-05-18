@@ -102,9 +102,7 @@
           <vxe-column
             :key="item.id"
             :field="item.props"
-            :min-width="
-                                          item.minWidth ? item.minWidth : 120
-                                    "
+            :min-width="item.minWidth ? item.minWidth : 120"
             :title="item.title"
           >
             <template #default="{ row }">

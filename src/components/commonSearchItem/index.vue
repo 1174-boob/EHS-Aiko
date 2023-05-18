@@ -8,7 +8,7 @@
       </a-form-model-item> -->
       <a-form-model-item class="flex" label="所属组织" :colon="false">
         <a-select :disabled="disabled" v-model="CommonFormInline.corporationId" placeholder="请选择所属组织" @change="corporationChange">
-          <a-select-option v-for="item in commonOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
+          <a-select-option v-for="item in getCommonAddOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
         </a-select>
       </a-form-model-item>
       <a-form-model-item class="flex" v-if="hasDepartment && !departmentMultiple" :label="deptLabel" :colon="false">
@@ -209,11 +209,11 @@ export default {
         // this.$set(this.CommonFormInline, "centerName", arr[0].corporationList[0].centerName);
         // this.$set(this.CommonFormInline, "corporationId", arr[0].corporationList[0].id);
         // this.$set(this.CommonFormInline, "corporationName", arr[0].corporationList[0].orgAbbrName);
-        let deptId = this.getMappingValue(arr[0].corporationList, "id", arr[0].corporationList[0].id).deptId;
+        let deptId = this.getMappingValue(arr[0].corporationList, "id", arr[0].id).deptId;
         this.$emit('corporationChange', this.CommonFormInline.corporationId, deptId);
-        if (this.hasDepartment) { // 有部门
-          this.getDeptTree(deptId);
-        }
+        // if (this.hasDepartment) { // 有部门
+        //   this.getDeptTree(deptId);
+        // }
       }
     },
     // 所属中心改变-获取所属组织

@@ -35,9 +35,9 @@ export const doPrint = (style, Nodes)=> { // style：样式  Nodes：节点结�
 
 //查找组织
 export const findCorporationId = (id) =>{
-    let data = store.state.setting.corporationList.find(item => item.corporationId == id)
+    let data = store.state.setting.setCorporationTree.find(item => item.orgId == id)
     if(data){
-        return store.state.setting.corporationList.find(item => item.corporationId == id).orgAbbrName||'--'
+        return store.state.setting.setCorporationTree.find(item => item.orgId == id).orgName||'--'
     }else{
         '--'
     }
