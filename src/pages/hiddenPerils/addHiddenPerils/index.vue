@@ -110,7 +110,6 @@
                 @getTreeData="responsibilityPersonIdThing"
                 :checkAbel="false"
                 :checkedTreeNode="responsibilityPersonIdList"
-                :onPreview="!deptTreeId"
                 :treePlaceholder="deptTreeId?'请选择' : '请先选择所属组织'"
                 :deptTreeId="deptTreeId"
               />
@@ -128,7 +127,6 @@
                 @getTreeData="rectificationResponsibilityPersonIdThing"
                 :checkedTreeNode="rectificationResponsibilityPersonIdList"
                 :checkAbel="false"
-                :onPreview="!deptTreeId"
                 :treePlaceholder="deptTreeId?'请选择' : '请先选择所属组织'"
                 :deptTreeId="deptTreeId"
               />
@@ -178,7 +176,7 @@ import {
   GetHiddenNextPeople,
 } from "@/services/hiddenPerils.js";
 import OrganizeLazyTree from "@/components/organizeLazyTree/organizeLazyTree.vue";
-import { PushTask } from "@/services/api";
+import { PushTask, getDepartmentTree } from "@/services/api";
 import dayJs from "dayjs";
 import { getQueryVariable } from "@/utils/util.js";
 import chemicalDict from "@/mixin/chemicalDict.js";
@@ -297,11 +295,17 @@ export default {
   methods: {
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
-      console.log('组织机构-改变');
-      this.$set(this.hideDangerForm, 'responsibilityDeptId', undefined)
-      this.deptTreeId = corporationDeptId
-      this.responsibilityPersonIdList = []
-      this.rectificationResponsibilityPersonIdList = []
+      let apiData = {
+        companyId: JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyId,
+        companyName: JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyName,
+      };
+      return getDepartmentTree(apiData).then((res) => {
+        this.outOrganizeTreeList = res.data ? [res.data] : [];
+        this.$set(this.hideDangerForm, 'responsibilityDeptId', undefined)
+        this.deptTreeId = corporationDeptId
+        this.responsibilityPersonIdList = []
+        this.rectificationResponsibilityPersonIdList = []
+      })
     },
 
     // 组织机构数据回显
@@ -316,9 +320,9 @@ export default {
         treeNode.data.props.title.indexOf(inputValue) > -1
       );
     },
-
     // 所属组织-获取部门
     corporationDeptChange(treeData) {
+      console.log(treeData)
       this.outOrganizeTreeList = treeData;
     },
 

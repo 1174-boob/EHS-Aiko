@@ -585,7 +585,7 @@ export default {
     },
     // 下载模板
     downloadTemplate() {
-      window.open(`${process.env.VUE_APP_API_BASE_URL}/file/resource/riskAccount.xlsx`);
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/riskAccount.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/riskAccount.xlsx`)
     },
     // 批量导入成功
     handleSuccess() {

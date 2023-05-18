@@ -90,19 +90,19 @@ export default {
     downloadTemplate(num) {
       switch(num) {
         case 0:
-          window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/叉车导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/叉车导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/叉车导入模板.xlsx`)
           break
         case 1:
-          window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/天车导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/天车导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/天车导入模板.xlsx`)
           break
         case 2:
-          window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/电梯导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/电梯导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/电梯导入模板.xlsx`)
           break
         case 3:
-          window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/压力管道导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/压力管道导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/压力管道导入模板.xlsx`)
           break
         case 4:
-          window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/压力容器导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/压力容器导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/压力容器导入模板.xlsx`)
           break
       }
     }

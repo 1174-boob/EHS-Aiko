@@ -291,7 +291,9 @@ export default {
     },
     //下载模板
     handleTodownload(e) {
-      window.open(`${process.env.VUE_APP_API_BASE_URL}/file/template/enviromentImport.xlsx`);
+      window.open(
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/enviromentImport.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/enviromentImport.xlsx`
+      );
     },
     //批量导出
     handleToexport() {

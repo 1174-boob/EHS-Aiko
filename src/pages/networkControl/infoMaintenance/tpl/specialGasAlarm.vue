@@ -425,7 +425,7 @@ export default {
     // 导入模板下载
     downTpl() {
       window.open(
-        `${process.env.VUE_APP_API_BASE_URL}/file/resource/特气报警系统设备信息维护批量导入模板.xlsx`
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/特气报警系统设备信息维护批量导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/特气报警系统设备信息维护批量导入模板.xlsx`
       );
     },
     // 批量导入成功

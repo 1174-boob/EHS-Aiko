@@ -804,7 +804,7 @@ export default {
     //下载模板
     handleDownloadTemplate() {
       window.open(
-        `${process.env.VUE_APP_API_BASE_URL}/file/template/importEquipment.xlsx`
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/importEquipment.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/importEquipment.xlsx`
       );
     },
     //计算下次认证时间

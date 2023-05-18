@@ -364,7 +364,7 @@ export default {
     },
     // 导入模板下载
     downloadTemplate() {
-      window.open(`${process.env.VUE_APP_API_BASE_URL}/file/resource/化学品清单导入模板.xlsx`);
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/化学品清单导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/化学品清单导入模板.xlsx`)
     },
     // 页码改变
     pageNoChange(page) {

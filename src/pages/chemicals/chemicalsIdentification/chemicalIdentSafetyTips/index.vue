@@ -365,8 +365,7 @@ export default {
     },
     // 下载模板
     downloadTem() {
-      let tarUrl = `${process.env.VUE_APP_API_BASE_URL}/file/resource/安全提示卡导入模板.xlsx`
-      window.open(tarUrl)
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/安全提示卡导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/安全提示卡导入模板.xlsx`)
     },
     //跳转新增、编辑页面
     jumpAddOrDetail(type, record) {

@@ -397,8 +397,7 @@ export default {
     },
     // 下载模板
     downloadTem() {
-      let tarUrl = `${process.env.VUE_APP_API_BASE_URL}/file/resource/化学品安全标识导入模板.xlsx`
-      window.open(tarUrl)
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/化学品安全标识导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/化学品安全标识导入模板.xlsx`)
     },
     // 重置
     iRest: debounce(
