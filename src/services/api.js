@@ -20,7 +20,7 @@ export const checkTokenEHS = (params, headers) => post(serviceNameList.authehs +
 export const getMenuTree = (params) => get('ehs-customer/api/role/getLoginMenu', params);
 // export const changeCompany = (params, headers) => get(serviceNameList.auth + '/api/auth/changeCompany', params, headers);
 // export const changeCompany = (params, headers) => get(process.env.VUE_APP_ZICONSOLE_AUTH + '/api/auth/changeCompany', params, headers);
-export const getPortraitUrlt = params => post(`${serviceNameList.btpFile}/api/file/getPath`, params);
+export const getPortraitUrlt = params => post(`ehs-customer/api/ehs/file/getFilePathList`, params);
 // 公共 字典 
 export const getDictionary = params => post(`ehs-customer/api/dict/list`, params);
 // 获取所有按钮权限 ---------------------------此处需要替换为ehs的权限接口
