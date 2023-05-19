@@ -13,7 +13,15 @@
                   </a-form-model-item>
                   <CommonDept ref="commonDept" :CommonFormInline="iForm" :rules="rules" :notTablePage="true" :hasDepartment="true" :labelCol="labelCol" :wrapperCol="wrapperCol" :disabled="disabled"  @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
                   <a-form-model-item ref="deptId" label="起草人部门" prop="deptId">
-                    <a-tree-select
+                    <DeptTree
+                      :disabled="disabled"
+                      :placeholder="iForm.corporationId ? '请选择':'请输入起草人部门'"
+                      v-model="iForm.deptId"
+                      :deptData="treeData"
+                      @change="applicantDeptChange"
+                      allowClear
+                    ></DeptTree>
+                    <!-- <a-tree-select
                       :disabled="disabled"
                       v-model="iForm.deptId"
                       style="width: 100%"
@@ -23,7 +31,7 @@
                       placeholder="请输入起草人部门"
                       tree-default-expand-all
                       @change="applicantDeptChange"
-                    >
+                    > -->
                     </a-tree-select>
                   </a-form-model-item>
                   <a-form-model-item ref="accidentDate" label="事故日期" prop="accidentDate">
@@ -35,7 +43,16 @@
                 </a-col>
                 <a-col :span="12">
                   <a-form-model-item ref="dutyDeptIdList" label="责任部门" prop="dutyDeptIdList">
-                    <a-tree-select
+                    <DeptTree
+                      :disabled="disabled"
+                      :placeholder="iForm.corporationId ? '请选择':'请输入责任部门'"
+                      v-model="iForm.dutyDeptIdList"
+                      :deptData="treeData"
+                      @change="deptChange"
+                      multiple
+                      allowClear
+                    ></DeptTree>
+                    <!-- <a-tree-select
                       :disabled="disabled"
                       v-model="iForm.dutyDeptIdList"
                       style="width: 100%"
@@ -46,7 +63,7 @@
                       tree-default-expand-all
                       @change="deptChange"
                       multiple
-                    >
+                    > -->
                     </a-tree-select>
                   </a-form-model-item>
                   <a-form-model-item ref="accidentLevelHurt" label="人员伤害" prop="accidentLevelHurt">

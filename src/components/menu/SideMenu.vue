@@ -9,7 +9,7 @@
     >
       <i-menu theme="light" :collapsed="collapsed" :options="menuData" @select="onSelect" class="menu beauty-scroll" />
       <!-- logo背景 -->
-      <img src="@/assets/menu/menu-logo-bg.png" class="side-menu-main-logo" />
+      <!-- <img src="@/assets/menu/menu-logo-bg.png" class="side-menu-main-logo" /> -->
     </a-layout-sider>
     <!-- 折叠按钮 -->
     <div class="side-menu-btn" @click="toggleCollapse" v-if="!isMobile">
