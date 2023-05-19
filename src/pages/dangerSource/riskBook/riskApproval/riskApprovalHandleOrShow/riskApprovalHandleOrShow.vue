@@ -353,7 +353,7 @@ export default {
       } else {
         let para = {
           node: infoStatus,
-          createUserId:this.detailObj.createUserId?this.detailObj.createUserId:this.userId,
+          // createUserId:this.detailObj.createUserId?this.detailObj.createUserId:this.userId,
           riskPointApprovalId: this.detailObj.riskPointApprovalId
         }
         if (infoStatus == 'POSITION_SECTION_CHIEF__2') {
