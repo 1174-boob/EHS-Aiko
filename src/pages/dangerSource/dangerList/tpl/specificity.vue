@@ -195,7 +195,7 @@ export default {
       centerAreaList: [],
       //导入弹窗开关
       addVisible: false,
-      actions: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.risk}/api/ehs/risk/detail/public/importUser` : `${serviceNameList.risk}/api/ehs/risk/detail/public/importUser`,
+      actions: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.risk}/api/ehs/risk/detail/specific/importUser` : `${serviceNameList.risk}/api/ehs/risk/detail/specific/importUser`,
       formInline: {},
       page: {
         pageNo: 1,
