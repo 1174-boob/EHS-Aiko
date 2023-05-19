@@ -44,7 +44,8 @@ const firstFlowMinxin = {
         //获取节点用户信息
         getUserNodeInfo(infoStatus) {
             let para = {
-                node: infoStatus
+                node: infoStatus,
+                corporationId: this.iFrom.corporationId
             }
             return getRiskUserNodeInfo(para)
         },
@@ -111,7 +112,7 @@ const firstFlowMinxin = {
                         resove()
                     })
                     .catch(err => { // 任何一步失败-则失败
-                        console.log('前端代码报错了');
+                        console.log(err);
                         reject()
                     })
             })
