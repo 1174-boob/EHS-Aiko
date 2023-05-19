@@ -380,7 +380,7 @@ export default {
               item.operateLevelText = ''
             }
             // 状态
-            item.infoStatusText = this.getChemicalDictText('dangerstatus', item.infoStatus)
+            item.infoStatusText = this.dictionary('dangerstatus', item.infoStatus)
             // 作业形式
             item.isMustText = dictionary('hazardForm', item.isMust)
             // 类型
