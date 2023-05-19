@@ -323,7 +323,7 @@ export default {
         ),
         corporationName: this.getMappingValue(
           this.organizationList,
-          "id",
+          "orgId",
           this.addForm.corporationId
         ).orgName,
         id: this.modalTitle ? this.id : undefined,

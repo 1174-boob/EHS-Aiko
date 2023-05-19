@@ -26,7 +26,7 @@
                         whitespace: true,
                       },
                     ],
-                    initialValue: '18303017471',
+                    initialValue: windowLocal < 0 ? '' : '18303017471',
                   },
                 ]"
               >
@@ -49,7 +49,7 @@
                         whitespace: true,
                       },
                     ],
-                    initialValue: 'Aa123456',
+                    initialValue: windowLocal < 0 ? '' : 'Aa123456',
                   },
                 ]"
               >
@@ -114,6 +114,7 @@ export default {
       form: this.$form.createForm(this),
       encrypt: new JSEncrypt(),
       showCompany: false,
+      windowLocal: window.location.host.indexOf('localhost')
     };
   },
   computed: {
