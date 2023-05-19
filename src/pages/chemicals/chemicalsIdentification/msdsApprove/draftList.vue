@@ -100,7 +100,7 @@ export default {
           title: '所属组织',
           dataIndex: 'corporationId',
           customRender: (text) => {
-            return (text ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", text).orgAbbrName : '');
+            return (text ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", text).orgName : '');
           },
           width: 150
         },
