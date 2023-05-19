@@ -143,7 +143,7 @@
           <staffOrDept
             ref="operations"
             :checkAbel="false"
-            :labelTitle="'厂务中心评审'"
+            :labelTitle="'环安部评审'"
             :treeRoles="reviewFormRules"
             :propKey="'operations'"
             :checkedTreeNode="checkedTreeNode"
