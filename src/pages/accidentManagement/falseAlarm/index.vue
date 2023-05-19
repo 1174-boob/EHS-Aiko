@@ -47,7 +47,7 @@
         <div slot="eventType" slot-scope="record">{{ record.eventType | userFilter('event_type') }}</div>
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="viewDetail(record)">查看</span>
-          <span v-if="isResolveVisible(record)" class="color-0067cc cursor-pointer" @click="toDealPage(record)">处理</span>
+          <span v-if="isResolveVisible(record)" v-show="!(record.auditStatus == 2)" class="color-0067cc cursor-pointer" @click="toDealPage(record)">处理</span>
         </div>
       </a-table>
     </CommonTable>
