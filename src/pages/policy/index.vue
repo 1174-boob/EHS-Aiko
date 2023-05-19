@@ -153,6 +153,7 @@ export default {
       let {timeArr} = this.formInline
       const params = {
         ...this.formInline,
+        organizationId: this.formInline.corporationId ? this.formInline.corporationId : '',
         timeArr:undefined,
         releaseTimeStart: timeArr && timeArr[0] ? (timeArr[0] + ' 00:00:00') : undefined,
         releaseTimeEnd:  timeArr && timeArr[1] ? (timeArr[1] + ' 23:59:59') : undefined,

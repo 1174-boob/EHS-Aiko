@@ -153,7 +153,7 @@ export default {
     },
     getPolicylawList(param = {}) {
       const params = {
-        organizationId: param.organizationId ? param.organizationId : '',
+        organizationId: param.corporationId ? param.corporationId : '',
         noticeType: param.noticeType ? param.noticeType : '',
         policyLawSubject: param.policyLawSubject ? param.policyLawSubject : '',
         releaseTimeStart: param.releaseTimeStart ? param.releaseTimeStart : '',
