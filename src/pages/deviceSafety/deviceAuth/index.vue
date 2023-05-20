@@ -406,9 +406,9 @@ export default {
                             _this.addForm.nodeStatesText = '撤回驳回';
                             break;
                     }
-                    _this.addForm.currentNode = e.nodeStates;
+                    _this.addForm.currentNode = e.nextNodeStates;
                     _this.addForm.handlerUser = e.handlerUser;
-                    _this.addForm.approvalId = e.approvalId
+                    _this.addForm.approvalId = e.approvalId;
                     const newArr = new Set([e.handlerUser]);
                     _this.getUserAndJobNumber(newArr).then(res => { //全局方法
                         console.log(res[e.handlerUser].name, _this.addForm)
