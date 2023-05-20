@@ -18,7 +18,7 @@ export const specialEquipmentDetail = (params, headers) => get(serviceNameList.e
 //特种设备批量导出
 export const specialEquipmentExport = (params, headers) => postExcel(serviceNameList.ehsEquip + '/api/ehs/equip/specialEquipmentExcel/export', params, headers)
 //特种设备批量导入
-export const specialEquipmentImport = (params, headers) => post(serviceNameList.ehsEquip + '/api/ehs/equip/sepicalEquipmentExcel/importEquipment', params, headers)
+export const specialEquipmentImport = (params, headers) => post(serviceNameList.ehsEquip + '/api/ehs/equip/specialEquipmentExcel/importEquipment', params, headers)
 //特种设备下载模板
 export const specialEquipmentTemplateDown = (params, headers) => postExcel(serviceNameList.danger + '/api/ehs/equip/spcialEquipmentExcel/template1', params, headers)
 
