@@ -263,12 +263,14 @@
         <FixedBottom>
           <div>
             <a-button @click="onCancle">返回</a-button>
-            <a-button v-if="!(dataMsg.processStatus == '3')" type="primary" :loading="btnLoading" @click="reject">驳回</a-button>
-            <a-button type="primary" :loading="btnLoading" @click="approved">通过</a-button>
+            <a-button v-if="!(dataMsg.processStatus == '3')" type="primary" :loading="btnLoading" @click="showReject">驳回</a-button>
+            <a-button type="primary" :loading="btnLoading" @click="showApproved">通过</a-button>
           </div>
         </FixedBottom>
       </div>
     </div>
+    <!-- 添加审核弹框 -->
+    <ApproveModal @doApprove="doApprove" @doReject="doReject" :isReject="isReject" ref="approveModal" :approveVisible.sync="approveVisible" />
     <Log v-if="logData.length" :flowLogList="logData" :hiddenRemark="true"></Log>
 </div>
 
@@ -286,6 +288,7 @@ import dictionary from '@/utils/dictionary'
 import cancelLoading from '@/mixin/cancelLoading'
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { nanoid } from 'nanoid'
+import ApproveModal from '../falseAlarm/comp/ApproveModal'
 
 
 import {  msdsGetUserInfo } from '@/services/chemicalMsds'
@@ -296,7 +299,7 @@ import { accidentEventAdd, accidentEventUpdate, accidentEventDetail, accidentEve
 import { debounce } from 'lodash'
 import { getQueryVariable } from "@/utils/util.js"
 export default {
-  components: { FixedBottom, UploadEhs, Log, OrganizeLazyTree, UploadCanRemove, UploadBtnStyle},
+  components: { FixedBottom, UploadEhs, Log, OrganizeLazyTree, UploadCanRemove, UploadBtnStyle, ApproveModal},
   mixins: [cancelLoading, teableCenterEllipsis],
   data() {
     return {
@@ -425,6 +428,8 @@ export default {
       treeData: [],
       processNode: "",
       btnLoading: false,
+      isReject: false,//是否是驳回，否则通过
+      approveVisible: false
     };
   },
   async created() {
@@ -458,6 +463,24 @@ export default {
     },
   },
   methods: {
+    showApproved() {
+      this.isReject = false
+      this.approveVisible = true
+    },
+    showReject() {
+      this.isReject = true
+      this.approveVisible = true
+    },
+    // 审核通过
+    doApprove(remake) {
+      this.approvalStatus = 2;
+      this.resolveFn();
+    },
+    //审核驳回
+    doReject(remake) {
+      this.approvalStatus = 3;
+      this.resolveFn();
+    },
     corporationChange(a, b) {
       this.$set(this.iForm, "dutyDeptIdList", undefined);
       this.$set(this.iForm, "corporationDeptId", b);
@@ -809,16 +832,6 @@ export default {
         break; // 因为我们只需要检测一项,所以就可以跳出循环了
       }
     },
-    // 驳回按钮
-    reject() {
-      this.approvalStatus = 3;
-      this.resolveFn();
-    },
-    // 通过按钮
-    approved() {
-      this.approvalStatus = 2;
-      this.resolveFn();
-    },
     async resolveFn() {
       try {
         this.btnLoading = true;
@@ -830,6 +843,7 @@ export default {
         this.pushPara = result.data;
         this.pushTask();
         this.$antMessage.success(this.approvalStatus == 2 ? "通过成功" : "驳回成功");
+        this.approveVisible = false
         if (this.approvalStatus == 2) {
           this.$router.push("/safeManage/emergencyManagement/accidentManagement/accidentList");
         } else if (this.approvalStatus == 3) {
