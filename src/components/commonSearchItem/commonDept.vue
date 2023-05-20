@@ -219,20 +219,20 @@ export default {
       let list = this.notTablePage ? this.getCommonAddOrgnizeList : this.commonOrgnizeList;
       let corporationDeptId = this.getMappingValue(list, "id", corporationId).deptId;
       this.$emit('echoCommonDept', { corporationDeptId });
-      // if (this.hasDepartment) { // 有部门
-      //   // 请求该组织下全量部门接口
-      //   this.getDeptTree(corporationDeptId);
-      // }
+      if (this.hasDepartment) { // 有部门
+        // 请求该组织下全量部门接口
+        this.getDeptTree(corporationDeptId);
+      }
     },
-    // getDeptTree(deptId) {
-    //   let treeData = [];
-    //   queryDeptTree({
-    //     deptId: deptId
-    //   }).then(res => {
-    //     treeData = res.data ? [res.data] : [];
-    //     this.$emit('corporationDeptChange', treeData);
-    //   }).catch(err => { console.log(err) })
-    // },
+    getDeptTree(deptId) {
+      let treeData = [];
+      queryDeptTree({
+        deptId: deptId
+      }).then(res => {
+        treeData = res.data ? [res.data] : [];
+        this.$emit('corporationDeptChange', treeData);
+      }).catch(err => { console.log(err) })
+    },
     // 所属部门改变
     departmentChange(value, label, extra) {
       this.$emit('departmentChange', value, label, extra)
