@@ -535,6 +535,15 @@ export default {
     // console.log(this.hazardLevelList,'..eventpossibility');
   },
   methods: {
+    // 浮点数四舍五入保留两位小数
+    toDecimal(x) {
+      var f = parseFloat(x);
+      if (isNaN(f)) {
+        return;
+      }
+      f = Math.round(x * 100) / 100;
+      return f;
+    },
     //获取详情
     getDetailInfo() {
       //1共性  2特异性
@@ -650,10 +659,10 @@ export default {
 
         //计算风险值
         if (newVal.lvalue && newVal.evalue && newVal.cvalue) {
-          newVal.valueRisk =
+          newVal.valueRisk = this.toDecimal(
             Number(newVal.lvalue) *
             Number(newVal.evalue) *
-            Number(newVal.cvalue);
+            Number(newVal.cvalue)) 
         }
 
         //计算危险级别、风险分级
