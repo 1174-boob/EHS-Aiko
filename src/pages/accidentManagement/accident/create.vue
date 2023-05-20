@@ -673,7 +673,7 @@ export default {
           this.getUserAndJobNumber([...new Set(idArr)]).then(res=>{ //全局方法
             let obj = res || {};
             for (let i = 0; i < idArr.length; i++) {
-              list[i].assigneeName = list[i].hander ? (obj[idArr[i]] ? obj[idArr[i]].name : "--") : "--";
+              list[i].assigneeName = list[i].hander ? (obj[idArr[i]] ? (obj[idArr[i]].name + '/' + obj[idArr[i]].workNum) : "--") : "--";
             }
             this.logData = list;
           }).catch(err=>{
