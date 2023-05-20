@@ -354,7 +354,8 @@ export default {
         let para = {
           node: infoStatus,
           // createUserId:this.detailObj.createUserId?this.detailObj.createUserId:this.userId,
-          riskPointApprovalId: this.detailObj.riskPointApprovalId
+          riskPointApprovalId: this.detailObj.riskPointApprovalId,
+          corporationId: this.iFrom.corporationId
         }
         if (infoStatus == 'POSITION_SECTION_CHIEF__2') {
           para.userId = this.detailObj.createUserId
