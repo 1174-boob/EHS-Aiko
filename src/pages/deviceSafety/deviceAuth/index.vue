@@ -397,7 +397,7 @@ export default {
                             _this.addForm.nodeStatesText = '技安部门认证';
                             break;
                         case "MINISTER":
-                            _this.addForm.nodeStatesText = '起草人总监审批';
+                            _this.addForm.nodeStatesText = '起草人总监';
                             break;
                         case "CLOSE":
                             _this.addForm.nodeStatesText = '结束';
