@@ -119,7 +119,7 @@
                 <a-row type="flex" class="bottom" justify="space-around">
                   <a-col :span="4">
                     设备ID：{{
-                    i.equipmentId
+                    i.equipmentCode
                     }}
                   </a-col>
                   <a-col :span="4">
