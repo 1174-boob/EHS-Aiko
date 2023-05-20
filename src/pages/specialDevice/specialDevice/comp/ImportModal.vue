@@ -72,11 +72,11 @@ export default {
   },
   data() {
     return {
-      action0: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/danger/sepicalEquipmentExcel/importEquipment?equipmentType=0`,
-      action1: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/danger/sepicalEquipmentExcel/importEquipment?equipmentType=1`,
-      action2: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/danger/sepicalEquipmentExcel/importEquipment?equipmentType=2`,
-      action3: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/danger/sepicalEquipmentExcel/importEquipment?equipmentType=3`,
-      action4: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/danger/sepicalEquipmentExcel/importEquipment?equipmentType=4`,
+      action0: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/equip/sepicalEquipmentExcel/importEquipment?equipmentType=0`,
+      action1: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/equip/sepicalEquipmentExcel/importEquipment?equipmentType=1`,
+      action2: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/equip/sepicalEquipmentExcel/importEquipment?equipmentType=2`,
+      action3: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/equip/sepicalEquipmentExcel/importEquipment?equipmentType=3`,
+      action4: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/equip/sepicalEquipmentExcel/importEquipment?equipmentType=4`,
     }
   },
   methods: {
