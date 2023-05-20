@@ -370,7 +370,7 @@ export default {
         handleAllocation (e) {
             let _this = this
             this.$antConfirm({
-                title: '重新分配流程节点人员会影响原有流程，是否确认进行重新分配？?',
+                title: '重新分配流程节点人员会影响原有流程，是否确认进行重新分配？',
                 onOk () {
                     _this.addVisible = true
                     /*
@@ -388,16 +388,16 @@ export default {
                             _this.addForm.nodeStatesText = '已提交';
                             break;
                         case "SECTION_CHIEF":
-                            _this.addForm.nodeStatesText = '起草人科长审批';
+                            _this.addForm.nodeStatesText = '起草人经理';
                             break;
                         case "POWER":
                             _this.addForm.nodeStatesText = '动力部门认证';
                             break;
                         case "TECHNICAL_SAFETY":
-                            _this.addForm.nodeStatesText = '技按部门认证';
+                            _this.addForm.nodeStatesText = '技安部门认证';
                             break;
                         case "MINISTER":
-                            _this.addForm.nodeStatesText = '起草人部长审批';
+                            _this.addForm.nodeStatesText = '起草人总监审批';
                             break;
                         case "CLOSE":
                             _this.addForm.nodeStatesText = '结束';
