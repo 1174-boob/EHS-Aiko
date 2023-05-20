@@ -838,7 +838,7 @@ export const getloginUserDataAuth = (params) => {
 };
 
 // 获取组织下的部门树
-export const queryDeptTree = params => post(`ehs-customer/api/company/dept/queryDeptTree`, params);
+export const queryDeptTree = params => get(`ehs-customer/api/enterprise/dept/tree`, params);
 /** 应急演练管理 start*/
 // 数据库新增预案
 export const planAddPrep = params => post(`${serviceNameList.danger}/api/ehs/emergent/plan/addPrep`, params);

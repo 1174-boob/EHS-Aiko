@@ -37,7 +37,7 @@ const copyTextMixin = {
             } else {
                 return {
                     title: '所属组织',
-                    dataIndex: "orgName",
+                    dataIndex: "corporationName",
                     align: "center",
                     ellipsis: true,
                     width: width
