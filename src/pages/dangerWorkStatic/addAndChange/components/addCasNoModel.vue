@@ -3,7 +3,7 @@
     <template slot="form">
       <a-form-model ref="addModleForm" :model="addModleForm" :rules="addModleFormRules" :label-col="{ span: 9 }" :wrapper-col="{ span: 15 }" :colon="false" labelAlign="left">
         <StaffOrDept
-          :labelTitle="'BOE现场监护人'"
+          :labelTitle="'现场监护人'"
           :treeRoles="addModleFormRules"
           :propKey="'guardianCode'"
           :checkedTreeNode="checkedTreeNode"
@@ -55,7 +55,7 @@ export default {
       addModleForm: {},
       // 表单校验
       addModleFormRules: {
-        guardianCode: [{ required: true, message: "BOE现场监护人不能为空", trigger: "change" },],
+        guardianCode: [{ required: true, message: "现场监护人不能为空", trigger: "change" },],
         guardianContact: [{ required: true, message: "联系方式不能为空", trigger: "blur" },],
       },
       checkedTreeNode: [],
@@ -64,7 +64,7 @@ export default {
   computed: {
     // 弹窗标题
     modelTitle() {
-      return this.addCasNoModelData.guid ? '编辑BOE现场监护人' : '新增BOE现场监护人'
+      return this.addCasNoModelData.guid ? '编辑现场监护人' : '新增现场监护人'
     },
   },
   methods: {
