@@ -145,7 +145,7 @@ export default {
           width: 150
         },
         {
-          title: '报警描述',
+          title: '预警描述',
           dataIndex: 'description',
           width: 150
         },
@@ -260,7 +260,7 @@ export default {
           { required: true, message: "预警时间不能为空", trigger: "change" },
         ],
         description: [
-          { required: true, message: "报警描述不能为空", trigger: "blur" },
+          { required: true, message: "预警描述不能为空", trigger: "blur" },
         ]
       },
       companyName:'',
