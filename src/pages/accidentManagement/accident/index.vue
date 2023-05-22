@@ -183,7 +183,7 @@ export default {
       this.columns.splice(1, 0, this.addCommonColumnItem(200, true));
       this.columns.splice(2, 0, this.addCommonColumnDepartment({
         width: 150,
-        title: "申请人部门",
+        title: "起草人部门",
       }, true))
       this.initConfigPage()
       this.getDataList();
