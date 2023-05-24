@@ -376,7 +376,7 @@ export default {
                     /*
                       SUBMITTED  已提交,
                       SECTION_CHIEF  起草人科长审批,
-                      POWER  动力部门认证,
+                      POWER  厂务部门认证,
                       TECHNICAL_SAFETY 技按部门认证,
                       MINISTER  起草人部长审批,
                       CLOSE  结束,
@@ -391,10 +391,10 @@ export default {
                             _this.addForm.nodeStatesText = '起草人经理';
                             break;
                         case "POWER":
-                            _this.addForm.nodeStatesText = '动力部门认证';
+                            _this.addForm.nodeStatesText = '厂务部门认证';
                             break;
                         case "TECHNICAL_SAFETY":
-                            _this.addForm.nodeStatesText = '技安部门认证';
+                            _this.addForm.nodeStatesText = '环安部门认证';
                             break;
                         case "MINISTER":
                             _this.addForm.nodeStatesText = '起草人总监';
