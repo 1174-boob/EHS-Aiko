@@ -192,7 +192,7 @@ export default {
           width: 120,
         },
         {
-          title: "库房二维码",
+          title: "柜架二维码",
           width: 160,
           scopedSlots: { customRender: 'qrcode' },
           key: "qrcode",
