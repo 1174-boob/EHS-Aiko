@@ -66,7 +66,7 @@
               <upload-can-remove ref="editModel1" :maxSize="5" :limit="20" :headImgs="afterImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="afterImproveSuccess" :disabled="disabled"></upload-can-remove>
             </a-form-model-item>
             <staffOrDept class="staff-Dept" ref="improveProposalMemberList" :onPreview="disabled" :labelTitle="'提案完善小组成员'" :treeRoles="emRules" :propKey="'improveProposalMemberList'" :checkedTreeNode="improveProposalMemberList" @getTreeData="getImproveProposalMemberList" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
-            <staffOrDept class="staff-Dept" ref="departmentReviewerList" :onPreview="(action=='edit' || action=='preview') ? true : false" :labelTitle="'科室级评审员'" :treeRoles="emRules" :propKey="'departmentReviewerList'" :checkedTreeNode="departmentReviewerList" @getTreeData="getReviewerList" :comment="comment" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
+            <staffOrDept class="staff-Dept" ref="departmentReviewerList" :onPreview="(action=='edit' || action=='preview') ? true : false" :labelTitle="'部门级评审员'" :treeRoles="emRules" :propKey="'departmentReviewerList'" :checkedTreeNode="departmentReviewerList" @getTreeData="getReviewerList" :comment="comment" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
             <staffOrDept v-if="action=='edit'" :onPreview="(emForm.proposalLevel =='1' && action=='edit') ? false : true" class="staff-Dept" ref="deptReviewerList" :labelTitle="'部门级评审员'" :treeRoles="emRules" :propKey="'deptReviewerList'" :checkedTreeNode="deptReviewerList" @getTreeData="getTreeData" :comment="comment1" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
           </a-col>
         </a-row>
@@ -148,7 +148,7 @@ export default {
         deptId: undefined
       },
       comment: "说明：至少选择3名评委",
-      comment1:'说明：所在部门部长及科室科长为评委',
+      comment1:'说明：所在部门经理及以上人员为评委',
       portalStatus: "",
       deptData:[],
       proposalLevel: [],
@@ -265,7 +265,7 @@ export default {
           const recordsVoList = data.recordsVoList;
           for(let ele of recordsVoList) {
             let level = ele.proposalLevel;
-            this['recordsVo'+level] = ele; //proposalLevel 1-科室级评审记录 2-部门级评审记录 3-公司级评审记录
+            this['recordsVo'+level] = ele; //proposalLevel 1-部门级评审记录 2-部门级评审记录 3-公司级评审记录
           }
         }).catch(err=>{
           console.log(err);
@@ -366,7 +366,7 @@ export default {
     },
     // 代办推送
     async pushTask(id, handler) {
-      // const title = this.action == 'add' ? '科室级提案评审' :  this.emForm.proposalLevel == '1' ? "部门级提案评审" :  this.emForm.proposalLevel == '2' ?"公司级提案分配" : this.emForm.proposalLevel == '3' ? '事业级提案分配' : "";
+      // const title = this.action == 'add' ? '部门级提案评审' :  this.emForm.proposalLevel == '1' ? "部门级提案评审" :  this.emForm.proposalLevel == '2' ?"公司级提案分配" : this.emForm.proposalLevel == '3' ? '事业级提案分配' : "";
       const title = this.action == 'add' ? 'proposalDept' :  this.emForm.proposalLevel == '1' ? "proposalDeptment" :  this.emForm.proposalLevel == '2' ?"distributionCompany" : this.emForm.proposalLevel == '3' ? 'distributionCareer' : "";
       const redirectUrl = this.action == 'edit' && (this.emForm.proposalLevel == '2' || this.emForm.proposalLevel == '3') ? '/safeManage/securityThinkTank/improveProposalManagement/proposalApprove&proposalTab=3' : `/safeManage/securityThinkTank/improveProposalManagement/approveScoring&proposalId=${id}`
       const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + redirectUrl;

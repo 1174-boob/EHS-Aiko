@@ -383,7 +383,7 @@ export default {
                       REJECT  撤回驳回
                     */
                     // handlerUser
-                    switch (e.nodeStates) {
+                    switch (e.nextNodeStates) {
                         case "SUBMITTED":
                             _this.addForm.nodeStatesText = '已提交';
                             break;

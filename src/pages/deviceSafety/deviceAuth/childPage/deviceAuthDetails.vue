@@ -40,7 +40,7 @@
                     :treeType="'user'"
                     :propKey="'powerDeptCertifier'"
                     :treeRoles="addFormRules"
-                    :labelTitle="'动力部门认证人'"
+                    :labelTitle="'厂务部门认证人'"
                     :label-col="{ span: 7 }"
                     :onPreview="type == 2"
                     :checkedTreeNode="
@@ -59,7 +59,7 @@
                     :treeType="'user'"
                     :propKey="'techniqueDeptCertifier'"
                     :treeRoles="addFormRules"
-                    :labelTitle="'技安环保认证人'"
+                    :labelTitle="'环安部门认证人'"
                     :label-col="{ span: 7 }"
                     :onPreview="type == 2"
                     :checkedTreeNode="
@@ -395,14 +395,14 @@ export default {
         powerDeptCertifier: [
           {
             required: true,
-            message: "动力部门认证人不能为空",
+            message: "厂务部门认证人不能为空",
             trigger: "change",
           },
         ],
         techniqueDeptCertifier: [
           {
             required: true,
-            message: "技安环保认证人不能为空",
+            message: "环安部门认证人不能为空",
             trigger: "change",
           },
         ],
@@ -829,7 +829,7 @@ export default {
             .join()
           : "";
     },
-    //动力部门认证人
+    //厂务部门认证人
     getDutyUserList2(data) {
       this.addForm.powerDeptCertifier =
         data && data.treeIdList.length
@@ -842,7 +842,7 @@ export default {
             .join()
           : "";
     },
-    //技安环保认证人
+    //环安部门认证人
     getDutyUserList3(data) {
       this.addForm.techniqueDeptCertifier =
         data && data.treeIdList.length
