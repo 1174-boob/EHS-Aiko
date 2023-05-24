@@ -437,7 +437,11 @@ export default {
     // },
   },
   created() {
-    // const userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"));
+    const userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"));
+    if (!userInfo) {
+      sessionStorage.clear();
+      this.$router.push("/login");
+    }
     // this.userInfo.company = userInfo.company
     //   ? userInfo.company.companyName
     //   : "";
