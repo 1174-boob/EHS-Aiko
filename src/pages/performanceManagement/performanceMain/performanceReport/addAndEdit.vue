@@ -79,7 +79,7 @@
               {{getMappingValue(setCorporationTree, "corporationCode", record.centerId).corporationName}}
             </div>
             <div slot="corporationId" slot-scope="record">
-              {{getMappingValue(getCommonAddOrgnizeListAll, "id", record.corporationId).orgAbbrName}}
+              {{getMappingValue(getCommonAddOrgnizeListAll, "orgId", record.corporationId).orgName}}
             </div>
             <div slot="configStatus" slot-scope="record">
               {{getMappingValue(configStatusList, "key", record.configStatus).value}}
@@ -144,11 +144,11 @@ export default {
         }
       ],
       columns: [
-        {
-          title: '制造中心',
-          scopedSlots: { customRender: 'centerId' },
-          width: 100,
-        },
+        // {
+        //   title: '制造中心',
+        //   scopedSlots: { customRender: 'centerId' },
+        //   width: 100,
+        // },
         {
           title: '组织',
           scopedSlots: { customRender: 'corporationId' },

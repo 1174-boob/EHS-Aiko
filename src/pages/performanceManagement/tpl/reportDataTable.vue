@@ -2,7 +2,7 @@
   <div id="pdfDom1">
     <div class="flex justify-content-between align-items-center">
       <div v-if="corporationMsg.corporationId">
-        <span>组织：{{getMappingValue(getCommonAddOrgnizeListAll, "id", corporationMsg.corporationId).orgAbbrName ? getMappingValue(getCommonAddOrgnizeListAll, "id", corporationMsg.corporationId).orgAbbrName : "--"}}</span>
+        <span>组织：{{getMappingValue(getCommonAddOrgnizeListAll, "orgId", corporationMsg.corporationId).orgName ? getMappingValue(getCommonAddOrgnizeListAll, "orgId", corporationMsg.corporationId).orgAbbrName : "--"}}</span>
         <span class="m-l-15">年度：{{corporationMsg.year ? corporationMsg.year : "--"}}</span>
         <span class="m-l-15">季度：{{corporationMsg.quarter ? this.getMappingValue(this.quarterList, "key", corporationMsg.quarter).value : "--"}}</span>
       </div>
