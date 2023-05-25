@@ -75,7 +75,7 @@ export const getDeptCache = params => get(`ehs-customer/api/enterprise/dept/getD
 // 获取组织人员的组合名称新接口-2022-10-17
 export const getUserAndJobNumber = params => post(`ehs-customer/api/user/getUserAndJobNumber`, params);
 // 搜索部门名称新接口-2022-10-17
-export const searchDept = params => post(`ehs-customer/api/company/dept/searchDept`, params);
+export const searchDept = params => post(`ehs-customer/api/enterprise/dept/searchDept`, params);
 // 搜索人员名称新接口-2022-10-17
 export const searchUser = params => post(`ehs-customer/api/enterprise/dept/searchUser`, params);
 
