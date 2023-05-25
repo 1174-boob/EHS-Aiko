@@ -7,7 +7,7 @@
           <!-- <CommonDept ref="commonDept" :CommonFormInline="iForm" :rules="rules" :notTablePage="true" @corporationChange="corporationChange"></CommonDept> -->
           <a-form-model-item class="flex" label="所属组织" prop="corporationId">
             <a-select v-model="iForm.corporationId" placeholder="请选择所属组织" @change="iFormChange">
-              <a-select-option v-for="item in getCommonAddOrgnizeListAll" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+              <a-select-option v-for="item in getCommonAddOrgnizeListAll" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
             </a-select>
           </a-form-model-item>
         </a-col>
