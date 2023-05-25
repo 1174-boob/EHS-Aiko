@@ -72,15 +72,15 @@ export const performanceManagementBranch = [
     },
     component: resolve => require(['@/pages/performanceManagement/performanceBranch/performanceReport/addAndEdit.vue'], resolve),
   },
-  {
-    path: 'performanceBranchCorporation',
-    name: '组织绩效-部门',
-    meta: {
-      title: '组织绩效-部门',
-      isPage: true,
-    },
-    component: resolve => require(['@/pages/performanceManagement/performanceBranch/performanceCorporation/index.vue'], resolve),
-  },
+  // {
+  //   path: 'performanceBranchCorporation',
+  //   name: '组织绩效-部门',
+  //   meta: {
+  //     title: '组织绩效-部门',
+  //     isPage: true,
+  //   },
+  //   component: resolve => require(['@/pages/performanceManagement/performanceBranch/performanceCorporation/index.vue'], resolve),
+  // },
   {
     path: 'performanceBranchSummary',
     name: '组织绩效汇总',

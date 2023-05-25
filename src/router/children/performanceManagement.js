@@ -9,15 +9,15 @@ export const performanceManagement = [
     },
     component: resolve => require(['@/pages/performanceManagement/performanceMain/performanceSummary/index.vue'], resolve),
   },
-  {
-    path: 'performanceCorporation',
-    name: '管理绩效-现地',
-    meta: {
-      title: '管理绩效-现地',
-      isPage: true,
-    },
-    component: resolve => require(['@/pages/performanceManagement/performanceMain/performanceCorporation/index.vue'], resolve),
-  },
+  // {
+  //   path: 'performanceCorporation',
+  //   name: '管理绩效-现地',
+  //   meta: {
+  //     title: '管理绩效-现地',
+  //     isPage: true,
+  //   },
+  //   component: resolve => require(['@/pages/performanceManagement/performanceMain/performanceCorporation/index.vue'], resolve),
+  // },
   {
     path: 'performanceData',
     name: '管理绩效数据',
