@@ -86,7 +86,7 @@
           </a-row>
         </a-spin>
       </div>
-      <div slot="btn">
+      <div slot="btn1">
         <a-button type="dashed" @click="closeTreeModel">取消</a-button>
         <a-button type="primary" style="margin-left: 0.2rem" @click="submitTreeFrom">提交</a-button>
       </div>
