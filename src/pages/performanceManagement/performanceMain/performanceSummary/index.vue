@@ -3,11 +3,11 @@
     <PageTitle>管理绩效汇总</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <a-form-model-item label="制造中心">
+        <!-- <a-form-model-item label="制造中心">
           <a-select v-model="formInline.centerId" placeholder="请选择制造中心">
             <a-select-option v-for="item in setCorporationTree" :key="item.corporationCode" :value="item.corporationCode">{{item.corporationName}}</a-select-option>
           </a-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="年份">
           <a-date-picker v-model="formInline.year" mode="year" format="YYYY" valueFormat="YYYY" @panelChange="yearChange" />
         </a-form-model-item>

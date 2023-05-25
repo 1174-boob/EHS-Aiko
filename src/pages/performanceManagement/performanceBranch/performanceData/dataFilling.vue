@@ -12,8 +12,8 @@
                               placeholder="请选择所属组织"
                               @change="corporationChange">
                         <a-select-option v-for="item in getCommonAddOrgnizeListAll"
-                                         :key="item.id"
-                                         :value="item.id">{{item.orgAbbrName}}</a-select-option>
+                                         :key="item.orgId"
+                                         :value="item.orgId">{{item.orgName}}</a-select-option>
                     </a-select>
                 </a-form-model-item>
                 <a-form-model-item label="部门"
