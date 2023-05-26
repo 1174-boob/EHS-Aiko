@@ -44,7 +44,7 @@
               />
             </a-form-model-item>
             <a-form-model-item label="改善前照片" class="flex">
-              <upload-can-remove ref="editModel" :maxSize="5" :limit="20" :headImgs="beforeImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :disabled="disabled"></upload-can-remove>
+              <upload-can-remove ref="editModel" :maxSize="10" :limit="20" :headImgs="beforeImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :disabled="disabled"></upload-can-remove>
             </a-form-model-item>
             <a-form-model-item class="flex" label="改善措施" prop="improveMeasures">
               <a-textarea
@@ -63,7 +63,7 @@
               />
             </a-form-model-item>
             <a-form-model-item label="改善后照片" class="flex">
-              <upload-can-remove ref="editModel1" :maxSize="5" :limit="20" :headImgs="afterImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="afterImproveSuccess" :disabled="disabled"></upload-can-remove>
+              <upload-can-remove ref="editModel1" :maxSize="10" :limit="20" :headImgs="afterImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="afterImproveSuccess" :disabled="disabled"></upload-can-remove>
             </a-form-model-item>
             <staffOrDept class="staff-Dept" ref="improveProposalMemberList" :onPreview="disabled" :labelTitle="'提案完善小组成员'" :treeRoles="emRules" :propKey="'improveProposalMemberList'" :checkedTreeNode="improveProposalMemberList" @getTreeData="getImproveProposalMemberList" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
             <staffOrDept class="staff-Dept" ref="departmentReviewerList" :onPreview="(action=='edit' || action=='preview') ? true : false" :labelTitle="'部门级评审员'" :treeRoles="emRules" :propKey="'departmentReviewerList'" :checkedTreeNode="departmentReviewerList" @getTreeData="getReviewerList" :comment="comment" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>

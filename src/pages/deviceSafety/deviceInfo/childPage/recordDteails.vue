@@ -64,11 +64,11 @@
                 </a-col>
                 <a-col :span="10"
                        class="my-col">
-                    动力部门认证人：{{baseInfo.corporationId||'--'}}
+                    厂务部门认证人：{{baseInfo.corporationId||'--'}}
                 </a-col>
                 <a-col :span="22"
                        class="my-col">
-                    技安环保认证人：{{baseInfo.corporationId||'--'}}
+                    环安部门认证人：{{baseInfo.corporationId||'--'}}
                 </a-col>
                 <a-col :span="10"
                        class="my-col">
