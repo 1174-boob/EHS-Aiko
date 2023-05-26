@@ -206,8 +206,8 @@ export const updateUserDetail = params => post(`${serviceNameList.danger}/api/eh
 export const getUserPageList = params => post(`${serviceNameList.danger}/api/ehs/company/user/pageList`, params);
 //获取列表
 export const GetLabelList = params => post(`ehs-customer/api/label/list`, params);
-//获取用户标签列表
-export const GetUserLabelList = params => get(`ehs-customer/api/label/user/list`, params);
+//获取用户、部门标签列表
+export const GetUserLabelList = params => post(`ehs-customer/api/label/labelList`, params);
 // 控制台角色--获取角色权限树
 export const getConsoleRoleTree = params => get(`ehs-customer/api/resource/queryResourceTree`, params);
 //权限-角色授权-设置添加
@@ -244,6 +244,8 @@ export const getAppAuthRoleDetail = params => get(`ehs-customer/api/role/detail`
 export const getAppAuthRoleUserList = params => post(`ehs-customer/api/role/getUserListPageByRoleId`, params);
 // 权限--部门 获取组织架构
 export const getDepartmentTree = params => get(`ehs-customer/api/enterprise/dept/tree`, params);
+// 隐患自动带出责任人
+export const searchManagerAuto = params => get(`ehs-customer/api/enterprise/dept/searchManager`, params);
 // 应用角色授权管理--获取授权用户时可选择的用户列表
 export const getGrantModelTreeData = params => post(`ehs-customer/api/userRoleRel/product/authUserList`, params);
 // 应用角色授权管理--获取当前产品的菜单权限树
