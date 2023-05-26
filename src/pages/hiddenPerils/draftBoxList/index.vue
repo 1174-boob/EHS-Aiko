@@ -14,7 +14,7 @@
         </a-form-model-item>
         <a-form-model-item label="隐患级别">
           <a-select v-model="formInline.dangerLevel" placeholder="请选择">
-            <a-select-option v-for="item in troubleClassList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
+            <a-select-option v-for="item in troubleClassList" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
           </a-select>
         </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
@@ -61,7 +61,7 @@ export default {
     return {
       checkList: [], //检查类型
       troubleList: [], //隐患类别
-      troubleClassList: dictionary("htlevel"), //隐患级别
+      troubleClassList: [], //隐患级别
       formInline: {},
       page: {
         pageNo: 1,
@@ -194,6 +194,7 @@ export default {
     initConfigPage(){
       this.checkList = this.getChemicalDictList('checkType')
       this.troubleList = this.getChemicalDictList('httype')
+      this.troubleClassList = this.getChemicalDictList('htlevel')
     },
     //获取列表
     getDataList() {

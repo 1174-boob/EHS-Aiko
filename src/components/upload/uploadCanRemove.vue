@@ -8,7 +8,7 @@
     </a-upload>
     <!-- <span class="ecertificateFileId-main-tishi">注：最多可上传{{limit}}个附件，且每个附件大小不超过{{maxSize}}M，支持格式：PNG、JPG</span> -->
     <span class="ecertificateFileId-main-tishi"
-      >注：每个附件大小不超过{{ maxSize }}M，支持格式：{{
+      >注：每张图片大小不超过{{ maxSize }}M，支持格式：{{
         fileTypeArr.join("、")
       }}</span
     >

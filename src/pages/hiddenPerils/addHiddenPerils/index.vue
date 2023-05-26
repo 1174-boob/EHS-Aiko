@@ -80,7 +80,7 @@
             <a-col :span="12">
               <a-form-model-item label="隐患级别" prop="dangerLevel">
                 <a-select v-model="hideDangerForm.dangerLevel" placeholder="请选择隐患类别">
-                  <a-select-option v-for="item in troubleClassList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
+                  <a-select-option v-for="item in troubleClassList" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
@@ -95,6 +95,7 @@
                   :placeholder="'请选择'"
                   @change="zRchange"
                   :show-search="true"
+                  @select="onSearchSelect" 
                   :filterTreeNode="filterTreeNode"
                 ></a-tree-select>
               </a-form-model-item>
@@ -176,7 +177,7 @@ import {
   GetHiddenNextPeople,
 } from "@/services/hiddenPerils.js";
 import OrganizeLazyTree from "@/components/organizeLazyTree/organizeLazyTree.vue";
-import { PushTask, getDepartmentTree } from "@/services/api";
+import { PushTask, getDepartmentTree ,searchManagerAuto} from "@/services/api";
 import dayJs from "dayjs";
 import { getQueryVariable } from "@/utils/util.js";
 import chemicalDict from "@/mixin/chemicalDict.js";
@@ -191,6 +192,7 @@ export default {
   mixins: [chemicalDict],
   data() {
     return {
+      deptId:'',
       spinning: true,
       // 部门数据
       outOrganizeTreeList: [],
@@ -202,7 +204,7 @@ export default {
       },
       checkList: [], //检查类型*
       troubleList: [], //隐患类别*
-      troubleClassList: dictionary("htlevel"), //隐患级别*
+      troubleClassList: [], //隐患级别*
       userTreeFields: { value: "key" },
       userTreeData: [],
       labelCol: { span: 6 },
@@ -275,6 +277,7 @@ export default {
   created() {
     this.checkList = this.getChemicalDictList('checkType')
     this.troubleList = this.getChemicalDictList('httype')
+    this.troubleClassList = this.getChemicalDictList('htlevel')
     this.userObjSession = JSON.parse(
       sessionStorage.getItem("zconsole_userInfo")
     ).user;
@@ -293,6 +296,15 @@ export default {
     }
   },
   methods: {
+    // 获取deptId
+    onSearchSelect(value, node, extra){
+      this.deptId = value
+      return searchManagerAuto({deptId:this.deptId}).then((res) => {
+        this.hideDangerForm.responsibilityPersonName = res.data.name
+        this.hideDangerForm.responsibilityPersonId = res.data.userId
+        this.responsibilityPersonIdList = [res.data.userId]
+      })
+    },
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
       let apiData = {
@@ -551,7 +563,7 @@ export default {
 
     //发现时间改变事件
     changeFindTime(val, v) {
-      const start = _.cloneDeep(val).add(7, "days");
+      const start = _.cloneDeep(val).add(15, "days");
       this.hideDangerForm.rectificationTime = start; //改变整改日期值 为发现日期的后三天
       this.disabledDate(val);
     },
