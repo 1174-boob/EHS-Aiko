@@ -25,7 +25,7 @@
                   <a-textarea placeholder="请输入" v-model="addForm.dangerRectificationMeasures" allowClear :maxLength="1000" />
                 </a-form-model-item>
                 <a-form-model-item label="隐患整改照片" prop="dangerRectificationPhotoList">
-                  <upload-can-remove :limit="20" :maxSize="5" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :headImgs="addForm.dangerRectificationPhotoList"></upload-can-remove>
+                  <upload-can-remove :limit="20" :maxSize="10" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :headImgs="addForm.dangerRectificationPhotoList"></upload-can-remove>
                 </a-form-model-item>
               </a-row>
               <a-row v-else>
@@ -151,13 +151,13 @@ export default {
             trigger: "change",
           },
         ],
-        dangerRectificationPhotoList: [
-          {
-            required: true,
-            message: "隐患整改照片不能为空",
-            trigger: "change",
-          },
-        ],
+        // dangerRectificationPhotoList: [
+        //   {
+        //     required: true,
+        //     message: "隐患整改照片不能为空",
+        //     trigger: "change",
+        //   },
+        // ],
       },
     };
   },

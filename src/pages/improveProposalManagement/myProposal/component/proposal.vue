@@ -194,6 +194,12 @@ export default {
         deptReviewerList: [
           { required: true, message:"不能为空", trigger: ['blur', 'change'] },
         ],
+        // beforeImprovePhotoList: [
+        //    { required: true, message:"不能为空", trigger: ['change'] },
+        // ],
+        // afterImprovePhotoList: [
+        //    { required: true, message:"不能为空", trigger: ['change'] },
+        // ],
       },
       proposalCode: ''
     }
