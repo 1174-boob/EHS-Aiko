@@ -174,15 +174,24 @@ export default {
         let brr = [];
         for (let i = 0; i < arr.length; i++) {
           for (let j = 0; j < arr[i].indexIds.length; j++) {
-            for (let m = 0; m < arr[i].indexIds[j].deductScoreDTOList.length; m++) {
+            if(arr[i].indexIds[j].deductScoreDTOList.length > 0) {
+              for (let m = 0; m < arr[i].indexIds[j].deductScoreDTOList.length; m++) {
+                brr.push({
+                  ...arr[i].indexIds[j],
+                  ...arr[i].indexIds[j].deductScoreDTOList[m],
+                  sitesNum: 0,
+                  projectId: arr[i].modular,
+                  projectScore: arr[i].indexIds[j].riskScore ? arr[i].indexIds[j].riskScore : "--",
+                })
+              }
+            } else {
               brr.push({
                 ...arr[i].indexIds[j],
-                ...arr[i].indexIds[j].deductScoreDTOList[m],
+                // ...arr[i].indexIds[j].deductScoreDTOList[m],
                 sitesNum: 0,
                 projectId: arr[i].modular,
                 projectScore: arr[i].indexIds[j].riskScore ? arr[i].indexIds[j].riskScore : "--",
               })
-              console.log("arr[i].sitesNum.length:"+arr[i].sitesNum.length)
             }
           }
         }
