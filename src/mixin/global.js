@@ -134,7 +134,7 @@ const copyTextMixin = {
                 return item.dictType == dictType;
             })[0];
             if (obj && obj.dictItem) {
-                return obj.dictItem;
+                return obj.dictItem.sort((a, b) => a.sort - b.sort);
             } else {
                 return [];
             }

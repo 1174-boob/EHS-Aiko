@@ -551,7 +551,7 @@ export default {
 
     //发现时间改变事件
     changeFindTime(val, v) {
-      const start = _.cloneDeep(val).add(3, "days");
+      const start = _.cloneDeep(val).add(7, "days");
       this.hideDangerForm.rectificationTime = start; //改变整改日期值 为发现日期的后三天
       this.disabledDate(val);
     },

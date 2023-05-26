@@ -23,7 +23,7 @@
         </a-form-model-item>
         <a-form-model-item label="隐患级别">
           <a-select v-model="formInline.dangerLevel" placeholder="请选择">
-            <a-select-option v-for="item in troubleClassList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
+            <a-select-option v-for="item in troubleClassList" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="数据筛选">
@@ -182,7 +182,8 @@ export default {
       statusList: dictionary("hdstatus"), //状态
       checkList: [], //检查类型
       troubleList: [], //隐患类别
-      troubleClassList: dictionary("htlevel"), //隐患级别
+      // troubleClassList: dictionary("htlevel"), //隐患级别
+      troubleClassList:[],
       filterList: [
         { key: "create", value: "我创建的" },
         { key: "handle", value: "我处理的" },
@@ -326,8 +327,9 @@ export default {
   },
   methods: {
     initConfigPage(){
-      this.checkList = this.getChemicalDictList('checkType')
-      this.troubleList = this.getChemicalDictList('httype')
+      this.checkList = this.getDictItemList('checkType')
+      this.troubleList = this.getDictItemList('httype')
+      this.troubleClassList = this.getDictItemList('htlevel')
       // 从本地获取表头显示信息
       this.setColumnsDataFormLoc();
     },
