@@ -419,9 +419,11 @@ export default {
     // 编辑
     async actionEdit(record) {
       this.editText = "编辑";
+      record.corporationName = this.getMappingValue(this.getCommonAddOrgnizeListAll, 'orgId', record.corporationId).orgName;
       this.editForm = {
         centerId: record.centerId,
         corporationId: record.corporationId,
+        corporationName: record.corporationName,
         equipFireId: record.equipFireId,
         area: record.area,
         floor: record.floor,
