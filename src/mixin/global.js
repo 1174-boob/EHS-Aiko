@@ -152,6 +152,15 @@ const copyTextMixin = {
             }
             return {}
         },
+        getOrgAuthMisson(data) {
+          let finalName = this.getMappingValue(this.getCommonAddOrgnizeList, 'orgId', data).orgName;
+          if(data && (finalName !== undefined)) {
+            return true
+          } else {
+            this.$antMessage.error('仅能编辑或删除本基地数据')
+            return false
+          }
+        },
         // 对象格式-获取中文
         getMappingValueObj(obj, val) { //obj为对象格式 val为key值
             for (let key in obj) {
