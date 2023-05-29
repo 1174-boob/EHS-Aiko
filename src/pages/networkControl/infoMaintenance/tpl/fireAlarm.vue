@@ -422,7 +422,7 @@ export default {
       if(!this.getOrgAuthMisson(record.corporationId)) {
         return
       }
-      record.corporationName = this.getMappingValue(this.getCommonAddOrgnizeListAll, 'orgId', record.corporationId).orgName;
+      record.corporationName = this.getMappingValue(this.getCommonAddOrgnizeList, 'orgId', record.corporationId).orgName;
       this.editForm = {
         centerId: record.centerId,
         corporationId: record.corporationId,
