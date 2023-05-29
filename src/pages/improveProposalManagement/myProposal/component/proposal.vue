@@ -43,7 +43,7 @@
                 :auto-size="{ minRows: 3, maxRows: 5 }"
               />
             </a-form-model-item>
-            <a-form-model-item label="改善前照片" class="flex">
+            <a-form-model-item label="改善前照片" prop="beforeImprovePhotoList" class="flex">
               <upload-can-remove ref="editModel" :maxSize="10" :limit="20" :headImgs="beforeImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :disabled="disabled"></upload-can-remove>
             </a-form-model-item>
             <a-form-model-item class="flex" label="改善措施" prop="improveMeasures">
@@ -62,7 +62,7 @@
                 :auto-size="{ minRows: 3, maxRows: 5 }"
               />
             </a-form-model-item>
-            <a-form-model-item label="改善后照片" class="flex">
+            <a-form-model-item label="改善后照片" prop="afterImprovePhotoList" class="flex">
               <upload-can-remove ref="editModel1" :maxSize="10" :limit="20" :headImgs="afterImprovePhotoList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="afterImproveSuccess" :disabled="disabled"></upload-can-remove>
             </a-form-model-item>
             <staffOrDept class="staff-Dept" ref="improveProposalMemberList" :onPreview="disabled" :labelTitle="'提案完善小组成员'" :treeRoles="emRules" :propKey="'improveProposalMemberList'" :checkedTreeNode="improveProposalMemberList" @getTreeData="getImproveProposalMemberList" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
@@ -197,9 +197,12 @@ export default {
         // beforeImprovePhotoList: [
         //    { required: true, message:"不能为空", trigger: ['change'] },
         // ],
-        // afterImprovePhotoList: [
-        //    { required: true, message:"不能为空", trigger: ['change'] },
-        // ],
+        beforeImprovePhotoList: [
+          { required: true, validator: this.headImgValidator, trigger: "change" },
+        ],
+        afterImprovePhotoList: [
+          { required: true, validator: this.headImgValidator1, trigger: "change" },
+        ],
       },
       proposalCode: ''
     }
@@ -215,6 +218,21 @@ export default {
     this.initProposal();
   },
   methods: {
+    // 象形图校验
+    headImgValidator(rule, value, callback) {
+      if (!this.beforeImprovePhotoList || this.beforeImprovePhotoList.length <= 0) {
+        return Promise.reject("改善前照片不能为空")
+      } else {
+        callback()
+      }
+    },
+    headImgValidator1(rule, value, callback) {
+      if (!this.afterImprovePhotoList || this.afterImprovePhotoList.length <= 0) {
+        return Promise.reject("改善后照片不能为空")
+      } else {
+        callback()
+      }
+    },
     goBack(){
       this.setKeepalive(true)
       this.$router.go(-1)
