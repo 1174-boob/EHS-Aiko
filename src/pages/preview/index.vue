@@ -60,7 +60,7 @@
                 <a-tab-pane v-for="item of policyTabs" :key="item.id" :tab="item.name">
                   <div class="list-title">
                     <div>标题</div>
-                    <div>发布日期</div>
+                    <div>施行日期</div>
                   </div>
                   <ul>
                     <li v-for="value of item.policyList" :key="value.id" @click="policyPreview(value.id)">

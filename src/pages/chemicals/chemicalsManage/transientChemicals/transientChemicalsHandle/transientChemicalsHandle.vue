@@ -25,7 +25,7 @@
               </a-row>
               <a-row>
                 <a-col :span="24">
-                  <!-- <a-form-model-item ref="boeAssume" label="BOE担当" prop="boeAssume">
+                  <!-- <a-form-model-item ref="boeAssume" label="业务担当" prop="boeAssume">
                     <a-tree-select
                       disabled
                       show-search
@@ -37,10 +37,10 @@
                       style="width: 100%"
                       :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
                       :tree-data="userTreeData"
-                      placeholder="请选择BOE担当"
+                      placeholder="请选择业务担当"
                     ></a-tree-select>
                   </a-form-model-item> -->
-                  <staffOrDept :labelTitle="'BOE担当'" :checkedTreeNode="checkedTreeNode" :treeRoles="iRules" :propKey="'boeAssume'" :onPreview="true" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
+                  <staffOrDept :labelTitle="'业务担当'" :checkedTreeNode="checkedTreeNode" :treeRoles="iRules" :propKey="'boeAssume'" :onPreview="true" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
                 </a-col>
               </a-row>
               <a-row>
@@ -180,7 +180,7 @@ export default {
       iRules: {
         deptId: [{ required: true, message: "使用部门不能为空", trigger: "change" },],
         title: [{ required: true, message: "标题不能为空", trigger: "change" },],
-        boeAssume: [{ required: true, message: "BOE担当不能为空", trigger: "change" },],
+        boeAssume: [{ required: true, message: "业务担当不能为空", trigger: "change" },],
         tradeName: [{ required: true, message: "厂商名称不能为空", trigger: "change" },],
         transportPerson: [{ required: true, message: "厂商化学品运送人员不能为空", trigger: "change" },],
         tradeTel: [{ required: true, message: "厂商联系方式不能为空", trigger: "change" },],
@@ -415,7 +415,7 @@ export default {
             iFrom.temporaryFactoryChemicals.forEach(item => {
               item.guid = this.guid()
             })
-            // BOE担当处理
+            // 业务担当处理
             iFrom.boeAssume = JSON.parse(iFrom.boeAssume)
             this.checkedTreeNode = iFrom.boeAssume;
             // 资料附件-回显

@@ -104,7 +104,7 @@ export default {
           width: 400
         },
         {
-          title: '发布时间',
+          title: '施行日期',
           dataIndex: 'releaseTime',
           key: "releaseTime",
           customRender: (text, record, index) => {

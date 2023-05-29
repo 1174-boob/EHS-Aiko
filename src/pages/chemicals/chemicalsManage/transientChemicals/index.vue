@@ -132,7 +132,7 @@ export default {
           minWidth: 110,
         },
         {
-          title: "BOE担当",
+          title: "业务担当",
           dataIndex: "boeAssume",
           key: "boeAssume",
           customRender: (text) => {

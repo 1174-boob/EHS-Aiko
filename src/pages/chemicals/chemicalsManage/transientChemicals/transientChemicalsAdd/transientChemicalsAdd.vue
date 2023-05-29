@@ -34,7 +34,7 @@
           <a-row>
             <a-col :span="13">
               <StaffOrDept
-                :labelTitle="'BOE担当'"
+                :labelTitle="'业务担当'"
                 :checkedTreeNode="checkedTreeNode"
                 :treeRoles="iRules"
                 :propKey="'boeAssume'"
@@ -199,7 +199,7 @@ export default {
       iRules: {
         deptId: [{ required: true, message: "使用部门不能为空", trigger: "change" },],
         title: [{ required: true, message: "标题不能为空", trigger: "change" },],
-        boeAssume: [{ required: true, message: "BOE担当不能为空", trigger: "change" },],
+        boeAssume: [{ required: true, message: "业务担当不能为空", trigger: "change" },],
         tradeName: [{ required: true, message: "厂商名称不能为空", trigger: "change" },],
         transportPerson: [{ required: true, message: "厂商化学品运送人员不能为空", trigger: "change" },],
         tradeTel: [{ required: true, message: "厂商联系方式不能为空", trigger: "change" },],
@@ -478,7 +478,7 @@ export default {
             iFrom.temporaryFactoryChemicals.forEach(item => {
               item.guid = this.guid()
             })
-            // BOE担当处理
+            // 业务担当处理
             iFrom.boeAssume = JSON.parse(iFrom.boeAssume)
             this.checkedTreeNode = iFrom.boeAssume;
             // 资料附件-回显
@@ -658,7 +658,7 @@ export default {
       }
       // 草稿 1-是，2-否
       apiData.draftStatus = 2
-      // BOE担当处理
+      // 业务担当处理
       apiData.boeAssume = JSON.stringify(apiData.boeAssume)
       apiData.intoFactoryDate = dayJs(apiData.intoFactoryDate).format("YYYY-MM-DD")
       console.log(555555555, this.isAddPage)
@@ -703,7 +703,7 @@ export default {
       let apiData = { ...this.iFrom }
       // 草稿 1-是，2-否
       apiData.draftStatus = 1
-      // BOE担当处理
+      // 业务担当处理
       apiData.boeAssume = JSON.stringify(apiData.boeAssume)
       apiData.intoFactoryDate = dayJs(apiData.intoFactoryDate).format("YYYY-MM-DD")
       const apiName = this.isAddPage ? addTransientChemicalsApi : changeTransientChemicalsApi

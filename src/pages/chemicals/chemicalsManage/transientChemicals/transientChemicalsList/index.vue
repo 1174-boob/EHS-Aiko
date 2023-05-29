@@ -148,7 +148,7 @@ export default {
           width: 140,
         },
         {
-          title: "BOE担当",
+          title: "业务担当",
           dataIndex: "boeAssume",
           key: "boeAssume",
           width: 140,
