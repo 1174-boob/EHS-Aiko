@@ -33,6 +33,11 @@
                   </a-form-model-item>
                 </a-col>
                 <a-col :span="spanCol">
+                  <a-form-model-item ref="planName" label="值班名称" prop="planName">
+                    <a-input v-model="iFrom.planName" disabled />
+                  </a-form-model-item>
+                </a-col>
+                <a-col :span="spanCol">
                   <a-form-model-item ref="classesName" label="值班班次" prop="classesName">
                     <a-input v-model="iFrom.classesName" disabled />
                   </a-form-model-item>
@@ -48,48 +53,8 @@
                   </a-form-model-item>
                 </a-col>
                 <a-col :span="spanCol">
-                  <a-form-model-item ref="handUserName" label="交班人" prop="handUserName">
-                    <a-textarea :value="filterValue(iFrom.handUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="handGroupUserName" label="交班组长" prop="handGroupUserName">
-                    <a-textarea :value="filterValue(iFrom.handGroupUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="handGroupEngineerUserName" label="交班组工程师" prop="handGroupEngineerUserName">
-                    <a-textarea :value="filterValue(iFrom.handGroupEngineerUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="handSectionChiefUserName" label="交班组科长" prop="handSectionChiefUserName">
-                    <a-textarea :value="filterValue(iFrom.handSectionChiefUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="pickUserName" label="接班人" prop="pickUserName">
-                    <a-textarea :value="filterValue(iFrom.pickUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="pickGroupUserName" label="接班组长" prop="pickGroupUserName">
-                    <a-textarea :value="filterValue(iFrom.pickGroupUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="pickGroupEngineerUserName" label="接班组工程师" prop="pickGroupEngineerUserName">
-                    <a-textarea :value="filterValue(iFrom.pickGroupEngineerUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="pickSectionChiefUserName" label="接班组科长" prop="pickSectionChiefUserName">
-                    <a-textarea :value="filterValue(iFrom.pickSectionChiefUserNames)" disabled autoSize />
-                  </a-form-model-item>
-                </a-col>
-                <a-col :span="spanCol">
-                  <a-form-model-item ref="handPickClassTime" label="交接班时间" prop="handPickClassTime">
-                    <a-textarea v-model="iFrom.handPickClassTime" disabled autoSize />
+                  <a-form-model-item ref="dutyUserNameList" label="值班员" prop="dutyUserNameList">
+                    <a-input v-model="iFrom.dutyUserNameList" disabled />
                   </a-form-model-item>
                 </a-col>
               </a-row>
@@ -587,13 +552,13 @@
     <!-- 故障维修记录 -->
     <TroubleShootingModel v-model="troubleShootingModelShow" :formModelOldData="formModelOldData" :dutyId="dutyId" @troubleShootingChange="troubleShootingChange" />
     <!-- 巡检记录 -->
-    <InspectionRecordModel
+    <!-- <InspectionRecordModel
       v-model="inspectionRecordModelShow"
       :formModelOldData="formModelOldData"
       :moduleList="inspectionRecord.tableAllList"
       :dutyId="dutyId"
       @changeModuleList="editInspectionRecordItem"
-    />
+    /> -->
     <!-- 事件记录 -->
     <EventRecordModel v-model="eventRecordModelShow" :formModelOldData="formModelOldData" :moduleList="eventRecord.tableAllList" :dutyId="dutyId" @changeModuleList="editEventRecordItem" />
     <!-- 消防业务电话记录表 -->
@@ -679,8 +644,8 @@ export default {
       // 获取页面详情
       Promise.all([
         this.getPageDetail(),
-        this.getInspectionRecordListFn(null, null, true),
-        this.getFirePhoneRecordListFn(),
+        // this.getInspectionRecordListFn(null, null, true),
+        // this.getFirePhoneRecordListFn(),
       ])
         .then(resArr => { })
         .finally(() => {
@@ -728,7 +693,7 @@ export default {
         })
         .then(detailRes => {
           return Promise.all([
-            this.getAlarmRecord(detailRes),
+            // this.getAlarmRecord(detailRes),
             this.getTroubleShooting(detailRes),
             this.getTestRecord(detailRes),
           ])
@@ -759,45 +724,45 @@ export default {
         .catch(err => { })
     },
     // 获取故障维修记录
-    getTroubleShooting(detailRes) {
-      let apiData = {
-        centerId: detailRes.centerId,
-        corporationId: detailRes.corporationId,
-      }
-      return getOndutyTroubleShootingApi(apiData)
-        .then(res => {
-          let tableAllList = res.data || []
-          tableAllList.forEach(item => {
-            // 设备类型
-            item.equipTypeText = dictionary('equipType', item.equipType)
-            // 状态
-            item.statusText = dictionary('faultStatus', item.status)
-            // 报警原因类型
-            item.reasonTypeText = this.getChemicalDictText('alarm_reason_type', item.reasonType)
-          })
-          this.troubleShooting.tableAllList = cloneDeep(tableAllList)
-        })
-        .catch(err => { })
-    },
+    // getTroubleShooting(detailRes) {
+    //   let apiData = {
+    //     centerId: detailRes.centerId,
+    //     corporationId: detailRes.corporationId,
+    //   }
+    //   return getOndutyTroubleShootingApi(apiData)
+    //     .then(res => {
+    //       let tableAllList = res.data || []
+    //       tableAllList.forEach(item => {
+    //         // 设备类型
+    //         item.equipTypeText = dictionary('equipType', item.equipType)
+    //         // 状态
+    //         item.statusText = dictionary('faultStatus', item.status)
+    //         // 报警原因类型
+    //         item.reasonTypeText = this.getChemicalDictText('alarm_reason_type', item.reasonType)
+    //       })
+    //       this.troubleShooting.tableAllList = cloneDeep(tableAllList)
+    //     })
+    //     .catch(err => { })
+    // },
     // 获取测试记录
-    getTestRecord(detailRes) {
-      let apiData = {
-        centerId: detailRes.centerId,
-        corporationId: detailRes.corporationId,
-      }
-      return getOndutyTestRecordApi(apiData)
-        .then(res => {
-          let tableAllList = res.data || []
-          tableAllList.forEach(item => {
-            // 预警类型 1-火灾；-2-特气
-            item.typeText = item.type == '1' ? '火灾' : '特气'
-            // 状态
-            item.statusText = dictionary('alarmStatus', item.status)
-          })
-          this.testRecord.tableAllList = cloneDeep(tableAllList)
-        })
-        .catch(err => { })
-    },
+    // getTestRecord(detailRes) {
+    //   let apiData = {
+    //     centerId: detailRes.centerId,
+    //     corporationId: detailRes.corporationId,
+    //   }
+    //   return getOndutyTestRecordApi(apiData)
+    //     .then(res => {
+    //       let tableAllList = res.data || []
+    //       tableAllList.forEach(item => {
+    //         // 预警类型 1-火灾；-2-特气
+    //         item.typeText = item.type == '1' ? '火灾' : '特气'
+    //         // 状态
+    //         item.statusText = dictionary('alarmStatus', item.status)
+    //       })
+    //       this.testRecord.tableAllList = cloneDeep(tableAllList)
+    //     })
+    //     .catch(err => { })
+    // },
     // 过滤内容
     filterValue(tarInfo) {
       if (tarInfo) {
@@ -822,47 +787,47 @@ export default {
       return newArr
     },
     // 巡检记录--添加一行
-    openInspectionRecordModel(row) {
-      this.formModelOldData = row ? row : {}
-      this.inspectionRecordModelShow = true;
-    },
-    // 巡检记录--修改表格某一行
-    editInspectionRecordItem(row) {
-      this.inspectionRecord.tableAllList = row
-    },
-    // 巡检记录--删除表格某一行
-    rmInspectionRecordItem(row, attrName) {
-      console.log(row);
-      this.$antConfirm({
-        title: "确定删除吗?",
-        onOk: () => {
-          return rmInspectionRecordApi({ historyId: row.historyId })
-            .then(async (res) => {
-              await this.getInspectionRecordListFn(row.type, attrName)
-              this.$antMessage.success('删除成功');
-            })
-            .catch(err => { });
-        },
-      });
-    },
+    // openInspectionRecordModel(row) {
+    //   this.formModelOldData = row ? row : {}
+    //   this.inspectionRecordModelShow = true;
+    // },
+    // // 巡检记录--修改表格某一行
+    // editInspectionRecordItem(row) {
+    //   this.inspectionRecord.tableAllList = row
+    // },
+    // // 巡检记录--删除表格某一行
+    // rmInspectionRecordItem(row, attrName) {
+    //   console.log(row);
+    //   this.$antConfirm({
+    //     title: "确定删除吗?",
+    //     onOk: () => {
+    //       return rmInspectionRecordApi({ historyId: row.historyId })
+    //         .then(async (res) => {
+    //           await this.getInspectionRecordListFn(row.type, attrName)
+    //           this.$antMessage.success('删除成功');
+    //         })
+    //         .catch(err => { });
+    //     },
+    //   });
+    // },
     // 获取巡检记录、事件记录列表
-    getInspectionRecordListFn(type, attrName, getAll = false) {
-      // console.log('获取巡检记录、事件记录列表', type, attrName);
-      let apiData = {
-        dutyId: this.dutyId,
-        type: getAll ? undefined : type,
-      };
-      return getInspectionRecordListApi(apiData)
-        .then((res) => {
-          if (getAll) {
-            this.inspectionRecord.tableAllList = (res.data || []).filter(item => item.type == '1')
-            this.eventRecord.tableAllList = (res.data || []).filter(item => item.type == '2')
-          } else {
-            this[attrName].tableAllList = res.data || [];
-          }
-        })
-        .catch(err => { })
-    },
+    // getInspectionRecordListFn(type, attrName, getAll = false) {
+    //   // console.log('获取巡检记录、事件记录列表', type, attrName);
+    //   let apiData = {
+    //     dutyId: this.dutyId,
+    //     type: getAll ? undefined : type,
+    //   };
+    //   return getInspectionRecordListApi(apiData)
+    //     .then((res) => {
+    //       if (getAll) {
+    //         this.inspectionRecord.tableAllList = (res.data || []).filter(item => item.type == '1')
+    //         this.eventRecord.tableAllList = (res.data || []).filter(item => item.type == '2')
+    //       } else {
+    //         this[attrName].tableAllList = res.data || [];
+    //       }
+    //     })
+    //     .catch(err => { })
+    // },
     // 事件记录--巡检记录--添加一行
     openEventRecordModel(row) {
       this.formModelOldData = row ? row : {}
