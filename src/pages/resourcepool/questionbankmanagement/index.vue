@@ -204,7 +204,7 @@ export default {
 
   created() { 
     this.setRouterCode("questionbankmanagement");
-    this.columns.splice(1, 0, this.addCommonColumnItem(150));
+    this.columns.splice(0, 0, this.addCommonColumnItem(150));
     this.getTabList(); // 获取列表
   },
   activated() {

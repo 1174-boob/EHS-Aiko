@@ -143,8 +143,8 @@ export default {
   created() {
     this.setRouterCode("emergencyDatabase");
     this.initConfigPage()
-    this.columns.splice(1, 0, this.addCommonColumnItem(150))
-    this.columns.splice(2, 0, this.addCommonColumnDepartment({
+    this.columns.splice(0, 0, this.addCommonColumnItem(150))
+    this.columns.splice(1, 0, this.addCommonColumnDepartment({
       width: 150,
       key:'eplanDepartcode',
       title: "预案部门"

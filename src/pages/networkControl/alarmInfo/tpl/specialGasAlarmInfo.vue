@@ -238,7 +238,7 @@ export default {
           width: 100,
         },
         {
-          title: "预警描述",
+          title: "报警描述",
           dataIndex: "description",
           width: 150,
           customRender: (text) => {
@@ -349,7 +349,7 @@ export default {
   },
   created() {
     this.setRouterCode("alarmInfo");
-    this.columns.splice(1, 0, this.addCommonColumnItem(150));
+    this.columns.splice(0, 0, this.addCommonColumnItem(150));
     this.getDataList();
     this.initConfigPage()
   },

@@ -166,7 +166,7 @@ export default {
   created() {
     this.setRouterCode("emergencyReport");
     this.initConfigPage()
-    this.columns.splice(1, 0, this.addCommonColumnItem(150))
+    this.columns.splice(0, 0, this.addCommonColumnItem(150))
     this.getPageList();
   },
   activated() {

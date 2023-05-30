@@ -294,8 +294,8 @@ export default {
   },
   created() {
     this.setRouterCode("storageDepot");
-    this.columns.splice(1, 0, this.addCommonColumnItem(150));
-    this.columns.splice(2, 0, this.addCommonColumnDepartment({
+    this.columns.splice(0, 0, this.addCommonColumnItem(150));
+    this.columns.splice(1, 0, this.addCommonColumnDepartment({
       width: 150,
       title: "管理部门",
       key: "deptIds"
