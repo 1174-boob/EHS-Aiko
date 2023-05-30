@@ -99,7 +99,7 @@
               <div>
                 {{
                 hideDangerForm.dangerLevel
-                ? dictionary("htlevel", hideDangerForm.dangerLevel)
+                ? getChemicalDictText("htlevel", hideDangerForm.dangerLevel)
                 : "--"
                 }}
               </div>

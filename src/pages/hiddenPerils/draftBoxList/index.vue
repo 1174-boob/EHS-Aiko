@@ -49,7 +49,6 @@
 <script>
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
-import dictionary from "@/utils/dictionary";
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { debounce } from "lodash";
 import { GethiddenPerilsList, DelhiddenPerilsList, } from "@/services/hiddenPerils.js";
