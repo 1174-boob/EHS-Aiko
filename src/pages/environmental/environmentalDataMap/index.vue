@@ -30,7 +30,7 @@
           </a-form-model-item>
           <a-form-model-item label="选择组织" prop="corporationList">
             <a-select v-model="chinaForm.corporationList" placeholder="请选择组织" mode="multiple" allowClear labelInValue>
-              <a-select-option v-for="item of getCommonAddOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+              <a-select-option v-for="item of getCommonAddOrgnizeList" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
             </a-select>
           </a-form-model-item>
         </a-form-model>
@@ -290,6 +290,7 @@ export default {
         }
         return newList
       })
+      console.log(this.chinaForm, 'cc')
       const params = {
         corporationList,
         mapId: this.chinaForm.mapId.key,
