@@ -2,6 +2,7 @@
   <div class="clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
+        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline"></CommonSearchItem>
         <a-form-model-item label="具体位置">
           <a-input v-model="formInline.location" placeholder="请输入具体位置"></a-input>
         </a-form-model-item>
@@ -60,6 +61,14 @@ export default {
       equipTypeList: [],
       columns:[
         {
+          title: '具体位置',
+          dataIndex: 'location',
+          width: 150,
+          customRender: (text) => {
+           return text = text ? text : '--'
+          },
+        },
+        {
           title: '设备编号',
           dataIndex: 'equipCode',
           width: 150
@@ -73,14 +82,6 @@ export default {
           title: '设备品牌',
           dataIndex: 'equipBrand',
           width: 150
-        },
-        {
-          title: '具体位置',
-          dataIndex: 'location',
-          width: 150,
-          customRender: (text) => {
-           return text = text ? text : '--'
-          },
         },
         {
           title: '预约测试时间',
@@ -105,6 +106,7 @@ export default {
     }
   },
   created() {
+    this.columns.splice(0, 0, this.addCommonColumnItem(150));
     this.getDataList();
     this.companyName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyName;
 

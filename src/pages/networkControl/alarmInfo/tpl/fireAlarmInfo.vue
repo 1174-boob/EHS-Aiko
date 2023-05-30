@@ -524,7 +524,7 @@ export default {
       };
       const res = await DownloadFireProcess(para);
       if (res) {
-        const name = "岗位管理审批导出";
+        const name = "火灾报警信息导出";
         const blob = new Blob([res], {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

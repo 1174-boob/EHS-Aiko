@@ -65,7 +65,7 @@
                   <ul>
                     <li v-for="value of item.policyList" :key="value.id" @click="policyPreview(value.id)">
                       <div class="title" :title="value.title">{{ value.title ? value.title : "--" }}</div>
-                      <div class="time">{{ value.time ? value.time.split(" ")[0] : "--" }}</div>
+                      <div class="time">{{ value.releaseTime ? value.releaseTime.split(" ")[0] : "--" }}</div>
                     </li>
                   </ul>
                 </a-tab-pane>
