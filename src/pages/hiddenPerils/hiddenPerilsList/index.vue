@@ -69,13 +69,13 @@
             <template #default="{ row }">
               <span v-if="
                   index == 0 &&
-                  dictionary('htlevel', row.dangerLevel, false).color
+                  getChemicalDictText('htlevel', row.dangerLevel, false).color
                 ">
                 <span
                   class="sacl_tSpan"
                   :style="{
                     background: row.dangerLevel
-                      ? dictionary('htlevel', row.dangerLevel, false).color
+                      ? getChemicalDictText('htlevel', row.dangerLevel, false).color
                       : '',
                   }"
                 ></span>
@@ -88,7 +88,7 @@
               </span>
               <span v-else-if="item.props == 'dangerLevel'">
                 {{
-                dictionary("htlevel", row[item.props])
+                getChemicalDictText("htlevel", row[item.props])
                 }}
               </span>
               <span v-else-if="item.props == 'checkType'">

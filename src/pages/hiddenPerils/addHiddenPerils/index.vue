@@ -288,7 +288,7 @@ export default {
     //起草人
     this.drafterMsg = `${this.userObjSession.name}${this.userObjSession.jobNumber ? "/" + this.userObjSession.jobNumber : ""
       }`;
-    this.checkType = dictionary("checkType");
+    this.checkType = getChemicalDictList("checkType");
 
     this.routerObj = this.$route.query;
     this.routerObj.hideDangerId =
