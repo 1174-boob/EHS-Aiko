@@ -62,15 +62,15 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
           currentRouter.push("/login");
           // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
         } else {
-          Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员');
+          // Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员');
           return
         }
         break;
       case 404:
-        Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员')
+        // Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员')
         break;
       case 400:
-        Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员')
+        // Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员')
         break;
     }
   }
