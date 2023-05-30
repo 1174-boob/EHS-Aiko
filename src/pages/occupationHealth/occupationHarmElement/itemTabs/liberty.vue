@@ -387,8 +387,8 @@ export default {
       },
       computed: {},
       created() {
-            this.columns.splice(1, 0, this.addCommonColumnItem(150));
-            this.columns.splice(2, 0, this.addCommonColumnDepartment(150));
+            this.columns.splice(0, 0, this.addCommonColumnItem(150));
+            this.columns.splice(1, 0, this.addCommonColumnDepartment(150));
             getPostAll().then((res) => {
                   this.positionList = res.data;
             });

@@ -291,7 +291,7 @@ export default {
   created() {
     this.setRouterCode("emergencyPlan");
     this.initConfigPage()
-    this.columns.splice(1, 0, this.addCommonColumnItem(150))
+    this.columns.splice(0, 0, this.addCommonColumnItem(150))
     this.columns.splice(3, 0, this.addCommonColumnDepartment({
       width: 150,
       title: "计划所属部门",

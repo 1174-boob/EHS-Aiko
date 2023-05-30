@@ -101,7 +101,7 @@
             </a-form-model-item>
             <a-form-model-item
               class="flex"
-              label="描述图片"
+              label="现场确认图片"
               prop="disposalProcessPhotosList"
             >
               <upload-can-remove

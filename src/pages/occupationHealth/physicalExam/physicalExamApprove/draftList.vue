@@ -145,8 +145,8 @@ export default {
   computed: {
   },
   created() {
-    this.columns.splice(1, 0, this.addCommonColumnItem(150));
-    this.columns.splice(2, 0, this.addCommonColumnDepartment({
+    this.columns.splice(0, 0, this.addCommonColumnItem(150));
+    this.columns.splice(1, 0, this.addCommonColumnDepartment({
       width: 150,
       title: "所属部门",
       key: "deptId"

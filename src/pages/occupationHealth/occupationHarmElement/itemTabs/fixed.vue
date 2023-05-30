@@ -448,8 +448,8 @@ export default {
       created() {
             // this.positionList = this.getChemicalDictList("position");
             // this.testItemList = this.getChemicalDictList("test_item");
-            this.columns.splice(1, 0, this.addCommonColumnItem(150))
-            this.columns.splice(2, 0, this.addCommonColumnDepartment(150))
+            this.columns.splice(0, 0, this.addCommonColumnItem(150))
+            this.columns.splice(1, 0, this.addCommonColumnDepartment(150))
             console.log(this.columns)
             getHarmAll({}).then((res) => {
                   this.testItemList = res.data;
