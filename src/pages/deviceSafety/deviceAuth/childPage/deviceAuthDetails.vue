@@ -554,6 +554,10 @@ export default {
     };
   },
   created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      this.checkedTreeNode3 = adminDeptId ? [adminDeptId] : [];
+    }
     this.setRouterCode("deviceAuth");
     this.type = this.$route.query.type || getQueryVariable('type')
     this.manage = this.$route.query.manage ? this.$route.query.manage : false;

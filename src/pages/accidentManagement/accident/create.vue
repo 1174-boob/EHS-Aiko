@@ -433,6 +433,10 @@ export default {
     };
   },
   async created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      this.$set(this.iForm, 'deptId', adminDeptId ? [adminDeptId] : []);
+    }
     console.log(this.$route.meta)
     this.accidentType = this.getDictItemList("accident_type");
     this.personalInjury = this.getDictItemList("accident_level_person");

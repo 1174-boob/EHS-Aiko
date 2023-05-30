@@ -283,6 +283,10 @@ export default {
     };
   },
   created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      this.$set(this.iForm, 'deptId', adminDeptId ? [adminDeptId] : []);
+    }
     this.setRouterCode('falseAlarm')
     this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
   },

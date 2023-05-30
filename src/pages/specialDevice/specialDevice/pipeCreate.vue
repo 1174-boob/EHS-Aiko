@@ -182,6 +182,10 @@ export default {
     }
   },
   created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      this.$set(this.newlyForm, 'draftDeptCode', adminDeptId ? [adminDeptId] : []);
+    }
     this.setRouterCode("specalDeviceAccount")
     if(this.isCreate) {
       this.initApplicant()

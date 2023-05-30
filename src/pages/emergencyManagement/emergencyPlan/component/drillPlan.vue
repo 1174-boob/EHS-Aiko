@@ -279,6 +279,10 @@ export default {
   },
 
   created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      this.$set(this.emForm, 'draftDepartCode', adminDeptId ? [adminDeptId] : []);
+    }
     const user = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
     this.emForm.draftName = user.name ? user.name : '';
     this.emForm.draftCode = user.jobNumber ? user.jobNumber : '';
