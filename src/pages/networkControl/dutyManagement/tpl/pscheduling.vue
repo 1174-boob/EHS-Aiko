@@ -113,8 +113,11 @@
             @departmentChange="departmentChange"
             @corporationDeptChange="corporationDeptChange"
           ></CommonSearchItem>
+          <a-form-model-item class="flex" label="排班名称" prop="planName">
+            <a-input :maxLength="50" v-model="editForm.planName" placeholder="请输入排班名称"></a-input>
+          </a-form-model-item>
           <a-form-model-item class="flex" label="值班日期" prop="planDate">
-            <a-date-picker v-model="editForm.planDate" />
+            <a-range-picker v-model="editForm.planDate" change="dataChange" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" />
           </a-form-model-item>
           <a-form-model-item class="flex" label="班次" prop="classesIdT">
             <a-select v-model="editForm.classesIdT" placeholder="请选择">
@@ -132,44 +135,11 @@
             :treeType="'user'"
             :propKey="'dutyUserIdList'"
             :treeRoles="editFormRules"
-            :labelTitle="'值班人'"
+            :labelTitle="'值班员'"
             :label-col="labelCol"
             :wrapper-col="wrapperCol"
             @getTreeData="personThingOne"
             :checkedTreeNode="editForm.dutyUserIdList"
-            :deptTreeId="editForm.deptId"
-          />
-          <StaffOrDept
-            :treeType="'user'"
-            :propKey="'dutyGroupUserIdList'"
-            :treeRoles="editFormRules"
-            :labelTitle="'值班组组长'"
-            :label-col="labelCol"
-            :wrapper-col="wrapperCol"
-            @getTreeData="personThingTwo"
-            :checkedTreeNode="editForm.dutyGroupUserIdList"
-            :deptTreeId="editForm.deptId"
-          />
-          <StaffOrDept
-            :treeType="'user'"
-            :propKey="'dutyGroupEngineerUserIdList'"
-            :treeRoles="editFormRules"
-            :labelTitle="'值班组工程师'"
-            :label-col="labelCol"
-            :wrapper-col="wrapperCol"
-            @getTreeData="personThingThree"
-            :checkedTreeNode="editForm.dutyGroupEngineerUserIdList"
-            :deptTreeId="editForm.deptId"
-          />
-          <StaffOrDept
-            :treeType="'user'"
-            :propKey="'dutySectionChiefUserIdList'"
-            :treeRoles="editFormRules"
-            :labelTitle="'值班组科长'"
-            :label-col="labelCol"
-            :wrapper-col="wrapperCol"
-            @getTreeData="personThingFour"
-            :checkedTreeNode="editForm.dutySectionChiefUserIdList"
             :deptTreeId="editForm.deptId"
           />
           <a-form-model-item class="flex" label="备注">
@@ -379,20 +349,10 @@ export default {
           { required: true, message: "班次不能为空", trigger: "change" },
         ],
         dutyUserIdList: [
-          { required: true, message: "值班人不能为空", trigger: "change" },
+          { required: true, message: "值班员不能为空", trigger: "change" },
         ],
-        dutyGroupUserIdList: [
-          { required: true, message: "值班组组长不能为空", trigger: "change" },
-        ],
-        dutyGroupEngineerUserIdList: [
-          {
-            required: true,
-            message: "值班组工程师不能为空",
-            trigger: "change",
-          },
-        ],
-        dutySectionChiefUserIdList: [
-          { required: true, message: "值班组科长不能为空", trigger: "change" },
+        planName: [
+          { required: true, message: "排班名称不能为空", trigger: "change" },
         ],
       },
 
@@ -428,11 +388,21 @@ export default {
           },
         },
         {
-          title: "值班日期",
-          dataIndex: "planDate",
+          title: "排班名称",
+          dataIndex: "planName",
           width: 150,
           customRender: (text) => {
             return text ? text : "--";
+          },
+        },
+        {
+          title: "值班日期",
+          dataIndex: "planDate",
+          width: 150,
+          customRender: (text, record) => {
+            return record.planStartDate && record.planEndDate
+              ? record.planStartDate + "-" + record.planEndDate
+              : "--";
           },
         },
         {
@@ -446,73 +416,9 @@ export default {
           },
         },
         {
-          title: "值班人",
+          title: "值班员",
           dataIndex: "dutyUserNameList",
           width: 200,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "值班组组长",
-          dataIndex: "dutyGroupUserNameList",
-          width: 200,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "值班组工程师",
-          dataIndex: "dutyGroupEngineerUserNameList",
-          width: 200,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "值班组科长",
-          dataIndex: "dutySectionChiefUserNameList",
-          width: 200,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "备注",
-          dataIndex: "remark",
-          width: 150,
           customRender: (text) => {
             text = text ? text : "--";
             return (
@@ -637,15 +543,15 @@ export default {
     //判断是否能编辑
     isChange(record) {
       //比较时间 true展示编辑 false不可编辑
-      if (record.planDate) {
+      if (record.planStartDate) {
         let date = new Date();
         let year = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(
           -2
         )}-${("0" + date.getDate()).slice(-2)}`;
         let hour = `${date.getHours()}:${date.getMinutes()}`;
-        if (new Date(year) > new Date(record.planDate)) {
+        if (new Date(year) > new Date(record.planStartDate)) {
           return false;
-        } else if (new Date(year) - new Date(record.planDate) == 0) {
+        } else if (new Date(year) - new Date(record.planStartDate) == 0) {
           //年月日相等-在判断时间
           let hourA = hour.split(":");
           let hourB = record.startTime.split(":");
@@ -664,9 +570,6 @@ export default {
     //新增排班部门修改-清空人员组件
     departmentChange() {
       this.editForm.dutyUserIdList = [];
-      this.editForm.dutyGroupUserIdList = [];
-      this.editForm.dutyGroupEngineerUserIdList = [];
-      this.editForm.dutySectionChiefUserIdList = [];
     },
 
     //所属组织改变
@@ -706,32 +609,11 @@ export default {
       return listName;
     },
 
-    //值班人
+    //值班员
     personThingOne(data) {
       this.editForm.dutyUserIdList = data.treeIdList;
       let list = data.treeNameAndCodeList || [];
       this.editForm.dutyUserNameList = this.getName(list);
-    },
-
-    //值班组组长
-    personThingTwo(data) {
-      this.editForm.dutyGroupUserIdList = data.treeIdList;
-      let list = data.treeNameAndCodeList || [];
-      this.editForm.dutyGroupUserNameList = this.getName(list);
-    },
-
-    //值班组工程师
-    personThingThree(data) {
-      this.editForm.dutyGroupEngineerUserIdList = data.treeIdList;
-      let list = data.treeNameAndCodeList || [];
-      this.editForm.dutyGroupEngineerUserNameList = this.getName(list);
-    },
-
-    //值班组科长
-    personThingFour(data) {
-      this.editForm.dutySectionChiefUserIdList = data.treeIdList;
-      let list = data.treeNameAndCodeList || [];
-      this.editForm.dutySectionChiefUserNameList = this.getName(list);
     },
 
     // 批量导入成功
@@ -901,17 +783,14 @@ export default {
         corporationId: record.corporationId,
         deptId: record.deptId,
         deptName: record.deptName,
-        planDate: record.planDate,
         classesIdT: record.classesId,
         equipBrand: record.equipBrand,
         dutyUserIdList: record.dutyUserIdList,
-        dutyUserNameList: record.dutyUserIdList,
-        dutyGroupUserIdList: record.dutyGroupUserIdList,
-        dutyGroupUserNameList: record.dutyGroupUserNameList,
-        dutyGroupEngineerUserIdList: record.dutyGroupEngineerUserIdList,
-        dutyGroupEngineerUserNameList: record.dutyGroupEngineerUserNameList,
-        dutySectionChiefUserIdList: record.dutySectionChiefUserIdList,
-        dutySectionChiefUserNameList: record.dutySectionChiefUserNameList,
+        dutyUserNameList: record.dutyUserNameList,
+        planName: record.planName,
+        planStartDate: record.planStartDate,
+        planEndDate: record.planEndDate,
+        planDate: [record.planStartDate,record.planEndDate],
         remark: record.remark,
       };
       this.editVisible = true;
@@ -937,9 +816,8 @@ export default {
         ...this.editForm,
         classesId:this.editForm.classesIdT,
         classesIdT:undefined,
-        planDate: this.editForm.planDate
-          ? moment(this.editForm.planDate).format("YYYY-MM-DD")
-          : undefined,
+        planStartDate :this.editForm.planDate ? this.editForm.planDate[0] : "",
+        planEndDate : this.editForm.planDate ? this.editForm.planDate[1] : "",
         planId: this.editText == "编辑" ? this.scalId : undefined,
       };
       let PromiseFn = this.editText == "编辑" ? ChangeInfoList : AddInfoList;

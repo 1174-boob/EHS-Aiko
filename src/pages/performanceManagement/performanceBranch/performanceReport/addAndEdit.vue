@@ -482,7 +482,7 @@ export default {
             this.corporationVisible = false;
         },
         pageCancle () {
-            this.$router.push("/ehsGerneralManage/performanceManagement/performanceReport");
+            this.$router.push("/ehsGerneralManage/orgPerformanceManage/performanceBranchReport");
         },
         //提交指标
         pageSubmit: debounce(function (n) {

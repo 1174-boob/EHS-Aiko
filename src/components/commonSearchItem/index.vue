@@ -249,18 +249,18 @@ export default {
         }
         this.$set(this.CommonFormInline, "deptName", undefined);
       }
-      // if (this.hasDepartment || this.useDeptData) {
-      //   let treeData = [];
-      //   queryDeptTree({
-      //     deptId: deptId
-      //   }).then(res => {
-      //     treeData = res.data ? [res.data] : [];
-      //     this.deptData = treeData
-      //     this.$emit('corporationDeptChange', treeData);
-      //   }).catch(err => {console.log(err)
-      //     console.log('kkk');
-      //   })
-      // }
+      if (this.hasDepartment || this.useDeptData) {
+        let treeData = [];
+        queryDeptTree({
+          deptId: deptId
+        }).then(res => {
+          treeData = res.data ? [res.data] : [];
+          this.deptData = treeData
+          this.$emit('corporationDeptChange', treeData);
+        }).catch(err => {console.log(err)
+          console.log('kkk');
+        })
+      }
       // return this.$refs.organizeLazyTree.getOrganizeLazyTree(deptId, true)
       // .then(res => {
       //   if (rebackDept && (typeof(rebackDept) == "string" || (this.departmentMultiple && (rebackDept instanceof Array)))) {

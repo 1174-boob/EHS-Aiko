@@ -73,9 +73,6 @@
           <a-form-model-item v-if="tabKey==2" class="flex" label="部门" prop="deptId">
             <dept-tree :placeholder="'请选择部门'" v-model="hazardForm.deptId" :deptData="deptData" @change="(id,name)=>draftChange(id,name,'deptName')" allowClear></dept-tree>
           </a-form-model-item>
-          <a-form-model-item v-if="tabKey==2" class="flex" label="科室" prop="officeId">
-            <dept-tree :placeholder="'请选择科室'" v-model="hazardForm.officeId" :deptData="deptData" @change="(id,name)=>draftChange(id,name,'officeName')" allowClear></dept-tree>
-          </a-form-model-item>
           <a-form-model-item class="flex" label="岗位" prop="jobName" v-if="tabKey==2">
             <a-input v-model.trim="hazardForm.jobName" placeholder="该岗位输入后跟部门关联" />
           </a-form-model-item>
@@ -319,12 +316,6 @@ export default {
         //   width: 200,
         // },
         {
-          title: "科室",
-          dataIndex: "officeName",
-          key: "officeName",
-          width: 200,
-        },
-        {
           title: "岗位",
           dataIndex: "jobName",
           key: "jobName",
@@ -382,9 +373,6 @@ export default {
           { required: true, message: '不能为空', trigger: ['blur', 'change'] },
         ],
         deptId: [
-          { required: true, message: '不能为空', trigger: ['blur', 'change'] },
-        ],
-        officeId: [
           { required: true, message: '不能为空', trigger: ['blur', 'change'] },
         ],
         jobName: [
@@ -448,12 +436,9 @@ export default {
   mounted() {
   },
   methods: {
-    corporationChange(corporationId, deptId, officeId) {
+    corporationChange(corporationId, deptId) {
       if (this.tabKey == 2) {
-        console.log(corporationId, deptId, officeId)
-        if (!officeId) {
-          this.$set(this.hazardForm, "officeId", undefined);
-        }
+        console.log(corporationId, deptId)
       }
     },
     // 获取组织下所有部门

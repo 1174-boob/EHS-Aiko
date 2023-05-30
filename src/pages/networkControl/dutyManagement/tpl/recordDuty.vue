@@ -72,12 +72,12 @@
             v-if="!record.handPickStatus"
             >编辑</span
           >
-          <span
+          <!-- <span
             class="color-0067cc cursor-pointer m-r-15"
             @click="actionHandle(record, 'handOver')"
             v-if="!record.handPickStatus"
             >交接班</span
-          >
+          > -->
           <span
             class="color-0067cc cursor-pointer m-r-15"
             @click="actionHandle(record, 'look')"
@@ -124,9 +124,9 @@ export default {
             return text
               ? this.getMappingValue(
                   this.getCommonAddOrgnizeListAll,
-                  "id",
+                  "orgId",
                   text
-                ).orgAbbrName
+                ).orgName
               : "--";
           },
         },
@@ -139,11 +139,35 @@ export default {
           },
         },
         {
+          title: "排班名称",
+          dataIndex: "planName",
+          width: 150,
+          customRender: (text) => {
+            return text ? text : "--";
+          },
+        },
+        {
           title: "班次",
           dataIndex: "classesName",
           width: 100,
           customRender: (text) => {
             return text ? text : "--";
+          },
+        },
+        {
+          title: "值班员",
+          dataIndex: "dutyUserNameList",
+          width: 200,
+          customRender: (text) => {
+            text = text ? text : "--";
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
           },
         },
         {
@@ -168,151 +192,6 @@ export default {
                 <span>{{ text }}</span>
               </a-popover>
             );
-          },
-        },
-        {
-          title: "交班人",
-          dataIndex: "handUserNames",
-          width: 150,
-          customRender: (text, record) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "交班组组长",
-          dataIndex: "handGroupUserNames",
-          width: 150,
-          customRender: (text, record) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "交班组工程师",
-          dataIndex: "handGroupEngineerUserNames",
-          width: 150,
-          customRender: (text, record) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "交班组科长",
-          dataIndex: "handSectionChiefUserNames",
-          width: 150,
-          customRender: (text, record) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "接班人",
-          dataIndex: "pickUserNames",
-          width: 150,
-          customRender: (text, record) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "接班组组长",
-          dataIndex: "pickGroupUserNames",
-          width: 150,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "接班组工程师",
-          dataIndex: "pickGroupEngineerUserNames",
-          width: 150,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-        {
-          title: "接班组科长",
-          dataIndex: "pickSectionChiefUserNames",
-          width: 150,
-          customRender: (text) => {
-            text = text ? text : "--";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
-
-        {
-          title: "交接班状态",
-          dataIndex: "handPickStatus",
-          width: 150,
-          customRender: (text) => {
-            return text == null ? "--" : text ? "已交班" : "未交班";
-          },
-        },
-        {
-          title: "交接班时间",
-          dataIndex: "handPickClassTime",
-          width: 150,
-          customRender: (text) => {
-            return text ? text : "--";
           },
         },
         {
