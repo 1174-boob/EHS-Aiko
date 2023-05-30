@@ -275,6 +275,10 @@ export default {
     };
   },
   created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      this.deptIdList = adminDeptId ? [adminDeptId] : [];
+    }
     this.checkList = this.getChemicalDictList('checkType')
     this.troubleList = this.getChemicalDictList('httype')
     this.troubleClassList = this.getChemicalDictList('htlevel')
