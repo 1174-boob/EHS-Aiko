@@ -2,6 +2,7 @@
   <div class="clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
+        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline"></CommonSearchItem>
         <a-form-model-item label="区域">
           <a-input v-model="formInline.area" placeholder="请输入区域"></a-input>
         </a-form-model-item>
@@ -137,11 +138,11 @@ export default {
           dataIndex: 'equipBrand',
           width: 150
         },
-        {
-          title: '状态',
-          width: 150,
-          scopedSlots: { customRender: 'status' },
-        },
+        // {
+        //   title: '状态',
+        //   width: 150,
+        //   scopedSlots: { customRender: 'status' },
+        // },
         {
           title: '预约测试时间',
           dataIndex: 'createTime',
@@ -164,6 +165,7 @@ export default {
     }
   },
   created() {
+    this.columns.splice(0, 0, this.addCommonColumnItem(150));
     this.getDataList();
     console.log(dictionary('faultStatus'),'...equipTypeList');
   },

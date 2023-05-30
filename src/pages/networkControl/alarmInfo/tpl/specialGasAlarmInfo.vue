@@ -461,7 +461,7 @@ export default {
       };
       const res = await DownloadGasProcess(para);
       if (res) {
-        const name = "岗位管理审批导出";
+        const name = "特气报警信息导出";   
         const blob = new Blob([res], {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
