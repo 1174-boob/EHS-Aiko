@@ -405,9 +405,9 @@ export default {
             return text
               ? this.getMappingValue(
                   this.getCommonAddOrgnizeListAll,
-                  "id",
+                  "orgId",
                   text
-                ).orgAbbrName
+                ).orgName
               : "--";
           },
         },
@@ -543,9 +543,9 @@ export default {
             return text
               ? this.getMappingValue(
                   this.getCommonAddOrgnizeListAll,
-                  "id",
+                  "orgId",
                   text
-                ).orgAbbrName
+                ).orgName
               : "--";
           },
         },
