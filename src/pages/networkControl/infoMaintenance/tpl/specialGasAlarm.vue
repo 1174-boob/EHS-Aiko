@@ -505,6 +505,10 @@ export default {
 
     // 预警测试
     earlyWarningTest() {
+      if(this.selectedRowKeys.length == 0){
+        this.$antMessage.warning('请至少选择一条数据')
+        return
+      }
       this.earlyWarningTestVisible = true;
     },
     earlyWarningTestCancle() {
