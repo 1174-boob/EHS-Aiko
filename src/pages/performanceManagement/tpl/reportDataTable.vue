@@ -223,7 +223,7 @@ export default {
         this.level = "B档";
         return "B档";
       } else {
-        this.reportLevel = "C档 存在否决性指标";
+        this.reportLevel = "C档";
         this.level = "C档";
         return "C档";
       }
