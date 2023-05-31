@@ -20,6 +20,9 @@
         <a-form-model-item label="值班日期">
           <a-date-picker v-model="formInline.dutyDate" format="YYYY-MM-DD" />
         </a-form-model-item>
+        <a-form-model-item label="值班名称">
+          <a-input v-model="formInline.planName" placeholder="请输入值班名称"/>
+        </a-form-model-item>
         <a-form-model-item label="值班时段">
           <el-time-picker
             is-range
@@ -117,6 +120,14 @@ export default {
       },
       columns: [
         {
+          title: "编号",
+          dataIndex: "num",
+          width: 150,
+          customRender: (text) => {
+            return text ? text : "--";
+          },
+        },
+        {
           title: "所属组织",
           dataIndex: "corporationId",
           width: 150,
@@ -139,7 +150,7 @@ export default {
           },
         },
         {
-          title: "排班名称",
+          title: "值班名称",
           dataIndex: "planName",
           width: 150,
           customRender: (text) => {
@@ -335,6 +346,7 @@ export default {
           ? this.formInline.dutyDate.format("YYYY-MM-DD")
           : undefined,
         timeArr: undefined,
+        planName: undefined,
       };
       const res = await ExoprCortExel(params);
       // console.log(res, "..res");
