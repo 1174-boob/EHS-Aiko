@@ -111,7 +111,6 @@ export default {
     // 新增
     addDataFn() {
       let apiData = { ...this.formModel }
-      apiData.corporationName = this.getMappingValue(this.corporationList, 'corporationId', this.formModel.corporationId).orgAbbrName
       return addPpeDepositoryApi(apiData)
         .then(res => {
           this.$antMessage.success(`新增成功`);
@@ -123,8 +122,6 @@ export default {
     // 编辑
     changeDataFn() {
       let apiData = { ...this.formModel }
-      let orgAbbrNameObj = this.corporationList.find(item => item.corporationId == this.formModel.corporationId)
-      apiData.corporationName = orgAbbrNameObj ? orgAbbrNameObj.orgAbbrName : ''
       return changePpeDepositoryApi(apiData)
         .then((res) => {
           this.$antMessage.success(`编辑成功`);

@@ -68,7 +68,7 @@
               <a-input v-model.trim="healthForm.age" placeholder="根据出生日期带出" disabled/>
             </a-form-model-item>
             <a-form-model-item label="入司时间" prop="joyCompanyTime" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-date-picker v-model="healthForm.joyCompanyTime" placeholder="请选择入司时间"/>
+              <a-date-picker v-model.trim="healthForm.joyCompanyTime" placeholder="请选择入司时间"/>
             </a-form-model-item>
             <a-form-model-item label="婚姻状况" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select v-model="healthForm.maritalStatus" placeholder="请选择婚姻状况" allowClear>
@@ -113,7 +113,7 @@
               <CommonTable :noPaging="true">
                 <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="exposureList" :rowKey="(record, index)=>{return index}" :pagination="false">
                   <div slot="time" slot-scope="record">
-                    {{record.startTime}} 至 {{record.endTime}}
+                    {{record.startTime.join('-')}} 至 {{record.endTime.join('-')}}
                   </div>
                   <div slot="action" slot-scope="text,record,index">
                     <span class="color-0067cc cursor-pointer m-r-15" @click="occupationalHistoryEdit(record,index)">编辑</span>
@@ -378,9 +378,9 @@ export default {
         birthTime: [
           { required: true, validator: this.birthTimeValidator, trigger: ['blur', 'change'] },
         ],
-        joyCompanyTime: [
-          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
-        ],
+        // joyCompanyTime: [
+        //   { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        // ],
         maritalStatus: [
           { required: true, message:"不能为空", trigger: ['blur', 'change'] },
         ],
@@ -761,8 +761,10 @@ export default {
         const data = res.data;
         this.healthForm = data;
         this.healthForm.nativePlace = this.healthForm.nativePlace ? this.healthForm.nativePlace.split(",") : null;
-        this.healthForm.joyCompanyTime = data.joyCompanyTime ? moment(data.joyCompanyTime) : null;
+        this.healthForm.joyCompanyTime = data.joyCompanyTime ? moment(this.getBirth(data.joyCompanyTime)) : null;
         this.healthForm.birthTime = data.birthTime ? moment(data.birthTime) : null;
+        console.log(this.healthForm.birthTime)
+        console.log(this.healthForm.joyCompanyTime)
         if(data.photo) {
           this.getPortraitUrlt(data.photo);
         }
@@ -1397,7 +1399,7 @@ export default {
       } else {
         this.healthForm.age = "";
       }
-      formValidator.formItemValidate(this, 'birthTime', 'healthForm')
+      // formValidator.formItemValidate(this, 'birthTime', 'healthForm')
     }
   },
   beforeDestroy() {

@@ -45,7 +45,8 @@ const firstFlowMinxin = {
         getUserNodeInfo(infoStatus) {
             let para = {
                 node: infoStatus,
-                corporationId:this.iFrom.corporationId || undefined
+                corporationId:this.iFrom.corporationId || undefined,
+                userId: JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
             }
             return msdsApproveNodeUser(para)
         },

@@ -4,7 +4,7 @@ import serviceNameList from '@/config/default/service.config.js'
 // 平台-组织架构
 export const getConsoleOrganizeList = params => post(`${serviceNameList.customer}/api/lowpower/dept`, params);
 // 平台-组织架构-一级一级的查
-export const getConsoleOrganizeLazyLoadListApi = params => post(`${serviceNameList.customer}/api/lowpower/dept/step`, params);
+export const getConsoleOrganizeLazyLoadListApi = params => get(`${serviceNameList.customer}/ehs-customer/api/enterprise/dept/tree`, params);
 // 平台-组织架构-根据id获取节点
 export const getEmersionTreeDataApi = params => post(`${serviceNameList.customer}/api/lowpower/dept/upList`, params);
 

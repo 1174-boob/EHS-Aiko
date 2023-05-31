@@ -259,10 +259,10 @@ export default {
       }) || {}).dictValue
     },
     canSelectDate() {
-      return this.$route.meta && this.$route.meta.isResolve && this.infoStatus === 'POSITION_011'
+      return this.$route.meta && this.$route.meta.isResolve && (this.infoStatus.indexOf('002') > -1)
     },
     isShowDate() {
-      return this.infoStatus === 'POSITION_011' || this.status === 'end'
+      return (this.infoStatus.indexOf('002') > -1) || this.status === 'end'
     },
     showRightLog() {
       return this.isResolve || this.$route.query.type === 'approveView'

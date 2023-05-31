@@ -106,7 +106,7 @@ export default {
       let apiData = deptId ? { deptId } : { deptId: '-1' }
       return getConsoleOrganizeLazyLoadListApi(apiData)
         .then(res => {
-          const newTreeData = res.data || []
+          const newTreeData = [res.data] || []
           if (isClear) {
             this.consoleOrganizeTreeList = newTreeData
           } else {

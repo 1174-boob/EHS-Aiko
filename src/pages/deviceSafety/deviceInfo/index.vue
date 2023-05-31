@@ -166,7 +166,12 @@
             <a-input v-model="addForm.equipmentName" placeholder="请输入设备名称" />
           </a-form-model-item>
           <a-form-model-item class="flex" label="设备类型" prop="equipmentType">
-            <a-input v-model="addForm.equipmentType" placeholder="请输入设备类型" />
+            <!-- <a-input v-model="addForm.equipmentType" placeholder="请输入设备类型" /> -->
+            <a-select v-model="addForm.equipmentType" placeholder="请选择" allowClear>
+              <a-select-option v-for="item in deviceInfo" :key="item.dictValue" :value="item.dictValue">
+                {{ item.dictLabel }}
+              </a-select-option>
+            </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="区域" prop="equipmentRegion">
             <a-input v-model="addForm.equipmentRegion" placeholder="请输入区域" />
@@ -505,7 +510,15 @@ export default {
     };
   },
   components: { StaffOrDept, UploadBtnStyle },
-  computed: {},
+  computed: {
+    deviceInfo() { //从字典组里获取化学品名称数据
+      const dict = this.$store.state.setting.dictTypeData;
+      const deviceInfo = dict.find(item => {
+        return item.dictType == 'equipment_type';
+      });
+      return deviceInfo.dictItem;
+    },
+  },
   created() {
     this.setRouterCode("deviceInfo");
     this.initConfigPage();
