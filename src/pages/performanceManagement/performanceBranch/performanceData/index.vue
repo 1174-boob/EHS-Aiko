@@ -85,7 +85,7 @@ export default {
         {
           title: '部门',
           dataIndex: 'deptName',
-          width: 100,
+          width: 150,
         },
         {
           title: '年份',
