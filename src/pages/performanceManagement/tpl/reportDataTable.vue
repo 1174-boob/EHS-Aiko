@@ -203,7 +203,7 @@ export default {
     getReportLevel(total) { 
       this.score = total;  
       for (let i = 0; i < this.reportData.length; i++) {
-        if (this.reportData[i].isNoIndex == 2 && (this.reportData[i].sitesNum && this.reportData[i].sitesNum > 0)) {
+        if (this.reportData[i].isNoIndex == 2 && (this.reportData[i].sitesNum && this.reportData[i].sitesNum > 0) || this.reportData[i].projectId == 1) {
           this.reportLevel = "C档 存在否决性指标";
           this.level = "C档";
           return "C档";
