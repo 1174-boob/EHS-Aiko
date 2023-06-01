@@ -8,7 +8,7 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <a-form-model-item label="选择分类">
           <a-select
-            v-model="formInline.sujectId"
+            v-model="formInline.subjectId"
             placeholder="请选择"
             allowClear
           >
@@ -113,7 +113,7 @@ export default {
       productId: null,
       formInline: {
         topicType: undefined,
-        sujectId: undefined,
+        subjectId: undefined,
       },
       formInline11: {
         subjectId: undefined,

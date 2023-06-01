@@ -153,7 +153,7 @@
           <SearchTerm>
             <a-form-model layout="inline" :model="formInline" :colon="false">
               <a-form-model-item label="选择科目">
-                <a-select v-model="formInline.sujectId" placeholder="请选择" allowClear>
+                <a-select v-model="formInline.subjectId" placeholder="请选择" allowClear>
                   <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -256,7 +256,7 @@ export default {
       accessScore: '', //及格分数
       formInline: {
         // topicType: undefined,
-        sujectId: undefined,
+        subjectId: undefined,
       },
       virtual: {
         radio: undefined,
@@ -335,7 +335,7 @@ export default {
     getThreeBigCount() {
       // console.log(this.formInline);
       // let sessObj = JSON.parse(sessionStorage.getItem("examinaObj_xt"));
-      const subjectId = this.formInline.sujectId;
+      const subjectId = this.formInline.subjectId;
       GetThreeBigCount({ subjectId }).then(
         (res) => {
           this.bigcount = res.data;
@@ -411,7 +411,7 @@ export default {
             singleNum: undefined, //单选
             multipleNum: undefined, //多选
             judgeNum: undefined, //判断
-            sujectId: undefined, //科目
+            subjectId: undefined, //科目
           };
         })
         .catch((err) => {
@@ -436,8 +436,6 @@ export default {
         this.list.length
       ) {
         if (this.scoreBlur()) {
-          let productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
-            .productSets.productId;
           let obj = this.dealWithData();
           let sessObj = JSON.parse(sessionStorage.getItem("examinaObj_xt"));
           // let clickQuestionsObj = this.clickQuestions == 1 ? {} : this.dictForm;
@@ -453,7 +451,6 @@ export default {
             ...clickQuestionsObj,
             ...sessObj.firstStep,
             questionList: obj,
-            productId,
             totalscore: this.allscore,
             topicNum: this.alltotal,
             type: this.clickQuestions == 1 ? 0 : 1,

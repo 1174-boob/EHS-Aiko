@@ -8,7 +8,7 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <a-form-model-item label="选择科目">
           <a-select
-            v-model="formInline.sujectId"
+            v-model="formInline.subjectId"
             placeholder="请选择"
             allowClear
           >
@@ -104,7 +104,7 @@ export default {
       ],
       formInline: {
         topicType: undefined,
-        sujectId: undefined,
+        subjectId: undefined,
       },
       sujectList: [], //科目列表
     };

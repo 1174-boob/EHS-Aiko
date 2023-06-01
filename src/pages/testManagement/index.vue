@@ -138,7 +138,6 @@ export default {
         },
       ],
       dictList: [],
-      productId: "",
       sujectList: [
         //试卷分类
         { id: "1", name: "已发布" },
@@ -166,9 +165,6 @@ export default {
   },
   methods: {
     initConfigPage(){
-      this.productId = JSON.parse(
-        sessionStorage.getItem("zconsole_userInfo")
-      ).productSets.productId;
       sessionStorage.removeItem("savEexamData");
       sessionStorage.removeItem("examPathFrom");
       sessionStorage.removeItem("pathFrom");
@@ -299,7 +295,6 @@ export default {
         ...this.formInline,
         pageNo: this.page.pageNo,
         pageSize: this.page.pageSize,
-        // productId: this.productId,
       };
       this.tableSpinning = true
       TestListPage(params)

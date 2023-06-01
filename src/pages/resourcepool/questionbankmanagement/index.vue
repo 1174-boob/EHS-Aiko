@@ -15,7 +15,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="题目分类">
-          <a-select v-model="formInline.sujectId" placeholder="请选择" allowClear>
+          <a-select v-model="formInline.subjectId" placeholder="请选择" allowClear>
             <a-select-option v-for="item in searchSubject" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -78,12 +78,12 @@
           <a-form-model-item label="第三步" prop="file">
             <div class="top_div_marginDiv">选择组织</div>
             <a-select v-model="dictForm.corporationId" placeholder="请选择组织" @change="corporationChange">
-              <a-select-option v-for="item of getCommonAddOrgnizeList" :key="item.id" :value="item.id">{{item.orgAbbrName}}</a-select-option>
+              <a-select-option v-for="item of getCommonAddOrgnizeListAll" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item label="第四步" prop="subjectId">
             <div class="top_div_marginDiv">选择题目分类</div>
-            <a-select v-model="dictForm.sujectId" placeholder="请选择" allowClear>
+            <a-select v-model="dictForm.subjectId" placeholder="请选择" allowClear>
               <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-model-item>
@@ -136,7 +136,7 @@ export default {
       dictFormRules: {},
       dictForm: {
         file: [],
-        sujectId: undefined,
+        subjectId: undefined,
       },
       itemForm: {
         dictValue: "", //字典标签
@@ -151,7 +151,7 @@ export default {
       formInline: {
         topicTitle: undefined,
         topicType: undefined,
-        sujectId: undefined,
+        subjectId: undefined,
       },
       columns: [
         {
@@ -224,8 +224,8 @@ export default {
       }
     },
     corporationChange(corporationId, deptId) {
-      this.$set(this.dictForm, "sujectId", undefined);
-      this.$set(this.dictForm, "centerId", this.getMappingValue(this.getCommonAddOrgnizeList, "id", corporationId).centerId);
+      this.$set(this.dictForm, "subjectId", undefined);
+      this.$set(this.dictForm, "centerId", this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", corporationId).centerId);
       this.sujectList = [];
       if (corporationId) {
         SubjectsDataList({corporationId}).then((res) => {
@@ -331,7 +331,7 @@ export default {
     addDict() {
       this.dictForm = {
         file: [],
-        sujectId: undefined,
+        subjectId: undefined,
       },
       this.visible = true;
     },
@@ -346,15 +346,14 @@ export default {
       if (!this.dictForm.file.length) {
         return this.$antMessage.info("请先上传文件");
       }
-      if (!this.dictForm.sujectId) {
+      if (!this.dictForm.subjectId) {
         return this.$antMessage.info("请先选择题目分类");
       }
       this.dictLoading = true;
       let fromData = new FormData();
       fromData.append("file", this.dictForm.file[0]);
-      fromData.append("centerId", this.dictForm.centerId);
       fromData.append("corporationId", this.dictForm.corporationId);
-      fromData.append("subjectId", this.dictForm.sujectId);
+      fromData.append("subjectId", this.dictForm.subjectId);
       post(
         `${serviceNameList.course}/api/course/topic/upload`,
         fromData
@@ -401,7 +400,7 @@ export default {
         this.formInline = {
           topicTitle: "",
           topicType: undefined,
-          sujectId: undefined,
+          subjectId: undefined,
         };
         this.getTabList();
       },

@@ -70,10 +70,8 @@ export default {
   methods: {
     //获取详情
     getExaminationDetail() {
-      let productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
-        .productSets.productId;
       let paperId = this.$route.query.paperId;
-      LookQuestionlDataList({ productId, paperId })
+      LookQuestionlDataList({ paperId })
         .then((res) => {
           this.list = res.data.questionList;
           this.quesionObj = res.data;

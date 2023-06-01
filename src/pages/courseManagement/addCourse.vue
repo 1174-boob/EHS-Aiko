@@ -348,7 +348,6 @@ export default {
       },
       testSearchForm: {},
       chooseTestMsg: {},
-      productId: "",
       // 上架
       groundingForm: {
         status: 1
@@ -375,7 +374,6 @@ export default {
   },
   async created() {
     this.fileTypeList = dictionary("fileType");
-    this.productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).productSets.productId;
     
     if (this.$route.params.dataMsg) {
       this.dataMsg = this.$route.params.dataMsg;
@@ -496,7 +494,6 @@ export default {
     async getLecturerList(corporationId) {
       try {
         let result1 = await GetLecturerAllList({
-          productId: this.productId,
           corporationId: corporationId
         })
         this.lecturerList = result1.data || [];
@@ -723,7 +720,6 @@ export default {
         ...this.testSearchForm,
         pageNo: this.page.pageNo,
         pageSize: this.page.pageSize,
-        productId: this.productId,
         corporationId: this.basicInfoForm.corporationId
       };
       GetQuestionDataList(params)

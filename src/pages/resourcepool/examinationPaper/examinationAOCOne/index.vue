@@ -124,9 +124,7 @@ export default {
     },
     //回显
     detailList() {
-      let productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
-        .productSets.productId;
-      LookQuestionlDataList({ paperId: this.paperId, productId }).then(
+      LookQuestionlDataList({ paperId: this.paperId }).then(
         (res) => {
           this.policyForm = {
             name: res.data.name,

@@ -265,7 +265,7 @@
     <!-- 选择部门 -->
     <CommonModal
       class="table-modal-large"
-      title="选择组织"
+      title="选择部门"
       :visible="corporationVisible"
       :cancelFn="corporationCancle"
     >
