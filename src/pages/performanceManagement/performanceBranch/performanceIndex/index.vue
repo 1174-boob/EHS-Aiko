@@ -28,7 +28,7 @@
         :rowKey="(record, index)=>{return record._id ? record._id : record.indexId}"
         :pagination="false"
       >
-        <div slot="indexType" slot-scope="record">{{getMappingValue(indexTypeList, "key", record.indexType).value}}</div>
+        <!-- <div slot="indexType" slot-scope="record">{{getMappingValue(indexTypeList, "key", record.indexType).value}}</div> -->
         <div slot="deductPoints" slot-scope="record">
           <p v-for="(i,index) in record" :key="index">{{i}}</p>
         </div>
@@ -59,7 +59,7 @@
         >
           <!-- 指标名称 -->
           <a-form-model-item class="flex" label="指标名称" prop="indexInfo">
-            <a-input v-model="editForm.indexInfo" :disabled="editForm.indexType == 1" :maxLength="100" placeholder="请输入指标名称"></a-input>
+            <a-input v-model="editForm.indexInfo" :maxLength="100" placeholder="请输入指标名称"></a-input>
           </a-form-model-item>
 
           <!-- 风险分值 -->
@@ -84,13 +84,13 @@
               <!-- 固定指标 || 否决性 -->
               <vxe-column field="deductPoints" title="扣分标准" min-width="200" :edit-render="{autofocus: '.vxe-input--inner', placeholder: '请点击输入扣分标准'}">
                 <template #edit="{ row }">
-                  <vxe-input :disabled="editForm.rejectIndex == 1 || editForm.indexType == 1" maxlength="100" v-model="row.deductPoints" type="text" placeholder="请点击输入扣分标准" allowClear></vxe-input>
+                  <vxe-input :disabled="editForm.rejectIndex == 1" maxlength="100" v-model="row.deductPoints" type="text" placeholder="请点击输入扣分标准" allowClear></vxe-input>
                 </template>
               </vxe-column>
               <!-- 固定指标  -->
               <vxe-column field="unit" title="指标单位" width="180" :edit-render="{autofocus: '.vxe-input--inner', placeholder: '请点击输入指标单位'}">
                 <template #edit="{ row }">
-                  <vxe-input v-model="row.unit" :disabled="editForm.indexType == 1" type="text" maxlength="10" placeholder="请点击输入指标单位" allowClear></vxe-input>
+                  <vxe-input v-model="row.unit" type="text" maxlength="10" placeholder="请点击输入指标单位" allowClear></vxe-input>
                 </template>
               </vxe-column>
               <!-- 否决性时为空且不可编辑 -->
@@ -208,11 +208,6 @@ export default {
       },
 
       columns: [
-        {
-          title: '指标类型',
-          scopedSlots: { customRender: 'indexType' },
-          width: 100,
-        },
         {
           title: '指标名称',
           dataIndex: 'indexInfo',
