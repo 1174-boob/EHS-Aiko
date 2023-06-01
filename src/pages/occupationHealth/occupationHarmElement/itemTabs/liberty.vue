@@ -266,12 +266,12 @@ export default {
                         //       width: 120,
                         // },
 
-                        {
-                              title: "科室",
-                              dataIndex: "officeName",
-                              key: "officeName",
-                              width: 120,
-                        },
+                        // {
+                        //       title: "科室",
+                        //       dataIndex: "officeName",
+                        //       key: "officeName",
+                        //       width: 120,
+                        // },
                         {
                               title: "岗位",
                               dataIndex: "jobName",

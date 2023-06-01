@@ -782,7 +782,7 @@ export const postExport = params => postExcel(`${serviceNameList.health}/api/ehs
 // 流程结束
 export const postEndEvent = params => post(`${serviceNameList.health}/api/ehs/health/post/endEvent`, params);
 // 看是不是安全员
-export const getIsSafety = params => post(`${serviceNameList.health}/api/ehs/health/post/isSafety`, params);
+export const getIsSafety = params => post(`${serviceNameList.customer}/api/ehs/process/node/isSafety`, params);
 // 获取所有危险岗位
 export const getDangerousPostAll = params => post(`${serviceNameList.health}/api/ehs/dangerous/station/all`, params);
 // 删除变岗申请

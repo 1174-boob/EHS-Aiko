@@ -22,9 +22,9 @@
               <li>
                 电话：{{healthForm.phone ? healthForm.phone : '--'}}
               </li>
-              <li>
+              <!-- <li>
                 邮箱：{{healthForm.email ? healthForm.email : '--'}}
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
@@ -54,7 +54,7 @@
           <li>
             <div class="info">
               <div class="title">出生年月：</div>
-              <div class="detail">{{healthForm.birthTime ? healthForm.birthTime : '--'}}</div>
+              <div class="detail">{{healthForm.birthTime ? healthForm.birthTime.join('-') : '--'}}</div>
             </div>
             <div class="info">
               <div class="title">文化程度：</div>
@@ -64,7 +64,7 @@
           <li>
             <div class="info">
               <div class="title">入司时间：</div>
-              <div class="detail">{{healthForm.joyCompanyTime ? healthForm.joyCompanyTime : '--'}}</div>
+              <div class="detail">{{healthForm.joyCompanyTime ? healthForm.joyCompanyTime.join('-') : '--'}}</div>
             </div>
             <div class="info">
               <div class="title">从业年数：</div>
@@ -130,6 +130,7 @@
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import StandingTable from "./standingTable.vue";
 import dictionary from '@/utils/dictionary';
+import defUrl from "@/assets/img/default.png";
 import {
   healthUserDetail,
   getPortraitUrlt,
@@ -205,8 +206,11 @@ export default {
       healthUserDetail({id}).then(res => {
         const data = res.data;
         this.healthForm = data;
+        console.log(data, 'data')
         if(data.photo) {
           this.getPortraitUrlt(data.photo);
+        } else {
+          this.avatarUrl = defUrl;
         }
       }).catch(err => {
         console.log(err);

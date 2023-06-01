@@ -239,7 +239,7 @@ export default {
         }
       }
       let list = this.notTablePage ? this.getCommonAddOrgnizeList : this.commonOrgnizeList;
-      let deptId = this.getMappingValue(list, "id", val).deptId;
+      let deptId = this.getMappingValue(list, "orgId", val).deptId;
       if (!((rebackDept && typeof(rebackDept) == "string") || (this.departmentMultiple && (rebackDept instanceof Array)))) { // 回显的时候不需要触发
         this.$emit('corporationChange', val, deptId);
         if (this.departmentMultiple) {

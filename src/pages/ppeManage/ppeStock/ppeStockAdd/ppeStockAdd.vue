@@ -35,11 +35,11 @@
                     :treeRoles="iRules"
                     :propKey="'principalUserId'"
                     :checkedTreeNode="checkedTreeNode"
-                    :onPreview="!deptTreeId"
                     :treePlaceholder="deptTreeId?'请选择' : '请先选择所属组织'"
                     :deptTreeId="deptTreeId"
                     @getTreeData="getTreeData"
                   ></StaffOrDept>
+                    <!-- :onPreview="!deptTreeId" -->
                 </a-col>
               </a-row>
               <a-row>
