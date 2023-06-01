@@ -1,5 +1,5 @@
 <template>
-  <CommonModal :title="'巡检记录' + modelTitle" :visible="inspectionRecordModelShow" :cancelFn="closeModel">
+  <CommonModal :title="modelTitle + '消防主机日检查情况记录'" :visible="inspectionRecordModelShow" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-model-item ref="problemDescription" label="问题描述" prop="problemDescription">

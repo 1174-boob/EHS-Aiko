@@ -31,8 +31,8 @@
                       placeholder="请输入起草人部门"
                       tree-default-expand-all
                       @change="applicantDeptChange"
-                    > -->
-                    </a-tree-select>
+                    >
+                    </a-tree-select> -->
                   </a-form-model-item>
                   <a-form-model-item ref="accidentDate" label="事故日期" prop="accidentDate">
                     <a-date-picker :disabled="disabled" style="width: 100%;" v-model="iForm.accidentDate" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" placeholder="请选择事故日期" />
@@ -63,8 +63,8 @@
                       tree-default-expand-all
                       @change="deptChange"
                       multiple
-                    > -->
-                    </a-tree-select>
+                    >
+                    </a-tree-select> -->
                   </a-form-model-item>
                   <a-form-model-item ref="accidentLevelHurt" label="人员伤害" prop="accidentLevelHurt">
                     <a-select :disabled="disabled" v-model="iForm.accidentLevelHurt" placeholder="请选择人员伤害">

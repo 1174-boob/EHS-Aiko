@@ -772,7 +772,7 @@ export const postPageList = params => post(`${serviceNameList.health}/api/ehs/he
 // 新增
 export const postSave = params => post(`${serviceNameList.health}/api/ehs/health/post/save`, params);
 // 查询下级节点审批人
-export const selectNodeUser = params => post(`${serviceNameList.health}/api/ehs/health/post/selectNodeUser`, params);
+export const selectNodeUser = params => post(`${serviceNameList.customer}/api/ehs/process/node/selectNodeUser`, params);
 // 编辑
 export const postUpdate = params => post(`${serviceNameList.health}/api/ehs/health/post/update`, params);
 // 详情

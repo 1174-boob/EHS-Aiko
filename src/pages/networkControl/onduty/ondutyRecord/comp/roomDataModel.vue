@@ -1,5 +1,5 @@
 <template>
-  <CommonModal :title="'事件记录' + modelTitle" :visible="inspectionRecordModelShow" :cancelFn="closeModel">
+  <CommonModal :title="modelTitle + '控制室内其他消防系统运行情况'" :visible="inspectionRecordModelShow" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-model-item ref="problemDescription" label="问题描述" prop="problemDescription">
@@ -73,7 +73,7 @@ export default {
       }
       this.handleLoading()
       let methodsName = this.formModelOldData.historyId ? 'editInspectionRecordApi' : 'addInspectionRecordApi'
-      let apiData = { ...this.formModel, type: '2', dutyId: this.dutyId }   //1-巡检记录；2-事件记录
+      let apiData = { ...this.formModel, type: '1', dutyId: this.dutyId }   //1-巡检记录；2-事件记录
       this[methodsName](apiData)
         .then(res => {
           // console.log('确定', this.formModel)
@@ -85,7 +85,7 @@ export default {
             if (res.data) {
               let formModel = cloneDeep(this.formModel)
               formModel.historyId = res.data
-              formModel.type = '2'
+              formModel.type = '1'
               moduleListNew.unshift(formModel)
             } else {
               this.$antMessage.warn(`新增失败`)

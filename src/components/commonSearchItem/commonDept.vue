@@ -211,7 +211,7 @@ export default {
       }
       if (this.hasDepartment) { // 有部门
         // // 请求该组织下全量部门接口
-        // this.getDeptTree(deptId);
+        this.getDeptTree(deptId);
       }
     },
     // 数据回显

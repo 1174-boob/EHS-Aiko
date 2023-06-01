@@ -34,7 +34,7 @@
               </p>
               <p>
                 <span>入司时间：</span>
-                <span>{{staffMsg.joyCompanyTime}}</span>
+                <span>{{staffMsg.joyCompanyTime ? staffMsg.joyCompanyTime.join('-') : ''}}</span>
               </p>
               <p>
                 <span>文化程度：</span>
@@ -56,7 +56,7 @@
               </p>
               <p>
                 <span>出生年月：</span>
-                <span>{{staffMsg.birthTime}}</span>
+                <span>{{staffMsg.birthTime ? staffMsg.birthTime.join('-') : ''}}</span>
               </p>
               <p>
                 <span>婚姻状况：</span>
@@ -440,10 +440,18 @@ export default {
         this.taskId = data.taskId;
         this.processId = data.processId;
         this.docNumber = data.code;
+        if(data.transferTime) {
+          data.transferTime = data.transferTime.join('-');
+        }
+        if(data.expectedTime) {
+          data.expectedTime = data.expectedTime.join('-');
+        }
+        if(data.expectedMedicalTime) {
+          data.expectedMedicalTime = data.expectedMedicalTime.join('-');
+        }
         this.form = { ...data };
         this.dataMsg = { ...data };
         this.changeTypeFn();
-        console.log(this.isEdit, data, '...this.isEdit');
         if (!this.isEdit) {
           this.userIdT = data.healthyUserId//处理
           let handler = data.handler ? data.handler.split(',') : [];
@@ -451,7 +459,7 @@ export default {
         } else {
 
         }
-        if (this.dataMsg.nodeStatus == "POSITION_011__1" || this.dataMsg.nodeStatus == "POSITION_011__3" || this.dataMsg.nodeStatus == "POSITION_011__4") {
+        if (this.dataMsg.nodeStatus.indexOf("__002") > -1) {
           this.isShowTime = true;
         } else {
           if (this.dataMsg.transferTime || this.dataMsg.expectedMedicalTime) {
@@ -460,7 +468,7 @@ export default {
             this.isShowTime = false;
           }
         }
-        if (this.dataMsg.nodeStatus == "POSITION_CREATE_USER__1" || this.dataMsg.nodeStatus == "POSITION_CREATE_USER__2" || this.dataMsg.nodeStatus == "POSITION_CREATE_USER__3" || this.dataMsg.nodeStatus == "POSITION_020__2") {
+        if (this.dataMsg.nodeStatus.indexOf("__011") > -1) {
           this.isShowUpLoad = true;
           this.isHiddenRejectBtn = true;
         } else {
@@ -656,6 +664,21 @@ export default {
           let para = {
             ...this.form,
           }
+          if(para.transferTime) {
+            para.transferTime = para.transferTime.split('-').map((item)=>{
+              return Number(item)
+            })
+          }
+          if(para.expectedTime) {
+            para.expectedTime = para.expectedTime.split('-').map((item)=>{
+              return Number(item)
+            })
+          }
+          if(para.expectedMedicalTime) {
+            para.expectedMedicalTime = para.expectedMedicalTime.split('-').map((item)=>{
+              return Number(item)
+            })
+          }
           if (this.isEdit) {
             para.id = this.$route.query.id || getQueryVariable('id')
           }
@@ -709,6 +732,21 @@ export default {
         ...this.form,
         id: this.$route.query.id || getQueryVariable('id'),
       }
+      if(para.transferTime) {
+        para.transferTime = para.transferTime.split('-').map((item)=>{
+          return Number(item)
+        })
+      }
+      if(para.expectedTime) {
+        para.expectedTime = para.expectedTime.split('-').map((item)=>{
+          return Number(item)
+        })
+      }
+      if(para.expectedMedicalTime) {
+        para.expectedMedicalTime = para.expectedMedicalTime.split('-').map((item)=>{
+          return Number(item)
+        })
+      }
       const { code, data } = await postEndEvent(para)
       if (+code === 20000) {
         this.$antMessage.success('归档成功')
@@ -753,8 +791,9 @@ export default {
       let para = {
         // userId: (this.isCreate || this.isEdit) ? "" : this.dataMsg.createUserId,
         userId: this.userIdT,
-        nodeStatus: infoStatus,
-        postTransferDepartment: this.dataMsg.postTransferDepartmentId,
+        node: infoStatus,
+        postTransferDepartmentId: this.dataMsg.postTransferDepartmentId,
+        deptId: this.staffMsg.deptId,
         corporationId: this.form.corporationId
       }
       const { code, data } = await selectNodeUser(para)
@@ -807,6 +846,21 @@ export default {
         nodeStatus: this.infoStatus,
         isDraft: 0,
         handler: this.staffArr.join()//处理人
+      }
+      if(para.transferTime) {
+        para.transferTime = para.transferTime.split('-').map((item)=>{
+          return Number(item)
+        })
+      }
+      if(para.expectedTime) {
+        para.expectedTime = para.expectedTime.split('-').map((item)=>{
+          return Number(item)
+        })
+      }
+      if(para.expectedMedicalTime) {
+        para.expectedMedicalTime = para.expectedMedicalTime.split('-').map((item)=>{
+          return Number(item)
+        })
       }
       if (this.isEdit || this.isResolve) {
         para.id = this.$route.query.id || getQueryVariable('id')
