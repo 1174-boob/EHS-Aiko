@@ -272,12 +272,15 @@ export default {
       urlObj: undefined,
       deptTreeId: undefined,
       deptIdList: [],
+      deptNameList: '',
     };
   },
   created() {
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
       this.deptIdList = adminDeptId ? [adminDeptId] : [];
+      this.deptNameList = adminDeptName
     }
     this.checkList = this.getChemicalDictList('checkType')
     this.troubleList = this.getChemicalDictList('httype')
@@ -458,10 +461,11 @@ export default {
         hideDangerId: this.routerObj.hideDangerId || undefined,
         draftPersonId: this.userObjSession.userId,
         draftPersonName: this.userObjSession.name,
+        draftDeptId: this.deptIdList[0],
+        draftDeptName:this.deptNameList,
         draftPersonJobNumber: this.userObjSession.jobNumber,
         findTime,
         rectificationTime,
-        draftDeptId: this.hideDangerForm.draftDeptId,
         dangerPhotoList: this.dealIdList(this.hideDangerForm.dangerPhotoList || []),
       };
       //判断是新增还是编辑
