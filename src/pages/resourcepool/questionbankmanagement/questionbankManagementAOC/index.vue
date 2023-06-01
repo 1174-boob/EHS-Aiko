@@ -11,8 +11,8 @@
                 <a-select-option v-for="policy of policyLowType" :value="policy.key" :key="policy.id">{{ policy.value }}</a-select-option>
               </a-select>
             </a-form-model-item>
-            <a-form-model-item label="科目" prop="sujectId" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-select v-model="policyForm.sujectId" placeholder="请选择类型">
+            <a-form-model-item label="科目" prop="subjectId" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-select v-model="policyForm.subjectId" placeholder="请选择类型">
                 <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
               </a-select>
             </a-form-model-item>
@@ -98,7 +98,7 @@ export default {
       wrapperColEditor: { span: 20 },
       policyForm: {
         topicType: undefined, //题型
-        sujectId: undefined, //科目分类
+        subjectId: undefined, //科目分类
         topicTitle: undefined, //题干
         topicScore: undefined, //基础分值
         topicSolution: undefined, //答题解析
@@ -108,7 +108,7 @@ export default {
         topicType: [
           { required: true, message: "类型不能为空", trigger: "change" },
         ],
-        sujectId: [
+        subjectId: [
           { required: true, message: "题目分类不能为空", trigger: "change" },
         ],
         topicTitle: [
@@ -159,7 +159,7 @@ export default {
   methods: {
     // 组织变动
     corporationChange(corporationId, deptId) {
-      this.$set(this.policyForm, "sujectId", undefined);
+      this.$set(this.policyForm, "subjectId", undefined);
       if (corporationId) {
         this.subjectsDataList(corporationId);
       }
@@ -337,7 +337,6 @@ export default {
 
         item.sort = index + 1;
       });
-      obj.productId = LocalObj.productSets.productId;
       obj.companyId = LocalObj.company.companyId;
       obj.phone = LocalObj.user.phone;
 

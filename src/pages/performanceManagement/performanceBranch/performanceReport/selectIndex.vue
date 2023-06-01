@@ -93,14 +93,6 @@ export default {
             ],
             columns: [
                 {
-                    title: '指标类型',
-                    scopedSlots: { customRender: 'indexType' },
-                    width: 200,
-                    customRender: v => {
-                        return v == 1 ? '固定指标' : '自定义指标'
-                    }
-                },
-                {
                     title: '指标名称',
                     dataIndex: 'indexInfo',
                     width: 200,

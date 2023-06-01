@@ -3,11 +3,6 @@
     <PageTitle v-if="!flag">管理绩效指标</PageTitle>
     <SearchTerm v-if="!configIndex">
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <a-form-model-item label="指标类型">
-          <a-select v-model="formInline.indexType" placeholder="请选择指标类型">
-            <a-select-option v-for="item in indexTypeList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
         <a-form-model-item label="否决性指标">
           <a-select v-model="formInline.isNoIndex" placeholder="请选择否决性指标">
             <a-select-option v-for="item in isNoIndexList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
@@ -40,7 +35,6 @@
         :rowKey="tableRowKey"
         :pagination="false"
       >
-        <div slot="indexType" slot-scope="record">{{getMappingValue(indexTypeList, "key", record.indexType).value}}</div>
         <div slot="isNoIndex" slot-scope="record">{{getMappingValue(isNoIndexList, "key", record.isNoIndex).value}}</div>
         <div slot="deductPoints" slot-scope="record">
           <div class="cell-item" v-for="item in record.deductPoints" :title="item">{{item ? item : "--"}}</div>
@@ -54,7 +48,7 @@
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer m-r-15" v-if="!flag" @click="actionEdit(record)">编辑</span>
           <!-- 固定指标、关联管理绩效表的自定义指标 不可删除 -->
-          <span class="color-red cursor-pointer" v-if="record.indexType != 1 && !configIndex" @click="actionDelete(record)">删除</span>
+          <span class="color-red cursor-pointer" v-if="!configIndex" @click="actionDelete(record)">删除</span>
           <span class="color-red cursor-pointer" v-if="configIndex" @click="configIndexDelete(record)">删除</span>
         </div>
       </a-table>
@@ -72,13 +66,13 @@
         >
           <!-- 固定指标 -->
           <a-form-model-item class="flex" label="否决性指标" prop="isNoIndex">
-            <a-select v-model="editForm.isNoIndex" :disabled="editForm.indexType == 1" placeholder="请选择是否是否决性指标" @change="isNoIndexChange">
+            <a-select v-model="editForm.isNoIndex" placeholder="请选择是否是否决性指标" @change="isNoIndexChange">
               <a-select-option v-for="item in isNoIndexList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
             </a-select>
           </a-form-model-item>
           <!-- 固定指标 -->
           <a-form-model-item class="flex" label="指标名称" prop="indexInfo">
-            <a-input v-model="editForm.indexInfo" :disabled="editForm.indexType == 1" :maxLength="100" placeholder="请输入指标名称"></a-input>
+            <a-input v-model="editForm.indexInfo" :maxLength="100" placeholder="请输入指标名称"></a-input>
           </a-form-model-item>
           <!-- 否决性时为空且禁止点击 -->
           <a-form-model-item class="flex" label="风险分值" prop="riskScore">
@@ -100,7 +94,7 @@
               <vxe-column field="deductPoints" title="扣分标准" min-width="300" :edit-render="{autofocus: '.vxe-input--inner', placeholder: '请点击输入扣分标准'}">
                 <template #edit="{ row }">
                   <a-input
-                    :disabled="editForm.isNoIndex == 2 || editForm.indexType == 1"
+                    :disabled="editForm.isNoIndex == 2"
                     :maxLength="100"
                     v-model="row.deductPoints"
                     type="text"
@@ -113,7 +107,7 @@
               <!-- 固定指标 -->
               <vxe-column field="unit" title="指标单位" width="100" :edit-render="{autofocus: '.vxe-input--inner', placeholder: '请点击输入指标单位'}">
                 <template #edit="{ row }">
-                  <a-input v-model="row.unit" :disabled="editForm.indexType == 1" type="text" :maxLength="10" placeholder="请点击输入指标单位" allowClear @blur="(e) => {removeComma(e, row, 'unit')}"></a-input>
+                  <a-input v-model="row.unit" type="text" :maxLength="10" placeholder="请点击输入指标单位" allowClear @blur="(e) => {removeComma(e, row, 'unit')}"></a-input>
                 </template>
               </vxe-column>
               <!-- 否决性时为空且不可编辑 -->
@@ -197,16 +191,6 @@ export default {
       selectedRowKeys: [],
       selectedRow: [],
       tableRowKey: 'id',
-      indexTypeList: [
-        {
-          key: "1",
-          value: "固定指标"
-        },
-        {
-          key: "2",
-          value: "自定义指标"
-        }
-      ],
       isNoIndexList: [
         {
           key: "1",
@@ -256,19 +240,14 @@ export default {
 
       columns: [
         {
-          title: '指标类型',
-          scopedSlots: { customRender: 'indexType' },
-          width: 100,
+          title: '指标',
+          dataIndex: 'indexInfo',
+          width: 200,
         },
         {
           title: '否决性指标',
           scopedSlots: { customRender: 'isNoIndex' },
           width: 150,
-        },
-        {
-          title: '指标',
-          dataIndex: 'indexInfo',
-          width: 200,
         },
         {
           title: '风险分值',
@@ -522,11 +501,11 @@ export default {
         })
       }
       this.modalTableData = [...arr];
-      if (record.indexType == 1) {
-        this.$nextTick(() => {
-          this.$refs.xTable.hideColumn(this.$refs.xTable.getColumnByField('action'));
-        })
-      }
+      // if (record.indexType == 1) {
+      //   this.$nextTick(() => {
+      //     this.$refs.xTable.hideColumn(this.$refs.xTable.getColumnByField('action'));
+      //   })
+      // }
 
     },
     actionDelete(record) {

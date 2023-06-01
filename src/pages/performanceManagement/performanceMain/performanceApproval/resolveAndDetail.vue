@@ -2,22 +2,9 @@
   <div class="post-wrapper flex clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <div class="fix-width flex-1 position-rel pd-b-100">
       <div class="scroll-center-box">
-        <PageTitle>{{isView ? "审批单详情" : "审批单处理"}}</PageTitle>
         <a-spin :spinning="spinning" wrapperClassName="a-spin">
           <div class="post-main m-b-20">
-            <div class="font-16 color-0067cc m-b-20">审批状态：{{getMappingValue(statusList, "dictValue", detailMsg.infoStatus).dictLabel ? getMappingValue(statusList, "dictValue", detailMsg.infoStatus).dictLabel : "--"}}</div>
-            <a-row :span="24">
-              <a-col :span="12">
-                <p><span>组织：</span><span>{{detailMsg.corporationName}}</span></p>
-                <p><span>填报人：</span><span>{{detailMsg.createUserId}}</span></p>
-                <p><span>审批人：</span><span>{{detailMsg.handlerName}}</span></p>
-              </a-col>
-              <a-col :span="12">
-                <p><span>填报范围：</span><span>{{detailMsg.range}}</span></p>
-                <p><span>提交时间：</span><span>{{detailMsg.createTime}}</span></p>
-                <p><span>审批时间：</span><span>{{detailMsg.updateTime}}</span></p>
-              </a-col>
-            </a-row>
+            <h1 style="font-size:16px; font-weight:bold; line-height:24px;">填报范围：{{detailMsg.range}}</h1>
           </div>
           <CommonTable>
             <a-table :columns="columns" :scroll="{ x: tableScrollX() }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">

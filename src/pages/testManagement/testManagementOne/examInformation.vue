@@ -330,7 +330,7 @@ export default {
     //   DetaillDataList({ topicId: this.topicId })
     //     .then((res) => {
     //       this.policyForm.topicType = res.data.topicType; //题型
-    //       this.policyForm.sujectId = res.data.sujectId; //科目分类
+    //       this.policyForm.subjectId = res.data.subjectId; //科目分类
     //       this.policyForm.topicTitle = res.data.topicTitle; //题干
     //       this.policyForm.topicScore = res.data.topicScore; //基础分值
     //       this.policyForm.topicSolution = res.data.topicSolution; //答题解析

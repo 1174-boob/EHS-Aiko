@@ -181,7 +181,6 @@ export default {
           value: "外部课程"
         }
       ],
-      productId: "",
 
       pushVisible: false,
       currentPushMsg: undefined,
@@ -211,9 +210,8 @@ export default {
   },
   methods: {
     initConfigPage(){
-       this.fileTypeList = dictionary('fileType');
-       this.getSubjectlist();
-       this.productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).productSets.productId;
+      this.fileTypeList = dictionary('fileType');
+      this.getSubjectlist();
       this.companyId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyId;
       this.companyName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyName;
     },

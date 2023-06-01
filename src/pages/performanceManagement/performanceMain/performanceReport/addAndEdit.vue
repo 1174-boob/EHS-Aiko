@@ -10,7 +10,7 @@
     <PageTitle>
       组织：
       <template v-if="selectedRowKeys.length">
-        <span class="m-r-15" v-for="item in selectedRowKeys">{{getMappingValue(getCommonAddOrgnizeListAll, "id", item).orgAbbrName}}</span>
+        <span class="m-r-15" v-for="item in selectedRowKeys">{{getMappingValue(getCommonAddOrgnizeListAll, "orgId", item).orgName}}</span>
       </template>
       <template v-else><span class="font-14 color-999">请点击上方”选择组织“按钮选择组织</span></template>
     </PageTitle>

@@ -126,7 +126,6 @@ export default {
         },
       ],
       dictList: [],
-      productId: undefined,
       sujectList: [], //科目
     };
   },
@@ -147,10 +146,7 @@ export default {
   },
   methods: {
     initConfigPage(){
-       this.productId = JSON.parse(
-          sessionStorage.getItem("zconsole_userInfo")
-        ).productSets.productId;
-        sessionStorage.removeItem("savEexamData");
+      sessionStorage.removeItem("savEexamData");
       sessionStorage.removeItem("examPathFrom");
       sessionStorage.removeItem("pathFrom");
       // this.permission=this.canClickBtnMixin("examinationPaper-del")?true:false;
@@ -197,7 +193,6 @@ export default {
         ...this.formInline,
         pageNo: this.page.pageNo,
         pageSize: this.page.pageSize,
-        productId: this.productId,
       };
       this.tableSpinning = true
       return GetQuestionDataList(params)
@@ -224,7 +219,6 @@ export default {
         onOk: () => {
           DelQuestionDataList({
             paperId: record.paperId,
-            productId: this.productId,
           })
             .then((res) => {
               this.$antMessage.success(res.message);

@@ -265,7 +265,7 @@
     <!-- 选择部门 -->
     <CommonModal
       class="table-modal-large"
-      title="选择组织"
+      title="选择部门"
       :visible="corporationVisible"
       :cancelFn="corporationCancle"
     >
@@ -316,14 +316,6 @@ export default {
       //显示选择部门
       showSelectDept: true,
       columns: [
-        {
-          title: "指标类型",
-          scopedSlots: { customRender: "indexType" },
-          width: 200,
-          customRender: (v) => {
-            return v == 1 ? "固定指标" : "自定义指标";
-          },
-        },
         {
           title: "指标名称",
           dataIndex: "indexInfo",

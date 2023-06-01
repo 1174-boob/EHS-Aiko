@@ -195,7 +195,6 @@ export default {
       genderList: [],
       headImg: {},
       replaceFields: { children: 'childDeptList', title: 'deptName', key: 'deptId', value: 'deptId' },
-      productId: "",
       editImgurl: "",
       fileMsgList: []
     }
@@ -204,14 +203,12 @@ export default {
     this.setRouterCode("instructormanagement");
     this.columns.splice(1, 0, this.addCommonColumnItem());
     this.genderList = dictionary('sex');
-    this.productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).productSets.productId;
     this.getDataList();
   },
   methods: {
     getDataList() {
       let params = {
         ...this.preFormInline,
-        productId: this.productId,
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo
       }
@@ -281,7 +278,6 @@ export default {
         onOk: () => {
           DeleteLecturer({
             lecturerId: record.lecturerId,
-            productId: this.productId
           }).then(res => {
             this.$antMessage.success('删除成功');
             this.getDataList()
@@ -303,7 +299,6 @@ export default {
         ...this.editForm,
         avatar: this.headImg.url,
         fileId: this.headImg.id,
-        productId: this.productId
       }
       let promiseFn = InsertLecturer;
       if (this.editText == "编辑") {
