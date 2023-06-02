@@ -144,7 +144,6 @@ export default {
     return {
       activeKey: "1",
       dataMsg: undefined,
-      productId: "",
       lecturerMsg: {},
       coverImg: "",
 
@@ -299,7 +298,6 @@ export default {
     },
   },
   created() {
-    this.productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).productSets.productId;
     this.userName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.name;
     this.dataMsg = this.$route.params.dataMsg;
     if (!this.dataMsg) {

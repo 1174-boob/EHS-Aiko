@@ -165,7 +165,7 @@
               <UploadBtnStyle
                 :action="actions"
                 :showAcceptText="true"
-                :accept="['.pptx']"
+                :accept="['.pptx','.pdf','.mp4','.mp3']"
                 :showUploadList="true"
                 :btnText="'上传文件'"
                 :btnType="'primary'"
@@ -328,7 +328,6 @@ export default {
       fileTypeList: [],
       subjectList: [],
       subjectListAll: [],
-      productId: "",
       subjectListType: [],
     }
   },
@@ -348,7 +347,6 @@ export default {
     this.fileTypeList = dictionary('fileType');
     this.getDataList();
     this.getSubjectSearchlist("", true);
-    this.productId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).productSets.productId;
   },
   methods: {
     // 搜索条件组织变动
@@ -422,8 +420,9 @@ export default {
       }
       GetSubjectlist(para).then((res) => {
         if (corporationId) {
-          console.log('?????')
+          console.log(corporationId,'?????')
           this.subjectListType = res.data || [];
+          this.subjectList = res.data || [];
           if (this.subjectListType.length == 0) {
             this.$antMessage.warn("该组织下暂无科目");
           }
@@ -484,6 +483,7 @@ export default {
     actionLook(record) {
       this.currentMsg = record;
       this.detailVisible = true;
+      this.getSubjectlist(record.corporationId);
     },
     actionEdit(record) {
       this.editForm = record;
@@ -501,7 +501,6 @@ export default {
         onOk: () => {
           DeleteCourseware({
             coursewareId: record.coursewareId,
-            productId: this.productId
           }).then(() => {
             this.$antMessage.success('删除成功');
             this.getDataList()
@@ -527,7 +526,6 @@ export default {
     editConfirm() {
       this.editLoading = true;
       UpdateCourseware({
-        productId: this.productId,
         coursewareId: this.editForm.coursewareId,
         name: this.editForm.name,
         subjectId: this.editForm.subjectId,
@@ -570,7 +568,6 @@ export default {
         this.addFileList[i].fileId = this.addFileList[i].id
       }
       let param = {
-        productId: this.productId,
         coursewareList: this.addFileList,
         ...this.addForm
       };
