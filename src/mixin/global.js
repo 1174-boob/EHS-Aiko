@@ -105,7 +105,7 @@ const copyTextMixin = {
         },
         // 匹配组织名称
         matchOrganizeName(corporationId) {
-            return this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", corporationId)?.orgAbbrName || ''
+            return this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", corporationId)?.orgName || ''
         },
         // 按钮是否可以点击
         canClickBtnMixin(btnId) {
