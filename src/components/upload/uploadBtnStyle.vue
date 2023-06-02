@@ -70,6 +70,7 @@ export default {
         ".jpg",
         ".jpeg",
         ".png",
+        ".pptx"
       ],
     },
     // 显示文件类型文字

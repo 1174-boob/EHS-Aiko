@@ -153,15 +153,26 @@
           ></CommonSearchItem>
           <a-form-model-item class="flex" label="上传课件">
             <div class="box">
-              <a-space>
+              <!-- <a-space>
                 <a-button type="primary" @click="uup">上传文件</a-button>
-              </a-space>
-              <GlobalUpload
+              </a-space> -->
+              <!-- <GlobalUpload
                 :maxSize="1024 * 2"
                 :needUnzip="false"
                 :simultaneousUploads="2"
                 :fileTypeArr="['video/mp4', 'audio/mpeg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.ms-powerpoint']"
-              />
+              /> -->
+              <UploadBtnStyle
+                :action="actions"
+                :showAcceptText="true"
+                :accept="['.pptx']"
+                :showUploadList="true"
+                :btnText="'上传文件'"
+                :btnType="'primary'"
+                :btnIcon="false"
+                @handleSuccess="globalUploadFileSuccess"
+              ></UploadBtnStyle>
+                <!-- @resultCancel="resultCancel" -->
             </div>
           </a-form-model-item>
         </a-form-model>
@@ -201,12 +212,14 @@ import { GetCoursewarelist, InsertCourseware, UpdateCourseware, DeleteCourseware
 // 大文件分片上传
 import Bus from '@/utils/bus.js';
 import GlobalUpload from '@/components/globalUploader/globalUpload.vue'
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 
 export default {
   mixins: [teableCenterEllipsis, cancelLoading, uploadCanRemove],
-  components: { GlobalUpload },
+  components: { GlobalUpload, UploadBtnStyle },
   data() {
     return {
+      actions: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`,
       tableSpinning:false,
       addLoading: false,
       editLoading: false,
@@ -359,14 +372,16 @@ export default {
     globalUploadFileAdd(file) {
     },
     // 文件上传成功的回调
-    globalUploadFileSuccess({ res, file }) {
+    globalUploadFileSuccess(res) {
+      console.log(res)
       this.newFile = res.length ? { ...res[0] } : {}
-      this.newFile = {
-        ...this.newFile,
-        name: file.name,
-        type: file.fileType,
-        size: file.size
-      }
+      // this.newFile = {
+      //   // ...this.newFile,
+      //   name: file.name,
+      //   type: file.fileType,
+      //   size: file.size
+      // }
+      // return
       this.addFileList.push({ ...this.newFile });
     },
     // 文件上传失败的回调
@@ -407,6 +422,7 @@ export default {
       }
       GetSubjectlist(para).then((res) => {
         if (corporationId) {
+          console.log('?????')
           this.subjectListType = res.data || [];
           if (this.subjectListType.length == 0) {
             this.$antMessage.warn("该组织下暂无科目");
