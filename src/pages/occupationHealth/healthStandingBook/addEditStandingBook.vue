@@ -113,7 +113,7 @@
               <CommonTable :noPaging="true">
                 <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="exposureList" :rowKey="(record, index)=>{return index}" :pagination="false">
                   <div slot="time" slot-scope="record">
-                    {{record.startTime.join('-')}} 至 {{record.endTime.join('-')}}
+                    {{record.startTime?record.startTime.join('-'):'--'}} 至 {{record.endTime?record.endTime.join('-'):'--'}}
                   </div>
                   <div slot="action" slot-scope="text,record,index">
                     <span class="color-0067cc cursor-pointer m-r-15" @click="occupationalHistoryEdit(record,index)">编辑</span>

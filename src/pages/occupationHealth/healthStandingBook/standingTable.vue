@@ -3,7 +3,7 @@
     <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
       <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="dataSource" :rowKey="(record, index)=>{return index}" :pagination="false">
         <div slot="time" slot-scope="record">
-          {{record.startTime}} 至 {{record.endTime}}
+          {{record.startTime?record.startTime.join('-'):'--'}} 至 {{record.endTime?record.endTime.join('-'):'--'}}
         </div>
         <template slot="checkResult" slot-scope="record">
           <span v-if="record.checkResult=='normal' || record.checkResult=='radiationWork'" style="color: #02DFAD">{{checkResultDict[record.checkResult]}}</span>

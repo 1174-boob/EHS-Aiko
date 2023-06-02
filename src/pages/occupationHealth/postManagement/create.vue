@@ -789,7 +789,7 @@ export default {
     // 获取下一节点审批人
     async getUserNodeInfo(infoStatus) {
       let para = {
-        // userId: (this.isCreate || this.isEdit) ? "" : this.dataMsg.createUserId,
+        createUserId: (this.isCreate || this.isEdit) ? "" : this.dataMsg.createUserId,
         userId: this.userIdT,
         node: infoStatus,
         postTransferDepartmentId: this.dataMsg.postTransferDepartmentId,
