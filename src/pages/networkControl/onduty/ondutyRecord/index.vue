@@ -83,7 +83,7 @@
                     :show-overflow="!isShowPage"
                     align="center"
                     :row-config="{isHover: true}"
-                    :data="dutyData.fireAlarmList"
+                    :data="iFrom.fireAlarmList"
                   >
                     <vxe-column field="normal" title="正常">
                       <template #default="{ row }">
@@ -168,7 +168,7 @@
                     :show-overflow="!isShowPage"
                     align="center"
                     :row-config="{isHover: true}"
-                    :data="dutyData.roomFireFightingList"
+                    :data="iFrom.roomFireFightingList"
                   >
                     <vxe-column field="deviceName" width="200" title="消防系统及相关设备名称"></vxe-column>
                     <vxe-column field="controlState" title="控制状态">
@@ -178,7 +178,7 @@
                     </vxe-column>
                     <vxe-column field="runningState" title="运行状态">
                       <template #default="{ row }">
-                        <span>{{ row.runningState == '1' ? '正常' : '故障' }}</span>
+                        <span>{{ row.runningState == '1' ? '故障' : '正常' }}</span>
                       </template>
                     </vxe-column>
                     <vxe-column field="handlingSituation" width="260" title="报警、故障部位、原因及处理情况"></vxe-column>
@@ -227,18 +227,38 @@
                     :show-overflow="!isShowPage"
                     align="center"
                     :row-config="{isHover: true}"
-                    :data="dutyData.fireEngineCheckList"
+                    :data="iFrom.fireEngineCheckList"
                   >
                     <vxe-colgroup title="消防主机型号">
                       <vxe-column field="fireEngineOne" title=" "></vxe-column>
                       <vxe-column field="fireEngineTwo" title=" "></vxe-column>
                     </vxe-colgroup>
                     <vxe-colgroup title="检查内容">
-                      <vxe-column field="selfTest" title="自检"></vxe-column>
-                      <vxe-column field="silencing" title="消音"></vxe-column>
-                      <vxe-column field="reset" title="复位"></vxe-column>
-                      <vxe-column field="mainPower" title="主电源"></vxe-column>
-                      <vxe-column field="standbyPower" title="备用电源"></vxe-column>
+                      <vxe-column field="selfTest" title="自检">
+                        <template #default="{ row }">
+                          <span>{{ row.selfTest == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="silencing" title="消音">
+                        <template #default="{ row }">
+                          <span>{{ row.silencing == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="reset" title="复位">
+                        <template #default="{ row }">
+                          <span>{{ row.reset == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="mainPower" title="主电源">
+                        <template #default="{ row }">
+                          <span>{{ row.mainPower == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="standbyPower" title="备用电源">
+                        <template #default="{ row }">
+                          <span>{{ row.standbyPower == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
                     </vxe-colgroup>
                     <vxe-column field="checkTime" title="检查时间"></vxe-column>
                     <vxe-column field="dutyUserNameList" title="检查人"></vxe-column>
@@ -324,12 +344,6 @@ export default {
   mixins: [chemicalDict, cancelLoading, deptAndUser, ondutyMixin],
   data() {
     return {
-      dutyData: {
-        dutyId: '',
-        fireAlarmList: [],
-        roomFireFightingList: [],
-        fireEngineCheckList: [],
-      },
       // 配置弹窗
       addCasNoModelShow: false,
       configTableRowKey: undefined,
@@ -343,7 +357,12 @@ export default {
       spinning: true,
       labelCol: { span: 4 },
       wrapperCol: { span: 19 },
-      iFrom: {},
+      iFrom: {
+        dutyId: '',
+        fireAlarmList: [],
+        roomFireFightingList: [],
+        fireEngineCheckList: [],
+      },
       iRules: {
         systemList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'systemList', text: '系统数据' },],
         fireFightingSystemTableList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'fireFightingSystemTableList', text: '消防系统CRT每日检测', targetAttr: 'fire', },],
@@ -398,7 +417,6 @@ export default {
           if (res.data) {
             // 值班基本信息
             let iFrom = res.data
-            this.dutyData.dutyId = iFrom.dutyId;
             iFrom.dutyUserNameList = iFrom.dutyUserNameList.length > 0 ? iFrom.dutyUserNameList.join(',') : '';
             // 部门回显
             this.$refs.corporationId.corporationChange(iFrom.corporationId, iFrom.deptId)
@@ -419,6 +437,8 @@ export default {
               item.guid = this.guid()
             })
             this.fireFightingSystem.tableAllList = cloneDeep(crtList)
+            console.log(this.iFrom)
+            console.log(iFrom)
             return iFrom
           } else {
             console.log('详情数据返回异常');
@@ -445,6 +465,7 @@ export default {
       }
     },
     openFireModel(row) {
+      console.log(row, '?')
       this.fireType = row.fireTimeStamp ? '编辑' : '新增';
       this.formModelFireData = row.fireTimeStamp ? row : {};
       this.inspectionRecordModelShowFire = true;
@@ -460,69 +481,68 @@ export default {
       this.inspectionRecordModelShowEngine = true;
     },
     openInspectionRecordModelFire(row) {
-      this.dutyData.fireAlarmList.push(row)
+      this.iFrom.fireAlarmList.push(row)
     },
     openInspectionRecordModelRoom(row) {
-      this.dutyData.roomFireFightingList.push(row)
+      this.iFrom.roomFireFightingList.push(row)
     },
     openInspectionRecordModelEngine(row) {
-      this.dutyData.fireEngineCheckList.push(row)
+      this.iFrom.fireEngineCheckList.push(row)
     },
     editInspectionRecordItemFire(row) {
       let currentIndex;
-      this.dutyData.fireAlarmList.forEach((item, index)=>{
+      this.iFrom.fireAlarmList.forEach((item, index)=>{
         row.fireTimeStamp == item.fireTimeStamp && (currentIndex = index);
       })
-      Object.assign(this.dutyData.fireAlarmList[currentIndex], row)
+      Object.assign(this.iFrom.fireAlarmList[currentIndex], row)
     },
     editInspectionRecordItemRoom(row) {
       let currentIndex;
-      this.dutyData.roomFireFightingList.forEach((item, index)=>{
+      this.iFrom.roomFireFightingList.forEach((item, index)=>{
         row.roomTimeStamp == item.roomTimeStamp && (currentIndex = index);
       })
-      Object.assign(this.dutyData.roomFireFightingList[currentIndex], row)
+      Object.assign(this.iFrom.roomFireFightingList[currentIndex], row)
     },
     editInspectionRecordItemEngine(row) {
       let currentIndex;
-      this.dutyData.engineAlarmList.forEach((item, index)=>{
+      this.iFrom.engineAlarmList.forEach((item, index)=>{
         row.engineTimeStamp == item.engineTimeStamp && (currentIndex = index);
       })
-      Object.assign(this.dutyData.engineAlarmList[currentIndex], row)
+      Object.assign(this.iFrom.engineAlarmList[currentIndex], row)
     },
-    // 火警--删除表格某一行
     rmFireRecordItem(row) {
       let currentIndex;
-      this.dutyData.fireAlarmList.forEach((item, index)=>{
+      this.iFrom.fireAlarmList.forEach((item, index)=>{
         row.fireTimeStamp == item.fireTimeStamp && (currentIndex = index);
       })
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          this.dutyData.fireAlarmList.splice(currentIndex, 1)
+          this.iFrom.fireAlarmList.splice(currentIndex, 1)
         },
       });
     },
     rmRoomRecordItem(row) {
       let currentIndex;
-      this.dutyData.roomFireFightingList.forEach((item, index)=>{
+      this.iFrom.roomFireFightingList.forEach((item, index)=>{
         row.roomTimeStamp == item.roomTimeStamp && (currentIndex = index);
       })
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          this.dutyData.roomFireFightingList.splice(currentIndex, 1)
+          this.iFrom.roomFireFightingList.splice(currentIndex, 1)
         },
       });
     },
     rmEngineRecordItem(row) {
       let currentIndex;
-      this.dutyData.fireEngineCheckList.forEach((item, index)=>{
+      this.iFrom.fireEngineCheckList.forEach((item, index)=>{
         row.engineTimeStamp == item.engineTimeStamp && (currentIndex = index);
       })
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          this.dutyData.fireEngineCheckList.splice(currentIndex, 1)
+          this.iFrom.fireEngineCheckList.splice(currentIndex, 1)
         },
       });
     },
@@ -643,13 +663,16 @@ export default {
     },
     // 提交api
     iSubmit() {
-      console.log(this.dutyData)
+      console.log(this.iFrom)
       // if (!this.formValidate()) {
       //   return
       // }
       // ondutyTableUpdateApi
+      // iFrom.fireAlarmList = this.dutyData.fireAlarmList;
+      // iFrom.roomFireFightingList = this.dutyData.roomFireFightingList;
+      // iFrom.fireEngineCheckList = this.dutyData.fireEngineCheckList;
       let apiData = {
-        ...this.dutyData
+        ...this.iFrom
       }
       this.handleLoading();
       Promise.all([ondutyTableUpdateApi(apiData)])
