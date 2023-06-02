@@ -56,3 +56,5 @@ export const editOndutyFireFightingSystemApi = params => post(`${serviceNameList
 export const editOndutyRecordApi = params => post(`${serviceNameList.danger}/api/ehs/duty/table/update`, params);
 // 值班表记录-交接班
 export const ondutyRecordChangeShiftsApi = params => post(`${serviceNameList.danger}/api/ehs/duty/table/handover`, params);
+// 值班编辑
+export const ondutyTableUpdateApi = params => post(`${serviceNameList.danger}/api/ehs/duty/table/update`, params);
