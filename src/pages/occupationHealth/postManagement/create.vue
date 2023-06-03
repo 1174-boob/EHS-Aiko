@@ -171,7 +171,7 @@
                     <div>{{relevantInfo.physicalExaminationProject}}</div>
                   </a-form-model-item>
                   <a-form-model-item v-if="isShowTime" label="调岗体检时间" prop="transferTime">
-                    <a-date-picker :disabled="Boolean(disabled && dataMsg.transferTime)" placeholder="请选择时间" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" v-model="form.transferTime" />
+                    <a-date-picker :disabled="!(dataMsg.nodeStatus.indexOf('__002') > -1)" placeholder="请选择时间" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" v-model="form.transferTime" />
                   </a-form-model-item>
                   <a-form-model-item v-if="isShowUpLoad" label="体检报告" prop="fileId">
                     <UploadEhs
