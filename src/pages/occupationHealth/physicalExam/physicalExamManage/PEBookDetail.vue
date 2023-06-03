@@ -8,12 +8,12 @@
               <a-col :span="6"><span class="info-label"> 性别：</span> <span>{{ userInfo.sex ? +userInfo.sex === 1 ? '男' : '女' : '--' }}</span></a-col>
               <a-col :span="6"><span class="info-label">身份证：</span><span>{{userInfo.certificateNum || '--'}}</span></a-col>
               <a-col :span="6"><span class="info-label">籍贯：</span><span>{{userInfo.nativePlace || '--'}}</span></a-col>
-              <a-col :span="6"><span class="info-label">入司时间：</span><span>{{userInfo.joyCompanyTime || '--'}}</span></a-col>
+              <a-col :span="6"><span class="info-label">入司时间：</span><span>{{(userInfo.joyCompanyTime ? userInfo.joyCompanyTime.join('-') : '') || '--'}}</span></a-col>
             </a-row>
             <a-row class="mgb-20">
               <a-col :span="6"><span class="info-label">文化程度：</span><span>{{education[userInfo.degreeEducation] || '--'}}</span></a-col>
               <a-col :span="6"><span class="info-label">手机号：</span><span>{{userInfo.phone || '--'}}</span></a-col>
-              <a-col :span="6"><span class="info-label">出生年月：</span><span>{{userInfo.birthTime || '--'}}</span></a-col>
+              <a-col :span="6"><span class="info-label">出生年月：</span><span>{{(userInfo.birthTime ? userInfo.birthTime.join('-') : '') || '--'}}</span></a-col>
               <a-col :span="6"><span class="info-label">婚姻状况：</span><span>{{userInfo.maritalStatus ? +userInfo.maritalStatus === 1 ? '已婚' : '未婚' : '--'}}</span></a-col>
             </a-row>
             <a-row class="mgb-20">
