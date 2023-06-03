@@ -77,6 +77,12 @@
         <div slot="approvalType" slot-scope="record">
           {{getMappingValue(nodeStatusList, "key", record.approvalType).value}}
         </div>
+        <div slot="approvalTime" slot-scope="record">
+          {{record.approvalTime?record.approvalTime.join('-'):''}}
+        </div>
+        <div slot="applicationTime" slot-scope="record">
+          {{record.applicationTime?record.applicationTime.join('-'):''}}
+        </div>
       </a-table>
     </CommonTable>
   </div>
@@ -146,12 +152,12 @@ export default {
         },
         {
           title: '申请时间',
-          dataIndex: 'applicationTime',
+          scopedSlots: { customRender: 'applicationTime' },
           width: 200
         },
         {
           title: '审核通过时间',
-          dataIndex: 'approvalTime',
+          scopedSlots: { customRender: 'approvalTime' },
           minWidth: 200
         },
         {
