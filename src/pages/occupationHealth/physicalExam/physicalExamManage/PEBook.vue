@@ -25,7 +25,7 @@
                 <span>{{userInfo.nativePlace || '--'}}</span>
               </a-col>
               <a-col :span="6">
-                <span class="info-label">入司1时间：</span>
+                <span class="info-label">入司时间：</span>
                 <span>{{(userInfo.joyCompanyTime ? userInfo.joyCompanyTime.join('-') : '') || '--'}}</span>
               </a-col>
             </a-row>
