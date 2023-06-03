@@ -55,14 +55,14 @@
     <CommonTable>
       <a-table bordered :columns="columnsRed" :scroll="{ x: 800 }"  :data-source="hideDangerDetailRed" rowKey="id" :pagination="false">
         <template slot="title">红线隐患汇总</template>
-        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.corporationId }).orgAbbrName || record.corporationId}}</span>
+        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
       </a-table>
     </CommonTable>
     <!-- 一类隐患汇总 -->
     <CommonTable>
       <a-table bordered :columns="columnsTotal" :scroll="{ x: 800 }"  :data-source="hideDangerDetailFst" rowKey="id" :pagination="false">
         <template slot="title">一类隐患汇总</template>
-        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.corporationId }).orgAbbrName || record.corporationId}}</span>
+        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
       </a-table>
     </CommonTable>
     <div class="echarts-style">
@@ -348,7 +348,8 @@ export default {
     },
     // 组织现地机构
     corporationList() {
-      return this.$store.state.setting.corporationList
+      return this.getCommonAddOrgnizeListAll
+      // return this.$store.state.setting.corporationList
     },
   },
   mounted() {
@@ -393,16 +394,16 @@ export default {
         // })
         this.columnsLevel = this.corporationList.map( item => {
           return {
-            title: item.orgAbbrName,
-            dataIndex: item.corporationId,
+            title: item.orgName,
+            dataIndex: item.orgId,
             width: 80,
             align: 'center'
           }
         })
         this.columnsType = this.corporationList.map( item => {
           return {
-            title: item.orgAbbrName,
-            dataIndex: item.corporationId,
+            title: item.orgName,
+            dataIndex: item.orgId,
             width: 80,
             align: 'center'
           }
@@ -469,11 +470,11 @@ export default {
           this.corporationList.forEach(item => {
             let sum = 0;
             hideDangerLevel.slice(0,4).map( _item => {
-              if(_item[item.corporationId] != undefined) {
-                sum += (_item[item.corporationId] - 0);
+              if(_item[item.orgId] != undefined) {
+                sum += (_item[item.orgId] - 0);
               }
             })
-            hideDangerLevel[4][item.corporationId] = sum;
+            hideDangerLevel[4][item.orgId] = sum;
           })
           Object.keys(hideDangerLevel[4]).forEach((key)=>{
             if(!isNaN(key-0)) {
@@ -523,11 +524,11 @@ export default {
           this.corporationList.forEach(item => {
             let sum = 0;
             hideDangerCategory.slice(0,hideDangerCategory.length-1).map( _item => {
-              if(_item[item.corporationId] != undefined) {
-                sum += (_item[item.corporationId] - 0);
+              if(_item[item.orgId] != undefined) {
+                sum += (_item[item.orgId] - 0);
               }
             })
-            hideDangerCategory[hideDangerCategory.length-1][item.corporationId] = sum;
+            hideDangerCategory[hideDangerCategory.length-1][item.orgId] = sum;
           })
           Object.keys(hideDangerCategory[hideDangerCategory.length-1]).forEach((key)=>{
             if(!isNaN(key-0)) {
@@ -546,7 +547,7 @@ export default {
     async searchEchart(analysisType, infoType) {
       let apiData = {
         ...this.searchData,
-        corporationIdList: this.corporationList.map(item=>{ return item.corporationId }),
+        corporationIdList: this.corporationList.map(item=>{ return item.orgId }),
         // mouthTime: this.searchData.reportDate + '-01',
         // mouthTime: this.searchData.reportDate,
         // dataSource: '1',
@@ -563,8 +564,8 @@ export default {
           );
           let xAxisData = ajaxData.map(item => item.xdata)
           xAxisData = xAxisData.map(item => {  //x轴为组织
-            let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-            return orgAbbrName ? orgAbbrName : item
+            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+            return orgName ? orgName : item
           })
           if(analysisType == '1') {
             this.echartFst.xAxis[0].data = cloneDeep(xAxisData);
@@ -583,7 +584,7 @@ export default {
     async searchEchartPie(analysisType, infoType) {
       let apiData = {
         ...this.searchData,
-        corporationIdList: this.corporationList.map(item=>{ return item.corporationId })
+        corporationIdList: this.corporationList.map(item=>{ return item.orgId })
       }
       return analysisMonthHideCookie(apiData).then((res) => {
         if (res.data && res.data.length) {

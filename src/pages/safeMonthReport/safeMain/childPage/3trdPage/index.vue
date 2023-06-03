@@ -61,7 +61,7 @@
         <template v-for="(item, index) in columnsReal">
           <vxe-column v-if="item.dataIndex === 'corporationId'" :key="index" :field="item.dataIndex" :min-width="item.width?item.width:120" :title="item.title">
             <template #default="{ row }">
-              <span>{{ corporationList.find(item=>{ return row.corporationId == item.corporationId }).orgAbbrName || row.corporationId }}</span>
+              <span>{{ corporationList.find(item=>{ return row.corporationId == item.orgId }).orgName || row.corporationId }}</span>
             </template>
           </vxe-column>
           <vxe-column v-else-if="item.dataIndex === 'deptId'" :key="index" :field="item.dataIndex" :min-width="item.width?item.width:120" :title="item.title">
@@ -424,7 +424,8 @@ export default {
   computed: {
     // 组织现地机构
     corporationList() {
-      return this.$store.state.setting.corporationList
+      return this.getCommonAddOrgnizeListAll
+      // return this.$store.state.setting.corporationList
     },
   },
   mounted() {
@@ -482,8 +483,8 @@ export default {
         // 定义表头
         this.columnsCommon = this.corporationList.map( item => {
           return {
-            title: item.orgAbbrName,
-            dataIndex: item.corporationId,
+            title: item.orgName,
+            dataIndex: item.orgId,
             width: 80,
             align: 'center'
           }
@@ -585,7 +586,7 @@ export default {
         ...this.searchData,
         analysisType: analysisType,
         infoType: infoType,
-        corporationIdList: this.corporationList.map(item=>{ return item.corporationId })
+        corporationIdList: this.corporationList.map(item=>{ return item.orgId })
       }
       return analysisAlarmHeadAnalysis(apiData).then((res) => {
         let ajaxData = res.data || [];
@@ -598,8 +599,8 @@ export default {
           );
           let xAxisData = ajaxData.map(item => item.xdata)
           xAxisData = xAxisData.map(item => {  //x轴为组织
-            let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-            return orgAbbrName ? orgAbbrName : item
+            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+            return orgName ? orgName : item
           })
           if(analysisType == '1' && infoType == 'fire') {
             this.echartFst.xAxis[0].data = cloneDeep(xAxisData);

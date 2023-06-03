@@ -36,7 +36,7 @@
     <CommonTable>
       <a-table bordered :columns="columnsYear" :scroll="{ x: 800 }"  :data-source="pecialAbnormalVoList" :rowKey="(record, index)=>{return index}" :pagination="false">
         <template slot="title">设备年检异常情况</template>
-        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.corporationId }).orgAbbrName || record.corporationId}}</span>
+        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
         <span slot="isDisable" slot-scope="text, record">{{record.isDisable == 1 ? '是' : '否'}}</span>
         <span slot="isRectify" slot-scope="text, record">{{record.isRectify == 1 ? '是' : '否'}}</span>
         <span slot="isRetest" slot-scope="text, record">{{record.isRetest == 1 ? '是' : '否'}}</span>
@@ -46,7 +46,7 @@
     <CommonTable>
       <a-table bordered :columns="columnsSafe" :scroll="{ x: 800 }"  :data-source="specialAttachVoList" :rowKey="(record, index)=>{return index}" :pagination="false">
         <template slot="title">安全附件异常情况</template>
-        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.corporationId }).orgAbbrName || record.corporationId}}</span>
+        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
       </a-table>
     </CommonTable>
   </div>
@@ -190,7 +190,8 @@ export default {
   computed: {
     // 组织现地机构
     corporationList() {
-      return this.$store.state.setting.corporationList
+      return this.getCommonAddOrgnizeListAll
+      // return this.$store.state.setting.corporationList
     },
   },
   methods: {
@@ -218,8 +219,8 @@ export default {
         // 定义表头
         this.columnsSpecial = this.corporationList.map( item => {
           return {
-            title: item.orgAbbrName,
-            dataIndex: item.corporationId,
+            title: item.orgName,
+            dataIndex: item.orgId,
             width: 180,
             align: 'center'
           }
