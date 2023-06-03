@@ -39,7 +39,7 @@
         <a-form-model-item ref="startTime" label="值班开始时间" prop="startTime">
           <a-time-picker style="width: 100%;" v-model="formModel.startTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择" />
         </a-form-model-item>
-        <a-form-model-item ref="endTime" label="值班始时间" prop="endTime">
+        <a-form-model-item ref="endTime" label="值班结束时间" prop="endTime">
           <a-time-picker style="width: 100%;" v-model="formModel.endTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择" />
         </a-form-model-item>
           <!-- :checkedTreeNode="checkedTreeNode"
