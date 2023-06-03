@@ -25,7 +25,7 @@ export const GetQuestionDataList = params => post(course + '/api/course/paper/li
 //试卷删除
 export const DelQuestionDataList = params => post(course + '/api/course/paper/delete', params);
 //试卷-新增-第二步-题目列表、查询选项题目
-export const GetKDataList = params => post(course + '/api/course/topic/list', params);
+export const GetKDataList = params => post(course + '/api/course/topic/pageList', params);
 //试卷新增
 export const AddQuestionDataList = params => post(course + '/api/course/paper/insert', params);
 //试卷查看

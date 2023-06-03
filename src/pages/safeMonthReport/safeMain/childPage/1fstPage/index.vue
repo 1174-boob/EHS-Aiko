@@ -25,7 +25,7 @@
     <CommonTable>
       <a-table bordered :columns="columnsDetails" :scroll="{ x: 800 }"  :data-source="accidentEventDetailVo" rowKey="id" :pagination="false">
         <template slot="title">事件详情</template>
-        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.corporationId }).orgAbbrName || record.corporationId}}</span>
+        <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
         <span slot="eventType" slot-scope="text, record">{{record.eventType != 'xjws' ? eventTypeOptions.find(item=>{ return record.eventType == item.dictValue }).dictLabel : '虚惊未遂'}}</span>
       </a-table>
     </CommonTable>
@@ -109,7 +109,8 @@ export default {
     },
     // 组织现地机构
     corporationList() {
-      return this.$store.state.setting.corporationList
+      return this.getCommonAddOrgnizeListAll
+      // return this.$store.state.setting.commonAddOrgnizeListAll
     },
   },
   mounted() {
@@ -134,8 +135,8 @@ export default {
         this.accidentEventDetailVo = data.accidentEventDetailVo || [];
         this.typeColumes = this.corporationList.map( item => {
           return {
-            title: item.orgAbbrName,
-            dataIndex: item.corporationId,
+            title: item.orgName,
+            dataIndex: item.orgId,
             width: 80,
             align: 'center'
           }

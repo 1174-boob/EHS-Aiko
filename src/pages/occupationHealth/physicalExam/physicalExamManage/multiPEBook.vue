@@ -254,10 +254,10 @@ export default {
       ]
     },
     canSelectDate() {
-      return this.$route.meta && this.$route.meta.isResolve && this.infoStatus === 'POSITION_011'
+      return this.$route.meta && this.$route.meta.isResolve && this.infoStatus.indexOf('__002') > -1
     },
     isShowDate() {
-      return this.infoStatus === 'POSITION_011' || this.status === 'end'
+      return this.infoStatus.indexOf('__002') > -1 || this.status === 'end'
     },
     disabled() {
       return this.$route.meta && (this.$route.meta.isView || this.$route.meta.isResolve)
