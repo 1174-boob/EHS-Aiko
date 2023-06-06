@@ -28,7 +28,7 @@
           <vxe-column field="nicheItems" title="数据"></vxe-column>
           <vxe-column v-if="type==1||type==3" field="dataItem" width="200" :title="searchFormData.monthlyDate" :edit-render="{placeholder: '请输入数值'}">
             <template #edit="scope">
-              <vxe-input v-model.number="scope.row.dataItem" :disabled="!(scope.row.nicheItemsCode==1123||scope.row.nicheItemsCode<1087)" type="number" transfer @change="dataItemChange(scope)"></vxe-input>
+              <vxe-input v-model.number="scope.row.dataItem" :disabled="!(scope.row.nicheItemsCode>=1 && scope.row.nicheItemsCode<=141)" type="number" transfer @change="dataItemChange(scope)"></vxe-input>
             </template>
           </vxe-column>
           <vxe-column v-else field="dataItem" :title="searchFormData.monthlyDate" :edit-render="{}">
@@ -345,12 +345,13 @@ export default {
               corporationId: res.data.corporationId,
               monthlyDate: res.data.monthlyDate
             }
-            this.$refs.commonSearchItem.centerIdChange(this.searchFormData.centerId)
+            // this.$refs.commonSearchItem.centerIdChange(this.searchFormData.centerId)
             // 转数字
             environmentMonthlyItemList.forEach(item => {
               item.dataItem = item.dataItem ? item.dataItem - 0 : item.dataItem
             })
             this.tableData = cloneDeep(environmentMonthlyItemList);
+            console.log(this.tableData, 'cxccxc')
             this.monthlyId = res.data.monthlyId
             this.createUserId = res.data.createUserId
             this.status = res.data.status
@@ -421,8 +422,8 @@ export default {
         status: n == 1 ? '01' : '02',//审批状态
         centerId: this.searchFormData.centerId,//中心id
         corporationId: this.searchFormData.corporationId,//组织机构id
-        environmentMonthlyItemList: this.tableData.filter(i => i.nicheItemsCode > 1000).map((i, index) => {
-          i.index = index;
+        environmentMonthlyItemList: this.tableData.filter(i => i.nicheItemsCode < 1000).map((i, index) => {
+          i.index = index + 1;
           return i
         }),//环境月报数据集合
       }

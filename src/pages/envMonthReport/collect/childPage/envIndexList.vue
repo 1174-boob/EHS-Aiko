@@ -60,7 +60,8 @@ import getDictionaryItemObj from "@/utils/dictionary.js";
 import { environmentMonthDetailed } from "@/services/envMonth.js";
 import dayJs from "dayjs";
 import chart from "./chart.vue";
-import tableDataJson from "@/pages/envMonthReport/terrain/childPage/monthlyData.js";
+// import tableDataJson from "@/pages/envMonthReport/terrain/childPage/monthlyData.js";
+import tableDataJson from "@/pages/envMonthReport/terrain/childPage/aikoMonthData.js";
 import { tableConversion, findCorporationId, lastMonth } from "./methods.js";
 export default {
   components: { chart },

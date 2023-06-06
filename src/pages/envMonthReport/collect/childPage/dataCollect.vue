@@ -77,7 +77,8 @@ import { lastMonth } from "./methods.js";
 import SelTable from "@/pages/dangerWorkStatic/components/selTable.vue";
 import cancelLoading from "@/mixin/cancelLoading";
 import { BigNumber } from "bignumber.js";
-import tableDataJsonSource from "@/pages/envMonthReport/terrain/childPage/monthlyData.js";
+// import tableDataJsonSource from "@/pages/envMonthReport/terrain/childPage/monthlyData.js";
+import tableDataJsonSource from "@/pages/envMonthReport/terrain/childPage/aikoMonthData.js";
 const tableDataJson = tableDataJsonSource.filter(i => i.nicheItemsCode < 1300);
 export default {
   components: { SelTable },

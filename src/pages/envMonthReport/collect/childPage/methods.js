@@ -1,4 +1,4 @@
-import tableDataJson from "@/pages/envMonthReport/terrain/childPage/monthlyData.js";
+import aikoMonthData from "@/pages/envMonthReport/terrain/childPage/aikoMonthData.js";
 import store from '@/store'
 export const tableConversion = (data, n = 1001) => { // style：样式  Nodes：节点结构体
     let tableData = []
@@ -18,14 +18,14 @@ export const tableConversion = (data, n = 1001) => { // style：样式  Nodes：
 }
 
 // function findData (key) {
-//     let item = tableDataJson.find(i => {
+//     let item = aikoMonthData.find(i => {
 //         return i.nicheItemsCode == key
 //     })
 //     return item
 // }
 
 export const findData = (key) => {
-    let item = tableDataJson.find(i => {
+    let item = aikoMonthData.find(i => {
         return i.nicheItemsCode == key
     })
     return item

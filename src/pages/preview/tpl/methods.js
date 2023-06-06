@@ -1,4 +1,4 @@
-import tableDataJson from "@/pages/envMonthReport/terrain/childPage/monthlyData.js";
+import tableDataJson from "@/pages/envMonthReport/terrain/childPage/aikoMonthData.js";
 import store from '@/store'
 export const tableConversion = (data, n = 1001) => { // style：样式  Nodes：节点结构体
     let tableData = []
