@@ -158,7 +158,8 @@ export default {
         {
           title: '推送批次',
           dataIndex: 'pushCode',
-          key: "pushCode"
+          key: "pushCode",
+          width:200
         },
         {
           title: '推送人数',
@@ -190,7 +191,7 @@ export default {
           scopedSlots: { customRender: 'action' },
           key: "action",
           fixed: 'right', // 固定操作列
-          width: 400 // 宽度根据操作自定义设置
+          width: 150 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],

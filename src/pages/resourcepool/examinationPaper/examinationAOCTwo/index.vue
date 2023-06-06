@@ -100,7 +100,7 @@
       </div>
 
       <!-- 添加题目弹框-组件 -->
-      <AddTitleModal :addAddressModel="addAddressModel" @closeAddAddressModel="closeAddAddressModel" @submitDict="submitDict" :sonDataList="sonDataList" />
+      <AddTitleModal :subjectId="subjectId" :corporationId="corporationId" :addAddressModel="addAddressModel" @closeAddAddressModel="closeAddAddressModel" @submitDict="submitDict" :sonDataList="sonDataList" />
 
       <!-- 批量设置分支弹框 -->
       <CommonModal title="选择题目" :visible="allSetVisible" :cancelFn="closeAllSetVisible">
@@ -150,30 +150,30 @@
       <!-- 随机抽题弹框 -->
       <CommonModal title="随机抽题" :visible="randomVisible" :cancelFn="closeRandomVisible">
         <template slot="form">
-          <SearchTerm>
+          <!-- <SearchTerm>
             <a-form-model layout="inline" :model="formInline" :colon="false">
               <a-form-model-item label="选择科目">
                 <a-select v-model="formInline.subjectId" placeholder="请选择" allowClear>
                   <a-select-option v-for="item in sujectList" :value="item.subjectId" :key="item.subjectId">{{ item.name }}</a-select-option>
                 </a-select>
               </a-form-model-item>
-              <!-- <a-form-model-item label="选择题型">
-            <a-select
-              v-model="formInline.topicType"
-              placeholder="请选择"
-              allowClear
-            >
-              <a-select-option value="1">单选题</a-select-option>
-              <a-select-option value="2">多选题</a-select-option>
-              <a-select-option value="3">判断题</a-select-option>
-            </a-select>
-              </a-form-model-item>-->
+              <a-form-model-item label="选择题型">
+                <a-select
+                  v-model="formInline.topicType"
+                  placeholder="请选择"
+                  allowClear
+                >
+                  <a-select-option value="1">单选题</a-select-option>
+                  <a-select-option value="2">多选题</a-select-option>
+                  <a-select-option value="3">判断题</a-select-option>
+                </a-select>
+              </a-form-model-item>
               <a-form-model-item class="float-right">
                 <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
                 <a-button @click="iRest">重置</a-button>
               </a-form-model-item>
             </a-form-model>
-          </SearchTerm>
+          </SearchTerm> -->
           <a-form-model ref="dictForm" :model="dictForm" :rules="dictFormRules" :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false" labelAlign="left">
             <!-- <a-form-model-item label="题目分类">
             <div class="display_div">
@@ -247,6 +247,8 @@ export default {
   data() {
     return {
       name: JSON.parse(sessionStorage.getItem("examinaObj_xt")).firstStep.name,
+      corporationId: JSON.parse(sessionStorage.getItem("examinaObj_corporationId")),
+      subjectId: JSON.parse(sessionStorage.getItem("examinaObj_subjectId")),
       labelCol: { span: 4 }, // 设置左边label宽度
       wrapperCol: { span: 20 }, // 设置右边表单宽度
       addAddressModel: false,
@@ -295,9 +297,11 @@ export default {
     let isJump = this.$store.state.examina.examinaObj;
     if (!isJump) {
       this.$router.replace(
-        "/ehsGerneralManage/educationmanagement/examinationPaper"
+        "/ehsGerneralManage/educationmanagement/resource/examinationPaper"
       );
       sessionStorage.removeItem("examinaObj_xt");
+      sessionStorage.removeItem("examinaObj_corporationId");
+      sessionStorage.removeItem("examinaObj_subjectId");
       return;
     }
     this.subjectsDataList(); //科目列表
@@ -404,26 +408,27 @@ export default {
 
     //获取手动选题回显
     getKDataList(list) {
-      GetKDataList({ topicIds: list })
-        .then((res) => {
-          this.list = res.data;
-          this.dictForm = {
-            singleNum: undefined, //单选
-            multipleNum: undefined, //多选
-            judgeNum: undefined, //判断
-            subjectId: undefined, //科目
-          };
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      GetKDataList({
+        topicIds: list,
+      }).then((res) => {
+        this.list = res.data;
+        this.dictForm = {
+          singleNum: undefined, //单选
+          multipleNum: undefined, //多选
+          judgeNum: undefined, //判断
+          subjectId: undefined, //科目
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
       console.log(this.list);
     },
 
     //返回
     cancel() {
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/examinationAOCOne",
+        path: "/ehsGerneralManage/educationmanagement/resource/examinationAOCOne",
       });
     },
 
@@ -473,7 +478,7 @@ export default {
                 } else {
                   this.$antMessage.success(res.message);
                   this.$router.replace(
-                    "/ehsGerneralManage/educationmanagement/examinationPaper"
+                    "/ehsGerneralManage/educationmanagement/resource/examinationPaper"
                   );
                 }
                 // this.$router.replace(
@@ -493,7 +498,7 @@ export default {
                   this.$router.replace(path)
                 } else {
                   this.$router.replace(
-                    "/ehsGerneralManage/educationmanagement/examinationPaper"
+                    "/ehsGerneralManage/educationmanagement/resource/examinationPaper"
                   );
                 }
                 // this.$router.replace(
@@ -733,6 +738,13 @@ export default {
 </script>
 
 <style scoped lang='less'>
+@media screen and (max-width: 1366px) {
+  .clx-model{
+    /deep/ .ant-modal{
+      width: 800px !important;
+    }
+  }
+}
 .arc {
   width: 100%;
   height: 100%;

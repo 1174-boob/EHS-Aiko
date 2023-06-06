@@ -185,7 +185,7 @@ export default {
     // 预览
     jumpLook(record) {
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/examinationLook",
+        path: "/ehsGerneralManage/educationmanagement/resource/examinationLook",
         query: { paperId: record.paperId },
       });
     },

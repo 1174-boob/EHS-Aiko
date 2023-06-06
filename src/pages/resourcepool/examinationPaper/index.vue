@@ -116,6 +116,7 @@ export default {
           title: "更新时间",
           dataIndex: "updateTime",
           key: "updateTime",
+          width: 180
         },
         {
           slots: { title: "customTitle" },
@@ -158,7 +159,7 @@ export default {
     //跳转查看
     jumpLook(record) {
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/examinationLook",
+        path: "/ehsGerneralManage/educationmanagement/resource/examinationLook",
         query: { paperId: record.paperId },
       });
     },
@@ -182,7 +183,7 @@ export default {
       this.$store.dispatch("examina/getExaminaObj", "ok");
 
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/examinationAOCOne",
+        path: "/ehsGerneralManage/educationmanagement/resource/examinationAOCOne",
         query: { paperId: record ? record.paperId : undefined, type },
       });
     },

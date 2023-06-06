@@ -115,7 +115,7 @@
                 <div class="name">考试数量</div>
               </div>
             </router-link>
-            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/coursewaremanagement">
+            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/resource/coursewaremanagement">
               <div class="count-ico-box">
                 <img class="count-ico" :src="coursewareNumIco" />
               </div>
@@ -124,7 +124,7 @@
                 <div class="name">课件数量</div>
               </div>
             </router-link>
-            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/questionbankmanagement">
+            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/resource/questionbankmanagement">
               <div class="count-ico-box">
                 <img class="count-ico" :src="questionBankNumIco" />
               </div>
@@ -133,7 +133,7 @@
                 <div class="name">题库数量</div>
               </div>
             </router-link>
-            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/examinationPaper">
+            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/resource/examinationPaper">
               <div class="count-ico-box">
                 <img class="count-ico" :src="paperNumIco" />
               </div>
@@ -142,7 +142,7 @@
                 <div class="name">试卷数量</div>
               </div>
             </router-link>
-            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/instructormanagement">
+            <router-link class="count-box" to="/ehsGerneralManage/educationmanagement/resource/instructormanagement">
               <div class="count-ico-box">
                 <img class="count-ico" :src="teacherNumIco" />
               </div>

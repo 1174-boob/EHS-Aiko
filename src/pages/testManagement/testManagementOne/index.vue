@@ -29,7 +29,7 @@ export default {
         vm.setRouterCode("testManagement");
         vm.$router.replace('/ehsGerneralManage/educationmanagement/testManagement')
       })
-    } else if(from.path =="/ehsGerneralManage/educationmanagement/examinationAOCOne" ||from.path=='/educationmanagement/examinationAOCTwo'){
+    } else if(from.path =="/ehsGerneralManage/educationmanagement/resource/examinationAOCOne" ||from.path=='/educationmanagement/examinationAOCTwo'){
       const data = JSON.parse(sessionStorage.getItem('savEexamData'));
       next(vm=>{
         vm.setRouterCode("testManagement");

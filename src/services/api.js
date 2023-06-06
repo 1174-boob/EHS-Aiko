@@ -407,7 +407,7 @@ export const getDispatchRowDisabledDataApi = params => post(`${serviceNameList.d
 export const DeleteDispatch = params => post(`${serviceNameList.danger}/api/ehs/invitation/deleteDispatch`, params);
 
 // 推送-公司人员列表
-export const GetPushTree = params => post(`${serviceNameList.danger}/api/ehs/education/pushPersonnelTree`, params);
+export const GetPushTree = params => post(`${serviceNameList.course}/api/ehs/education/pushPersonnelTree`, params);
 // 组织人员id名称字典
 export const deptDict = params => get(`${serviceNameList.danger}/api/ehs/company/dept/dict`, params);
 

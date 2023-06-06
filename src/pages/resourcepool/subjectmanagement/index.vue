@@ -285,7 +285,7 @@ export default {
         handelContent(record) {
             console.log("handelContent", record);
             this.$router.push({
-                path: "/ehsGerneralManage/educationmanagement/subjectContent",
+                path: "/ehsGerneralManage/educationmanagement/resource/subjectContent",
                 query: { ...record }
             });
         },

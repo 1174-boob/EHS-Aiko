@@ -164,7 +164,7 @@ export default {
       this.$store.dispatch("examina/getExaminaObj", "ok");
       sessionStorage.setItem("savEexamData",JSON.stringify(data)); //离开页面前保存之前编辑的全部数据
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/examinationAOCOne",
+        path: "/ehsGerneralManage/educationmanagement/resource/examinationAOCOne",
         query: { paperId: undefined, type:'add' },
       });
     },
@@ -179,7 +179,7 @@ export default {
       sessionStorage.setItem("savEexamData",JSON.stringify(data)); //离开页面前保存之前编辑的全部数据
       const paperId = this.paperDetail.paperId
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/examinationAOCOne",
+        path: "/ehsGerneralManage/educationmanagement/resource/examinationAOCOne",
         query: { paperId, type:"change" },
       });
     },

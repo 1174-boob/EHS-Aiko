@@ -306,7 +306,7 @@ export default {
           if (res.code == 20000) {
             this.$antMessage.success(res.message);
             this.$router.replace(
-              "/ehsGerneralManage/educationmanagement/questionbankmanagement"
+              "/ehsGerneralManage/educationmanagement/resource/questionbankmanagement"
             );
           }
         })
@@ -406,7 +406,7 @@ export default {
     policyCancel() {
       this.setKeepalive(true)
       this.$router.replace(
-        "/ehsGerneralManage/educationmanagement/questionbankmanagement"
+        "/ehsGerneralManage/educationmanagement/resource/questionbankmanagement"
       );
     },
   },

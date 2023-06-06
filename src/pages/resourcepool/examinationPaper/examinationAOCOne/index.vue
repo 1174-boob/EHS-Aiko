@@ -3,7 +3,7 @@
     <div class="arc">
       <!-- 步骤条 -->
       <div class="steps">
-        <span class="active">1/设置设卷信息</span>
+        <span class="active">1/设置试卷信息</span>
         <span>2/设置试卷题目</span>
       </div>
       <a-form-model ref="ruleForm" :model="policyForm" :rules="rules" :colon="false">
@@ -89,7 +89,7 @@ export default {
     let isJump = this.$store.state.examina.examinaObj;
     if (!isJump) {
       this.$router.replace(
-        "/ehsGerneralManage/educationmanagement/examinationPaper"
+        "/ehsGerneralManage/educationmanagement/resource/examinationPaper"
       );
       sessionStorage.removeItem("examinaObj_xt");
       return;
@@ -173,8 +173,10 @@ export default {
         type: this.type,
       };
       sessionStorage.setItem("examinaObj_xt", JSON.stringify(obj));
+      sessionStorage.setItem("examinaObj_corporationId", JSON.stringify(this.policyForm.corporationId));
+      sessionStorage.setItem("examinaObj_subjectId", JSON.stringify(this.policyForm.subjectId));
       this.$router.replace(
-        "/ehsGerneralManage/educationmanagement/examinationAOCTwo"
+        "/ehsGerneralManage/educationmanagement/resource/examinationAOCTwo"
       );
     },
     //返回
@@ -187,7 +189,7 @@ export default {
         this.$router.replace(path)
       } else {
         this.$router.replace(
-          "/ehsGerneralManage/educationmanagement/examinationPaper"
+          "/ehsGerneralManage/educationmanagement/resource/examinationPaper"
         );
       }
     },

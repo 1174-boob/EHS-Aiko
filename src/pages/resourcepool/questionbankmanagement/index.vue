@@ -181,8 +181,8 @@ export default {
         },
         {
           title: "创建人",
-          dataIndex: "phone",
-          key: "phone",
+          dataIndex: "createUser",
+          key: "createUser",
         },
         {
           title: "创建时间",
@@ -194,7 +194,7 @@ export default {
           scopedSlots: { customRender: "action" },
           key: "action",
           fixed: "right", // 固定操作列
-          width: 300, // 宽度根据操作自定义设置
+          width: 240, // 宽度根据操作自定义设置
         },
       ],
       dictList: [],
@@ -204,7 +204,7 @@ export default {
 
   created() { 
     this.setRouterCode("questionbankmanagement");
-    this.columns.splice(0, 0, this.addCommonColumnItem(150));
+    this.columns.splice(1, 0, this.addCommonColumnItem(150));
     this.getTabList(); // 获取列表
   },
   activated() {
@@ -286,7 +286,7 @@ export default {
         query = { type };
       }
       this.$router.push({
-        path: "/ehsGerneralManage/educationmanagement/questionbankManagementAOC",
+        path: "/ehsGerneralManage/educationmanagement/resource/questionbankManagementAOC",
         query,
       });
     },

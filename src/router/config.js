@@ -1087,109 +1087,120 @@ const options = {
               component: NoBreadcrumb,
               children: [
                 {
-                  path: 'subjectmanagement',
-                  name: '科目管理',
+                  path: 'resource',
+                  name: '资源库管理',
                   meta: {
-                    title: '科目管理',
-                    routerCode:'subjectmanagement',
-                    isKeepalive:true,
-                    isPage: true,
+                    title: '资源库',
+                    icon: 'none',
                   },
-                  component: resolve => require(['@/pages/resourcepool/subjectmanagement/index.vue'], resolve),
-                  children: []
-                },
-                {
-                  path: 'instructormanagement',
-                  name: '讲师管理',
-                  meta: {
-                    title: '讲师管理',
-                    routerCode:'instructormanagement',
-                    isPage: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/instructormanagement/index.vue'], resolve),
-                },
-                {
-                  path: 'coursewaremanagement',
-                  name: '课件管理',
-                  meta: {
-                    title: '课件管理',
-                    routerCode:'coursewaremanagement',
-                    isPage: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/coursewaremanagement/index.vue'], resolve),
-                },
-                {
-                  path: 'questionbankmanagement',
-                  name: '题库管理',
-                  meta: {
-                    title: '题库管理',
-                    routerCode:'questionbankmanagement',
-                    isKeepalive:true,
-                    isPage: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/questionbankmanagement/index.vue'], resolve),
-                },
-                {
-                  path: 'questionbankManagementAOC',
-                  name: '题库新增编辑',
-                  meta: {
-                    title: '新建编辑',
-                    routerCode:'questionbankmanagement',
-                    isPage: true,
-                    invisible: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/questionbankmanagement/questionbankManagementAOC'], resolve)
-                },
-                {
-                  path: 'examinationPaper',
-                  name: '试卷管理',
-                  meta: {
-                    title: '试卷管理',
-                    routerCode:'examinationPaper',
-                    isKeepalive:true,
-                    isPage: false,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/examinationPaper'], resolve),
-                },
-                {
-                  path: 'examinationLook',
-                  name: '查看试卷',
-                  meta: {
-                    title: '查看试卷',
-                    isPage: true,
-                    invisible: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/examinationPaper/examinationPaperLook'], resolve),
-                },
-                {
-                  path: 'examinationAOCOne',
-                  name: '试卷新增编辑',
-                  meta: {
-                    title: '新增编辑',
-                    isPage: true,
-                    invisible: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/examinationPaper/examinationAOCOne'], resolve),
-                },
-                {
-                  path: 'examinationAOCTwo',
-                  name: '新增编辑',
-                  meta: {
-                    title: '新增编辑',
-                    invisible: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/examinationPaper/examinationAOCTwo'], resolve),
-                },
-                {
-                  path: 'subjectContent',
-                  name: '内容管理',
-                  meta: {
-                    title: '内容管理',
-                    routerCode:'subjectmanagement',
-                    isPage: true,
-                    invisible: true,
-                  },
-                  component: resolve => require(['@/pages/resourcepool/subjectmanagement/subjectContent/index.vue'], resolve),
+                  component: NoBreadcrumb,
+                  children: [
+                    {
+                      path: 'subjectmanagement',
+                      name: '科目管理',
+                      meta: {
+                        title: '科目管理',
+                        routerCode:'subjectmanagement',
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/subjectmanagement/index.vue'], resolve),
+                      children: []
+                    },
+                    {
+                      path: 'instructormanagement',
+                      name: '讲师管理',
+                      meta: {
+                        title: '讲师管理',
+                        routerCode:'instructormanagement',
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/instructormanagement/index.vue'], resolve),
+                    },
+                    {
+                      path: 'coursewaremanagement',
+                      name: '课件管理',
+                      meta: {
+                        title: '课件管理',
+                        routerCode:'coursewaremanagement',
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/coursewaremanagement/index.vue'], resolve),
+                    },
+                    {
+                      path: 'questionbankmanagement',
+                      name: '题库管理',
+                      meta: {
+                        title: '题库管理',
+                        routerCode:'questionbankmanagement',
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/questionbankmanagement/index.vue'], resolve),
+                    },
+                    {
+                      path: 'questionbankManagementAOC',
+                      name: '题库新增编辑',
+                      meta: {
+                        title: '新建编辑',
+                        routerCode:'questionbankmanagement',
+                        isPage: true,
+                        invisible: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/questionbankmanagement/questionbankManagementAOC'], resolve)
+                    },
+                    {
+                      path: 'examinationPaper',
+                      name: '试卷管理',
+                      meta: {
+                        title: '试卷管理',
+                        routerCode:'examinationPaper',
+                        isKeepalive:true,
+                        isPage: false,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/examinationPaper'], resolve),
+                    },
+                    {
+                      path: 'examinationLook',
+                      name: '查看试卷',
+                      meta: {
+                        title: '查看试卷',
+                        isPage: true,
+                        invisible: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/examinationPaper/examinationPaperLook'], resolve),
+                    },
+                    {
+                      path: 'examinationAOCOne',
+                      name: '试卷新增编辑',
+                      meta: {
+                        title: '新增编辑',
+                        isPage: true,
+                        invisible: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/examinationPaper/examinationAOCOne'], resolve),
+                    },
+                    {
+                      path: 'examinationAOCTwo',
+                      name: '新增编辑',
+                      meta: {
+                        title: '新增编辑',
+                        invisible: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/examinationPaper/examinationAOCTwo'], resolve),
+                    },
+                    {
+                      path: 'subjectContent',
+                      name: '内容管理',
+                      meta: {
+                        title: '内容管理',
+                        routerCode:'subjectmanagement',
+                        isPage: true,
+                        invisible: true,
+                      },
+                      component: resolve => require(['@/pages/resourcepool/subjectmanagement/subjectContent/index.vue'], resolve),
+                    },
+                  ]
                 },
                 {
                   path: 'coursemanagement',
@@ -1367,16 +1378,27 @@ const options = {
                   },
                   component: NoBreadcrumb,
                   children: [
+                    // {
+                    //   path: 'partnerInvitation',
+                    //   name: '相关方邀请',
+                    //   meta: {
+                    //     title: '相关方邀请',
+                    //     routerCode:'partnerInvitation',
+                    //     isKeepalive:true,
+                    //     isPage: true,
+                    //   },
+                    //   component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/index.vue'], resolve),
+                    // },
                     {
-                      path: 'partnerInvitation',
-                      name: '相关方邀请',
+                      path: 'examine',
+                      name: '相关方审批',
                       meta: {
-                        title: '相关方邀请',
-                        routerCode:'partnerInvitation',
+                        title: '相关方审批',
+                        routerCode:'examine',
                         isKeepalive:true,
                         isPage: true,
                       },
-                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/index.vue'], resolve),
+                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/examine.vue'], resolve),
                     },
                     {
                       path: 'audit',
