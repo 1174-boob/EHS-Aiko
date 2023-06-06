@@ -25,11 +25,10 @@
         </template>
       </vxe-table>
     </CommonTable>
-    <div class="echarts-style">
-      <!-- EHS培训报告分析 -->
+    <!-- <div class="echarts-style">
       EHS培训报告分析
       <Echarts :option="echartFst" />
-    </div>
+    </div> -->
   </div>
 </template>
 

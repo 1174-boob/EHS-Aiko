@@ -297,8 +297,8 @@ export default {
       }
       let params = {
         ...this.editForm,
-        avatar: this.headImg.url,
-        fileId: this.headImg.id,
+        avatar: this.headImg === undefined? '' :this.headImg.url,
+        fileId: this.headImg === undefined? '' :this.headImg.id,
       }
       let promiseFn = InsertLecturer;
       if (this.editText == "编辑") {
@@ -309,6 +309,7 @@ export default {
         this.$antMessage.success(this.editText + "成功");
         this.editVisible = false;
         this.editForm = {};
+        this.headImg = {};
         this.getDataList();
       }).catch(err => console.log(err))
     },

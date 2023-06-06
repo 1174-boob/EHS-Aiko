@@ -147,7 +147,7 @@ export default {
       columnsCommon: [],
       columnsReal: [
         {
-          title: '现地',
+          title: '所属组织',
           dataIndex: 'corporationId',
           width: 200,
           align: 'center'

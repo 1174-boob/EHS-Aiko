@@ -1367,16 +1367,27 @@ const options = {
                   },
                   component: NoBreadcrumb,
                   children: [
+                    // {
+                    //   path: 'partnerInvitation',
+                    //   name: '相关方邀请',
+                    //   meta: {
+                    //     title: '相关方邀请',
+                    //     routerCode:'partnerInvitation',
+                    //     isKeepalive:true,
+                    //     isPage: true,
+                    //   },
+                    //   component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/index.vue'], resolve),
+                    // },
                     {
-                      path: 'partnerInvitation',
-                      name: '相关方邀请',
+                      path: 'examine',
+                      name: '相关方审批',
                       meta: {
-                        title: '相关方邀请',
-                        routerCode:'partnerInvitation',
+                        title: '相关方审批',
+                        routerCode:'examine',
                         isKeepalive:true,
                         isPage: true,
                       },
-                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/index.vue'], resolve),
+                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/examine.vue'], resolve),
                     },
                     {
                       path: 'audit',

@@ -322,7 +322,7 @@ export default {
           scopedSlots: { customRender: 'action' },
           key: "action",
           fixed: 'right', // 固定操作列
-          width: 200 // 宽度根据操作自定义设置
+          width: 80 // 宽度根据操作自定义设置
         }
       ],
       fileTypeList: [],
@@ -666,6 +666,9 @@ export default {
   .ant-select {
     width: 100%;
   }
+}
+/deep/ .ant-modal-content {
+  width: 800px;
 }
 // /deep/ #global-uploader {
 //   display: none;

@@ -1,7 +1,7 @@
 <template>
     <!-- 邀请列表 -->
     <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
-        <h3 class="title">BOE废弃物</h3>
+        <h3 class="title">爱旭废弃物</h3>
 
         <!-- 列表 -->
         <CommonTable :page="page"
@@ -129,7 +129,7 @@ export default {
             searchFormData: { dateType: '1', dateStr: lastMonth(), dataType: '' },
             boeColumns: [
                 {
-                    title: "2022年",
+                    title: "2023年",
                     dataIndex: "nicheItemsCode",
                     key: "nicheItemsCode",
                     align: "center",

@@ -26,11 +26,10 @@
         </template>
       </vxe-table>
     </CommonTable>
-    <div class="echarts-style">
-      <!-- 应知应会抽查报告分析 -->
+    <!-- <div class="echarts-style">
       应知应会抽查报告分析
       <Echarts :option="echartFst" />
-    </div>
+    </div> -->
   </div>
 </template>
 

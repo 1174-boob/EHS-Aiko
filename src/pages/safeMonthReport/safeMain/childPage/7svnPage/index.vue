@@ -24,7 +24,7 @@
         </template>
       </vxe-table>
     </CommonTable>
-    <div class="echarts-style">
+    <!-- <div class="echarts-style">
       培训厂商数据分析 同比
       <Echarts :option="echartFst" />
     </div>
@@ -39,7 +39,7 @@
     <div class="echarts-style">
       培训外协人员数据分析 环比
       <Echarts :option="echartFor" />
-    </div>
+    </div> -->
   </div>
 </template>
 

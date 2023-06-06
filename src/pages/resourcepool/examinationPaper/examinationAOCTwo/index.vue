@@ -738,6 +738,13 @@ export default {
 </script>
 
 <style scoped lang='less'>
+@media screen and (max-width: 1366px) {
+  .clx-model{
+    /deep/ .ant-modal{
+      width: 800px !important;
+    }
+  }
+}
 .arc {
   width: 100%;
   height: 100%;

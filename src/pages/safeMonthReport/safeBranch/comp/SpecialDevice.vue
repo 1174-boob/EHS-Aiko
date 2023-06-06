@@ -194,7 +194,7 @@ export default {
           align: 'center'
         },
         {
-          title: '是否存在隐患（选择）',
+          title: '是否存在隐患',
           dataIndex: 'deviceTrouble',
           width: 200,
           align: 'center'

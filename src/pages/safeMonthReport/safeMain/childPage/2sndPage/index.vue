@@ -52,19 +52,19 @@
       </vxe-table>
     </CommonTable>
     <!-- 红线隐患汇总 -->
-    <CommonTable>
+    <!-- <CommonTable>
       <a-table bordered :columns="columnsRed" :scroll="{ x: 800 }"  :data-source="hideDangerDetailRed" rowKey="id" :pagination="false">
         <template slot="title">红线隐患汇总</template>
         <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
       </a-table>
-    </CommonTable>
+    </CommonTable> -->
     <!-- 一类隐患汇总 -->
-    <CommonTable>
+    <!-- <CommonTable>
       <a-table bordered :columns="columnsTotal" :scroll="{ x: 800 }"  :data-source="hideDangerDetailFst" rowKey="id" :pagination="false">
         <template slot="title">一类隐患汇总</template>
         <span slot="showSite" slot-scope="text, record">{{corporationList.find(item=>{ return record.corporationId == item.orgId }).orgName || record.corporationId}}</span>
       </a-table>
-    </CommonTable>
+    </CommonTable> -->
     <div class="echarts-style">
       隐患数据统计同比
       <Echarts :option="echartFst" />
@@ -467,35 +467,36 @@ export default {
           // 将最终list的第五项中的keyid拿出来与最终list的第四项的匹配keyid
           // 匹配上，则将第五项中的keyid的value除以第四项的keyid的value
           // 得出的值，给第六项的keyid中，带百分号
+          let hideDangerLevelLength = hideDangerLevel.length;
           this.corporationList.forEach(item => {
             let sum = 0;
-            hideDangerLevel.slice(0,4).map( _item => {
+            hideDangerLevel.slice(0,hideDangerLevelLength-3).map( _item => {
               if(_item[item.orgId] != undefined) {
                 sum += (_item[item.orgId] - 0);
               }
             })
-            hideDangerLevel[4][item.orgId] = sum;
+            hideDangerLevel[hideDangerLevelLength-3][item.orgId] = sum;
           })
-          Object.keys(hideDangerLevel[4]).forEach((key)=>{
+          Object.keys(hideDangerLevel[hideDangerLevelLength-3]).forEach((key)=>{
             if(!isNaN(key-0)) {
-              hideDangerLevel[4].lastTotal += (hideDangerLevel[4][key]-0);
+              hideDangerLevel[hideDangerLevelLength-3].lastTotal += (hideDangerLevel[hideDangerLevelLength-3][key]-0);
             }
           })
-          Object.keys(hideDangerLevel[5]).forEach((key)=>{
-            Object.keys(hideDangerLevel[4]).forEach((_key)=>{
+          Object.keys(hideDangerLevel[hideDangerLevelLength-2]).forEach((key)=>{
+            Object.keys(hideDangerLevel[hideDangerLevelLength-3]).forEach((_key)=>{
               if(!isNaN(key-0)) {
                 if(key == _key) {
-                  hideDangerLevel[6][key] = hideDangerLevel[5][key] / hideDangerLevel[4][_key]
+                  hideDangerLevel[hideDangerLevelLength-1][key] = hideDangerLevel[hideDangerLevelLength-2][key] / hideDangerLevel[hideDangerLevelLength-3][_key]
                 }
               }
             })
           })
-          Object.keys(hideDangerLevel[6]).forEach((key)=>{
+          Object.keys(hideDangerLevel[hideDangerLevelLength-1]).forEach((key)=>{
             if(!isNaN(key-0)) {
-              hideDangerLevel[6].lastTotal = hideDangerLevel[5].lastTotal / hideDangerLevel[4].lastTotal
+              hideDangerLevel[hideDangerLevelLength-1].lastTotal = hideDangerLevel[hideDangerLevelLength-2].lastTotal / hideDangerLevel[hideDangerLevelLength-3].lastTotal
             }
           })
-          hideDangerLevel[6].lastTotal = parseFloat(hideDangerLevel[6].lastTotal*100).toFixed(2) + '%';
+          hideDangerLevel[hideDangerLevelLength-1].lastTotal = parseFloat(hideDangerLevel[hideDangerLevelLength-1].lastTotal*100).toFixed(2) + '%';
           this.hideDangerLevel = hideDangerLevel;
         }
         if(this.hideDangerCategory && this.hideDangerCategory.length > 0) {

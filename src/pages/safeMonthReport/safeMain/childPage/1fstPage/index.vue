@@ -165,6 +165,7 @@ export default {
           }
           return mapIndex
         });
+        console.log(this.accidentEventAnalyseVo, 'cczczc')
       } else {
         this.accidentEventDetailVo = [];
         this.accidentEventAnalyseVo = [];

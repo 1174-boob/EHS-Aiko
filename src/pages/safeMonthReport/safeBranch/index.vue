@@ -36,7 +36,7 @@
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="viewDetail(record)">查看</span>
           <span v-if="[1,3].includes(+record.nodeStatus)" class="color-0067cc cursor-pointer" @click="toDealPage(record)">编辑</span>
-          <span class="color-0067cc cursor-pointer" @click="showPreview(record)">预览</span>
+          <!-- <span class="color-0067cc cursor-pointer" @click="showPreview(record)">预览</span> -->
           <span v-show="isResolveVisible(record)" class="color-0067cc cursor-pointer" @click="toResolvePage(record)">处理</span>
         </div>
       </a-table>

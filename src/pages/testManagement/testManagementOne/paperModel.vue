@@ -265,4 +265,12 @@ export default {
 .clx-model-body {
   margin-bottom: 20px;
 }
+@media screen and (max-width: 1366px) {
+  .clx-model{
+    /deep/ .ant-modal{
+      width: 800px !important;
+    }
+  }
+}
+
 </style>

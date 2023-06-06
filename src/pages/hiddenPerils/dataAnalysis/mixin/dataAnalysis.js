@@ -154,19 +154,19 @@ const dataAnalysisMinxin = {
             if (needSearchFormName == 'none') { //带查询但不展示查询-例如总览
                 if (this.formInline.corporationId) { //x轴为部门
                     xAxisData = xAxis.map(item => {
-                        let orgAbbrName = this.deptCache[item] ? this.deptCache[item] : item
-                        return orgAbbrName
+                        let orgName = this.deptCache[item] ? this.deptCache[item] : item
+                        return orgName
                     })
                 } else {
                     xAxisData = xAxis.map(item => { //x轴为组织
-                        let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-                        return orgAbbrName ? orgAbbrName : item
+                        let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+                        return orgName ? orgName : item
                     })
                 }
             } else if (this[needSearchFormName].isSummary) { // 汇总
                 xAxisData = xAxis.map(item => {
-                    let orgAbbrName = this.getMappingValue(this.setCorporationTree, "corporationCode", item).corporationName
-                    return orgAbbrName ? orgAbbrName : item
+                    let orgName = this.getMappingValue(this.setCorporationTree, "corporationCode", item).corporationName
+                    return orgName ? orgName : item
                 })
             } else {
                 if (needSearchFormName == 'formInline') {
@@ -177,8 +177,8 @@ const dataAnalysisMinxin = {
                         })
                     } else {
                         xAxisData = xAxis.map(item => { //x轴为组织
-                            let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-                            return orgAbbrName ? orgAbbrName : item
+                            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+                            return orgName ? orgName : item
                         })
                     }
                 } else {
@@ -189,8 +189,8 @@ const dataAnalysisMinxin = {
                         })
                     } else {
                         xAxisData = xAxis.map(item => { //x轴为组织
-                            let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-                            return orgAbbrName ? orgAbbrName : item
+                            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+                            return orgName ? orgName : item
                         })
                     }
                 }

@@ -35,7 +35,7 @@
         </div>
       </a-table> -->
     </CommonTable>
-    <h3><i></i>红线隐患汇总</h3>
+    <!-- <h3><i></i>红线隐患汇总</h3>
     <CommonTable>
       <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="hideDangerDetail" :cell-class-name="cellClassName">
         <template v-for="(item) in redColumes">
@@ -80,9 +80,7 @@
           </div>
         </template>
       </vxe-table>
-      <!-- <a-table bordered :columns="firstColumes" :scroll="{ x: 1000 }" :locale="{emptyText: ''}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
-      </a-table> -->
-    </CommonTable>
+    </CommonTable> -->
     <h3><i></i>隐患类别统计</h3>
     <CommonTable>
       <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableDataList" :cell-class-name="cellClassName">

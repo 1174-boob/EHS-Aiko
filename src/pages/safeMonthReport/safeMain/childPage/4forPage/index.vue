@@ -70,7 +70,7 @@ export default {
       columnsSpecial: [],
       columnsYear: [
         {
-          title: '现地',
+          title: '所属组织',
           dataIndex: 'corporationId',
           key: "corporationId",
           width: 180,
@@ -124,7 +124,7 @@ export default {
       ],
       columnsSafe: [
         {
-          title: '现地',
+          title: '所属组织',
           dataIndex: 'corporationId',
           key: "corporationId",
           width: 180,
@@ -188,7 +188,7 @@ export default {
     this.searchTable();
   },
   computed: {
-    // 组织现地机构
+    // 组织所属组织机构
     corporationList() {
       return this.getCommonAddOrgnizeListAll
       // return this.$store.state.setting.corporationList

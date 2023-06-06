@@ -11,7 +11,7 @@
       <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border :cell-class-name="cellClassName" :header-cell-class-name="headerCellClassName"
       show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableData">
         <template v-for="(item) in columes">
-          <vxe-column v-if="['monthNum', 'yearNum', 'averageNum'].includes(item.dataIndex)" :key="item.dataIndex" :field="item.dataIndex" :min-width="item.width?item.width:120" :title="item.title">
+          <vxe-column v-if="['monthNum', 'yearNum', 'averageNum'].includes(item.dataIndex)" :key="item.dataIndex" disabled :field="item.dataIndex" :min-width="item.width?item.width:120" :title="item.title">
             <template #default="{ row }">
               <a-input @blur="handleInputBlur(row)" @change="handleChange" v-if="!disabled" class="editable-input" v-model="row[item.dataIndex]" :maxLength="30"></a-input>
               <span v-else>{{row[item.dataIndex]}}</span>
