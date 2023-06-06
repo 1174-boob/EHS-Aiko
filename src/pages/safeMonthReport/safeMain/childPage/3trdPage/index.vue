@@ -66,7 +66,7 @@
           </vxe-column>
           <vxe-column v-else-if="item.dataIndex === 'deptId'" :key="index" :field="item.dataIndex" :min-width="item.width?item.width:120" :title="item.title">
             <template #default="{ row }">
-              <span>{{ deptCache[row.deptId] }}</span>
+              <span>{{ row.deptId }}</span>
             </template>
           </vxe-column>
           <vxe-column v-else-if="item.dataIndex === 'reason'" :key="index" :field="item.dataIndex" :min-width="item.width?item.width:120" :title="item.title">
