@@ -26,7 +26,7 @@
               </a-col>
               <a-col :span="6">
                 <span class="info-label">入司时间：</span>
-                <span>{{userInfo.joyCompanyTime || '--'}}</span>
+                <span>{{(userInfo.joyCompanyTime ? userInfo.joyCompanyTime.join('-') : '') || '--'}}</span>
               </a-col>
             </a-row>
             <a-row class="mgb-20">
@@ -40,7 +40,7 @@
               </a-col>
               <a-col :span="6">
                 <span class="info-label">出生年月：</span>
-                <span>{{userInfo.birthTime || '--'}}</span>
+                <span>{{(userInfo.birthTime ? userInfo.birthTime.join('-') : '') || '--'}}</span>
               </a-col>
               <a-col :span="6">
                 <span class="info-label">婚姻状况：</span>

@@ -6,7 +6,7 @@
   >
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <a-form-model-item label="选择科目">
+        <!-- <a-form-model-item label="选择科目">
           <a-select
             v-model="formInline.subjectId"
             placeholder="请选择"
@@ -19,7 +19,7 @@
               >{{ item.name }}</a-select-option
             >
           </a-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="选择题型">
           <a-select
             v-model="formInline.topicType"
@@ -39,7 +39,29 @@
         </a-form-model-item>
       </a-form-model>
     </SearchTerm>
-    <CommonTable>
+
+    <!-- <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
+      <a-table
+        :columns="columns"
+        :scroll="{ x: 800 }"
+        :locale="{ emptyText: emptyText }"
+        :data-source="dictList"
+        :rowKey="
+          (record, index) => {
+            return index;
+          }
+        "
+        :pagination="false"
+      >
+        <div slot="customTitle">操作</div>
+        <div slot="action" slot-scope="record">
+          <span class="color-0067cc cursor-pointer" @click="jumpLook(record)">查看</span>
+          <span class="color-0067cc cursor-pointer" @click="jumpAddOrDetail('change', record)">编辑</span>
+          <span class="color-ff4d4f cursor-pointer" @click="deleteDict(record)">删除</span>
+        </div>
+      </a-table>
+    </CommonTable> -->
+    <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
       <a-table
         :columns="columns"
         :locale="{ emptyText: emptyText }"
@@ -82,7 +104,7 @@ import { debounce } from "lodash";
 import { GetKDataList, SubjectsDataList } from "@/services/questionmodel.js";
 export default {
   mixins: [fromMaxLength, cancelLoading, teableCenterEllipsis, dragTable],
-  props: ["addAddressModel", "sonDataList"],
+  props: ["addAddressModel", "sonDataList", "corporationId", "subjectId"],
   data() {
     return {
       dictList: [],
@@ -102,6 +124,11 @@ export default {
           key: "topicTitle",
         },
       ],
+      page: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      },
       formInline: {
         topicType: undefined,
         subjectId: undefined,
@@ -129,16 +156,32 @@ export default {
     },
     //获取列表
     getTabList() {
-      let par = { ...this.formInline };
-      GetKDataList(par)
-        .then((res) => {
-          this.dictList = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      let par = {
+        // ...this.formInline,
+        pageNo: this.page.pageNo,
+        pageSize: this.page.pageSize,
+        corporationId: this.corporationId,
+        subjectId: this.subjectId
+      };
+      GetKDataList(par).then((res) => {
+        this.dictList = res.data ? res.data.list : [];
+        this.page.total = res.data.total;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     },
-
+    // 页码改变
+    pageNoChange(page) {
+      this.page.pageNo = page;
+      // 获取列表
+      this.getTabList();
+    },
+    showSizeChange(page, pageSize) {
+      this.page.pageNo = 1;
+      this.page.pageSize = pageSize;
+      this.getTabList();
+    },
     onSelectChange(selectedRowKeys, selectedRows) {
       // console.log(selectedRowKeys, selectedRows);
       this.selectedRowKeys = selectedRowKeys;

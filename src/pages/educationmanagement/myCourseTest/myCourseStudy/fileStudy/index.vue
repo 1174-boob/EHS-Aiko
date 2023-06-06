@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      previewFileBaseUrl: 'https://ziehs.boeplat.com/viewOnline//onlinePreview'
+      previewFileBaseUrl: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/viewOnline/onlinePreview` : `http://10.254.131.77/viewOnline/onlinePreview`
     };
   },
   created() {

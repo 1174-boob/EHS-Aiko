@@ -1,13 +1,45 @@
 <template>
-  <CommonModal :title="modelTitle + '控制室内其他消防系统运行情况'" :visible="inspectionRecordModelShow" :cancelFn="closeModel">
+  <CommonModal :title="roomType + '控制室内其他消防系统运行情况'" :visible="inspectionRecordModelShowRoom" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item ref="problemDescription" label="问题描述" prop="problemDescription">
-          <a-textarea v-model.trim="formModel.problemDescription" :maxLength="300" placeholder="请输入问题描述" allowClear></a-textarea>
+        <a-form-model-item ref="deviceName" label="消防系统设备名称" prop="deviceName">
+          <a-input v-model="formModel.deviceName" placeholder="请输入" />
         </a-form-model-item>
-        <a-form-model-item ref="result" label="处理方法及结果" prop="result">
-          <a-textarea v-model.trim="formModel.result" :maxLength="300" placeholder="请输入处理方法及结果" allowClear></a-textarea>
+        <a-form-model-item ref="controlState" label="控制状态" prop="controlState">
+          <a-radio-group v-model="formModel.controlState">
+            <a-radio value="0">手动</a-radio>
+            <a-radio value="1">自动</a-radio>
+          </a-radio-group>
         </a-form-model-item>
+        <a-form-model-item ref="runningState" label="运行状态" prop="runningState">
+          <a-radio-group v-model="formModel.runningState">
+            <a-radio value="0">正常</a-radio>
+            <a-radio value="1">故障</a-radio>
+          </a-radio-group>
+        </a-form-model-item>
+        <a-form-model-item ref="handlingSituation" label="故障及处理情况" prop="handlingSituation">
+          <a-textarea v-model.trim="formModel.handlingSituation" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
+        </a-form-model-item>
+        <a-form-model-item ref="startTime" label="值班开始时间" prop="startTime">
+          <a-time-picker style="width: 100%;" v-model="formModel.startTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择" />
+        </a-form-model-item>
+        <a-form-model-item ref="endTime" label="值班结束时间" prop="endTime">
+          <a-time-picker style="width: 100%;" v-model="formModel.endTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择" />
+        </a-form-model-item>
+          <!-- :checkedTreeNode="checkedTreeNode"
+          :treeRoles="iRules"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          :onPreview="!iFrom.corporationId"
+          :treePlaceholder="iFrom.corporationId?'请选择' : '请先选择所属组织'"
+          :deptTreeId="deptTreeId"
+            -->
+          <StaffOrDept
+            :labelTitle="'值班员'"
+            :propKey="'dutyUserIdList'"
+            :checkedTreeNode="checkedTreeNode"
+            @getTreeData="getTreeData"
+          ></StaffOrDept>
       </a-form-model>
     </template>
     <template slot="btn">
@@ -19,29 +51,26 @@
 
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
-// 自定义表单验证的class类
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { cloneDeep, isEmpty } from "lodash";
 import chemicalDict from "@/mixin/chemicalDict.js";
-import { addInspectionRecordApi, editInspectionRecordApi } from '@/services/networkControl/onduty.js'
+import dictionary from "@/utils/dictionary.js";
+import StaffOrDept from "@/components/staffOrDept";
 export default {
+  components: { StaffOrDept },
   mixins: [cancelLoading, chemicalDict],
   model: {
-    prop: 'inspectionRecordModelShow',
+    prop: 'inspectionRecordModelShowRoom',
   },
   props: {
-    inspectionRecordModelShow: {
+    inspectionRecordModelShowRoom: {
       type: Boolean,
       default: false,
     },
     formModelOldData: {
-      default: () => { }
+      default: () => {}
     },
-    // 全部数据
-    moduleList: {
-      type: Array,
-      default: () => [],
-    },
+    roomType: {},
     dutyId: {},
   },
   data() {
@@ -52,52 +81,46 @@ export default {
       formModel: {},
       // 表单验证
       rules: {
-        problemDescription: [{ required: true, message: "问题描述不能为空", trigger: "blur" }],
-        result: [{ required: true, message: "处理方法及结果不能为空", trigger: "blur" }],
+        deviceName: [{ required: true, message: "不能为空", trigger: "blur" }],
+        controlState: [{ required: true, message: "不能为空", trigger: "blur" }],
+        runningState: [{ required: true, message: "不能为空", trigger: "blur" }],
+        handlingSituation: [{ required: true, message: "不能为空", trigger: "blur" }],
+        startTime: [{ required: true, message: "不能为空", trigger: "change" }],
+        endTime: [{ required: true, message: "不能为空", trigger: "change" }],
+        dutyUserIdList: [{ required: true, message: "不能为空", trigger: "blur" }],
       },
+      dicOnly: [],
+      checkedTreeNode: []
     };
   },
-  computed: {
-    // 弹窗标题
-    modelTitle() {
-      return this.formModelOldData.historyId ? '编辑' : '新增'
-    },
+  created() {
+    this.dicOnly = dictionary('only');
   },
   methods: {
-    addInspectionRecordApi,
-    editInspectionRecordApi,
+    getTreeData(value) {
+      this.formModel.dutyUserIdList = value.treeIdList;
+      this.formModel.dutyUserNameList = value.treeNameAndCodeList.map((item)=>{
+        return item.treeName
+      });
+      this.checkedTreeNode = value.treeIdList;
+      if (!formValidator.formItemValidate(this, "dutyUserIdList", "ruleForm")) {
+        return;
+      }
+    },
     // 确定
     onSubmit() {
       if (!formValidator.formAll(this, "ruleForm")) {
         return;
       }
       this.handleLoading()
-      let methodsName = this.formModelOldData.historyId ? 'editInspectionRecordApi' : 'addInspectionRecordApi'
-      let apiData = { ...this.formModel, type: '1', dutyId: this.dutyId }   //1-巡检记录；2-事件记录
-      this[methodsName](apiData)
-        .then(res => {
-          // console.log('确定', this.formModel)
-          let moduleListNew = cloneDeep(this.moduleList)
-          if (this.formModel.historyId) {   // 修改
-            let index = moduleListNew.findIndex(item => item.historyId == this.formModel.historyId)
-            moduleListNew.splice(index, 1, { ...this.formModel })
-          } else {   // 新增
-            if (res.data) {
-              let formModel = cloneDeep(this.formModel)
-              formModel.historyId = res.data
-              formModel.type = '1'
-              moduleListNew.unshift(formModel)
-            } else {
-              this.$antMessage.warn(`新增失败`)
-              return
-            }
-          }
-          this.$emit('changeModuleList', moduleListNew)
-          this.closeModel()
-        })
-        .finally(() => {
-          this.cancelLoading()
-        })
+      if(this.roomType == '编辑') {
+        this.$emit('changeModuleList', this.formModel)
+      } else {
+        this.formModel.roomTimeStamp = new Date().getTime() + '';
+        this.$emit('addModuleList', this.formModel)
+      }
+      this.cancelLoading()
+      this.closeModel()
     },
     // 取消-关闭model
     closeModel() {
@@ -105,9 +128,10 @@ export default {
     },
   },
   watch: {
-    inspectionRecordModelShow(newVal) {
+    inspectionRecordModelShowRoom(newVal) {
       if (newVal) {
         this.formModel = isEmpty(this.formModelOldData) ? {} : cloneDeep(this.formModelOldData)
+        this.checkedTreeNode = this.formModel.dutyUserIdList;
       } else {
         setTimeout(() => {
           this.formModel = {}

@@ -96,6 +96,7 @@
 import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
 import tableDataJson from "./monthlyData.js";
+import aikoMonthDataJson from "./aikoMonthData.js";
 import { saveEnvMonth, detailsEnvMonth, checkOut, update, envMonthApproved, envMonthApprovalRejection, envMonthApprovalWithdraw, getLog } from "@/services/envMonth.js";
 import dayJs from "dayjs";
 import SetLog from './setLog.vue'
@@ -147,7 +148,7 @@ export default {
     if (this.type > 1) {   //编辑、查看、处理
       this.initData();
     } else {    //新增
-      let tableData = tableDataJson.filter(i => i.nicheItemsCode < 1300);
+      let tableData = aikoMonthDataJson.filter(i => i.nicheItemsCode < 1300);
       tableData.forEach(item => {
         if (item.nicheItemsCode == 999) {
           item.dataItem = 99;
@@ -166,7 +167,7 @@ export default {
     mergeCells() {
       //{row: 第几行, col: 第几列, rowspan: 竖向几个, colspan: 横向几个}
       //{ row: 3, col: 0, rowspan: 1, colspan: 3 }, 
-      let mergeCellsData = tableDataJson.map((item, index) => {
+      let mergeCellsData = aikoMonthDataJson.map((item, index) => {
         let obj = undefined
         if (item.needMerge) {
           obj = { row: index, ...item.mergeCellsObj }
@@ -334,7 +335,7 @@ export default {
           try {
             let environmentMonthlyItemList = res.data.environmentMonthlyItemList || []
             // 回显不需要输入的项
-            tableDataJson.forEach((item, index) => {
+            aikoMonthDataJson.forEach((item, index) => {
               if (item.nicheItemsCode == 999) {
                 environmentMonthlyItemList.splice(index, 0, item)
               }

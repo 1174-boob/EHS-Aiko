@@ -185,7 +185,7 @@ export default {
             initConfigPage(){
                   this.userId = this.$route.query.userId;
                   let corporationId = this.$route.query.corporationId;
-                  this.corporationName = this.getMappingValue(this.getCommonAddOrgnizeList,"id",corporationId).orgName || null;
+                  this.corporationName = this.getMappingValue(this.getCommonAddOrgnizeListAll,"orgId",corporationId).orgName || null;
                   this.userData();
             },
             // 页码改变

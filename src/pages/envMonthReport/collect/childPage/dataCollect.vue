@@ -40,13 +40,11 @@
       </a-form-model>
     </SearchTerm>
 
-    <DashBtn>
+    <!-- <DashBtn>
       <div>
-        <!-- <a-button type="dashed" @click="goDraft">草稿箱</a-button> -->
-
         <a-button type="dashed" @click="openSelTable">显示数据配置</a-button>
       </div>
-    </DashBtn>
+    </DashBtn> -->
     <!-- 列表 -->
     <vxe-table v-if="columnsAll" max-height="600" border resizable :merge-cells="mergeCells" :scroll-y="{enabled: false}" :data="tableData">
       <template v-for="(item,index) in columnsIng">
@@ -109,7 +107,7 @@ export default {
       columnsEnd: [
         {
           id: 3,
-          title: "BOE汇总",
+          title: "爱旭汇总",
           disabled: true,
           isDefault: true,
           minWidth: 130,
@@ -135,15 +133,15 @@ export default {
     let columns = this.getCommonAddOrgnizeListAll.map((item, index) => {
       return {
         id: index + 3,
-        title: item.orgAbbrName,
-        disabled: keys.includes(item.orgAbbrName),
-        isDefault: keys.includes(item.orgAbbrName),
-        props: item.id,
-        corporationId: item.id,
+        title: item.orgName,
+        // disabled: keys.includes(item.orgName),
+        // isDefault: keys.includes(item.orgName),
+        props: item.orgId,
+        corporationId: item.orgId,
       }
     })
     this.orgAbbrIds = this.getCommonAddOrgnizeListAll.map((item, index) => {
-      return item.id
+      return item.orgId
     })
     this.columnsEnd[0].id = this.columnsStart.length + columns.length + 1;
     this.columnsAll = [...this.columnsStart, ...columns, ...this.columnsEnd]//
@@ -179,6 +177,7 @@ export default {
       return mergeCellsData
     },
     initData() {
+      console.log(this.columnsAll, 'ccc')
       let apiData = {
         ...this.searchFormData
       }

@@ -121,6 +121,12 @@ export default {
       searchFormData: {},
       columns: [
         {
+          title: "所属组织",
+          dataIndex: "corporationName",
+          key: "corporationName",
+          align: "center",
+        },
+        {
           title: "填报月份",
           dataIndex: "monthlyDate",
           key: "monthlyDate",

@@ -5,7 +5,7 @@
         <HasFixedBottomWrapper>
           <a-form-model id="pdfDom" ref="ruleForm" :model="iFrom" :colon="false" :rules="iRules" :label-col="labelCol" :wrapper-col="wrapperCol">
             <!-- 开发完成后打开 -->
-            <!-- <template title="值班基本信息">
+            <template title="值班基本信息">
               <div>
                 <div class="m-t-20 border-b-e7 has-right-btn">
                   <PageTitle>值班基本信息</PageTitle>
@@ -59,15 +59,14 @@
                   </a-form-model-item>
                 </a-col>
               </a-row>
-            </template> -->
-
+            </template>
             <template title="火灾报警控制运行情况">
               <div>
                 <div class="m-t-20 border-b-e7 ttile ttile-add-btn">
                   <PageTitle class="ttile-text">火灾报警控制运行情况</PageTitle>
                   <DashBtn class="ttile-bbtn" v-if="!isShowPage">
                     <div>
-                      <a-button type="dashed" @click="openInspectionRecordModel">
+                      <a-button type="dashed" @click="openFireModel">
                         <a-icon type="plus" />新增
                       </a-button>
                     </div>
@@ -84,28 +83,56 @@
                     :show-overflow="!isShowPage"
                     align="center"
                     :row-config="{isHover: true}"
-                    :data="dutyData.fireAlarmList"
+                    :data="iFrom.fireAlarmList"
                   >
-                    <vxe-column field="normal" title="正常"></vxe-column>
-                    <vxe-column field="failure" title="故障"></vxe-column>
+                    <vxe-column field="normal" title="正常">
+                      <template #default="{ row }">
+                        <span>{{ row.normal == '1' ? '是' : '否' }}</span>
+                      </template>
+                    </vxe-column>
+                    <vxe-column field="failure" title="故障">
+                      <template #default="{ row }">
+                        <span>{{ row.failure == '1' ? '是' : '否' }}</span>
+                      </template>
+                    </vxe-column>
                     <vxe-colgroup title="火警">
-                      <vxe-column field="fireAlarm" title="火警"></vxe-column>
-                      <vxe-column field="fireAlarm" title="误报"></vxe-column>
+                      <vxe-column field="fireAlarm" title="火警">
+                        <template #default="{ row }">
+                          <span>{{ row.fireAlarm == '1' ? '√' : '×' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="fireAlarm" title="误报">
+                        <template #default="{ row }">
+                          <span>{{ row.fireAlarm == '0' ? '√' : '×' }}</span>
+                        </template>
+                      </vxe-column>
                     </vxe-colgroup>
-                    <vxe-column field="faultAlarm" title="故障报警"></vxe-column>
-                    <vxe-column field="supervisionAlarm" title="监管报警"></vxe-column>
-                    <vxe-column field="omissionOfReport" title="漏报"></vxe-column>
+                    <vxe-column field="faultAlarm" title="故障报警">
+                      <template #default="{ row }">
+                        <span>{{ row.faultAlarm == '1' ? '是' : '否' }}</span>
+                      </template>
+                    </vxe-column>
+                    <vxe-column field="supervisionAlarm" title="监管报警">
+                      <template #default="{ row }">
+                        <span>{{ row.supervisionAlarm == '1' ? '是' : '否' }}</span>
+                      </template>
+                    </vxe-column>
+                    <vxe-column field="omissionOfReport" title="漏报">
+                      <template #default="{ row }">
+                        <span>{{ row.omissionOfReport == '1' ? '是' : '否' }}</span>
+                      </template>
+                    </vxe-column>
                     <vxe-column field="handlingSituation" width="260" title="报警、故障部位、原因及处理情况"></vxe-column>
-                    <vxe-colgroup title="时段">
-                      <vxe-column field="startTime" title=" "></vxe-column>
-                      <vxe-column field="endTime" title=" "></vxe-column>
+                    <vxe-colgroup title="值班时段">
+                      <vxe-column field="startTime" title="开始时间"></vxe-column>
+                      <vxe-column field="endTime" title="结束时间"></vxe-column>
                     </vxe-colgroup>
                     <vxe-column field="dutyUserNameList" title="值班员"></vxe-column>
                     <vxe-column field="action" fixed="right" title="操作" width="100" v-if="!isShowPage">
                       <template #default="{ row }">
                         <div class="table-btn-box">
-                          <span class="color-0067cc cursor-pointer m-r-15" @click="openInspectionRecordModel(row)">编辑</span>
-                          <span class="color-ff4d4f cursor-pointer" @click="rmInspectionRecordItem(row,'inspectionRecord')">删除</span>
+                          <span class="color-0067cc cursor-pointer m-r-15" @click="openFireModel(row)">编辑</span>
+                          <span class="color-ff4d4f cursor-pointer" @click="rmFireRecordItem(row)">删除</span>
                         </div>
                       </template>
                     </vxe-column>
@@ -116,29 +143,15 @@
                     </template>
                   </vxe-table>
                 </CommonTable>
-                <template v-if="inspectionRecord.tableAllList.length > pageSize">
-                  <div class="more-btn" v-show="showPrintPdfBtn" v-if="inspectionRecordTableList.length <= pageSize">
-                    <span @click="getMore('inspectionRecord',true)">
-                      更多
-                      <a-icon type="double-right" class="more-btn-up" />
-                    </span>
-                  </div>
-                  <div class="more-btn" v-show="showPrintPdfBtn" v-else>
-                    <span @click="getMore('inspectionRecord',false)">
-                      <a-icon type="double-right" class="more-btn-down" />收起
-                    </span>
-                  </div>
-                </template>
               </a-form-model-item>
             </template>
-
             <template title="控制室内其他消防系统运行情况">
               <div>
                 <div class="m-t-20 border-b-e7 ttile ttile-add-btn">
                   <PageTitle class="ttile-text">控制室内其他消防系统运行情况</PageTitle>
                   <DashBtn class="ttile-bbtn" v-if="!isShowPage">
                     <div>
-                      <a-button type="dashed" @click="openInspectionRecordModel">
+                      <a-button type="dashed" @click="openRoomModel">
                         <a-icon type="plus" />新增
                       </a-button>
                     </div>
@@ -155,28 +168,30 @@
                     :show-overflow="!isShowPage"
                     align="center"
                     :row-config="{isHover: true}"
-                    :data="dutyData.roomFireFightingList"
+                    :data="iFrom.roomFireFightingList"
                   >
                     <vxe-column field="deviceName" width="200" title="消防系统及相关设备名称"></vxe-column>
-                    <vxe-colgroup title="控制状态">
-                      <vxe-column field="controlState" title="自动"></vxe-column>
-                      <vxe-column field="controlState" title="手动"></vxe-column>
-                    </vxe-colgroup>
-                    <vxe-colgroup title="运行状态">
-                      <vxe-column field="runningState" title="正常"></vxe-column>
-                      <vxe-column field="runningState" title="故障"></vxe-column>
-                    </vxe-colgroup>
+                    <vxe-column field="controlState" title="控制状态">
+                      <template #default="{ row }">
+                        <span>{{ row.controlState == '1' ? '自动' : '手动' }}</span>
+                      </template>
+                    </vxe-column>
+                    <vxe-column field="runningState" title="运行状态">
+                      <template #default="{ row }">
+                        <span>{{ row.runningState == '1' ? '故障' : '正常' }}</span>
+                      </template>
+                    </vxe-column>
                     <vxe-column field="handlingSituation" width="260" title="报警、故障部位、原因及处理情况"></vxe-column>
-                    <vxe-colgroup title="时段">
-                      <vxe-column field="startTime" title=" "></vxe-column>
-                      <vxe-column field="endTime" title=" "></vxe-column>
+                    <vxe-colgroup title="值班时段">
+                      <vxe-column field="startTime" title="开始时间"></vxe-column>
+                      <vxe-column field="endTime" title="结束时间"></vxe-column>
                     </vxe-colgroup>
                     <vxe-column field="dutyUserNameList" title="值班员"></vxe-column>
                     <vxe-column field="action" fixed="right" title="操作" width="100" v-if="!isShowPage">
                       <template #default="{ row }">
                         <div class="table-btn-box">
-                          <span class="color-0067cc cursor-pointer m-r-15" @click="openInspectionRecordModel(row)">编辑</span>
-                          <span class="color-ff4d4f cursor-pointer" @click="rmInspectionRecordItem(row,'inspectionRecord')">删除</span>
+                          <span class="color-0067cc cursor-pointer m-r-15" @click="openRoomModel(row)">编辑</span>
+                          <span class="color-ff4d4f cursor-pointer" @click="rmRoomRecordItem(row)">删除</span>
                         </div>
                       </template>
                     </vxe-column>
@@ -187,29 +202,15 @@
                     </template>
                   </vxe-table>
                 </CommonTable>
-                <template v-if="inspectionRecord.tableAllList.length > pageSize">
-                  <div class="more-btn" v-show="showPrintPdfBtn" v-if="inspectionRecordTableList.length <= pageSize">
-                    <span @click="getMore('inspectionRecord',true)">
-                      更多
-                      <a-icon type="double-right" class="more-btn-up" />
-                    </span>
-                  </div>
-                  <div class="more-btn" v-show="showPrintPdfBtn" v-else>
-                    <span @click="getMore('inspectionRecord',false)">
-                      <a-icon type="double-right" class="more-btn-down" />收起
-                    </span>
-                  </div>
-                </template>
               </a-form-model-item>
             </template>
-
             <template title="消防主机日检查情况记录">
               <div>
                 <div class="m-t-20 border-b-e7 ttile ttile-add-btn">
                   <PageTitle class="ttile-text">消防主机日检查情况记录</PageTitle>
                   <DashBtn class="ttile-bbtn" v-if="!isShowPage">
                     <div>
-                      <a-button type="dashed" @click="openInspectionRecordModel">
+                      <a-button type="dashed" @click="openEngineModel">
                         <a-icon type="plus" />新增
                       </a-button>
                     </div>
@@ -226,18 +227,38 @@
                     :show-overflow="!isShowPage"
                     align="center"
                     :row-config="{isHover: true}"
-                    :data="dutyData.fireEngineCheckList"
+                    :data="iFrom.fireEngineCheckList"
                   >
                     <vxe-colgroup title="消防主机型号">
                       <vxe-column field="fireEngineOne" title=" "></vxe-column>
                       <vxe-column field="fireEngineTwo" title=" "></vxe-column>
                     </vxe-colgroup>
                     <vxe-colgroup title="检查内容">
-                      <vxe-column field="selfTest" title="自检"></vxe-column>
-                      <vxe-column field="silencing" title="消音"></vxe-column>
-                      <vxe-column field="reset" title="复位"></vxe-column>
-                      <vxe-column field="mainPower" title="主电源"></vxe-column>
-                      <vxe-column field="standbyPower" title="备用电源"></vxe-column>
+                      <vxe-column field="selfTest" title="自检">
+                        <template #default="{ row }">
+                          <span>{{ row.selfTest == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="silencing" title="消音">
+                        <template #default="{ row }">
+                          <span>{{ row.silencing == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="reset" title="复位">
+                        <template #default="{ row }">
+                          <span>{{ row.reset == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="mainPower" title="主电源">
+                        <template #default="{ row }">
+                          <span>{{ row.mainPower == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="standbyPower" title="备用电源">
+                        <template #default="{ row }">
+                          <span>{{ row.standbyPower == '1' ? '异常' : '正常' }}</span>
+                        </template>
+                      </vxe-column>
                     </vxe-colgroup>
                     <vxe-column field="checkTime" title="检查时间"></vxe-column>
                     <vxe-column field="dutyUserNameList" title="检查人"></vxe-column>
@@ -245,8 +266,8 @@
                     <vxe-column field="action" fixed="right" title="操作" width="100" v-if="!isShowPage">
                       <template #default="{ row }">
                         <div class="table-btn-box">
-                          <span class="color-0067cc cursor-pointer m-r-15" @click="openInspectionRecordModel(row)">编辑</span>
-                          <span class="color-ff4d4f cursor-pointer" @click="rmInspectionRecordItem(row,'inspectionRecord')">删除</span>
+                          <span class="color-0067cc cursor-pointer m-r-15" @click="openEngineModel(row)">编辑</span>
+                          <span class="color-ff4d4f cursor-pointer" @click="rmEngineRecordItem(row)">删除</span>
                         </div>
                       </template>
                     </vxe-column>
@@ -257,19 +278,6 @@
                     </template>
                   </vxe-table>
                 </CommonTable>
-                <template v-if="inspectionRecord.tableAllList.length > pageSize">
-                  <div class="more-btn" v-show="showPrintPdfBtn" v-if="inspectionRecordTableList.length <= pageSize">
-                    <span @click="getMore('inspectionRecord',true)">
-                      更多
-                      <a-icon type="double-right" class="more-btn-up" />
-                    </span>
-                  </div>
-                  <div class="more-btn" v-show="showPrintPdfBtn" v-else>
-                    <span @click="getMore('inspectionRecord',false)">
-                      <a-icon type="double-right" class="more-btn-down" />收起
-                    </span>
-                  </div>
-                </template>
               </a-form-model-item>
             </template>
           </a-form-model>
@@ -287,48 +295,29 @@
     </div>
     <!-- 新增面板弹窗 -->
     <FireDataModel
-      v-model="inspectionRecordModelShow"
-      :formModelOldData="formModelOldData"
-      :moduleList="inspectionRecord.tableAllList"
+      v-model="inspectionRecordModelShowFire"
+      :formModelOldData="formModelFireData"
       :dutyId="dutyId"
-      @changeModuleList="editInspectionRecordItem"
+      :fireType="fireType"
+      @addModuleList="openInspectionRecordModelFire"
+      @changeModuleList="editInspectionRecordItemFire"
     />
-    <!-- <RoomDataModel
-      v-model="inspectionRecordModelShow"
-      :formModelOldData="formModelOldData"
-      :moduleList="inspectionRecord.tableAllList"
+    <RoomDataModel
+      v-model="inspectionRecordModelShowRoom"
+      :formModelOldData="formModelRoomData"
       :dutyId="dutyId"
-      @changeModuleList="editInspectionRecordItem"
+      :roomType="roomType"
+      @addModuleList="openInspectionRecordModelRoom"
+      @changeModuleList="editInspectionRecordItemRoom"
     />
     <EngineDataModel
-      v-model="inspectionRecordModelShow"
-      :formModelOldData="formModelOldData"
-      :moduleList="inspectionRecord.tableAllList"
+      v-model="inspectionRecordModelShowEngine"
+      :formModelOldData="formModelEngineData"
       :dutyId="dutyId"
-      @changeModuleList="editInspectionRecordItem"
-    /> -->
-    <!-- 故障维修记录 -->
-    <!-- <TroubleShootingModel v-model="troubleShootingModelShow" :formModelOldData="formModelOldData" :dutyId="dutyId" @troubleShootingChange="troubleShootingChange" /> -->
-    <!-- 巡检记录 -->
-    <!-- <InspectionRecordModel
-      v-model="inspectionRecordModelShow"
-      :formModelOldData="formModelOldData"
-      :moduleList="inspectionRecord.tableAllList"
-      :dutyId="dutyId"
-      @changeModuleList="editInspectionRecordItem"
-    /> -->
-    <!-- 事件记录 -->
-    <!-- <EventRecordModel v-model="eventRecordModelShow" :formModelOldData="formModelOldData" :moduleList="eventRecord.tableAllList" :dutyId="dutyId" @changeModuleList="editEventRecordItem" /> -->
-    <!-- 消防业务电话记录表 -->
-    <!-- <FirePhoneRecordModel
-      v-model="firePhoneRecordModelShow"
-      :formModelOldData="formModelOldData"
-      :moduleList="firePhoneRecord.tableAllList"
-      :dutyId="dutyId"
-      @changeModuleList="editFirePhoneRecordItem"
-    /> -->
-    <!-- 消防系统CRT每日检测 -->
-    <!-- <FireFightingSystemModel v-model="fireFightingSystemModelShow" :formModelOldData="formModelOldData" :dutyId="dutyId" @fireFightingSystemChange="fireFightingSystemChange" /> -->
+      :engineType="engineType"
+      @addModuleList="openInspectionRecordModelEngine"
+      @changeModuleList="editInspectionRecordItemEngine"
+    />
   </div>
 </template>
 
@@ -336,7 +325,7 @@
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
-import { getOndutyRecordDetailApi, editOndutyRecordApi, getInspectionRecordListApi, rmInspectionRecordApi, getOndutyAlarmRecordApi, getOndutyTroubleShootingApi, getOndutyTestRecordApi, rmFirePhoneRecordItemApi, getFirePhoneRecordListApi, } from '@/services/networkControl/onduty.js'
+import { getOndutyRecordDetailApi, editOndutyRecordApi, ondutyTableUpdateApi, getInspectionRecordListApi, rmInspectionRecordApi, getOndutyAlarmRecordApi, getOndutyTroubleShootingApi, getOndutyTestRecordApi, rmFirePhoneRecordItemApi, getFirePhoneRecordListApi, } from '@/services/networkControl/onduty.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
 import deptAndUser from '@/pages/dangerWorkStatic/mixin/deptAndUser.js'
@@ -346,11 +335,6 @@ import html2canvas from 'html2canvas'
 import FireDataModel from './comp/fireDataModel.vue'
 import EngineDataModel from './comp/engineDataModel.vue'
 import RoomDataModel from './comp/roomDataModel.vue'
-// import TroubleShootingModel from './comp/troubleShootingModel.vue'
-// import InspectionRecordModel from './comp/inspectionRecordModel.vue'
-// import EventRecordModel from './comp/eventRecordModel.vue'
-// import FireFightingSystemModel from './comp/fireFightingSystemModel.vue'
-// import FirePhoneRecordModel from './comp/firePhoneRecordModel.vue'
 import { getDictConfigData } from "@/utils/dictionary.js";
 import dictionary from "@/utils/dictionary.js";
 import dayJs from "dayjs";
@@ -360,12 +344,6 @@ export default {
   mixins: [chemicalDict, cancelLoading, deptAndUser, ondutyMixin],
   data() {
     return {
-      dutyData: {
-        dutyId: '',
-        fireAlarmList: [],
-        roomFireFightingList: [],
-        fireEngineCheckList: [],
-      },
       // 配置弹窗
       addCasNoModelShow: false,
       configTableRowKey: undefined,
@@ -379,7 +357,12 @@ export default {
       spinning: true,
       labelCol: { span: 4 },
       wrapperCol: { span: 19 },
-      iFrom: {},
+      iFrom: {
+        dutyId: '',
+        fireAlarmList: [],
+        roomFireFightingList: [],
+        fireEngineCheckList: [],
+      },
       iRules: {
         systemList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'systemList', text: '系统数据' },],
         fireFightingSystemTableList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'fireFightingSystemTableList', text: '消防系统CRT每日检测', targetAttr: 'fire', },],
@@ -388,8 +371,16 @@ export default {
       showPrintPdfBtn: true,
       // 主键
       dutyId: undefined,
-      formModelOldData: {},
+      formModelFireData: {},
+      formModelRoomData: {},
+      formModelEngineData: {},
       handSealList: [],
+      fireType: '',
+      roomType: '',
+      engineType: '',
+      inspectionRecordModelShowFire: false,
+      inspectionRecordModelShowRoom: false,
+      inspectionRecordModelShowEngine: false,
     }
   },
   created() {
@@ -426,6 +417,7 @@ export default {
           if (res.data) {
             // 值班基本信息
             let iFrom = res.data
+            iFrom.dutyUserNameList = iFrom.dutyUserNameList.length > 0 ? iFrom.dutyUserNameList.join(',') : '';
             // 部门回显
             this.$refs.corporationId.corporationChange(iFrom.corporationId, iFrom.deptId)
             // 值班时段
@@ -445,12 +437,8 @@ export default {
               item.guid = this.guid()
             })
             this.fireFightingSystem.tableAllList = cloneDeep(crtList)
-
-            //  匹配字典项-系统数据、物品交接、其他交接
-            this.systemList = cloneDeep(this.matchDictConfigListHasValueFn(iFrom.systemList, 'system'))
-            this.itemsList = cloneDeep(this.matchDictConfigListHasValueFn(iFrom.itemsList, 'items'))
-            this.otherList = cloneDeep(this.matchDictConfigListHasValueFn(iFrom.otherList, 'other'))
-            console.log(iForm)
+            console.log(this.iFrom)
+            console.log(iFrom)
             return iFrom
           } else {
             console.log('详情数据返回异常');
@@ -459,7 +447,6 @@ export default {
         })
         .then(detailRes => {
           return Promise.all([
-            // this.getAlarmRecord(detailRes),
             this.getTroubleShooting(detailRes),
             this.getTestRecord(detailRes),
           ])
@@ -468,67 +455,6 @@ export default {
           return Promise.reject()
         })
     },
-    // 获取报警记录
-    getAlarmRecord(detailRes) {
-      let apiData = {
-        centerId: detailRes.centerId,
-        corporationId: detailRes.corporationId,
-      }
-      return getOndutyAlarmRecordApi(apiData)
-        .then(res => {
-          let tableAllList = res.data || []
-          tableAllList.forEach(item => {
-            // 设备类型
-            item.equipTypeText = dictionary('equipType', item.equipType)
-            // 状态
-            item.statusText = dictionary('closeStatus', item.status)
-            // 报警原因类型
-            item.reasonTypeText = this.getChemicalDictText('alarm_reason_type', item.reasonType)
-          })
-          this.alarmRecord.tableAllList = cloneDeep(tableAllList)
-        })
-        .catch(err => { })
-    },
-    // 获取故障维修记录
-    // getTroubleShooting(detailRes) {
-    //   let apiData = {
-    //     centerId: detailRes.centerId,
-    //     corporationId: detailRes.corporationId,
-    //   }
-    //   return getOndutyTroubleShootingApi(apiData)
-    //     .then(res => {
-    //       let tableAllList = res.data || []
-    //       tableAllList.forEach(item => {
-    //         // 设备类型
-    //         item.equipTypeText = dictionary('equipType', item.equipType)
-    //         // 状态
-    //         item.statusText = dictionary('faultStatus', item.status)
-    //         // 报警原因类型
-    //         item.reasonTypeText = this.getChemicalDictText('alarm_reason_type', item.reasonType)
-    //       })
-    //       this.troubleShooting.tableAllList = cloneDeep(tableAllList)
-    //     })
-    //     .catch(err => { })
-    // },
-    // 获取测试记录
-    // getTestRecord(detailRes) {
-    //   let apiData = {
-    //     centerId: detailRes.centerId,
-    //     corporationId: detailRes.corporationId,
-    //   }
-    //   return getOndutyTestRecordApi(apiData)
-    //     .then(res => {
-    //       let tableAllList = res.data || []
-    //       tableAllList.forEach(item => {
-    //         // 预警类型 1-火灾；-2-特气
-    //         item.typeText = item.type == '1' ? '火灾' : '特气'
-    //         // 状态
-    //         item.statusText = dictionary('alarmStatus', item.status)
-    //       })
-    //       this.testRecord.tableAllList = cloneDeep(tableAllList)
-    //     })
-    //     .catch(err => { })
-    // },
     // 过滤内容
     filterValue(tarInfo) {
       if (tarInfo) {
@@ -538,140 +464,87 @@ export default {
         return ''
       }
     },
-    // 匹配字典项-系统数据、物品交接、其他交接
-    matchDictConfigListHasValueFn(keysObjArr, dictKey) {
-      let matchDictConfigList = Array.isArray(getDictConfigData(dictKey)) ? getDictConfigData(dictKey) : []
-      // console.log(matchDictConfigList, keysObjArr, dictKey);
-      let newArr = [];
-      (keysObjArr || []).forEach(item => {
-        let targetObj = matchDictConfigList.find(item1 => item1.randomKey == item.key)
-        if (targetObj) {
-          newArr.push({ ...targetObj, ...item })
-        }
+    openFireModel(row) {
+      console.log(row, '?')
+      this.fireType = row.fireTimeStamp ? '编辑' : '新增';
+      this.formModelFireData = row.fireTimeStamp ? row : {};
+      this.inspectionRecordModelShowFire = true;
+    },
+    openRoomModel(row) {
+      this.roomType = row.roomTimeStamp ? '编辑' : '新增';
+      this.formModelRoomData = row.roomTimeStamp ? row : {};
+      this.inspectionRecordModelShowRoom = true;
+    },
+    openEngineModel(row) {
+      this.engineType = row.engineTimeStamp ? '编辑' : '新增';
+      this.formModelEngineData = row.engineTimeStamp ? row : {};
+      this.inspectionRecordModelShowEngine = true;
+    },
+    openInspectionRecordModelFire(row) {
+      this.iFrom.fireAlarmList.push(row)
+    },
+    openInspectionRecordModelRoom(row) {
+      this.iFrom.roomFireFightingList.push(row)
+    },
+    openInspectionRecordModelEngine(row) {
+      this.iFrom.fireEngineCheckList.push(row)
+    },
+    editInspectionRecordItemFire(row) {
+      let currentIndex;
+      this.iFrom.fireAlarmList.forEach((item, index)=>{
+        row.fireTimeStamp == item.fireTimeStamp && (currentIndex = index);
       })
-      // console.log(newArr);
-      return newArr
+      Object.assign(this.iFrom.fireAlarmList[currentIndex], row)
     },
-    // 巡检记录--添加一行
-    openInspectionRecordModel(row) {
-      this.formModelOldData = row ? row : {}
-      this.inspectionRecordModelShow = true;
+    editInspectionRecordItemRoom(row) {
+      let currentIndex;
+      this.iFrom.roomFireFightingList.forEach((item, index)=>{
+        row.roomTimeStamp == item.roomTimeStamp && (currentIndex = index);
+      })
+      Object.assign(this.iFrom.roomFireFightingList[currentIndex], row)
     },
-    // 巡检记录--修改表格某一行
-    editInspectionRecordItem(row) {
-      this.inspectionRecord.tableAllList = row
+    editInspectionRecordItemEngine(row) {
+      let currentIndex;
+      this.iFrom.engineAlarmList.forEach((item, index)=>{
+        row.engineTimeStamp == item.engineTimeStamp && (currentIndex = index);
+      })
+      Object.assign(this.iFrom.engineAlarmList[currentIndex], row)
     },
-    // 巡检记录--删除表格某一行
-    rmInspectionRecordItem(row, attrName) {
-      console.log(row);
+    rmFireRecordItem(row) {
+      let currentIndex;
+      this.iFrom.fireAlarmList.forEach((item, index)=>{
+        row.fireTimeStamp == item.fireTimeStamp && (currentIndex = index);
+      })
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          return rmInspectionRecordApi({ historyId: row.historyId })
-            .then(async (res) => {
-              await this.getInspectionRecordListFn(row.type, attrName)
-              this.$antMessage.success('删除成功');
-            })
-            .catch(err => { });
+          this.iFrom.fireAlarmList.splice(currentIndex, 1)
         },
       });
     },
-    // 获取巡检记录、事件记录列表
-    getInspectionRecordListFn(type, attrName, getAll = false) {
-      // console.log('获取巡检记录、事件记录列表', type, attrName);
-      let apiData = {
-        dutyId: this.dutyId,
-        type: getAll ? undefined : type,
-      };
-      return getInspectionRecordListApi(apiData)
-        .then((res) => {
-          if (getAll) {
-            this.inspectionRecord.tableAllList = (res.data || []).filter(item => item.type == '1')
-            this.eventRecord.tableAllList = (res.data || []).filter(item => item.type == '2')
-          } else {
-            this[attrName].tableAllList = res.data || [];
-          }
-        })
-        .catch(err => { })
-    },
-    // 事件记录--巡检记录--添加一行
-    openEventRecordModel(row) {
-      this.formModelOldData = row ? row : {}
-      this.eventRecordModelShow = true;
-    },
-    // 事件记录--巡检记录--修改表格某一行
-    editEventRecordItem(row) {
-      this.eventRecord.tableAllList = row
-    },
-
-    // 消防业务电话记录表--添加一行
-    openFirePhoneRecordModel(row) {
-      this.formModelOldData = row ? row : {}
-      this.firePhoneRecordModelShow = true;
-    },
-    // 消防业务电话记录表--修改表格某一行
-    editFirePhoneRecordItem(row) {
-      this.firePhoneRecord.tableAllList = row
-    },
-    // 消防业务电话记录表--删除表格某一行
-    rmFirePhoneRecordItem(row) {
-      console.log(row);
+    rmRoomRecordItem(row) {
+      let currentIndex;
+      this.iFrom.roomFireFightingList.forEach((item, index)=>{
+        row.roomTimeStamp == item.roomTimeStamp && (currentIndex = index);
+      })
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          return rmFirePhoneRecordItemApi({ telId: row.telId })
-            .then(async (res) => {
-              await this.getFirePhoneRecordListFn()
-              this.$antMessage.success('删除成功');
-            })
-            .catch(err => { });
+          this.iFrom.roomFireFightingList.splice(currentIndex, 1)
         },
       });
     },
-    // 消防业务电话记录表列表
-    getFirePhoneRecordListFn() {
-      let apiData = {
-        dutyId: this.dutyId,
-      };
-      return getFirePhoneRecordListApi(apiData)
-        .then((res) => {
-          this.firePhoneRecord.tableAllList = res.data || [];
-        })
-        .catch(err => { })
-    },
-
-    // 故障维修记录--编辑
-    troubleShootingChange(isOpen, row) {
-      // console.log(isOpen, row);
-      if (isOpen) {
-        this.formModelOldData = row
-        this.troubleShootingModelShow = true
-      } else {
-        // 修改
-        let index = this.troubleShooting.tableAllList.findIndex(item => item.equipFireId == this.formModelOldData.equipFireId)
-        this.troubleShooting.tableAllList.splice(index, 1, { ...row })
-      }
-    },
-    // 消防系统CRT每日检测--编辑
-    fireFightingSystemChange(isOpen, row) {
-      // console.log(isOpen, row);
-      if (isOpen) {
-        this.formModelOldData = row
-        this.fireFightingSystemModelShow = true
-      } else {
-        // 修改
-        let index = this.fireFightingSystem.tableAllList.findIndex(item => item.guid == this.formModelOldData.guid)
-        this.fireFightingSystem.tableAllList.splice(index, 1, { ...row })
-        formValidator.formItemValidate(this, 'fireFightingSystemTableList', 'ruleForm')
-      }
-    },
-    // 消防系统CRT每日检测--格式化
-    formatterCTR({ cellValue }) {
-      return cellValue ? (cellValue == 1 ? '√' : '×') : ''
-    },
-    // 系统数据、其他交接--内容修改时
-    valueChangeCustomTableValidator(targetName) {
-      formValidator.formItemValidate(this, targetName, 'ruleForm')
+    rmEngineRecordItem(row) {
+      let currentIndex;
+      this.iFrom.fireEngineCheckList.forEach((item, index)=>{
+        row.engineTimeStamp == item.engineTimeStamp && (currentIndex = index);
+      })
+      this.$antConfirm({
+        title: "确定删除吗?",
+        onOk: () => {
+          this.iFrom.fireEngineCheckList.splice(currentIndex, 1)
+        },
+      });
     },
     // 系统数据、其他交接--表单校验
     customTableValidator(rule, value, callback) {
@@ -683,45 +556,6 @@ export default {
       } else {
         callback();
       }
-    },
-    // 获取各列表api
-    getMoreFn(listName, isAll) {
-      let apiData = {
-        isAll,
-      }
-      let apiName = undefined
-      switch (listName) {
-        case 'alarmRecord':
-          apiName = getAlarmRecordApi
-          break;
-        case 'troubleShooting':
-          apiName = getTroubleShootingApi
-          break;
-        case 'testRecord':
-          apiName = getTestRecordApi
-          break;
-        case 'inspectionRecord':
-          apiName = getInspectionRecordApi
-          break;
-        case 'eventRecord':
-          apiName = getEventRecordApi
-          break;
-        case 'fireFightingSystem':
-          apiName = getFireFightingSystemApi
-          break;
-        case 'firePhoneRecord':
-          apiName = getFirePhoneRecordApi
-          break;
-        default:
-
-      }
-      return
-      return apiName(apiData)
-        .then(res => {
-          this[listName] = res.data || []
-          this[`${listName}HasMore`] = false
-        })
-        .catch(err => { })
     },
     // pdf导出
     reactPrint() {
@@ -829,20 +663,19 @@ export default {
     },
     // 提交api
     iSubmit() {
-      // console.log(this.iFrom);
-      if (!this.formValidate()) {
-        return
-      }
+      console.log(this.iFrom)
+      // if (!this.formValidate()) {
+      //   return
+      // }
+      // ondutyTableUpdateApi
+      // iFrom.fireAlarmList = this.dutyData.fireAlarmList;
+      // iFrom.roomFireFightingList = this.dutyData.roomFireFightingList;
+      // iFrom.fireEngineCheckList = this.dutyData.fireEngineCheckList;
       let apiData = {
-        dutyId: this.dutyId,
-        remark: this.iFrom.remark,
-        systemList: this.systemList,
-        itemsList: this.itemsList,
-        otherList: this.otherList,
-        crtList: this.fireFightingSystem.tableAllList,
+        ...this.iFrom
       }
       this.handleLoading();
-      Promise.all([editOndutyRecordApi(apiData)])
+      Promise.all([ondutyTableUpdateApi(apiData)])
         .then(res => {
           this.$antMessage.success('提交成功');
           // 跳转列表页
@@ -856,10 +689,6 @@ export default {
     cancleSubmit() {
       this.setKeepalive(true)
       this.$router.go(-1)
-    },
-    // 图片预览
-    handlePreview(url) {
-      this.$hevueImgPreview(url);
     },
   },
 }

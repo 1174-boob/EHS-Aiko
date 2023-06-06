@@ -1,7 +1,7 @@
 <template>
       <!-- 邀请列表 -->
       <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
-          <h3 class="title">BOE电量</h3>
+          <h3 class="title">爱旭电量</h3>
   
           <!-- 列表 -->
           <CommonTable>
@@ -9,7 +9,7 @@
               </a-table>
           </CommonTable>
           <chart :option="boeOption"></chart>
-          <h3 class="title">现地电量（最新月份的数据）</h3>
+          <h3 class="title">基地电量（最新月份的数据）</h3>
           <SearchTerm>
               <a-form-model layout="inline"
                           :model="searchFormData"

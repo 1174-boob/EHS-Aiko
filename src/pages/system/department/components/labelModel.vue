@@ -4,30 +4,22 @@
       <a-spin :spinning="spinning" wrapperClassName="a-spin">
         <div class="filter-form-box">
           <div class="filter-form-tips">分配标签</div>
-          <a-form-model v-for="(item,index) in userDeptRelsList" :key="item.guid" ref="filterForm" class="filter-form" :model="item" :rules="rulesAuth" layout="inline">
-            <a-form-model-item ref="labelId" prop="labelId" class="filter-form-item filter-form-left">
+          <a-form-model ref="filterForm" class="filter-form" :model="formData" :rules="rulesAuth" layout="inline">
+            <a-form-model-item ref="userLabelList" prop="userLabelList" class="filter-form-item filter-form-left">
               <a-tree-select
-                v-model="item.labelId"
+                v-model="userLabelList"
                 :dropdown-style="{
                   maxHeight: '400px',
                   overflow: 'auto',
                   zIndex: 9999,
                 }"
+                tree-checkable
                 @select="onSearchSelect" 
                 placeholder="请选择标签组"
                 :tree-data="treeData"
-                :replace-fields="{ title: 'labelName', key: 'labelId', value: 'labelId' }"
+                :replace-fields="{ title: 'labelItemName', key: 'labelItemId', value: 'labelItemId' , children: 'labelItemList' }"
               ></a-tree-select>
             </a-form-model-item>
-            <a-form-model-item ref="labelItemId" prop="labelItemId" class="filter-form-item filter-form-right">
-              <a-select v-model="item.labelItemName" placeholder="请选择标签" @change="getSelectLabel">
-                <a-select-option v-for="item in labelItemList" :key="item.labelItemId" :value="JSON.stringify(item)">{{ item.labelItemName }}</a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <div class="filter-form-btn-box">
-              <img class="btn-icon add-btn" @click="addUserDeptRels" v-if="index == userDeptRelsList.length-1" src="@/assets/depAndPosModel/add-icon.svg" />
-              <img class="btn-icon btn-rm" v-if="userDeptRelsList.length > 1" @click="rmUserDeptRels(item)" src="@/assets/depAndPosModel/rm-icon.svg" />
-            </div>
           </a-form-model>
         </div>
       </a-spin>
@@ -84,23 +76,22 @@ export default {
         labelId: [
           { required: false, message: `标签组不能为空`, trigger: "change" },
         ],
-        labelItemId: [
-          { required: false, message: `标签不能为空`, trigger: "change" },
-        ],
       },
       // 条件列表
       labelItemList: [],
+      userLabelList:[],
       userDeptRelsListInit: [
         {
-          guid: 1,
-          labelId: undefined,
-          labelItemId: undefined,
-          labelItemName: undefined,
-          labelName: undefined,
+          // // guid: 1,
+          // labelId: undefined,
+          // labelItemId: undefined,
+          // labelItemName: undefined,
+          // labelName: undefined,
         },
       ],
       // 标签组及标签列表
       userDeptRelsList: [],
+      formData: {},
     };
   },
   created() {
@@ -109,17 +100,18 @@ export default {
   },
   computed: {
     // 取值列表
-    filterValueList() {
-      let filterValueListArr = [];
-      this.labelItemList.some((item) => {
-        if (item.key == this.filterForm.labelItemId) {
-          filterValueListArr = item.options.options;
-          return true;
-        }
-      });
-      // 过滤假值
-      return filterValueListArr;
-    },
+    // filterValueList() {
+    //   let filterValueListArr = [];
+    //   this.labelItemList.some((item) => {
+    //     if (item.key == this.filterForm.labelItemId) {
+    //       filterValueListArr = item.options.options;
+    //       return true;
+    //     }
+    //   });
+    //   console.log(this.labelItemList,'...');
+    //   // 过滤假值
+    //   return filterValueListArr;
+    // },
   },
   methods: {
     getSelectLabel(data){
@@ -135,12 +127,9 @@ export default {
 
     },
     onSearchSelect(value, node, extra){
-      // console.log(value);
-      // console.log(node.$options,'node.$options');
-      // console.log(node.$options.propsData.dataRef,'node.$options.propsData.dataRef');
-      this.userDeptRelsListInit.labelId = value
-      console.log(this.userDeptRelsListInit.labelId,'this.userDeptRelsListInit.labelId');
-      this.labelItemList = node.$options.propsData.dataRef.labelItemList
+      console.log(value,'value');
+      console.log(node,'node');
+      console.log(extra,'extra');
     },
     // 初始化弹窗数据
     initDepAndPosModel() {
@@ -161,9 +150,9 @@ export default {
           let dataObj = res.data
           dataObj.deptLabelDtos = dataObj.deptLabelDtos ? dataObj.deptLabelDtos : []
           // 添加id唯一标识
-          dataObj.deptLabelDtos.forEach(item => {
-            item.guid = this.guid()
-          })
+          // dataObj.deptLabelDtos.forEach(item => {
+          //   item.guid = this.guid()
+          // })
           this.userDeptRelsList = dataObj.deptLabelDtos.length ? dataObj.deptLabelDtos : cloneDeep(this.userDeptRelsListInit)
           return Promise.resolve()
         })
@@ -192,14 +181,18 @@ export default {
     },
     // 选择字段弹框-确定
     submitBtn() {
+      console.log(this.userLabelList, 'ccc')
+
+      return
       this.userDeptRelsList.forEach(item => {
         item.deptId = this.labelModelData.deptId
-        item.companyId = this.labelModelData.companyId
       })
       let apiData = {
         deptId: this.labelModelData.deptId,
-        deptLabelRels: this.userDeptRelsListInit
+        deptLabelRels: this.userLabelList
       }
+      console.log('apiData',apiData);
+      // return
       saveDeptAndGroupApi(apiData)
         .then(res => {
           this.$message.success("提交成功");
@@ -218,8 +211,8 @@ export default {
     // 新增标签组及标签
     addUserDeptRels() {
       let userDeptRelsItem = {
-        guid: this.guid(),
-        labelId: undefined,
+        // guid: this.guid(),
+        labelId: 1,
         labelItemId: undefined,
         labelItemName: undefined,
         labelName: undefined,

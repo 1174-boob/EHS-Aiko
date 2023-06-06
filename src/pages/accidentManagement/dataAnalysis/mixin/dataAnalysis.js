@@ -146,8 +146,8 @@ const dataAnalysisMinxin = {
                     })
                 } else {
                     xAxisData = xAxis.map(item => {  //x轴为组织
-                        let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-                        return orgAbbrName ? orgAbbrName : item
+                        let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+                        return orgName ? orgName : item
                     })
                 }
             }

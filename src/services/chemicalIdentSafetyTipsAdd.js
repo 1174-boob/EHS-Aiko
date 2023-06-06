@@ -113,3 +113,21 @@ export const ppeStockHandleRejectApi = params => post(`${serviceNameList.health}
 export const ppeStockHandlePassApi = params => post(`${serviceNameList.health}/api/ehs/ppe/scrap/approval`, params);
 // PPE报废管理-处理-最后一个节点-归档
 export const ppeStockHandleSaveFilingApi = params => post(`${serviceNameList.health}/api/ehs/ppe/scrap/archive`, params);
+
+//相关方审批
+//查询列表
+export const getEnterpriseList = params => post(`${serviceNameList.customer}/api/enterprise/add/page/list`, params);
+//新增
+export const enterpriseInsert = params => post(`${serviceNameList.customer}/api/enterprise/add/insert`, params);
+//修改
+export const enterpriseUpdate = params => post(`${serviceNameList.customer}/api/enterprise/add/update`, params);
+//详情
+export const enterpriseDetail = params => get(`${serviceNameList.customer}/api/enterprise/add/detail`, params);
+//删除
+export const enterpriseDelete = params => get(`${serviceNameList.customer}/api/enterprise/add/delete`, params);
+//审批
+export const enterpriseApproval = params => post(`${serviceNameList.customer}/api/enterprise/add/approval`, params);
+//驳回
+export const enterpriseRejection = params => post(`${serviceNameList.customer}/api/enterprise/add/rejection`, params);
+//归档信息
+export const enterpriseSaveFiling = params => post(`${serviceNameList.customer}/api/enterprise/add/saveFiling`, params);

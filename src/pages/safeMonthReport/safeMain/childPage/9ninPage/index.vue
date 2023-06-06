@@ -26,11 +26,10 @@
         </template>
       </vxe-table>
     </CommonTable>
-    <div class="echarts-style">
-      <!-- 应知应会抽查报告分析 -->
+    <!-- <div class="echarts-style">
       应知应会抽查报告分析
       <Echarts :option="echartFst" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -122,7 +121,8 @@ export default {
   computed: {
     // 组织现地机构
     corporationList() {
-      return this.$store.state.setting.corporationList
+      return this.getCommonAddOrgnizeListAll
+      // return this.$store.state.setting.corporationList
     },
   },
   methods: {
@@ -145,8 +145,8 @@ export default {
         this.dataList = data || [];
         this.columnsCan = this.corporationList.map( item => {
           return {
-            title: item.orgAbbrName,
-            dataIndex: item.corporationId,
+            title: item.orgName,
+            dataIndex: item.orgId,
             width: 80,
             align: 'center'
           }
@@ -205,7 +205,7 @@ export default {
     async searchEchart(analysisType, infoType) {
       let apiData = {
         ...this.searchData,
-        corporationIdList: this.corporationList.map(item=>{ return item.corporationId })
+        corporationIdList: this.corporationList.map(item=>{ return item.orgId })
       }
       return analysisKnowHeadAnalysis(apiData).then((res) => {
         let ajaxData = res.data || [];
@@ -218,8 +218,8 @@ export default {
           );
           let xAxisData = ajaxData.map(item => item.xdata)
           xAxisData = xAxisData.map(item => {  //x轴为组织
-            let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-            return orgAbbrName ? orgAbbrName : item
+            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+            return orgName ? orgName : item
           })
           this.echartFst.xAxis[0].data = cloneDeep(xAxisData);
           this.echartFst.legend.data = cloneDeep(legendData);

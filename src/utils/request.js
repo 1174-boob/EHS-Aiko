@@ -48,7 +48,6 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
           // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
         } else {
           sessionStorage.clear();
-          console.log("currentRouter", currentRouter)
           setTimeout(() => {
             currentRouter.replace({
               path: '/login'
@@ -85,17 +84,20 @@ export function get(url, params = {}) {
       method: 'get',
       params: params
     }).then(res => {
-      if (res.data.code != 20000) {
-        // 20020  用于激活优惠券-不需要message提醒
-        if (res.data.code != 20017 && res.data.code != 20020) {
-          Vue.prototype.$antMessage.warn(res.data.message)
+      if(res) {
+        if (res.data.code != 20000) {
+          // 20020  用于激活优惠券-不需要message提醒
+          if (res.data.code != 20017 && res.data.code != 20020) {
+            Vue.prototype.$antMessage.warn(res.data.message)
+          }
+          reject(res.data);
+        } else {
+          resolve(res.data);
         }
-        reject(res.data);
       } else {
-        resolve(res.data);
+        resolve(res);
       }
     }).catch(err => {
-      console.log(err);
       // 只做状态码为200的报错提示
       if (err.response.status == 200) {
         Vue.prototype.$antMessage.warn(err.response.data.msg || err.response.data.message)
@@ -117,14 +119,18 @@ export function post(url, params = {}, headers = { 'Content-Type': 'application/
       data: params,
       headers: headers
     }).then(res => {
-      if (res.data.code != 20000) {
-        // 20020  用于激活优惠券-不需要message提醒
-        if (res.data.code != 20020) {
-          Vue.prototype.$antMessage.warn(res.data.message);
+      if(res) {
+        if (res.data.code != 20000) {
+          // 20020  用于激活优惠券-不需要message提醒
+          if (res.data.code != 20020) {
+            Vue.prototype.$antMessage.warn(res.data.message);
+          }
+          reject(res.data);
+        } else {
+          resolve(res.data);
         }
-        reject(res.data);
       } else {
-        resolve(res.data);
+        resolve(res);
       }
     }).catch(err => {
       // 只做状态码为200的报错提示
@@ -148,7 +154,6 @@ export function postExcel(url, params = {}, headers = { 'Content-Type': 'applica
       headers: headers,
       responseType: 'arraybuffer'
     }).then(res => {
-      // console.log(res);
       let errData = undefined
       try {
         let enc = new TextDecoder('utf-8')
