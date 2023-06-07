@@ -44,7 +44,7 @@
     <div class="content-title">
       <span class="content-title-left">科目数据分析</span>
       <div class="content-title-right">
-        <a-checkbox v-if="allButtonCodeList.includes('resourcepoolDA-summary')" v-model="summary" @change="summaryChange">汇总</a-checkbox>
+        <!-- <a-checkbox v-if="allButtonCodeList.includes('resourcepoolDA-summary')" v-model="summary" @change="summaryChange">汇总</a-checkbox> -->
       </div>
     </div>
 
@@ -160,6 +160,9 @@ export default {
           {
             type: 'value',
             name: '%',
+            min: 0,
+            max: 100,
+            interval: 16.67,
             axisLabel: {
               formatter: (value) => {
                 // value = value * 100 + '%'
@@ -219,11 +222,6 @@ export default {
     this.getSubjectlist()
   },
   computed: {
-    isSummary() {
-      //1汇总 2不汇总
-      let val = this.summary ? 1 : 2
-      return val
-    }
   },
   methods: {
     initOption() {
@@ -290,8 +288,7 @@ export default {
           })
         } else {
           columnsArr.forEach(item => {
-            item.value = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item.name).orgAbbrName || item.name
-            console.log(item.value);
+            item.value = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item.name).orgName || item.name
           })
         }
       }
@@ -300,7 +297,6 @@ export default {
     getApiData() {
       let apiData = {
         ...this.formInline,
-        isSummary: this.isSummary,
         auditTime: undefined,
         startTime: this.formInline.auditTime ? this.formInline.auditTime[0] : undefined,
         endTime: this.formInline.auditTime ? this.formInline.auditTime[1] : undefined,
@@ -316,19 +312,19 @@ export default {
       // 汇总
       if (this.summary) {  //x轴为中心
         xAxisData = xAxis.map(item => {
-          let orgAbbrName = this.getMappingValue(this.setCorporationTree, "corporationCode", item).corporationName
-          return orgAbbrName ? orgAbbrName : item
+          let orgName = this.getMappingValue(this.setCorporationTree, "corporationId", item).orgName
+          return orgName ? orgName : item
         })
       } else {
         if (this.formInline.corporationId) {  //x轴为部门
           xAxisData = xAxis.map(item => {
-            let orgAbbrName = this.deptCache[item] ? this.deptCache[item] : item
-            return orgAbbrName
+            let orgName = this.deptCache[item] ? this.deptCache[item] : item
+            return orgName
           })
         } else {
           xAxisData = xAxis.map(item => {  //x轴为组织
-            let orgAbbrName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", item).orgAbbrName
-            return orgAbbrName ? orgAbbrName : item
+            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName || item
+            return orgName ? orgName : item
           })
         }
       }
@@ -373,7 +369,7 @@ export default {
           if (ajaxData && ajaxData.length) {
             let { xAxisData, series, legendData } = this.barDataHandle(ajaxData, true, true)
             this.courseRankingOption.xAxis[0].data = cloneDeep(xAxisData)
-            this.courseRankingOption.legend.data = cloneDeep(legendData)
+            // this.courseRankingOption.legend.data = cloneDeep(legendData)
             this.courseRankingOption.series = cloneDeep(series)
           } else {
             this.courseRankingOption.series = []
