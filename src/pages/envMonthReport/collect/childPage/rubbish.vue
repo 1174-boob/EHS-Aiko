@@ -21,7 +21,7 @@
       </a-table>
     </CommonTable>
     <chart :option="setBoeOption"></chart>
-    <h3 class="title">现地废弃物</h3>
+    <!-- <h3 class="title">现地废弃物</h3>
     <SearchTerm>
       <a-form-model layout="inline" :model="searchFormData" :colon="false">
         <a-form-model-item label="日期筛选">
@@ -94,9 +94,9 @@
           <a-button @click="iRest">重置</a-button>
         </a-form-model-item>
       </a-form-model>
-    </SearchTerm>
+    </SearchTerm> -->
     <!-- 列表 -->
-    <div>
+    <!-- <div>
       <vxe-table border resizable align="center" :data="tableData">
         <vxe-column field="rubbishName" title="项目"></vxe-column>
 
@@ -113,8 +113,7 @@
         </template>
       </vxe-table>
     </div>
-
-    <chart :option="setOption"></chart>
+    <chart :option="setOption"></chart> -->
   </div>
 </template>
 
@@ -266,7 +265,7 @@ export default {
       boeTableDataList: [],
       boeOption: {
         title: {
-          text: "废气物统计图", //"作业数量",
+          text: "废弃物统计图", //"作业数量",
           x: "left",
           y: "top",
           z: 1,
@@ -553,7 +552,7 @@ export default {
     initData() {
       wasteBOE({}).then((res) => {
         this.boeTableDataList = [
-          res.data[3],
+        //   res.data[3],
           res.data[1],
           res.data[0],
           res.data[2],
@@ -580,15 +579,15 @@ export default {
             for (let j in res.data[i]) {
               console.log(monthText.indexOf(j));
               if (monthText.indexOf(j) > -1) {
-                if (res.data[i].nicheItemsCode == 1113) {
+                if (res.data[i].nicheItemsCode == 45) {
                   v1113[monthText.indexOf(j)] =
                     res.data[i][j] == null ? 0 : res.data[i][j];
                 }
-                if (res.data[i].nicheItemsCode == 1043) {
+                if (res.data[i].nicheItemsCode == 146) {
                   v1043[monthText.indexOf(j)] =
                     res.data[i][j] == null ? 0 : res.data[i][j];
                 }
-                if (res.data[i].nicheItemsCode == 1092) {
+                if (res.data[i].nicheItemsCode == 9999) {
                   v1092[monthText.indexOf(j)] =
                     res.data[i][j] == null ? 0 : res.data[i][j];
                 }

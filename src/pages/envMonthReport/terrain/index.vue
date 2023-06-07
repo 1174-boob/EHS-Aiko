@@ -122,8 +122,11 @@ export default {
       columns: [
         {
           title: "所属组织",
-          dataIndex: "corporationName",
-          key: "corporationName",
+          dataIndex: 'corporationId',
+          key: "corporationId",
+          customRender: (text) => {
+            return (text ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", text).orgName : '');
+          },
           align: "center",
         },
         {

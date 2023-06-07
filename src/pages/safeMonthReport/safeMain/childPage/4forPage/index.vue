@@ -241,6 +241,30 @@ export default {
         // 最后将表格数据渲染到月、年、年均的每条数据中
         if(data.specialAnalyseVoList && data.specialAnalyseVoList.length > 0) {
           this.initDeviceChainVoList = data.specialAnalyseVoList;
+          if(this.searchData.dataType != '1') {
+            this.columnDataList = [
+              { typeName: '特种设备总数(台/套)', typeKey: 1},
+              { typeName: '本月到期年检设备数', typeKey: 2 },
+              { typeName: '月完成年检的数量', typeKey: 3 },
+              { typeName: '安全附件数量', typeKey: 7 },
+              { typeName: '本月到期年检数量', typeKey: 8 },
+              { typeName: '超期未年检数量', typeKey: 9 },
+            ]
+          } else {
+            this.columnDataList = [
+              { typeName: '特种设备总数(台/套)', typeKey: 1},
+              { typeName: '本月到期年检设备数', typeKey: 2 },
+              { typeName: '月完成年检的数量', typeKey: 3 },
+              { typeName: '是否存在隐患', typeKey: 4},
+              { typeName: '存在隐患设备是否已停用', typeKey: 5 },
+              { typeName: '存在隐患设备是否已整改', typeKey: 6 },
+              { typeName: '安全附件数量', typeKey: 7 },
+              { typeName: '本月到期年检数量', typeKey: 8 },
+              { typeName: '超期未年检数量', typeKey: 9 },
+              { typeName: '是否存在隐患', typeKey: 10 },
+              { typeName: '存在隐患安全附件是否已更换', typeKey: 11 },
+            ]
+          }
           let deviceChainVoList = this.columnDataList.map(item=> {
             let mapIndex = {
               title: item.typeName,

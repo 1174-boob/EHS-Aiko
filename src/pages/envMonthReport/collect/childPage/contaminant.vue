@@ -42,7 +42,7 @@
                 </div>
             </template>
         </vxe-table>
-        <div style="height:20px"></div>
+        <!-- <div style="height:20px"></div>
         <SearchTerm>
             <a-form-model layout="inline"
                           :model="searchFormDataC"
@@ -73,7 +73,7 @@
                 </a-form-model-item>
             </a-form-model>
         </SearchTerm>
-        <chart :option="setOption"></chart>
+        <chart :option="setOption"></chart> -->
     </div>
 </template>
 
@@ -245,9 +245,8 @@ export default {
             this.initData();
         },
         initData () {
-
             wasteWaterAndGas({ ...this.searchFormData }).then((res) => {
-                let obj = tableConversion(res.data, 1048)
+                let obj = tableConversion(res.data, 47)
                 this.titleList = obj.titleList
                 this.tableData = obj.tableData
             });
@@ -263,7 +262,6 @@ export default {
                     let v1050 = []
                     for (let i = 0; i < res.data.length; i++) {
                         for (let j in res.data[i]) {
-                            console.log(monthText.indexOf(j))
                             if (monthText.indexOf(j) > -1) {
                                 if (res.data[i].nicheItemsCode == this.searchFormDataC.nicheItemsCodeList[0]) {
                                     v1048[monthText.indexOf(j)] = res.data[i][j] == null ? 0 : res.data[i][j]
@@ -281,7 +279,6 @@ export default {
                     this.option.series[0].data = v1048
                     this.option.series[1].data = v1049
                     this.option.series[2].data = v1050
-                    console.log(v1048, v1049, v1050)
                     this.setOption = this.option
                 } else {
                     this.setOption = undefined

@@ -333,7 +333,8 @@ const aikoMonthData = [
         "nicheItemsCode": 45,
         "projectName": "固废处置费用合计",
         "nicheItems": "不含税处置费用(元)",
-        "dataItem": null
+        "dataItem": null,
+        "rubbishName": "废弃物处置费用(百万元)"
     },
     {
         "nicheItemsCode": 999,
@@ -1005,6 +1006,7 @@ const aikoMonthData = [
         "projectName": "总耗",
         "nicheItems": "总废弃物(千克)=废活性炭+废有机溶剂+废矿物油+废滤芯+废填料+废抹布手套+酸性沉渣+含铜、锡污泥+废化学品包装物+污泥+银浆布+银浆罐+铝浆布+铝浆罐",
         "dataItem": null,
+        "rubbishName": "废弃物处置量(万t)"
     },
     {
         "nicheItemsCode": 147,
@@ -1044,5 +1046,12 @@ const aikoMonthData = [
         "nicheItems": "万元产值废弃物(千克/万元产值)=总废弃物(吨)*1000/产值(万元)",
         "dataItem": null,
     },
+    {
+        "nicheItemsCode": 9999,
+        "carBonName": "scope1(万tCO₂e)",
+        "carBonName1": "scope1(tCO₂e)",
+        "waterName": "新鲜水量(万t)",
+        "rubbishName": "废弃物单价(元/t)"
+    }
 ]
 export default aikoMonthData

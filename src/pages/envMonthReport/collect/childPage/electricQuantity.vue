@@ -398,17 +398,17 @@ export default {
             barMaxWidth: 50,
             data: [],
           },
-          {
-            name: "单位面积用电量(kwh/㎡)",
-            type: "line",
-            yAxisIndex: 1,
-            // tooltip: {
-            //     valueFormatter: function (value) {
-            //         return value + " %";
-            //     },
-            // },
-            data: [],
-          },
+        //   {
+        //     name: "单位面积用电量(kwh/㎡)",
+        //     type: "line",
+        //     yAxisIndex: 1,
+        //     tooltip: {
+        //         valueFormatter: function (value) {
+        //             return value + " %";
+        //         },
+        //     },
+        //     data: [],
+        //   },
         ],
       },
       tableDataList: [],
@@ -600,7 +600,7 @@ export default {
     async getPowerSubmodule() {
       this.boeTableDataList = [];
       this.boeOption.series[0].data = [];
-      this.boeOption.series[1].data = [];
+    //   this.boeOption.series[1].data = [];
       const data = await environmentMonthPower();
       const res = data.data;
       this.boeTableDataList = res;
@@ -609,7 +609,7 @@ export default {
       const data2 = [];
       for (let item of res) {
         const code = item.nicheItemsCode;
-        if (code == 1004) {
+        if (code == 3) {
           data1[0] = item.january;
           data1[1] = item.february;
           data1[2] = item.march;
@@ -622,23 +622,24 @@ export default {
           data1[9] = item.october;
           data1[10] = item.november;
           data1[11] = item.december;
-        } else if (code == 1110) {
-          data2[0] = item.january;
-          data2[1] = item.february;
-          data2[2] = item.march;
-          data2[3] = item.april;
-          data2[4] = item.may;
-          data2[5] = item.june;
-          data2[6] = item.july;
-          data2[7] = item.august;
-          data2[8] = item.september;
-          data2[9] = item.october;
-          data2[10] = item.november;
-          data2[11] = item.december;
         }
+        // else if (code == 1110) {
+        //   data2[0] = item.january;
+        //   data2[1] = item.february;
+        //   data2[2] = item.march;
+        //   data2[3] = item.april;
+        //   data2[4] = item.may;
+        //   data2[5] = item.june;
+        //   data2[6] = item.july;
+        //   data2[7] = item.august;
+        //   data2[8] = item.september;
+        //   data2[9] = item.october;
+        //   data2[10] = item.november;
+        //   data2[11] = item.december;
+        // }
       }
       this.boeOption.series[0].data = data1;
-      this.boeOption.series[1].data = data2;
+    //   this.boeOption.series[1].data = data2;
     },
     //现地电量（最新月份的数据）
     async getSubmodule() {

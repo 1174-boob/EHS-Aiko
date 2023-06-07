@@ -713,6 +713,7 @@ export default {
       if(sessionStorage.getItem('zconsole_userInfo')) {
         if(JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other && JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList) {
           commit('setCorporationTree', JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList);
+          commit('setCorporationList', JSON.parse(sessionStorage.getItem('zconsole_userInfo')).other.allOrgList);
         }
       }
     },

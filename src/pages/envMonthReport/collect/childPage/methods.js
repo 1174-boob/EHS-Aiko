@@ -32,7 +32,7 @@ export const findData = (key) => {
 }
 
 export const findCorporationId = (id) => {
-    return store.state.setting.corporationList.find(item => item.corporationId == id).orgAbbrName
+    return store.state.setting.corporationList.find(item => item.orgId == id).orgName
 }
 
 export const lastMonth = () => {
