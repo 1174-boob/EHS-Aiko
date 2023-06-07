@@ -26,7 +26,7 @@
     </CommonTable>
     <div class="echarts-style">
       <!-- 各现地设备安全认证数量统计图 -->
-      各现地设备安全认证数量统计图
+      各所属组织设备安全认证数量统计图
       <Echarts :option="echartFst" />
     </div>
     <div class="echarts-style">

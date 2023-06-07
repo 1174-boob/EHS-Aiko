@@ -22,6 +22,7 @@ const aikoMonthData = [
         "nicheItemsCode": 3,
         "projectName": "电",
         "nicheItems": "电用量(kWh)",
+        "elecName": "总用电量(亿kwh)",
         "dataItem": null
     },
     {
