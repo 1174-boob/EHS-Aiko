@@ -36,7 +36,7 @@
     <div class="content-title">
       <span class="content-title-left">虚惊未遂事件情况</span>
       <div class="content-title-right">
-        <a-checkbox v-if="allButtonCodeList.includes('falseAlarmDA-summary')" v-model="summary" @change="summaryChange">汇总</a-checkbox>
+        <!-- <a-checkbox v-if="allButtonCodeList.includes('falseAlarmDA-summary')" v-model="summary" @change="summaryChange">汇总</a-checkbox> -->
         <!-- <a-checkbox v-model="summary" @change="summaryChange">汇总</a-checkbox> -->
       </div>
     </div>
@@ -191,7 +191,7 @@ export default {
     getApiData() {
       let apiData = {
         ...this.formInline,
-        isSummary: this.isSummary,
+        // isSummary: this.isSummary,
         auditTime: undefined,
         startTime: this.formInline.auditTime ? this.formInline.auditTime[0] : undefined,
         endTime: this.formInline.auditTime ? this.formInline.auditTime[1] : undefined,

@@ -2,8 +2,8 @@
 <template>
   <CommonModal title="下载导入模板" :visible="visible" :cancelFn="cancelFn">
     <template slot="form">
-      <a-button type="primary" class="btn" @click="downloadTemplate(0)">叉车模板下载</a-button>
-      <a-button type="primary" class="btn" @click="downloadTemplate(1)">天车模板下载</a-button>
+      <a-button type="primary" class="btn" @click="downloadTemplate(0)">场(厂)内专用机动车辆模板下载</a-button>
+      <a-button type="primary" class="btn" @click="downloadTemplate(1)">起重机械模板下载</a-button>
       <a-button type="primary" class="btn" @click="downloadTemplate(2)">电梯模板下载</a-button>
       <a-button type="primary" class="btn" @click="downloadTemplate(3)">压力管道模板下载</a-button>
       <a-button type="primary" class="btn" @click="downloadTemplate(4)">压力容器模板下载</a-button>
@@ -33,10 +33,10 @@ export default {
     downloadTemplate(num) {
       switch(num) {
         case 0:
-          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/叉车导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/叉车导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/场(厂)内专用机动车辆导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/场(厂)内专用机动车辆导入模板.xlsx`)
           break
         case 1:
-          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/天车导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/天车导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/起重机械导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/起重机械导入模板.xlsx`)
           break
         case 2:
           window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/电梯导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/电梯导入模板.xlsx`)
