@@ -311,7 +311,7 @@ export default {
           data: [
             "废弃物处置量(万t)",
             "废弃物处置费用(百万元)",
-            "废弃物单耗(kg/m2)",
+            // "废弃物单耗(kg/m2)",
           ],
         },
         color: ["#0067CC", "#00CECA", "#9958FF"],
@@ -384,12 +384,12 @@ export default {
             yAxisIndex: 1,
             data: [],
           },
-          {
-            name: "废弃物单耗(kg/m2)",
-            type: "line",
-            yAxisIndex: 1,
-            data: [],
-          },
+          // {
+          //   name: "废弃物单耗(kg/m2)",
+          //   type: "line",
+          //   yAxisIndex: 1,
+          //   data: [],
+          // },
         ],
       },
       setBoeOption: undefined,
@@ -594,7 +594,7 @@ export default {
               }
             }
           }
-          this.boeOption.series[2].data = v1113;
+          // this.boeOption.series[2].data = v1113;
           this.boeOption.series[1].data = v1043;
           this.boeOption.series[0].data = v1092;
           console.log(v1113, v1043, v1092);
