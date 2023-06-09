@@ -86,8 +86,15 @@
       </a-row>
       <a-row>
         <a-col :span="colSpan" :xxl="xxlSpan">
-          <a-form-model-item ref="isNight" label="是否跨夜" prop="isNight">
-            <a-select v-model="iFrom.isNight" disabled show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
+          <a-form-model-item ref="sgrlx" label="作业日类型" prop="sgrlx">
+            <a-select v-model="iFrom.sgrlx" disabled show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
+              <a-select-option v-for="item in overnightList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="colSpan" :xxl="xxlSpan">
+          <a-form-model-item ref="ssfwyjsgfty" label="是否跨夜" prop="ssfwyjsgfty">
+            <a-select v-model="iFrom.ssfwyjsgfty" disabled show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
               <a-select-option v-for="item in overnightList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
             </a-select>
           </a-form-model-item>
@@ -133,7 +140,7 @@
       </a-form-model-item>
     </template>
 
-    <a-row>
+    <!-- <a-row>
       <a-col :span="colSpan" :xxl="xxlSpan">
         <a-form-model-item ref="isMust" label="作业形式" prop="isMust">
           <a-select v-model="iFrom.isMust" disabled show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
@@ -141,9 +148,9 @@
           </a-select>
         </a-form-model-item>
       </a-col>
-    </a-row>
+    </a-row> -->
 
-    <template title="外协厂商信息" v-if="iFrom.isMust-0 == 2">
+    <template title="外协厂商信息">
       <div>
         <div class="m-t-20 border-b-e7">
           <PageTitle>外协厂商信息</PageTitle>
@@ -244,11 +251,13 @@ export default {
         operateBrief: [{ required: true, message: "作业内容简述不能为空", trigger: "blur" },],
         operateType: [{ required: true, message: "作业类别不能为空", trigger: "change" },],
         operateLevel: [{ required: false, message: "作业级别不能为空", trigger: "change" },],
-        isNight: [{ required: true, message: "是否跨夜不能为空", trigger: "change" },],
+        
+        sgrlx: [{ required: true, message: "作业日类型不能为空", trigger: "change" },],
+        ssfwyjsgfty: [{ required: true, message: "是否跨夜不能为空", trigger: "change" },],
         dayDate: [{ required: true, message: "作业日期不能为空", trigger: "change" },],
         dayTime: [{ required: true, message: "每日作业时间不能为空", trigger: "change" },],
         dangerGuardian: [{ required: true, message: "BOE现场监护人不能为空", trigger: "change" },],
-        isMust: [{ required: true, message: "作业形式不能为空", trigger: "change" },],
+        // isMust: [{ required: true, message: "作业形式不能为空", trigger: "change" },],
         outCompany: [{ required: true, message: "外协厂商名称不能为空", trigger: "blur" },],
         outPrincipal: [{ required: true, message: "负责人不能为空", trigger: "blur" },],
         outPrincipalContact: [{ required: true, message: "负责人联系方式不能为空", trigger: "blur" },],
