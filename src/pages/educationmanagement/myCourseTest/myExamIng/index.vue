@@ -119,7 +119,7 @@ export default {
       this.testId = this.$route.query.testId
       this.paperId = this.$route.query.paperId
     }
-    this.testDate = dayJs(Date.now() + 480 * 60 * 1000)
+    this.testDate = dayJs(Date.now() + 480 * 60 * 1000).format("YYYY-MM-DD HH:mm:ss")
     this.getDetai()
   },
   computed: {

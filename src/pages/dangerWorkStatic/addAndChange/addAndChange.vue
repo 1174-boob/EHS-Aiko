@@ -77,9 +77,9 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateLevel" label="作业级别" prop="operateLevel" v-if="['fire_work','high_work'].includes(iFrom.operateType)">
+              <a-form-model-item ref="operateLevel" label="作业级别" prop="operateLevel">
                 <a-select v-model="iFrom.operateLevel" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in hazardLevelList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+                  <a-select-option v-for="item in getChemicalDictList('hazard_level')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
@@ -287,7 +287,7 @@ export default {
         areaLocation: [{ required: true, message: "作业区域具体位置不能为空", trigger: "blur" },],
         operateBrief: [{ required: true, message: "作业内容简述不能为空", trigger: "blur" },],
         operateType: [{ required: true, message: "作业类别不能为空", trigger: "change" },],
-        operateLevel: [{ required: false, message: "作业级别不能为空", trigger: "change" },],
+        operateLevel: [{ required: true, message: "作业级别不能为空", trigger: "change" },],
         isNight: [{ required: true, message: "是否跨夜不能为空", trigger: "change" },],
         dayDate: [{ required: true, message: "作业日期不能为空", trigger: "change" },],
         dayTime: [{ required: true, message: "每日作业时间不能为空", trigger: "change" },],
@@ -499,17 +499,17 @@ export default {
     },
     // 作业类别改变
     operateTypeChange(val, rm = true) {
-      if (val == 'fire_work') {
-        this.hazardLevelList = dictionary('dangerhazardHLevel')
-        this.iRules.operateLevel[0].required = true
-      } else if (val == 'high_work') {
-        this.hazardLevelList = dictionary('dangerhazardGLevel')
-        this.iRules.operateLevel[0].required = true
-      } else {
-        this.hazardLevelList = []
-        this.iRules.operateLevel[0].required = false
-      }
-      rm && this.$set(this.iFrom, 'operateLevel', undefined)
+      // if (val == 'fire_work') {
+      //   this.hazardLevelList = dictionary('dangerhazardHLevel')
+      //   this.iRules.operateLevel[0].required = true
+      // } else if (val == 'high_work') {
+      //   this.hazardLevelList = dictionary('dangerhazardGLevel')
+      //   this.iRules.operateLevel[0].required = true
+      // } else {
+      //   this.hazardLevelList = []
+      //   this.iRules.operateLevel[0].required = false
+      // }
+      // rm && this.$set(this.iFrom, 'operateLevel', undefined)
     },
     // 时间限制
     disabledDate(current) {
