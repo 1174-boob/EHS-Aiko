@@ -103,7 +103,7 @@ export default {
                   formInline: {},
                   loading: false,
                   data: {},
-                  xAxisName: "现地",
+                  xAxisName: "基地",
                   yAxisName: "岗位数",
                   harmList: [],
             };
