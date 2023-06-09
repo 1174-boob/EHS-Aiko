@@ -88,14 +88,14 @@
             <a-col :span="12">
               <a-form-model-item ref="sgrlx" label="作业日类型" prop="sgrlx">
                 <a-select v-model="iFrom.sgrlx" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in overnightList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+                  <a-select-option v-for="item in getChemicalDictList('sgrlx')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item ref="ssfwyjsgfty" label="是否跨夜" prop="ssfwyjsgfty">
                 <a-select v-model="iFrom.ssfwyjsgfty" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in overnightList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+                  <a-select-option v-for="item in getChemicalDictList('ssfwyjsgfty')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
