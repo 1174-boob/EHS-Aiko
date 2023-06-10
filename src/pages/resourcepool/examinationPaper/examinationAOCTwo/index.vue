@@ -100,7 +100,7 @@
       </div>
 
       <!-- 添加题目弹框-组件 -->
-      <AddTitleModal :subjectId="subjectId" :corporationId="corporationId" :addAddressModel="addAddressModel" @closeAddAddressModel="closeAddAddressModel" @submitDict="submitDict" :sonDataList="sonDataList" />
+      <AddTitleModal :subjectId="subjectId" :corporationId="corporationId" :addAddressModel="addAddressModel" @pageNo="pageNo" @pageSize='pageSize' @closeAddAddressModel="closeAddAddressModel" @submitDict="submitDict" :sonDataList="sonDataList" />
 
       <!-- 批量设置分支弹框 -->
       <CommonModal title="选择题目" :visible="allSetVisible" :cancelFn="closeAllSetVisible">
@@ -210,6 +210,9 @@
                 <div style="padding-left: 5px; width: 45px">/{{ bigcount.judgeNum }}</div>
               </div>
             </a-form-model-item>
+            <div>
+              <p>注：题目选择范围（单选题基础分值为2分、多选题和判断题基础分值为5分）</p>
+            </div>
           </a-form-model>
         </template>
         <template slot="btn">
@@ -234,6 +237,7 @@ import FixedBottom from "@/components/commonTpl/fixedBottom";
 import { debounce } from "lodash";
 import {
   GetKDataList,
+  GetTopicDataList,
   AddQuestionDataList,
   ChangeQuestionDataList,
   SubjectsDataList,
@@ -289,6 +293,11 @@ export default {
       randomObj: { total: 0, price: 0 },
       sujectList: [],
       bigcount: {},
+      page: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      },
     };
   },
   created() {
@@ -408,8 +417,10 @@ export default {
 
     //获取手动选题回显
     getKDataList(list) {
-      GetKDataList({
+      GetTopicDataList({
         topicIds: list,
+        pageNo: this.page.pageNo,
+        pageSize: this.page.pageSize,
       }).then((res) => {
         this.list = res.data;
         this.dictForm = {
@@ -621,6 +632,16 @@ export default {
       this.addAddressModel = false;
     },
 
+    pageNo: function (childValue) {
+      // childValue就是子组件传过来的值
+      this.page.pageNo = childValue
+      console.log(childValue,'pageNo=childValue');
+    },
+    pageSize: function (childValue) {
+      // childValue就是子组件传过来的值
+      this.page.pageSize = childValue
+      console.log(childValue,'pageSize=childValue');
+    },
     //接受组件传的参数
     submitDict(list) {
       this.clickQuestions = "1";

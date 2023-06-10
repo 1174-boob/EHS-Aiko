@@ -49,7 +49,6 @@
               <a-radio value="1">同比</a-radio>
               <a-radio value="2">环比</a-radio>
             </a-radio-group>&nbsp;&emsp;
-            <a-checkbox v-if="allButtonCodeList.includes('dangerWorkDA-compare-summary')" v-model="summary" @change="summaryChange">汇总</a-checkbox>
             <!-- <a-checkbox v-model="summary" @change="summaryChange">汇总</a-checkbox> -->
           </div>
         </div>
@@ -86,8 +85,6 @@ export default {
       },
       // 同比环比
       compType: '1',
-      // 汇总
-      summary: false,
       // 作业数量
       injuryOption: {
         tooltip: { ...barObj.tooltip },
@@ -154,11 +151,6 @@ export default {
     this.iSearch(false)
   },
   computed: {
-    isSummary() {
-      //1汇总 2不汇总
-      let val = this.summary ? 1 : 2
-      return val
-    }
   },
   methods: {
     initOption() {

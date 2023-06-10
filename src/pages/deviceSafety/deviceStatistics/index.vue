@@ -40,12 +40,6 @@
             <!-- 设备认证情况 -->
             <div class="content-title">
                   <span class="content-title-left">设备认证情况</span>
-                  <div class="content-title-right">
-                        <a-checkbox v-model="summary" @change="summaryChange"
-                              >汇总</a-checkbox
-                        >
-                        <!-- <a-checkbox v-model="summary" @change="summaryChange">汇总</a-checkbox> -->
-                  </div>
             </div>
 
             <chart :option="setOption"></chart>
@@ -73,8 +67,6 @@ export default {
       data() {
             return {
                   searchFormData: {},
-                  // 汇总
-                  summary: false,
                   // 作业数量
                   option: {
                         title: {
@@ -289,11 +281,7 @@ export default {
             this.iSearch(false);
       },
       computed: {
-            isSummary() {
-                  //1汇总 2不汇总
-                  let val = this.summary ? 1 : 2;
-                  return val;
-            },
+            
       },
       methods: {
             // 重置
@@ -328,7 +316,6 @@ export default {
                   }
                   deviceData({
                         ...this.searchFormData,
-                        isSummary: this.summary ? 1 : 2,
                   }).then((res) => {
                         if (res.data.length) {
                               this.option.series[0].data = [];

@@ -38,9 +38,6 @@
     <div>
       <div class="title">
         <div class="title-left">隐患数量统计</div>
-        <div class="title-right">
-          <a-checkbox v-model="formInline.isSummary" @change="summaryChange">汇总</a-checkbox>
-        </div>
       </div>
       <div class="casualties">
         <Echarts v-if="optionA.series.length" :option="optionA" />
@@ -141,7 +138,6 @@
               <a-radio value="1">同比</a-radio>
               <a-radio value="2">环比</a-radio>
             </a-radio-group>&nbsp;&emsp;
-            <a-checkbox v-model="formInlineTwoObj.isSummary" @change="summaryChangeTwo">汇总</a-checkbox>
           </div>
         </div>
         <Echarts :option="optionF" v-if="optionF.series.length" />
@@ -187,11 +183,9 @@ export default {
         { key: 3, value: "隐患级别" },
       ],
       formInline: {
-        isSummary: false,
         auditTime: undefined,
       },
       formInlineTwoObj: {
-        isSummary: false,
         compType: "1",
         dataSource: 1,
         mouthTime: moment().startOf("month").format("YYYY-MM-DD"),
@@ -459,7 +453,6 @@ export default {
             ? this.corporationIdObjTwo.corporationId
             : this.formInlineTwoObj.corporationId,
 
-          isSummary: this.formInlineTwoObj.isSummary ? 1 : 2, //1汇总 2不汇总
           mouthTime: this.formInlineTwoObj.mouthTime
             ? moment(this.formInlineTwoObj.mouthTime).format("YYYY-MM-DD")
             : undefined,
@@ -476,7 +469,6 @@ export default {
             ? this.corporationIdObj.corporationId
             : this.formInline.corporationId,
 
-          isSummary: this.formInline.isSummary ? 1 : 2, //1汇总 2不汇总
           startTime: this.formInline.auditTime
             ? this.formInline.auditTime[0]
             : undefined,
@@ -649,29 +641,20 @@ export default {
 
     //隐患对比-汇总
     summaryChange(e) {
-      if (!this.canClickBtnMixin("HiddenIsSummary")) {
-        this.formInline.isSummary = false;
-        return;
-      }
       this.disabledCommonDept = e.target.checked;
       let { auditTime } = this.formInline;
-      this.formInline = { auditTime, isSummary: e.target.checked };
+      this.formInline = { auditTime };
       this.iSearch();
     },
 
     //对比分析-汇总
     summaryChangeTwo(e) {
-      if (!this.canClickBtnMixin("AnalysisIsSummary")) {
-        this.formInlineTwoObj.isSummary = false;
-        return;
-      }
       this.disabledCommonDeptTwo = e.target.checked;
       let { compType, dataSource, mouthTime } = this.formInlineTwoObj;
       this.formInlineTwoObj = {
         mouthTime,
         compType,
         dataSource,
-        isSummary: e.target.checked,
       };
       this.iSearchTwo();
     },
@@ -717,7 +700,6 @@ export default {
     iRestTwo: debounce(
       function () {
         this.formInlineTwoObj = {
-          isSummary: false,
           compType: "1",
           dataSource: 1,
           mouthTime: moment().startOf("month").format("YYYY-MM-DD"),
