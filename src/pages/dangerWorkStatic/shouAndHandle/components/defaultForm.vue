@@ -93,7 +93,7 @@
           </a-form-model-item>
         </a-col>
         <a-col :span="colSpan" :xxl="xxlSpan">
-          <a-form-model-item ref="ssfwyjsgfty" label="是否跨夜" prop="ssfwyjsgfty">
+          <a-form-model-item ref="ssfwyjsgfty" label="是否夜间施工" prop="ssfwyjsgfty">
             <a-select v-model="iFrom.ssfwyjsgfty" disabled show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
               <a-select-option v-for="item in getChemicalDictList('ssfwyjsgfty')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
             </a-select>
@@ -253,7 +253,7 @@ export default {
         operateLevel: [{ required: false, message: "作业级别不能为空", trigger: "change" },],
         
         sgrlx: [{ required: true, message: "作业日类型不能为空", trigger: "change" },],
-        ssfwyjsgfty: [{ required: true, message: "是否跨夜不能为空", trigger: "change" },],
+        ssfwyjsgfty: [{ required: true, message: "是否夜间施工不能为空", trigger: "change" },],
         dayDate: [{ required: true, message: "作业日期不能为空", trigger: "change" },],
         dayTime: [{ required: true, message: "每日作业时间不能为空", trigger: "change" },],
         dangerGuardian: [{ required: true, message: "BOE现场监护人不能为空", trigger: "change" },],
