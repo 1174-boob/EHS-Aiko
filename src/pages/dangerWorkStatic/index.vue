@@ -219,12 +219,12 @@ export default {
           isDefault: true,
           props: 'infoStatusText',
         },
-        {
-          id: 10,
-          title: "类型",
-          isDefault: true,
-          props: 'isCommonText',
-        },
+        // {
+        //   id: 10,
+        //   title: "类型",
+        //   isDefault: true,
+        //   props: 'isCommonText',
+        // },
         {
           id: 11,
           title: "创建时间",
@@ -372,19 +372,19 @@ export default {
             // 作业类别
             item.operateTypeText = this.getChemicalDictText('hazard_category', item.operateType)
             // 作业级别
-            if (item.operateType == 'fire_work') {
-              item.operateLevelText = dictionary('dangerhazardHLevel', item.operateLevel)
-            } else if (item.operateType == 'high_work') {
-              item.operateLevelText = dictionary('dangerhazardGLevel', item.operateLevel)
-            } else {
-              item.operateLevelText = ''
-            }
+            // if (item.operateType == 'fire_work') {
+            //   item.operateLevelText = dictionary('dangerhazardHLevel', item.operateLevel)
+            // } else if (item.operateType == 'high_work') {
+              item.operateLevelText = this.getChemicalDictText('hazard_level', item.operateLevel)
+            // } else {
+            //   item.operateLevelText = ''
+            // }
             // 状态
             item.infoStatusText = this.dictionary('dangerstatus', item.infoStatus)
             // 作业形式
             item.isMustText = dictionary('hazardForm', item.isMust)
             // 类型
-            item.isCommonText = item.isCommon ? (item.isCommon == '1' ? '常规' : '非常规') : ''
+            // item.isCommonText = item.isCommon ? (item.isCommon == '1' ? '常规' : '非常规') : ''
           })
           this.tableList = tableList
           this.page.total = total;

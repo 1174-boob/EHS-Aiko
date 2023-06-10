@@ -476,7 +476,7 @@ export default {
     // 页面初始化
     initPage() {
       if (this.isAddPage) {
-        this.$set(this.iFrom, 'isMust', '1');
+        // this.$set(this.iFrom, 'isMust', '1');
         this.spinning = false
       } else {
         // 获取页面详情
@@ -611,9 +611,9 @@ export default {
       }
       this.handleLoading();
       // 删除外协厂商信息
-      if (this.iFrom.isMust == '1') {
-        this.rmAttrFn()
-      }
+      // if (this.iFrom.isMust == '1') {
+      //   this.rmAttrFn()
+      // }
       // 草稿 1-是，2-否
       let apiData = { ...this.iFrom, isDraft: 2 }
       const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
@@ -664,9 +664,9 @@ export default {
         return
       }
       // 删除外协厂商信息
-      if (this.iFrom.isMust == '1') {
-        this.rmAttrFn()
-      }
+      // if (this.iFrom.isMust == '1') {
+      //   this.rmAttrFn()
+      // }
       // 草稿 1-是，2-否
       let apiData = { ...this.iFrom, isDraft: 1 }
       const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
