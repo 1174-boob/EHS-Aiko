@@ -36,10 +36,6 @@
     <!-- 危险作业情况 -->
     <div class="content-title">
       <span class="content-title-left">危险作业情况</span>
-      <div class="content-title-right">
-        <a-checkbox v-if="allButtonCodeList.includes('dangerWorkDA-summary')" v-model="summary" @change="summaryChange">汇总</a-checkbox>
-        <!-- <a-checkbox v-model="summary" @change="summaryChange">汇总</a-checkbox> -->
-      </div>
     </div>
 
     <template title="作业情况总览">
@@ -137,8 +133,6 @@ export default {
       formInline: {
         auditTime: undefined,
       },
-      // 汇总
-      summary: false,
       // 作业数量
       injuryOption: {
         tooltip: {
@@ -280,11 +274,6 @@ export default {
     this.iSearch(false)
   },
   computed: {
-    isSummary() {
-      //1汇总 2不汇总
-      let val = this.summary ? 1 : 2
-      return val
-    }
   },
   methods: {
     initOption() {
@@ -320,7 +309,6 @@ export default {
     getApiData() {
       let apiData = {
         ...this.formInline,
-        isSummary: this.isSummary,
         auditTime: undefined,
         startTime: this.formInline.auditTime ? this.formInline.auditTime[0] : undefined,
         endTime: this.formInline.auditTime ? this.formInline.auditTime[1] : undefined,

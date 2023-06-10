@@ -51,7 +51,6 @@
               <a-radio value="1">计划演练</a-radio>
               <a-radio value="2">实际演练</a-radio>
             </a-radio-group>&nbsp;&emsp;
-            <a-checkbox v-model="formInline.isSummary" @change="summaryChange">汇总</a-checkbox>
           </div>
         </div>
         <div class="emergency_form">
@@ -435,7 +434,6 @@ export default {
         corporationId: !isEmpty(this.corporationIdObj)
           ? this.corporationIdObj.corporationId
           : this.formInline.corporationId,
-        isSummary: this.formInline.isSummary ? 1 : 2, //1汇总 2不汇总
         startTime: this.formInline.auditTime
           ? this.formInline.auditTime[0]
           : undefined,
@@ -580,17 +578,6 @@ export default {
       });
     },
 
-    //汇总
-    summaryChange(e) {
-      if (!this.canClickBtnMixin("emergencyIsSummary")) {
-        this.formInline.isSummary = false;
-        return;
-      }
-      this.disabledCommonDept = e.target.checked;
-      let { auditTime, prepType } = this.formInline;
-      this.formInline = { auditTime, prepType, isSummary: e.target.checked };
-      this.iSearch();
-    },
 
     // 查询
     iSearch(openLoading = true) {
