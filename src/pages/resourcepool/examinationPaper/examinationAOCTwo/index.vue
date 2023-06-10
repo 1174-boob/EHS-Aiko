@@ -210,6 +210,9 @@
                 <div style="padding-left: 5px; width: 45px">/{{ bigcount.judgeNum }}</div>
               </div>
             </a-form-model-item>
+            <div>
+              <p>注：题目选择范围（单选题基础分值为2分、多选题和判断题基础分值为5分）</p>
+            </div>
           </a-form-model>
         </template>
         <template slot="btn">

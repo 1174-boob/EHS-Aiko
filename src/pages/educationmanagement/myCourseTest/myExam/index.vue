@@ -24,10 +24,11 @@
         <vxe-column field="subjectName" :min-width="120" title="考试科目"></vxe-column>
         <vxe-column field="courseName" :min-width="120" title="关联课程"></vxe-column>
         <vxe-column field="examDate" :min-width="140" title="考试时间"></vxe-column>
-        <vxe-column field="action" fixed="right" title="操作" width="120">
+        <vxe-column field="action" fixed="right" title="操作" width="180">
           <template #default="{ row }">
             <div class="vex-table-btn">
-              <span class="color-0067cc cursor-pointer" @click="goDetail(row)">开始考试</span>
+              <span class="color-0067cc cursor-pointer m-r-15" @click="goDetail(row)">开始考试</span>
+              <span class="color-0067cc cursor-pointer" @click="goMyExamDetail(row)">查看答题详情</span>
             </div>
           </template>
         </vxe-column>
@@ -132,6 +133,13 @@ export default {
       setTimeout(() => {
         this.tipModelShow = true
       }, 200);
+    },
+    goMyExamDetail(row) {
+      let query = { testRecordsId: row.testRecordsId }
+      this.$router.push({
+        path: '/ehsGerneralManage/educationmanagement/myExamDetail',
+        query
+      })
     },
     // 页码改变
     pageNoChange(page) {

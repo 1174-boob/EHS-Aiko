@@ -60,7 +60,7 @@ export default {
     //请求地址
     action: {
       type: String,
-      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}ehs-customer/api/ehs/invitation/upload` : `ehs-customer/api/ehs/invitation/upload`
+      default: window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/ehs/invitation/upload` : `ehs-customer/api/ehs/invitation/upload`
     },
     // 文件类型
     fileTypeArr: {
