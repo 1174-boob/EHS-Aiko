@@ -2,10 +2,10 @@
   <div class="clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <div class="course-info flex align-items-center justify-content-between">
       <div class="pd-t-15 pd-b-15">
-        <div class="font-14">用户名称：{{userInfo.name ? userInfo.name : "--"}}</div>
+        <div class="font-14">用户名称：{{userInfo.userName ? userInfo.userName : "--"}}</div>
         <div class="font-14 m-t-10">公司名称：{{userInfo.companyName ? userInfo.companyName : "--"}}</div>
         <div class="font-14 m-t-10">联系电话：{{userInfo.phone ? userInfo.phone : "--"}}</div>
-        <div class="font-14 m-t-10">证件号码：{{userInfo.idCard ? userInfo.idCard : "--"}}</div>
+        <div class="font-14 m-t-10">证件号码：{{userInfo.idNumber ? userInfo.idNumber : "--"}}</div>
       </div>
       <div class="flex">
         <div class="flex flex-direction-column m-r-20">
@@ -89,9 +89,9 @@
         </div>
         <div class="paper-name pd-b-20">{{item.name ? item.name : "----"}}</div>
         <div class="flex justify-content-around pd-b-20">
-          <span>考生姓名：{{userInfo.name}}</span>
+          <span>考生姓名：{{userInfo.userName}}</span>
           <span>考生组织（公司或部门）：{{userInfo.companyName}}</span>
-          <span>考生证件号/工号：{{userInfo.idCard}}</span>
+          <span>考生证件号/工号：{{userInfo.idNumber}}</span>
         </div>
         <div>考生答案已用绿色标识</div>
         <div class="paper-topic" v-for="(topic, topicNo) in item.topicVoList" :key="topic.topicId">

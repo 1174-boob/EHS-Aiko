@@ -5,14 +5,14 @@
         <a-form-model-item ref="rule" label=" " prop="rule">
           <span>违章处罚达</span>
           <a-input-number class="rule-class" v-model="formModel.rule" :min="1" :max="9999" @blur="() => {$refs.rule.onFieldBlur()}" />
-          <span>次的供应商列入现地黑名单。</span>
+          <span>次的企业列入基地黑名单。</span>
         </a-form-model-item>
-        <a-form-model-item ref="boeRule" label=" " prop="boeRule">
+        <!-- <a-form-model-item ref="boeRule" label=" " prop="boeRule">
           <span>违章处罚达</span>
           <a-input-number class="rule-class" v-model="formModel.boeRule" :min="1" :max="9999" @blur="() => {$refs.boeRule.onFieldBlur()}" />
           <span>次的供应商列入B0E黑名单。</span>
-        </a-form-model-item>
-        <div>备注：列入现地黑名单的供应商将无法接收对应现地的安全培训与考核；列入BOE黑名单的供应商将无法接收所有现地的培训与考核。</div>
+        </a-form-model-item> -->
+        <div>备注：列入基地黑名单的企业将无法被推送对应基地的安全培训与考核。</div>
       </a-form-model>
     </template>
     <template slot="btn">
@@ -52,10 +52,7 @@ export default {
       rules: {
         rule: [
           { required: true, validator: this.ruleFormValidator, trigger: "blur" },
-        ],
-        boeRule: [
-          { required: true, message: "次数不能为空", trigger: "blur" }
-        ],
+        ]
       },
       // 新增、修改表单
       formModel: {},
@@ -67,8 +64,8 @@ export default {
     selectBlacklistRuleDetail() {
       selectBlacklistRuleDetail()
         .then(res => {
-          let { rule, boeRule, ruleId } = res.data
-          this.formModel = { rule, boeRule }
+          let { rule, ruleId } = res.data
+          this.formModel = { rule }
           this.ruleId = ruleId
         })
         .catch(err => { })

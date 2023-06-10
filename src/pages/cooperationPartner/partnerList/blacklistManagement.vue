@@ -3,13 +3,11 @@
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline"></CommonSearchItem>
-        <a-form-model-item label="公司全称">
-          <a-input v-model="formInline.companyName" placeholder="请输入公司全称"></a-input>
+        <a-form-model-item label="企业全称">
+          <a-input v-model="formInline.companyName" placeholder="请输入企业全称"></a-input>
         </a-form-model-item>
-        <a-form-model-item ref="blackType" label="黑名单类型" prop="blackType">
-          <a-select v-model="formInline.blackType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-            <a-select-option v-for="item in getDictTarget('s','blackType')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-          </a-select>
+        <a-form-model-item label="企业简称">
+          <a-input v-model="formInline.companyAbbreviation" placeholder="请输入企业简称"></a-input>
         </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
@@ -28,19 +26,15 @@
     <CommonTable :page="page" :spinning="tableSpinning" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
       <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
         <vxe-column field="blackId" :min-width="180" title="编号"></vxe-column>
-        <vxe-column field="companyName" :min-width="120" title="供应商名称"></vxe-column>
-        <vxe-column field="companyAbbreviation" :min-width="120" title="供应商简称"></vxe-column>
         <vxe-column field="corporationId" :min-width="120" title="所属组织">
           <template #default="{ row }">
             <span>{{matchOrganizeName(row.corporationId)}}</span>
           </template>
         </vxe-column>
-        <vxe-column field="blackType" :min-width="130" title="黑名单类型">
-          <template #default="{ row }">
-            <span>{{getDictTarget('s','blackType',row.blackType)}}</span>
-          </template>
-        </vxe-column>
-        <vxe-column field="action" fixed="right" title="操作" width="140">
+        <vxe-column field="companyName" :min-width="150"  title="企业全称"></vxe-column>
+        <vxe-column field="companyAbbreviation" :min-width="100" title="企业简称"></vxe-column>
+        <vxe-column field="companyCode" :min-width="180" title="统一社会信用代码"></vxe-column>
+        <vxe-column field="action" fixed="right" title="操作" width="180">
           <template #default="{ row }">
             <div class="vex-table-btn">
               <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(row)">详情</span>

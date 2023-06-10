@@ -9,11 +9,8 @@
               <a-form-model-item v-if="!isCreate" class="flex text-form-item" label="审批单编号">
                 <div>{{iForm.formCode || "--"}}</div>
               </a-form-model-item>
-              <a-form-model-item class="flex text-form-item" label="供应商名称">
+              <a-form-model-item class="flex text-form-item" label="企业全称">
                 <div>{{iForm.supplierName || "--"}}</div>
-              </a-form-model-item>
-              <a-form-model-item class="flex text-form-item" label="入厂部门">
-                <div>{{iForm.incomingDeptId ? deptCache[iForm.incomingDeptId] : "--"}}</div>
               </a-form-model-item>
               <a-form-model-item class="flex text-form-item" label="联系电话">
                 <div>{{iForm.phone || "--"}}</div>
@@ -24,7 +21,7 @@
                 <div v-if="isCreate">{{userInfo.jobNumber ? userInfo.name + '/' + userInfo.jobNumber : userInfo.name || "--"}}</div>
                 <div v-else>{{draftPersonMsg}}</div>
               </a-form-model-item>
-              <a-form-model-item class="flex text-form-item" label="供应商简称">
+              <a-form-model-item class="flex text-form-item" label="企业简称">
                 <div>{{iForm.supplierCode || "--"}}</div>
               </a-form-model-item>
               <a-form-model-item class="flex text-form-item" label="违章次数">
@@ -64,9 +61,6 @@
               </a-form-model-item>
               <a-form-model-item class="flex" ref="relieveReason" label="移除黑名单申请原因" prop="relieveReason">
                 <a-textarea :disabled="isResolve || isView" v-model.trim="iForm.relieveReason" :maxLength="50" placeholder="请输入移除黑名单申请原因"></a-textarea>
-              </a-form-model-item>
-              <a-form-model-item class="flex text-form-item" label="黑名单类型">
-                <div>{{iForm.blackType ? getDictTarget('s','blackType',iForm.blackType):'--'}}</div>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -193,10 +187,9 @@ export default {
               phone: this.userInfo.phone,
               ...resData,
               corporationId: undefined,
-              supplierName: resData.companyName, // 供应商名称
-              supplierCode: resData.companyAbbreviation, // 供应商简称
+              supplierName: resData.companyName, // 企业名称
+              supplierCode: resData.companyAbbreviation, // 企业简称
               violationNum: resData.punishmentCount, // 处罚次数
-              incomingDeptId: resData.departmentId, // 入场部门
             }
           })
           .catch(err => { })
@@ -208,7 +201,7 @@ export default {
         if (this.isEdit) {
           this.getDetail()
             .finally(() => {
-              this.spinning
+              this.spinning = false;
             })
         } else {
           Promise.all([
@@ -305,7 +298,7 @@ export default {
           this.pushTask(handle, formId);
           this.$antMessage.success("提交成功");
           this.$router.push({
-            path: '/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/blacklistManagement',
+            path: '/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/blacklistApprovalList',
           })
         })
         .catch(err => { })

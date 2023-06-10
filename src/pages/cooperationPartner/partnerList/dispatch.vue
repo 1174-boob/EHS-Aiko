@@ -393,7 +393,7 @@ export default {
       }
       this.handleLoadingThree()
       let apiData = {
-        dispatchJson: this.selectedRow,
+        enterpriseDispatchVo: this.selectedRow,
         companyId: this.dataMsg.companyId,
         companyName: this.dataMsg.customerName,
         corporationId: this.dataMsg.corporationId,

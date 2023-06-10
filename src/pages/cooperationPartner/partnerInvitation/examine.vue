@@ -51,8 +51,9 @@
         </div>
         <div slot="action" slot-scope="text,record">
           <span class="color-0067cc cursor-pointer" @click="goShowPage(record)">查看</span>
-          <span class="color-0067cc cursor-pointer" @click="goShowPage(record)">编辑</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.approvalStatus == 1 || record.approvalStatus == 3" @click="jumpAddOrDetail(record)">编辑</span>
           <span class="color-0067cc cursor-pointer" v-if="isResolveVisible(record)" @click="goHandlePge(record)">处理</span>
+          <span class="color-ff4d4f cursor-pointer" @click="delDataList(record)">删除</span>
         </div>
       </a-table>
     </CommonTable>
@@ -109,10 +110,11 @@ export default {
           },
           width: 160,
         },
+        
         {
           title: "企业全称",
-          dataIndex: "title",
-          key: "title",
+          dataIndex: "companyName",
+          key: "companyName",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -126,10 +128,16 @@ export default {
           },
           minWidth: 110,
         },
+        
         {
-          title: "业务担当",
-          dataIndex: "boeAssume",
-          key: "boeAssume",
+          title: '所属部门',
+          dataIndex: 'departmentName',
+          width: 140,
+        },
+        {
+          title: "所属担当",
+          dataIndex: "toBearName",
+          key: "toBearName",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -145,14 +153,14 @@ export default {
         },
         {
           title: "安全协议合同号",
-          dataIndex: "intoFactoryDate",
-          key: "intoFactoryDate",
+          dataIndex: "contractNo",
+          key: "contractNo",
           width: 140,
         },
         {
           title: "安全协议到期日",
-          dataIndex: "intoFactoryDate",
-          key: "intoFactoryDate",
+          dataIndex: "contractExpirationDate",
+          key: "contractExpirationDate",
           width: 140,
         },
         {
@@ -194,7 +202,7 @@ export default {
           dataIndex: "approvalStatus",
           key: "approvalStatus",
           customRender: (text) => {
-            text = dictionary('chemicalApproveStatus', text)
+            text = dictionary('dirllPlanApproveStatus', text)
             return text;
           },
           width: 110,
@@ -204,7 +212,7 @@ export default {
           scopedSlots: { customRender: "action" },
           key: "action",
           fixed: "right", // 固定操作列
-          width: 250, // 宽度根据操作自定义设置
+          width: 180, // 宽度根据操作自定义设置
         },
       ],
       tableList: [],
@@ -221,10 +229,6 @@ export default {
   created() {
     this.setRouterCode("transientChemicals");
     this.columns.splice(1, 0, this.addCommonColumnItem(130));
-    this.columns.splice(3, 0, this.addCommonColumnDepartment({
-      width: 130,
-      title: "所属部门"
-    }))
     this.initConfigPage()
     this.getTableList();
   },
@@ -251,7 +255,7 @@ export default {
     // 控制处理按钮是否显示
     isResolveVisible(row) {
       let showBtn = false
-      if (row.approvalStatus != 'end') {
+      if (row.approvalStatus == 2 && row.handler == this.userId) {
         showBtn = row.handler.indexOf(this.userId) != -1
       }
       return showBtn
@@ -279,33 +283,52 @@ export default {
             this.getTableList();
           }
         })
+        .catch(err => {})
         .finally(() => {
           this.tableSpinning = false
           this.cancelLoading();
         })
     },
     //跳转新增、编辑页面
-    jumpAddOrDetail() {
-      let query = {};
+    jumpAddOrDetail(record) {
+      let query = { invitationId: record.invitationId };
       this.$router.push({
-        path: "/ehsGerneralManage/cooperationPartner/transientChemicalsAdd",
+        path: "/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/examineAdd",
         query,
+      }).catch(err => {
+        console.log(err,'.....bc');
       });
     },
     // 跳转处理页面
     goHandlePge(record) {
-      let query = { temporaryEntryId: record.temporaryEntryId };
+      let query = { invitationId: record.invitationId };
       this.$router.push({
-        path: "/ehsGerneralManage/cooperationPartner/transientChemicalsHandle",
+        path: "/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/examineHandle",
         query,
       });
     },
-    // 跳转查看页面
+    // 跳转查看、编辑页面
     goShowPage(record) {
-      let query = { temporaryEntryId: record.temporaryEntryId };
+      let query = { invitationId: record.invitationId };
       this.$router.push({
-        path: "/ehsGerneralManage/cooperationPartner/transientChemicalsShow",
+        path: "/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/examinePreview",
         query,
+      });
+    },
+    // 删除
+    delDataList(record) {
+      this.$antConfirm({
+        title: "确定删除吗?",
+        onOk: () => {
+          return enterpriseDelete({ invitationId: record.invitationId })
+            .then((res) => {
+              this.$antMessage.success(res.message);
+              this.getTableList();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        },
       });
     },
     // 页码改变

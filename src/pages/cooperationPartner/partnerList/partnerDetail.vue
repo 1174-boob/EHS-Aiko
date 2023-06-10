@@ -1,14 +1,21 @@
 <template>
   <div class="parter-detail">
     <PageTitle>详情</PageTitle>
-    <div class="partner-title" v-if="partner==1">供应商基本信息</div>
+    <div class="partner-title" v-if="partner==1">企业基本信息</div>
     <a-row v-if="partnerInfo">
       <a-col :span="12">
-        <p class="pd-b-16 m-b-0">供应商名称: {{partnerInfo.companyName}}</p>
-        <p class="pd-b-16 m-b-0">人员总数: 20</p>
+        <p class="pd-b-16 m-b-0">企业全称: {{partnerInfo.companyName}}</p>
       </a-col>
       <a-col :span="12">
-        <p class="pd-b-16 m-b-0">供应商简称: {{partnerInfo.companyAbbreviation}}</p>
+        <p class="pd-b-16 m-b-0">企业简称: {{partnerInfo.companyAbbreviation}}</p>
+      </a-col>
+    </a-row>
+    <a-row v-if="partnerInfo">
+      <a-col :span="12">
+        <p class="pd-b-16 m-b-0">统一社会信用代码: {{partnerInfo.companyCode}}</p>
+      </a-col>
+      <a-col :span="12">
+        <p class="pd-b-16 m-b-0">主营业务: {{partnerInfo.mainBusiness}}</p>
       </a-col>
     </a-row>
     <div class="partner-title">关联信息</div>
@@ -19,6 +26,20 @@
         </div>
       </a-table>
     </CommonTable>
+    <a-row>
+      <a-col :span="24">
+        <a-form-model-item ref="fileIds" label="资料附件" prop="fileIds" :label-col="labelColEditor" :wrapper-col="wrapperColEditor">
+          <UploadBtnStyle
+            :accept="['.doc', '.docx','.pdf','.xls','.xlsx','.ppt']"
+            :maxSize="20"
+            :limit="20"
+            :onlyShow="true"
+            :fileLists="partnerInfo.fileIdList"
+            @handleSuccess="handleSuccessReferencesAttachment"
+          ></UploadBtnStyle>
+        </a-form-model-item>
+      </a-col>
+    </a-row>
     <FixedBottom>
       <a-button :style="{ marginLeft: '8px' }" @click="back">返回</a-button>
     </FixedBottom>
@@ -26,70 +47,155 @@
 </template>
 
 <script>
+import { formValidator } from "@/utils/clx-form-validator.js";
 import FixedBottom from "@/components/commonTpl/fixedBottom";
 import { InvitationDetail, invitationSupplieDetail, invitationClientDetail } from "@/services/api.js";
+import { enterpriseDetail,} from '@/services/chemicalIdentSafetyTipsAdd.js'
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import SelfTable from "@/pages/ngform/tpl/selfTable.vue";
 
 export default {
   name: 'parter-detail',
-  components: { FixedBottom, SelfTable },
+  components: { FixedBottom, UploadBtnStyle, },
   mixins: [teableCenterEllipsis],
   data() {
     return {
       partnerInfo: null,
+      labelColEditor: { span: 1 },
+      wrapperColEditor: { span: 23 },
       partner: null,
       columns: [
         {
           title: '所属部门',
           dataIndex: 'departmentName',
-          width: 150
         },
         {
           title: '所属担当',
           scopedSlots: { customRender: "tobear" },
-          width: 150
-        },
-        {
-          title: '曾经入场现地',
-          dataIndex: 'onceEnteredSite',
-          width: 150
-        },
-        {
-          title: '作业内容',
-          dataIndex: 'jobContent',
-          width: 150
         },
         {
           title: '安全协议合同号',
           dataIndex: 'contractNo',
-          width: 150
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
           title: '安全协议到期日',
           dataIndex: 'contractExpirationDate',
-          width: 150
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
-          title: '厂商负责人',
+          title: '企业负责人',
           dataIndex: 'supplierDirector',
-          width: 150
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
-          title: '厂商负责人电话',
+          title: '企业负责人电话',
           dataIndex: 'supplierDirectorPhone',
-          width: 150
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
-          title: '厂商安全负责人',
+          title: '企业安全负责人',
           dataIndex: 'supplierSafeDirector',
-          width: 150
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
-          title: '厂商安全负责人电话',
+          title: '企业安全负责人电话',
           dataIndex: 'supplierSafeDirectorPhone',
-          minWidth: 150
-        }
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+          width:160
+        },
+        {
+          title: '作业内容',
+          dataIndex: 'jobContent',
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+        },
+        {
+          title: '备注',
+          dataIndex: 'remarks',
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+          width: 120
+        },
       ],
       page: {
         pageNo: 1,
@@ -110,17 +216,25 @@ export default {
   created() {
     if (this.$route.query && this.$route.query.id) {
       this.partner = this.$route.query.partner;
-      // 获取供应商基本信息
+      // 获取企业基本信息
       this.initPage(this.$route.query.id);
       // 获取关联信息数据
       this.getInvitationSupplieDetail();
     }
   },
   methods: {
+    
+    // 资料附件-文件上传
+    handleSuccessReferencesAttachment(fileList) {
+      this.iFrom.fileIds = fileList.map(item => {
+        return item.id
+      })
+      formValidator.formItemValidate(this, 'fileIds', 'ruleForm')
+    },
     // 获取详情
     initPage(id) {
       this.dataListLoading = true;
-      InvitationDetail({ invitationId: id }).then(res => {
+      enterpriseDetail({ invitationId: id }).then(res => {
         let resultObj = res.data || {};
         if (this.partner == 1) {
           this.partnerInfo = resultObj;
@@ -128,6 +242,9 @@ export default {
           this.partnerInfo = null
         }
         this.departmentName = resultObj.departmentName;
+        // 资料附件-回显
+        this.partnerInfo.fileIds = this.handleFileIdS(this.partnerInfo.fileIdList)
+        this.partnerInfo.fileIdList = this.handleFileRedisplay(this.partnerInfo.fileIdList)
         this.toBear = resultObj.toBear;
         this.fromId = resultObj.fromId;
       }).catch(err => {
@@ -144,7 +261,7 @@ export default {
         pageSize: this.page.pageSize
       }
       let promiseFn;
-      if (this.partner == 1) { // 我的供应商
+      if (this.partner == 1) { // 我的企业
         promiseFn = invitationSupplieDetail;
         params.companyCode = this.$route.query.companyId;
       } else if (this.partner == 2) { // 我的客户
@@ -153,7 +270,8 @@ export default {
       }
       promiseFn(params).then(res => {
         const data = res.data || {};
-        this.dataSource = data.list || [];
+        console.log(res.data,'res.datares.datares.data');
+        this.dataSource = data || [];
         this.page.total = data.total;
         let arr = [];
         for (let i = 0; i < this.dataSource.length; i++) {
@@ -174,6 +292,26 @@ export default {
       }).finally(() => {
         this.dataListLoading = false;
       })
+    },
+    // 处理文件id
+    handleFileIdS(list) {
+      list = list ? list : []
+      let ids = list.map(item => {
+        return item.id
+      })
+      ids = ids ? ids : []
+      return ids
+    },
+    // 处理文件回显
+    handleFileRedisplay(list) {
+      let fileList = list ? list : []
+      fileList.forEach(item => {
+        item.uid = item.id
+        item.name = item.sourceFileName
+        item.status = 'done'
+        item.url = item.filePath
+      })
+      return fileList
     },
     // 返回
     back() {

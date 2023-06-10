@@ -1401,6 +1401,42 @@ const options = {
                       component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/examine.vue'], resolve),
                     },
                     {
+                      path: 'examineAdd',
+                      name: '相关方审批新建编辑',
+                      meta: {
+                        title: '相关方审批新建编辑',
+                        routerCode:'examine',
+                        invisible: true,
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/examineAdd.vue'], resolve),
+                    },
+                    {
+                      path: 'examinePreview',
+                      name: '相关方审批查看',
+                      meta: {
+                        title: '相关方审批查看',
+                        invisible: true,
+                        routerCode:'examine',
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/examinePreview.vue'], resolve),
+                    },
+                    {
+                      path: 'examineHandle',
+                      name: '相关方审批处理',
+                      meta: {
+                        invisible: true,
+                        title: '相关方审批处理',
+                        routerCode:'examine',
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/cooperationPartner/partnerInvitation/examineHandle.vue'], resolve),
+                    },
+                    {
                       path: 'audit',
                       name: '邀请审核',
                       meta: {
@@ -1465,9 +1501,9 @@ const options = {
                     },
                     {
                       path: 'dispatchDetail',
-                      name: '查看派工',
+                      name: '相关方派工',
                       meta: {
-                        title: '查看派工',
+                        title: '相关方派工',
                         isPage: true,
                         invisible: true,
                       },

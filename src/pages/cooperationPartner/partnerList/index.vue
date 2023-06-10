@@ -3,13 +3,15 @@
   <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <PageTitle>合作伙伴列表</PageTitle>
     <div class="card-container">
-      <a-tabs v-model="activeKey" @change="tabChange">
-        <a-tab-pane key="1" tab="我的供应商">
+        <!-- <a-tab-pane key="1" tab="我的供应商"> -->
           <SearchTerm>
             <a-form-model layout="inline" :model="formInline" :colon="false">
               <CommonDept ref="commonDept" :CommonFormInline="formInline"></CommonDept>
-              <a-form-model-item label="公司全称">
-                <a-input v-model="formInline.name" placeholder="公司全称模糊搜索" allowClear></a-input>
+              <a-form-model-item label="企业全称">
+                <a-input v-model="formInline.name" placeholder="企业全称模糊搜索" allowClear></a-input>
+              </a-form-model-item>
+              <a-form-model-item label="企业简称">
+                <a-input v-model="formInline.companyAbbreviation" placeholder="企业简称模糊搜索" allowClear></a-input>
               </a-form-model-item>
               <a-form-model-item class="float-right">
                 <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -22,15 +24,16 @@
             <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="invitationList" :rowKey="(record, index)=>{return index}" :pagination="false">
               <div slot="customTitle">操作</div>
               <div slot="action" slot-scope="record">
-                <span class="color-0067cc cursor-pointer" @click="action(record,1)">详情</span>
-                <span class="color-0067cc cursor-pointer" @click="actionDispatchDetail(record)">查看派工</span>
+                <span class="color-0067cc cursor-pointer" @click="action(record,1)">查看</span>
+                <span class="color-0067cc cursor-pointer" @click="actionDispatchDetail(record)">派工</span>
                 <span class="color-0067cc cursor-pointer" @click="actionPunishmentRecord1(record, 'companyCode')">处罚记录</span>
                 <span class="color-0067cc cursor-pointer" v-if="record.approvalStatus == 1" @click="actionApprovalRecord(record)">审批记录</span>
+                <span class="color-ff4d4f cursor-pointer" @click="delDataList(record)">删除</span>
               </div>
             </a-table>
           </CommonTable>
-        </a-tab-pane>
-        <a-tab-pane key="2" tab="我的客户">
+        <!-- </a-tab-pane> -->
+        <!-- <a-tab-pane key="2" tab="我的客户">
           <SearchTerm>
             <a-form-model layout="inline" :model="clientForm" :colon="false">
               <a-form-model-item label="公司全称">
@@ -51,8 +54,7 @@
               </div>
             </a-table>
           </CommonTable>
-        </a-tab-pane>
-      </a-tabs>
+        </a-tab-pane> -->
     </div>
   </div>
 </template>
@@ -62,7 +64,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from '@/mixin/cancelLoading';
 import dragTable from "@/mixin/dragTable.js";
 import { debounce } from 'lodash';
-import { InvitationSupplier, InvitationClient } from "@/services/api.js";
+import { InvitationSupplier, InvitationClient,InvitationDelete } from "@/services/api.js";
 
 export default {
   mixins: [teableCenterEllipsis, cancelLoading, dragTable],
@@ -70,7 +72,7 @@ export default {
     return {
       tableSpinning:false,
       tableSpinningClient:false,
-      activeKey:'1',
+      // activeKey:'1',
       gData: [],
       page: {
         pageNo: 1,
@@ -84,29 +86,37 @@ export default {
       },
       formInline: {
         name: '',
+        companyAbbreviation:''
       },
       clientForm: {
         name: '',
+        companyAbbreviation:''
       },
       searchFormData: {},
       clientFormData: {},
       columns: [
+        // {
+        //   title: '编号',
+        //   dataIndex: 'invitationId',
+        //   key: "invitationId",
+        //   // width: 200
+        // },
         {
-          title: '编号',
-          dataIndex: 'invitationId',
-          key: "invitationId",
-          // width: 200
-        },
-        {
-          title: '供应商名称',
+          title: '企业全称',
           dataIndex: 'companyName',
           key: "companyName",
           // width: 200
         },
         {
-          title: '供应商简称',
+          title: '企业简称',
           dataIndex: 'companyAbbreviation',
           key: "companyAbbreviation",
+          // width: 200
+        },
+        {
+          title: '统一社会信用代码',
+          dataIndex: 'companyCode',
+          key: "companyCode",
           // width: 200
         },
         {
@@ -158,18 +168,18 @@ export default {
   },
   created() {
     this.setRouterCode("partnerList");
-    this.columns.splice(1, 0, this.addCommonColumnItem(200));
+    this.columns.splice(0, 0, this.addCommonColumnItem(200));
     this.clientColumns.splice(3, 0, this.addCommonColumnItem(200, true));
     this.getInvitationSupplier();
   },
   activated() {
     setTimeout(() => {
       if(!this.keepalive){
-        if(this.activeKey == 1){
+        // if(this.activeKey == 1){
           this.getInvitationSupplier();
-        }else{
-          this.getInvitationClient();
-        }
+        // }else{
+          // this.getInvitationClient();
+        // }
       }
     }, 20);
   },
@@ -287,6 +297,7 @@ export default {
       }
       this.formInline = {
         name: '',
+        companyAbbreviation:''
       }
       this.searchFormData = JSON.parse(JSON.stringify(this.formInline))
       this.getInvitationSupplier();
@@ -304,9 +315,26 @@ export default {
       this.clientFormData = JSON.parse(JSON.stringify(this.clientForm))
       this.getInvitationClient();
     }, 250, { leading: true, trailing: false }),
-    // 查看派工
+    // 派工
     actionDispatchDetail(record) {
       this.$router.push({ path: "/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/dispatchDetail", query: { dataMsg: record } })
+    },
+    // 删除
+    delDataList(record) {
+      this.$antConfirm({
+        title: "确定删除吗?",
+        onOk: () => {
+          console.log(record.invitationId,'record.invitationId');
+          return InvitationDelete({ invitationId: record.invitationId })
+            .then((res) => {
+              this.$antMessage.success(res.message);
+              this.getInvitationSupplier();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        },
+      });
     },
     // 处罚记录--我的供应商
     actionPunishmentRecord1(record, str, flag) {

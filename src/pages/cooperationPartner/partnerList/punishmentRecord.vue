@@ -103,7 +103,6 @@
         >
           <CommonSearchItem
             :CommonFormInline="editForm"
-            :disabled="true"
             :rules="editFormRules"
             :notTablePage="true"
             :labelCol="{ style: { width: '98px' } }"

@@ -3,9 +3,6 @@
     <a-spin :spinning="spinning" wrapperClassName="a-spin">
       <a-form-model ref="iForm" :model="iForm" :rules="rules" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
         <!-- <CommonDept :CommonFormInline="iForm" :rules="rules" :notTablePage="true" :labelCol="labelCol" :wrapperCol="wrapperCol" :disabled="disabled"  @corporationChange="corporationChange"></CommonDept> -->
-        <a-form-model-item class="flex" ref="onceEnteredSite" label="曾经入场现地" prop="onceEnteredSite">
-          <a-input :disabled="disabled" v-model.trim="iForm.onceEnteredSite" placeholder="请输入曾经入场现地"></a-input>
-        </a-form-model-item>
         <a-form-model-item class="flex" ref="jobContent" label="作业内容" prop="jobContent">
           <a-input :disabled="disabled" v-model.trim="iForm.jobContent" placeholder="请输入作业内容"></a-input>
         </a-form-model-item>
@@ -89,7 +86,6 @@ export default {
       wrapperCol: { style: { width: 'calc(100% - 150px)' } },
       iForm: {},
       rules: {
-        onceEnteredSite: [{ required: true, message: "曾经入场现地不能为空", trigger: "change" }],
         jobContent: [{ required: true, message: "作业内容不能为空", trigger: "blur" }],
         contractNo: [{ required: true, message: "安全协议合同号不能为空", trigger: "blur" }],
         contractExpirationDate: [{ required: true, message: "安全协议到期日不能为空", trigger: "change" }],

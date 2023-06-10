@@ -24,11 +24,6 @@
         <a-form-model-item label="申请日期">
           <a-range-picker style="width: 200px" class="search-range-picker" v-model="formInline.createDate" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" />
         </a-form-model-item>
-        <a-form-model-item ref="blackType" label="黑名单类型" prop="blackType">
-          <a-select v-model="formInline.blackType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-            <a-select-option v-for="item in getDictTarget('s','blackType')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -52,11 +47,6 @@
         <vxe-column field="incomingDeptId" :min-width="120" title="入厂部门">
           <template #default="{ row }">
             <span>{{row.incomingDeptId ? deptCache[row.incomingDeptId] : "--"}}</span>
-          </template>
-        </vxe-column>
-        <vxe-column field="blackType" :min-width="120" title="黑名单类型">
-          <template #default="{ row }">
-            <span>{{getDictTarget('s','blackType',row.blackType)}}</span>
           </template>
         </vxe-column>
         <vxe-column field="createTime" :min-width="120" title="申请时间"></vxe-column>

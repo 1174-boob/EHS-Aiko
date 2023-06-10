@@ -145,31 +145,33 @@ export const RemoveSysDictData = params => post(`ehs-customer/api/ehs/sysDictDat
 //更新字典项值
 export const UpdateSysDictData = params => post(`ehs-customer/api/ehs/sysDictData/updateSysDictData`, params);
 //分页查询发出企业邀请
-export const SelectIssueInvitationPage = params => post(`${serviceNameList.danger}/api/ehs/invitation/selectIssueInvitationPage`, params);
+export const SelectIssueInvitationPage = params => post(`ehs-customer/api/ehs/invitation/selectIssueInvitationPage`, params);
 //分页查询企业收到的邀请
-export const ReceivedInvitationPage = params => post(`${serviceNameList.danger}/api/ehs/invitation/selectReceivedInvitationPage`, params);
+export const ReceivedInvitationPage = params => post(`ehs-customer/api/ehs/invitation/selectReceivedInvitationPage`, params);
 //根据供应商名称完全匹配供应商信息
-export const SelectCompany = params => post(`${serviceNameList.danger}/api/ehs/invitation/selectCompany`, params);
+export const SelectCompany = params => post(`ehs-customer/api/ehs/invitation/selectCompany`, params);
 //根据供应商名称完全匹配供应商信息
-export const InsertInvitation = params => post(`${serviceNameList.danger}/api/ehs/invitation/insertInvitation`, params);
+export const InsertInvitation = params => post(`ehs-customer/api/ehs/invitation/insertInvitation`, params);
 //根据供应商名称完全匹配供应商信息
-export const BatchSendInvitation = params => post(`${serviceNameList.danger}/api/ehs/invitation/batchSendInvitation`, params);
+export const BatchSendInvitation = params => post(`ehs-customer/api/ehs/invitation/batchSendInvitation`, params);
 //查看详情
-export const InvitationDetail = params => post(`${serviceNameList.danger}/api/ehs/invitation/selectInvitationDetail`, params);
+export const InvitationDetail = params => post(`ehs-customer/api/ehs/invitation/selectInvitationDetail`, params);
 //待发送编辑邀请
-export const UpdateInvitation = params => post(`${serviceNameList.danger}/api/ehs/invitation/updateInvitation`, params);
+export const UpdateInvitation = params => post(`ehs-customer/api/ehs/invitation/updateInvitation`, params);
 //我的供应商
-export const InvitationSupplier = params => post(`${serviceNameList.danger}/api/ehs/invitation/supplier`, params);
+export const InvitationSupplier = params => post(`ehs-customer/api/ehs/invitation/supplier`, params);
+//删除审批完成的记录
+export const InvitationDelete = params => get(`ehs-customer/api/ehs/invitation/supplier/delete`, params);
 //我的客户
-export const InvitationClient = params => post(`${serviceNameList.danger}/api/ehs/invitation/client`, params);
+export const InvitationClient = params => post(`ehs-customer/api/ehs/invitation/client`, params);
 //审核通过
-export const InvitationToExamine = params => post(`${serviceNameList.danger}/api/ehs/invitation/toExamineInvitation`, params);
+export const InvitationToExamine = params => post(`ehs-customer/api/ehs/invitation/toExamineInvitation`, params);
 //审核通过
-export const rejectInvitation = params => post(`${serviceNameList.danger}/api/ehs/invitation/rejectInvitation`, params);
+export const rejectInvitation = params => post(`ehs-customer/api/ehs/invitation/rejectInvitation`, params);
 //变更信息
-export const ChangeInformation = params => post(`${serviceNameList.danger}/api/ehs/invitation/changeInformation`, params);
+export const ChangeInformation = params => post(`ehs-customer/api/ehs/invitation/changeInformation`, params);
 //变更信息
-export const PerfectInformation = params => post(`${serviceNameList.danger}/api/ehs/invitation/perfectInformation`, params);
+export const PerfectInformation = params => post(`ehs-customer/api/ehs/invitation/perfectInformation`, params);
 //节假日列表
 export const HolidayDate = params => get(`${serviceNameList.danger}/api/ehs/holiday/holidays`, params);
 //设置节假日
@@ -391,25 +393,25 @@ export const updateCourses = params => post(`${serviceNameList.course}/api/cours
 
 
 // 点击派工，人员列表
-export const GetDispatchPage = params => post(`${serviceNameList.danger}/api/ehs/invitation/dispatchPage`, params);
+export const GetDispatchPage = params => post(`ehs-customer/api/ehs/invitation/dispatchPage`, params);
 // 我的客户-点击派工-人员列表
-export const SelectDispatch = params => post(`${serviceNameList.danger}/api/ehs/invitation/selectDispatch`, params);
+export const SelectDispatch = params => post(`ehs-customer/api/ehs/invitation/selectDispatch`, params);
 // 保存派工信息
-export const SaveDispatch = params => post(`${serviceNameList.danger}/api/ehs/invitation/dispatch`, params);
+export const SaveDispatch = params => post(`ehs-customer/api/ehs/invitation/dispatch`, params);
 // 我的供应商查看派工列表
-export const GetDispatchList = params => post(`${serviceNameList.danger}/api/ehs/invitation/toDispatch`, params);
+export const GetDispatchList = params => post(`ehs-customer/api/ehs/invitation/toDispatch`, params);
 // 更新派工人员
-export const UpdateDispatch = params => post(`${serviceNameList.danger}/api/ehs/invitation/updateDispatch`, params);
+export const UpdateDispatch = params => post(`ehs-customer/api/ehs/invitation/updateDispatch`, params);
 // 获取已经派工的人员id
-export const getDispatchRowDisabledDataApi = params => post(`${serviceNameList.danger}/api/ehs/invitation/getDispatchUserIdList`, params);
+export const getDispatchRowDisabledDataApi = params => post(`ehs-customer/api/ehs/invitation/getDispatchUserIdList`, params);
 
 // 删除
-export const DeleteDispatch = params => post(`${serviceNameList.danger}/api/ehs/invitation/deleteDispatch`, params);
+export const DeleteDispatch = params => post(`ehs-customer/api/ehs/invitation/deleteDispatch`, params);
 
 // 推送-公司人员列表
 export const GetPushTree = params => post(`${serviceNameList.course}/api/ehs/education/pushPersonnelTree`, params);
 // 组织人员id名称字典
-export const deptDict = params => get(`${serviceNameList.danger}/api/ehs/company/dept/dict`, params);
+export const deptDict = params => get(`ehs-customer/api/ehs/company/dept/dict`, params);
 
 // 学习记录
 // 预览试卷
@@ -419,7 +421,7 @@ export const PushExamList = params => post(`${serviceNameList.course}/api/push/e
 // 课程推送列表
 export const PushCourseList = params => post(`${serviceNameList.course}/api/push/course/list/page`, params);
 // 获取考试记录页面用户相关信息
-export const GetUserMsg = params => get(`${serviceNameList.danger}/api/ehs/invitation/getDispatchUserInfo`, params);
+export const GetUserMsg = params => get(`ehs-customer/api/ehs/invitation/getDispatchUserInfo`, params);
 // 学习记录页面获取考试次数等信息
 export const GetStatistics = params => post(`${serviceNameList.course}/api/push/statistics`, params);
 
@@ -438,7 +440,7 @@ export const UpdateFormDataByEnter = params => post(`${serviceNameList.form}/api
 // 合作伙伴完善信息-查询自定义表单数据详情
 export const SelectFormDataDetailByEnter = params => post(`${serviceNameList.form}/api/ehs/formtemplate/selectFormDataDetailByEnter`, params);
 // 合作伙伴-详情 
-export const invitationSupplieDetail = params => post(`${serviceNameList.danger}/api/ehs/invitation/supplier/detail`, params);
+export const invitationSupplieDetail = params => post(`ehs-customer/api/ehs/invitation/supplier/detail`, params);
 // 合作伙伴-详情 
 export const invitationClientDetail = params => post(`${serviceNameList.danger}/api/ehs/invitation/client/detail`, params);
 
@@ -480,39 +482,39 @@ export const gasDelete = params => get(`${serviceNameList.danger}/api/ehs/equip/
 
 // 黑名单
 // 违规记录分页查-增-改-删
-export const punishPageList = params => post(`${serviceNameList.danger}/api/ehs/enterblack/selectPunishPage`, params);
-export const punishInsert = params => post(`${serviceNameList.danger}/api/ehs/enterblack/savePunish`, params);
-export const punishUpdate = params => post(`${serviceNameList.danger}/api/ehs/enterblack/updatePunish`, params);
-export const punishDelete = params => post(`${serviceNameList.danger}/api/ehs/enterblack/deletePunish`, params);
+export const punishPageList = params => post(`ehs-customer/api/ehs/enterblack/selectPunishPage`, params);
+export const punishInsert = params => post(`ehs-customer/api/ehs/enterblack/savePunish`, params);
+export const punishUpdate = params => post(`ehs-customer/api/ehs/enterblack/updatePunish`, params);
+export const punishDelete = params => post(`ehs-customer/api/ehs/enterblack/deletePunish`, params);
 // 更新已派工人员禁用启用状态
-export const updateDispatchByStatus = params => post(`${serviceNameList.danger}/api/ehs/invitation/updateDispatchByStatus`, params);
+export const updateDispatchByStatus = params => post(`ehs-customer/api/ehs/invitation/updateDispatchByStatus`, params);
 // 黑名单列表
-export const selectEnterBlack = params => post(`${serviceNameList.danger}/api/ehs/enterblack/selectEnterBlack`, params);
+export const selectEnterBlack = params => post(`ehs-customer/api/ehs/enterblack/selectEnterBlack`, params);
 // 查看合作伙伴黑名单规则次数
-export const selectBlacklistRuleDetail = params => post(`${serviceNameList.danger}/api/ehs/enterblack/selectBlacklistRuleDetail`, params);
+export const selectBlacklistRuleDetail = params => post(`ehs-customer/api/ehs/enterblack/selectBlacklistRuleDetail`, params);
 // 保存合作伙伴黑名单规则次数
-export const saveBlacklistRule = params => post(`${serviceNameList.danger}/api/ehs/enterblack/saveBlacklistRule`, params);
+export const saveBlacklistRule = params => post(`ehs-customer/api/ehs/enterblack/saveBlacklistRule`, params);
 // 移除黑名单
-export const deleteEnterBlack = params => post(`${serviceNameList.danger}/api/ehs/enterblack/deleteEnterBlack`, params);
+export const deleteEnterBlack = params => post(`ehs-customer/api/ehs/enterblack/deleteEnterBlack`, params);
 // 修改黑名单状态  
-export const updateEnterBlack = params => post(`${serviceNameList.danger}/api/ehs/enterblack/updateEnterBlack`, params);
+export const updateEnterBlack = params => post(`ehs-customer/api/ehs/enterblack/updateEnterBlack`, params);
 
 // 解除黑名单-新建审批单
-export const blackRelieveAdd = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/add`, params);
+export const blackRelieveAdd = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/add`, params);
 // 解除黑名单-删除审批单
-export const blackRelieveDelete = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/delete`, params);
+export const blackRelieveDelete = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/delete`, params);
 // 解除黑名单-审批单更新
-export const blackRelieveUpdate = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/update`, params);
+export const blackRelieveUpdate = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/update`, params);
 // 解除黑名单-审批单详情
-export const blackRelieveDetail = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/detail`, params);
+export const blackRelieveDetail = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/detail`, params);
 // 解除黑名单-审批单分页查询
-export const blackRelievePageList = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/page/list`, params);
+export const blackRelievePageList = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/page/list`, params);
 // 解除黑名单-审批处理
-export const blackRelieveProcess = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/process`, params);
+export const blackRelieveProcess = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/process`, params);
 // 解除黑名单-审批单日志
-export const blackRelieveGetlog = params => post(`${serviceNameList.danger}/api/ehs/enterprise/black/relieve/getLog`, params);
+export const blackRelieveGetlog = params => post(`ehs-customer/api/ehs/enterprise/black/relieve/getLog`, params);
 // 查询新建移除黑名单页面固定信息
-export const blackBeforeAddDetail = params => post(`${serviceNameList.danger}/api/ehs/enterblack/before/add/detail`, params);
+export const blackBeforeAddDetail = params => post(`ehs-customer/api/ehs/enterblack/before/add/detail`, params);
 
 
 // 预警测试
