@@ -12,9 +12,9 @@ export const specialDevice = [
   },
   {
     path: 'forkliftCreate',
-    name: '特种设备台帐叉车新建',
+    name: '特种设备台帐场(厂)内专用机动车辆新建',
     meta: {
-      title: '特种设备台帐叉车新建',
+      title: '特种设备台帐场(厂)内专用机动车辆新建',
       routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
@@ -24,9 +24,9 @@ export const specialDevice = [
   },
   {
     path: 'forkliftView',
-    name: '特种设备台帐叉车查看',
+    name: '特种设备台帐场(厂)内专用机动车辆查看',
     meta: {
-      title: '特种设备台帐叉车查看',
+      title: '特种设备台帐场(厂)内专用机动车辆查看',
       routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,
@@ -36,9 +36,9 @@ export const specialDevice = [
   },
   {
     path: 'forkliftEdit',
-    name: '特种设备台帐叉车编辑',
+    name: '特种设备台帐场(厂)内专用机动车辆编辑',
     meta: {
-      title: '特种设备台帐叉车编辑',
+      title: '特种设备台帐场(厂)内专用机动车辆编辑',
       routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
@@ -48,9 +48,9 @@ export const specialDevice = [
   },
   {
     path: 'skyCarCreate',
-    name: '特种设备台帐天车新建',
+    name: '特种设备台帐起重机械新建',
     meta: {
-      title: '特种设备台帐天车新建',
+      title: '特种设备台帐起重机械新建',
       routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
@@ -60,9 +60,9 @@ export const specialDevice = [
   },
   {
     path: 'skyCarEdit',
-    name: '特种设备台帐天车编辑',
+    name: '特种设备台帐起重机械编辑',
     meta: {
-      title: '特种设备台帐天车编辑',
+      title: '特种设备台帐起重机械编辑',
       routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
@@ -72,9 +72,9 @@ export const specialDevice = [
   },
   {
     path: 'skyCarView',
-    name: '特种设备台帐天车查看',
+    name: '特种设备台帐起重机械查看',
     meta: {
-      title: '特种设备台帐天车查看',
+      title: '特种设备台帐起重机械查看',
       routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,

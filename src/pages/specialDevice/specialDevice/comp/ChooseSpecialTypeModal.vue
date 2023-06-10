@@ -42,8 +42,8 @@ export default {
       form: {
       },
       specialDeviceTypeOptions: [
-        { dictValue: '1', dictLabel: '叉车' },
-        { dictValue: '2', dictLabel: '天车' },
+        { dictValue: '1', dictLabel: '场(厂)内专用机动车辆' },
+        { dictValue: '2', dictLabel: '起重机械' },
         { dictValue: '3', dictLabel: '电梯' },
         { dictValue: '4', dictLabel: '压力管道' },
         { dictValue: '5', dictLabel: '压力容器' },

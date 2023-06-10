@@ -7,7 +7,7 @@
         :showAcceptText="false"
         :accept="['.xlsx', '.xls',]"
         :showUploadList="false"
-        :btnText="'叉车批量导入'"
+        :btnText="'场(厂)内专用机动车辆批量导入'"
         :btnType="'primary'"
         :btnIcon="false"
         @handleSuccess="handleSuccess"
@@ -17,7 +17,7 @@
         :showAcceptText="false"
         :accept="['.xlsx', '.xls',]"
         :showUploadList="false"
-        :btnText="'天车批量导入'"
+        :btnText="'起重机械批量导入'"
         :btnType="'primary'"
         :btnIcon="false"
         @handleSuccess="handleSuccess"
@@ -90,10 +90,10 @@ export default {
     downloadTemplate(num) {
       switch(num) {
         case 0:
-          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/叉车导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/叉车导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/场(厂)内专用机动车辆导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/场(厂)内专用机动车辆导入模板.xlsx`)
           break
         case 1:
-          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/天车导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/天车导入模板.xlsx`)
+          window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/起重机械导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/起重机械导入模板.xlsx`)
           break
         case 2:
           window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/电梯导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/电梯导入模板.xlsx`)

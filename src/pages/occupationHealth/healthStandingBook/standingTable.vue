@@ -360,8 +360,8 @@ export default {
         },
         {
           title: "部门",
-          dataIndex: "departmentName",
-          key: "departmentName",
+          dataIndex: "deptName",
+          key: "deptName",
           align:'center',
         },
         {

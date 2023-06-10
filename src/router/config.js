@@ -806,15 +806,15 @@ const options = {
                   },
                   component: resolve => require(['@/pages/environmental/environmentalDataMap/labelingDetail.vue'], resolve),
                 },
-                {
-                  path: 'dataMonitoring',
-                  name: '数据监测首页',
-                  meta: {
-                    title: '数据监测首页',
-                    isPage: true,
-                  },
-                  component: resolve => require(['@/pages/environmental/dataMonitoring'], resolve),
-                },
+                // {
+                //   path: 'dataMonitoring',
+                //   name: '数据监测首页',
+                //   meta: {
+                //     title: '数据监测首页',
+                //     isPage: true,
+                //   },
+                //   component: resolve => require(['@/pages/environmental/dataMonitoring'], resolve),
+                // },
                 {
                   path: 'bitmapManage',
                   name: '点位图管理',

@@ -247,11 +247,11 @@ export default {
           title: "作业时间",
           props: 'dayTime',
         },
-        {
-          id: 15,
-          title: "作业形式",
-          props: 'isMustText',
-        },
+        // {
+        //   id: 15,
+        //   title: "作业形式",
+        //   props: 'isMustText',
+        // },
         {
           id: 16,
           title: "外协厂商名称",

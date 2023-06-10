@@ -351,7 +351,6 @@ export default {
               item.dataItem = item.dataItem ? item.dataItem - 0 : item.dataItem
             })
             this.tableData = cloneDeep(environmentMonthlyItemList);
-            console.log(this.tableData, 'cxccxc')
             this.monthlyId = res.data.monthlyId
             this.createUserId = res.data.createUserId
             this.status = res.data.status

@@ -353,7 +353,7 @@ export default {
                                     this.option.series[4].data.push(
                                           res.data[i].passRate
                                     ); //认证合格率
-                                    if (!this.summary) {
+                                    if (!this.searchFormData.corporationId) {
                                           //翻译组织
                                           this.option.xAxis[0].data.push(
                                                 findCorporationId(
@@ -361,15 +361,9 @@ export default {
                                                 )
                                           );
                                     } else {
-                                          //翻译中心
-                                          let orgAbbrName =
-                                                this.getMappingValue(
-                                                      this.setCorporationTree,
-                                                      "corporationCode",
-                                                      res.data[i].xdata
-                                                ).corporationName;
+                                          let deptCache = this.$store.state.setting.deptCache;
                                           this.option.xAxis[0].data.push(
-                                                orgAbbrName
+                                                deptCache[res.data[i].xdata]
                                           );
                                     }
                               }
