@@ -14,7 +14,7 @@ const aikoMonthData = [
     {
         "nicheItemsCode": 999,
         "dataItem": null,
-        "projectName": "<b>能耗</b>",
+        "projectName": "<b>能源</b>",
         needMerge: true,
         mergeCellsObj: { col: 0, rowspan: 1, colspan: 3 }
     },
@@ -43,7 +43,7 @@ const aikoMonthData = [
     {
         "nicheItemsCode": 5,
         "projectName": "新鲜水",
-        "nicheItems": "再生水用量(t)",
+        "nicheItems": "江水用量(t)",
         "dataItem": null
     },
     {

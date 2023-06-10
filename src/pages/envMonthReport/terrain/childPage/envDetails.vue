@@ -177,151 +177,38 @@ export default {
       mergeCellsData = mergeCellsData.filter(item => item)
       return mergeCellsData
     },
-    // v1088天然气计算系数
-    v1088NaturalGasBase() {
-      let { corporationId } = this.searchFormData
-      let naturalGasVal = 1.33
-      // B2：1586691773627400194
-      // B7：1586695162566311938
-      // B11：1586695220145717250
-      // B19：1586694597253824513
-      if (corporationId == '1586691773627400194' || corporationId == '1586695162566311938' || corporationId == '1586695220145717250' || corporationId == '1586694597253824513') {
-        this.electricCharge = 1.2143
-      }
-      return naturalGasVal
+    v142() {
+      return this.v142Fn()
     },
-    //总能耗1(吨标煤)parseFloat(string)
-    v1088() {
-      return this.v1088Fn()
+    v143() {
+      return this.v143Fn()
     },
-    //总能耗2(吨标煤，含耗能工质
-    v1089() {
-      return this.v1089Fn()
+    v144() {
+      return this.v144Fn()
     },
-    //总能耗(兆瓦时)
-    v1090() {
-      return this.v1090Fn()
+    v145() {
+      return this.v145Fn()
     },
-    //总水耗(吨)
-    v1091() {
-      return this.v1091Fn()
+    v146() {
+      return this.v146Fn()
     },
-    //总废弃物(千克)
-    v1092() {
-      return this.v1092Fn()
+    v147() {
+      return this.v147Fn()
     },
-    //总危废(千克)
-    v1093() {
-      return this.v1093Fn()
+    v148() {
+      return this.v148Fn()
     },
-    //总污泥(千克)
-    v1094() {
-      return this.v1094Fn()
+    v149() {
+      return this.v149Fn()
     },
-    //碳排放量(scope2)-外购电力(吨)
-    v1095() {
-      return this.v1095Fn()
+    v150() {
+      return this.v150Fn()
     },
-    //碳排放量(scope2)-外购热力(吨)
-    v1096() {
-      return this.v1096Fn()
+    v151() {
+      return this.v151Fn()
     },
-    //碳排放量(scope2)(吨)
-    v1097() {
-      return this.v1097Fn()
-    },
-    //碳排放量(scope1)-燃料燃烧(吨)
-    v1098() {
-      return this.v1098Fn()
-    },
-    //能源折合碳排放量(吨)
-    v1099() {
-      return this.v1099Fn()
-    },
-    //碳排放量(scope1)-F-GHG(吨)【2019 年 IPCC】
-    v1101() {
-      return this.v1101Fn()
-    },
-    //碳排放量（scope1)-F-GHG（吨）【中国电子设备制造企业温室气体核算方法与报告指南】
-    v1102() {
-      return this.v1102Fn()
-    },
-    //碳排放总量（吨）
-    v1103() {
-      return this.v1103Fn()
-    },
-    //单耗开始------------
-    //万元产值能耗1（吨标煤/万元产值
-    v1105() {
-      return this.v1105Fn()
-    },
-    //万元产值水耗（吨/万元产值）
-    v1106() {
-      return this.v1106Fn()
-    },
-    //万元产值废弃物（千克/万元产值）
-    v1107() {
-      return this.v1107Fn()
-    },
-    //单位面积能耗1（kg标煤/单位平米基板）
-    v1108() {
-      return this.v1108Fn()
-    },
-    //单位面积能耗1（千瓦时/单位平米基板）
-    v1109() {
-      return this.v1109Fn()
-    },
-    //单位面积电耗（千瓦时/单位平米基板）
-    v1110() {
-      return this.v1110Fn()
-    },
-    //单位面积天然气（m3/m2）
-    v1111() {
-      return this.v1111Fn()
-    },
-    //单位面积水耗（吨/单位平米基板）
-    v1112() {
-      return this.v1112Fn()
-    },
-    //单位面积废弃物（千克/单位平米基板）
-    v1113() {
-      return this.v1113Fn()
-    },
-    //单位面积二氧化碳排放量（kgCO2/m2）
-    v1114() {
-      return this.v1114Fn()
-    },
-    //单位产品基准排水量（m³/㎡）
-    v1115() {
-      return this.v1115Fn()
-    },
-    //单位面积污泥（千克/单位平米基板）
-    v1116() {
-      return this.v1116Fn()
-    },
-    //单位面积含氟气体折合二氧化碳排放量（kgCO2/m2）（PFC按照2006IPCC排放因子核算）
-    // v1117() {
-    //   return this.v1117Fn()
-    // },
-    //单位面积含氟气体折合二氧化碳排放量（kgCO2/m2）（PFC按照发改委-电子行业核算方法）
-    v1118() {
-      return this.v1118Fn()
-    },
-    //废弃物平均处置单价(元/kg)  
-    v1119() {
-      return this.v1119Fn()
-    },
-    //万元产值二氧化碳排放量(kgCO2/万元)
-    v1120() {
-      return this.v1120Fn()
-    },
-    //单位面积含氟气体折合二氧化碳排放量（kgCO2/m2）
-    v1121() {
-      return this.v1121Fn()
-    },
-    //单位面积二氧化碳排放量（kgCO2/m2）=碳排放量（kg）/投入面积（m2）(2019 IPCC+能源)
-    v1122() {
-      return this.v1122Fn()
+    v152() {
+      return this.v152Fn()
     },
   },
   methods: {
@@ -528,112 +415,44 @@ export default {
     // 监听计算属性修改
     watchChangeDataItem(nicheItemsCode, newV, precision = 2) {
       if (this.isChangeDataItem) {
-        console.log('实时计算已开启');
         newV = (isNaN(newV) || newV === Infinity) ? 0 : parseFloat(newV.toFixed(precision));
         this.tableData[this.getDataItemIndex(nicheItemsCode)].dataItem = newV;
       }
     },
   },
   watch: {
-    v1088(newV) {
-      this.watchChangeDataItem(1088, newV)
+    v142(newV) {
+      this.watchChangeDataItem(142, newV)
     },
-    v1089(newV) {
-      this.watchChangeDataItem(1089, newV)
+    v143(newV) {
+      this.watchChangeDataItem(143, newV)
     },
-    v1090(newV) {
-      this.watchChangeDataItem(1090, newV)
+    v144(newV) {
+      this.watchChangeDataItem(144, newV)
     },
-    v1091(newV) {
-      this.watchChangeDataItem(1091, newV)
+    v145(newV) {
+      this.watchChangeDataItem(145, newV)
     },
-    v1092(newV) {
-      this.watchChangeDataItem(1092, newV)
+    v146(newV) {
+      this.watchChangeDataItem(146, newV)
     },
-    v1093(newV) {
-      this.watchChangeDataItem(1093, newV)
+    v147(newV) {
+      this.watchChangeDataItem(147, newV)
     },
-    v1094(newV) {
-      this.watchChangeDataItem(1094, newV)
+    v148(newV) {
+      this.watchChangeDataItem(148, newV)
     },
-    v1095(newV) {
-      this.watchChangeDataItem(1095, newV)
+    v149(newV) {
+      this.watchChangeDataItem(149, newV)
     },
-    v1096(newV) {
-      this.watchChangeDataItem(1096, newV)
+    v150(newV) {
+      this.watchChangeDataItem(150, newV)
     },
-    v1097(newV) {
-      this.watchChangeDataItem(1097, newV)
+    v151(newV) {
+      this.watchChangeDataItem(151, newV)
     },
-    v1098(newV) {
-      this.watchChangeDataItem(1098, newV)
-    },
-    v1099(newV) {
-      this.watchChangeDataItem(1099, newV)
-    },
-    v1101(newV) {
-      this.watchChangeDataItem(1101, newV)
-    },
-    v1102(newV) {
-      this.watchChangeDataItem(1102, newV)
-    },
-    v1103(newV) {
-      this.watchChangeDataItem(1103, newV)
-    },
-    //单耗
-    v1105(newV) {
-      this.watchChangeDataItem(1105, newV)
-    },
-    v1106(newV) {
-      this.watchChangeDataItem(1106, newV)
-    },
-    v1107(newV) {
-      this.watchChangeDataItem(1107, newV)
-    },
-    v1108(newV) {
-      this.watchChangeDataItem(1108, newV)
-    },
-    v1109(newV) {
-      this.watchChangeDataItem(1109, newV)
-    },
-    v1110(newV) {
-      this.watchChangeDataItem(1110, newV)
-    },
-    v1111(newV) {
-      this.watchChangeDataItem(1111, newV)
-    },
-    v1112(newV) {
-      this.watchChangeDataItem(1112, newV)
-    },
-    v1113(newV) {
-      this.watchChangeDataItem(1113, newV)
-    },
-    v1114(newV) {
-      this.watchChangeDataItem(1114, newV)
-    },
-    v1115(newV) {
-      this.watchChangeDataItem(1115, newV)
-    },
-    v1116(newV) {
-      this.watchChangeDataItem(1116, newV)
-    },
-    // v1117(newV) {
-    //   this.watchChangeDataItem(1117, newV)
-    // },
-    v1118(newV) {
-      this.watchChangeDataItem(1118, newV)
-    },
-    v1119(newV) {
-      this.watchChangeDataItem(1119, newV)
-    },
-    v1120(newV) {
-      this.watchChangeDataItem(1120, newV)
-    },
-    v1121(newV) {
-      this.watchChangeDataItem(1121, newV)
-    },
-    v1122(newV) {
-      this.watchChangeDataItem(1122, newV)
+    v152(newV) {
+      this.watchChangeDataItem(152, newV)
     },
   },
 };
