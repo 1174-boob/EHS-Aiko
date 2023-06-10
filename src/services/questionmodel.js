@@ -26,6 +26,8 @@ export const GetQuestionDataList = params => post(course + '/api/course/paper/li
 export const DelQuestionDataList = params => post(course + '/api/course/paper/delete', params);
 //试卷-新增-第二步-题目列表、查询选项题目
 export const GetKDataList = params => post(course + '/api/course/topic/pageList', params);
+//试卷-新增-第二步-题目列表、查询选项题目(更换版 2023-6-10)
+export const GetTopicDataList = params => post(course + '/api/course/topic/list', params);
 //试卷新增
 export const AddQuestionDataList = params => post(course + '/api/course/paper/insert', params);
 //试卷查看

@@ -174,12 +174,14 @@ export default {
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page;
+      this.$emit("pageNo", this.page.pageNo);
       // 获取列表
       this.getTabList();
     },
     showSizeChange(page, pageSize) {
       this.page.pageNo = 1;
       this.page.pageSize = pageSize;
+      this.$emit("pageSize", this.page.pageSize);
       this.getTabList();
     },
     onSelectChange(selectedRowKeys, selectedRows) {

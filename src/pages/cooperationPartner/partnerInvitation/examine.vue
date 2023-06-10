@@ -255,7 +255,7 @@ export default {
     // 控制处理按钮是否显示
     isResolveVisible(row) {
       let showBtn = false
-      if (row.approvalStatus == 2 && row.handler == this.userId) {
+      if (row.approvalStatus == 2 && row.handler.indexOf(this.userId) != -1) {
         showBtn = row.handler.indexOf(this.userId) != -1
       }
       return showBtn
