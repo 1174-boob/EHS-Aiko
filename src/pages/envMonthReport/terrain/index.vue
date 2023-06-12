@@ -185,7 +185,7 @@ export default {
       checkItemList: null,
       addVisible: false,
       addForm: {},//serviceNameList['envMonth']
-      actions: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/danger/importFile`:`${serviceNameList.safe}/api/ehs/safe/danger/importFile`,
+      actions: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}ehs-month/api/ehs/month/environmentMonth/importFile`:`ehs-month/api/ehs/month/environmentMonth/importFile`,
       addFormRules: {
         monthlyDate: [
           { required: true, message: "月份不能为空", trigger: "change" },
