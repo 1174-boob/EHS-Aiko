@@ -126,10 +126,10 @@
       </a-row>
     </template>
 
-    <template title="BOE现场监护人">
+    <template title="现场监护人">
       <div>
         <div class="ttile border-b-e7">
-          <PageTitle class="ttile-text">BOE现场监护人</PageTitle>
+          <PageTitle class="ttile-text">现场监护人</PageTitle>
         </div>
         <div class="m-t-20"></div>
       </div>
@@ -268,7 +268,7 @@ export default {
       // 主要成分table
       columns: [
         {
-          title: "BOE现场监护人",
+          title: "现场监护人",
           dataIndex: "guardianName",
           key: "guardianName",
           customRender: (text) => {
