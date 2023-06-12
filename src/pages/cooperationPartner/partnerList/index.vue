@@ -1,7 +1,7 @@
 <template>
   <!-- 邀请列表 -->
   <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
-    <PageTitle>合作伙伴列表</PageTitle>
+    <PageTitle>相关方列表</PageTitle>
     <div class="card-container">
         <!-- <a-tab-pane key="1" tab="我的供应商"> -->
           <SearchTerm>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CommonModal title="导入化学品记录" :visible="visible" :cancelFn="closeVisible">
+    <CommonModal title="导入派工人员" :visible="visible" :cancelFn="closeVisible">
       <div class="down-upload">
         <a-upload
           class="up-load load"
