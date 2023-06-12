@@ -44,8 +44,8 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
       case 401:
         if (process.env.NODE_ENV === "production") {
           sessionStorage.clear();
-          currentRouter.push("/login");
-          // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+          // currentRouter.push("/login");
+          window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
         } else {
           sessionStorage.clear();
           setTimeout(() => {
