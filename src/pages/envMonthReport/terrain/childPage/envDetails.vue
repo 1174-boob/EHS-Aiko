@@ -223,11 +223,11 @@ export default {
           try {
             let environmentMonthlyItemList = res.data.environmentMonthlyItemList || []
             // 回显不需要输入的项
-            // aikoMonthDataJson.forEach((item, index) => {
-            //   if (item.nicheItemsCode == 999) {
-            //     environmentMonthlyItemList.splice(index, 0, item)
-            //   }
-            // })
+            aikoMonthDataJson.forEach((item, index) => {
+              if (item.nicheItemsCode == 999) {
+                environmentMonthlyItemList.splice(index, 0, item)
+              }
+            })
             this.searchFormData = {
               centerId: res.data.centerId,
               corporationId: res.data.corporationId,
@@ -327,7 +327,7 @@ export default {
       let apiData = {
         monthlyId: this.monthlyId,
         status: n == 1 ? '01' : '02',//审批状态
-        environmentMonthlyItemList: this.tableData.filter(i => i.nicheItemsCode > 1000).map((i, index) => {
+        environmentMonthlyItemList: this.tableData.filter(i => i.nicheItemsCode < 999).map((i, index) => {
           i.index = index;
           return i
         }),//环境月报数据集合
