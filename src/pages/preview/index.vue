@@ -181,7 +181,7 @@ import {
 import { barObj } from "@/pages/hiddenPerils/dataAnalysis/mixin/dataAnalysis.js";
 import Echarts from "@/components/echarts/index.vue";
 import dataAnalysis from "@/pages/hiddenPerils/dataAnalysis/mixin/dataAnalysis.js";
-import { cloneDeep } from "lodash";
+import { cloneDeep ,isEmpty} from "lodash";
 import { GetStaticalaAllNum } from "@/services/networkControl.js";
 import ElectricQuantity from './tpl/electricQuantity.vue'
 import Rubbish from './tpl/rubbish.vue'
@@ -353,12 +353,16 @@ export default {
     this.getPreviewPerformanceAppraisalFn(); //教育培训数量接口
   },
   computed: {
-    // 季度
+    // 季度  2023-6-12 修改内容：获取上一个季度的数据
     quarter() {
       let currMonth = dayJs().month()
       let currQuarter = Math.floor((currMonth % 3 == 0 ? (currMonth / 3) : (currMonth / 3 + 1)));
-      return currQuarter
-    },
+      let prevQuarter = currQuarter - 1;
+      if (prevQuarter < 1) {
+        prevQuarter = 4;
+      }
+      return prevQuarter;
+    }
   },
   methods: {
     //教育培训
