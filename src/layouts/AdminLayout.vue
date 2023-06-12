@@ -343,7 +343,14 @@ export default {
       sessionStorage.clear();
       if (process.env.NODE_ENV === "production") {
         // this.$router.push("/login");
-        window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
+        window.location.href =
+          process.env.VUE_APP_API_BASE_OUT_URL +
+          "client_id=" +
+          process.env.VUE_APP_CLIENTID +
+          "&response_type=" +
+          process.env.VUE_APP_RESPONSE_TYPE +
+          "&redirectUrl=" +
+          process.env.VUE_APP_REDIRECT_URI;
       } else {
         this.$router.push("/login");
       }
