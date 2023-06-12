@@ -24,7 +24,7 @@ boeService.interceptors.request.use(config => {
   if (sessionStorage.getItem('token')) {//判断浏览器中的cookie中是否存在项目的token
     config.headers.token = sessionStorage.getItem('token')
   }
-  let clientId = process.env.VUE_APP_CLIENTID;
+  let clientId = process.env.VUE_APP_API_CLIENTID;
   let clientSecret = process.env.VUE_APP_CLIENT_SECRET;
   let headerLogin = clientId + ':' + clientSecret;
   if (config.url.indexOf('oauth/token') > 0 || config.url.indexOf('getToken') > 0) {
@@ -44,8 +44,8 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
       case 401:
         if (process.env.NODE_ENV === "production") {
           sessionStorage.clear();
-          currentRouter.push("/login");
-          // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+          // currentRouter.push("/login");
+          window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
         } else {
           sessionStorage.clear();
           setTimeout(() => {
@@ -58,8 +58,8 @@ boeService.interceptors.response.use(response => Promise.resolve(response), err 
       case 500:
         if (err.response.config.url.indexOf('check_token') > -1) {
           sessionStorage.clear();
-          currentRouter.push("/login");
-          // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+          // currentRouter.push("/login");
+          window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
         } else {
           // Vue.prototype.$antMessage.warn('请求方法：' + err.response.data.path + '失败，' + (err.response.data.msg || err.response.data.message) + '，请联系管理员');
           return

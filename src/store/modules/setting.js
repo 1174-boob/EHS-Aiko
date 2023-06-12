@@ -4,7 +4,7 @@ import { formatFullPath } from '@/utils/i18n'
 import { filterMenu } from '@/utils/authority-utils'
 import { getLocalSetting } from '@/utils/themeUtil'
 import deepClone from 'lodash.clonedeep'
-import { getToken, getUserInfo, getDevToken, getTokenApi, getDevCompany, getDevMessage, checkToken, checkTokenEHS, getPortraitUrlt } from '@/services/api'
+import { getToken, getApiToken, getUserInfo, getDevMessageBOE, getDevToken, getTokenApi, getDevCompany, getDevMessage, checkToken, checkTokenEHS, getPortraitUrlt } from '@/services/api'
 import { getQueryVariable, recursionObject, recursionMenuButton, recursionMenuBtn } from '@/utils/util'
 import Vue from 'vue'
 import { initRouter } from '@/router'
@@ -252,7 +252,6 @@ export default {
       sessionStorage.setItem("calledSetMenuAuthList", JSON.stringify(setMenuAuthList));
     },
     setPollutantOptions(state, setPollutantOptions) {
-      console.log(setPollutantOptions, 'setPollutantOptions')
       state.pollutantOptions = setPollutantOptions
       sessionStorage.setItem("pollutantOptions", JSON.stringify(setPollutantOptions));
     },
@@ -291,7 +290,6 @@ export default {
     },
     // 开始检验路由权限
     setIsBeginGuardBtnRoute(state, isBeginGuardBtnRoute) {
-      // console.log('设置了setIsBeginGuardBtnRoute', isBeginGuardBtnRoute);
       state.isBeginGuardBtnRoute = isBeginGuardBtnRoute
     },
     // 设置是否跳转地址栏routeUrl
@@ -442,13 +440,13 @@ export default {
     // 获取token
     async getDevTokenData({ dispatch, commit }, responseData) {
       let code = getQueryVariable('code');
-      let companyId = getQueryVariable('companyId');
+      // let companyId = getQueryVariable('companyId');
       if (!code) {
         if (sessionStorage.getItem('access_token')) {
           let params = {
             userId: sessionStorage.getItem('userId'),
             companyId: sessionStorage.getItem('companyId'),
-            clientId: process.env.VUE_APP_CLIENTID,
+            clientId: process.env.VUE_APP_API_CLIENTID,
             token: sessionStorage.getItem('access_token')
           }
           if (!params.companyId) {
@@ -460,35 +458,33 @@ export default {
             return
           } else {
             sessionStorage.clear();
-            currentRouter.push("/login");
-            // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI + '&isLogout=true';
+            // currentRouter.push("/login");
+            window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
           }
         } else {
           sessionStorage.clear();
           if (window.location.pathname.indexOf('register') > -1) {
-            currentRouter.push("/login");
-            // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI + '#/register';
+            // currentRouter.push("/login");
+            window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
           } else {
-            currentRouter.push("/login");
-            // window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+            // currentRouter.push("/login");
+            window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
           }
         }
       }
       let apiData = {
         code,
-        redirectUri: process.env.VUE_APP_REDIRECT_URI,
-      }
-      if (companyId) {
-        apiData.companyId = companyId
+        grantType: "iam",
+        clientId: process.env.VUE_APP_API_CLIENTID
       }
       return new Promise((resolve, reject) => {
-        getTokenApi(apiData)
+        getApiToken(apiData)
+        // getTokenApi(apiData)
           .then(res => {
             if (res.code == 20000) {
               let tokenData = res.data;
-              console.log('tokenData', tokenData);
-              sessionStorage.setItem('token_type', tokenData.token_type);
-              sessionStorage.setItem('access_token', tokenData.access_token);
+              sessionStorage.setItem('token_type', tokenData.tokenType);
+              sessionStorage.setItem('access_token', tokenData.accessToken);
               sessionStorage.setItem('refresh_token', tokenData.refresh_token);
               if (tokenData.companyId) {
                 sessionStorage.setItem('companyId', tokenData.companyId);
@@ -503,15 +499,8 @@ export default {
               setTimeout(() => {
                 sessionStorage.clear();
                 if (process.env.NODE_ENV === "production") {
-                  currentRouter.push("/login");
-                  // window.location.href = process.env.VUE_APP_LOGIN_URL +
-                  //   "client_id=" +
-                  //   process.env.VUE_APP_CLIENTID +
-                  //   "&response_type=" +
-                  //   process.env.VUE_APP_RESPONSE_TYPE +
-                  //   "&redirect_uri=" +
-                  //   process.env.VUE_APP_REDIRECT_URI +
-                  //   "&isLogout=true";
+                  // currentRouter.push("/login");
+                  window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
                 } else {
                   currentRouter.push("/login");
                 }
@@ -523,15 +512,8 @@ export default {
             setTimeout(() => {
               sessionStorage.clear();
               if (process.env.NODE_ENV === "production") {
-                currentRouter.push("/login");
-                // window.location.href = process.env.VUE_APP_LOGIN_URL +
-                //   "client_id=" +
-                //   process.env.VUE_APP_CLIENTID +
-                //   "&response_type=" +
-                //   process.env.VUE_APP_RESPONSE_TYPE +
-                //   "&redirect_uri=" +
-                //   process.env.VUE_APP_REDIRECT_URI +
-                //   "&isLogout=true";
+                // currentRouter.push("/login");
+                window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
               } else {
                 currentRouter.push("/login");
               }
@@ -541,30 +523,21 @@ export default {
       })
     },
     // 获取用户信息
-    getUserInfoData({ dispatch, commit }, responseData = {}) {
+    async getUserInfoData({ dispatch, commit }, responseData = {}) {
+      // let userId = sessionStorage.getItem('userId');
       let params = {
-        userId: responseData.userId || sessionStorage.getItem('userId'),
-        companyId: responseData.companyId == undefined ? (sessionStorage.getItem('companyId') ? sessionStorage.getItem('companyId') : '') : responseData.companyId,
-        clientId: process.env.VUE_APP_CLIENTID,
+        // companyId: companyId,
+        // userId: userId,
+        // type: type,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
-        token: responseData.access_token || sessionStorage.getItem('access_token')
+      };
+      let result = await getDevMessageBOE({});
+      if (result.code == 20000) {
+        sessionStorage.setItem('zconsole_userInfo', JSON.stringify(result.data));
+        sessionStorage.setItem('userName', result.data.user.name);
+        currentRouter.push("/overview/preview");
       }
-      console.log(params, 'params')
-      if (!params.companyId) {
-        delete params.companyId
-      }
-      return new Promise((resolve, reject) => {
-        // resolve()
-        getUserInfo(params)
-          .then(res => {
-            sessionStorage.setItem('zconsole_userInfo', JSON.stringify(res.data))
-            // 刷新页面重新获取用户信息
-            resolve(res)
-          })
-          .catch(err => {
-            reject(err)
-          })
-      })
     },
     // 验证token----重新获取用户信息
     // checkToken({ dispatch, commit }) {
@@ -602,7 +575,7 @@ export default {
       let params = {
         userId: responseData.userId,
         companyId: responseData.companyId,
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
       }
       return new Promise((resolve, reject) => {
@@ -619,7 +592,7 @@ export default {
       let params = {
         userId: responseData.userId,
         companyId: responseData.companyId,
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
       }
       return new Promise((resolve, reject) => {
@@ -636,10 +609,9 @@ export default {
       let params = {
         userId: sessionStorage.getItem('userId'),
         companyId: JSON.parse(sessionStorage.getItem('zconsole_userInfo')).company ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).company.companyId : '',
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         token: sessionStorage.getItem('access_token')
       }
-      console.log("yyyyy====", JSON.parse(JSON.stringify(params)));
       if (!params.companyId) {
         delete params.companyId
       }
@@ -651,10 +623,8 @@ export default {
       return new Promise((resolve, reject) => {
         // checkToken(formData).then(res => {
         checkTokenEHS(params).then(res => {
-          console.log("res---", res);
           resolve(res)
         }).catch(err => {
-          console.log("rror--", err);
           reject(err)
         })
       })
@@ -688,7 +658,6 @@ export default {
     // 获取ehs字典列表
     getDictTree({ commit }) {
       return getDictTree().then(res => {
-        console.log(res, 'huigang')
         commit('setDictTypeData', res.data);
       }).catch(err => {
         console.log(err);
@@ -755,20 +724,12 @@ export default {
         let menuArr = [];
         if (!result.data) {
           sessionStorage.clear();
-          currentRouter.push("/login");
-          // window.location.href = process.env.VUE_APP_LOGIN_URL +
-          //   "client_id=" +
-          //   process.env.VUE_APP_CLIENTID +
-          //   "&response_type=" +
-          //   process.env.VUE_APP_RESPONSE_TYPE +
-          //   "&redirect_uri=" +
-          //   process.env.VUE_APP_REDIRECT_URI +
-          //   "&isLogout=true";
+          // currentRouter.push("/login");
+          window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
         }
         if (result && result.data && result.data.resourceId == 'root') {
           menuArr.push(result.data);
           recursionMenuBtn(menuArr[0].children)
-          console.log(menuArr, 'menuArr')
           result.data.children = defaultRoutes.concat(menuArr[0].children);
           result.data.children = recursionObject(defaultSeedMenuRoutes, menuArr[0].children)
         }

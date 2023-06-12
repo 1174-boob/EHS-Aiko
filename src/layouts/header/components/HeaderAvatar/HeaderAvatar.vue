@@ -86,37 +86,17 @@ export default {
     logout() {
       this.logoutFn();
     },
-    // changeCompany() {
-    //   changeCompany().then(res => {
-    //     if (res.code == 20000) {
-    //       this.$router.push("/login");
-    //       // window.location.href =
-    //       //   process.env.VUE_APP_LOGIN_URL +
-    //       //   "client_id=" +
-    //       //   process.env.VUE_APP_CLIENTID +
-    //       //   "&response_type=" +
-    //       //   process.env.VUE_APP_RESPONSE_TYPE +
-    //       //   "&redirect_uri=" +
-    //       //   process.env.VUE_APP_REDIRECT_URI;
-    //     }
-    //   })
-    // },
     logoutFn() {
       this.$antConfirm({
         title: "确认退出登录？",
         onOk: () => {
           sessionStorage.clear();
           if (process.env.NODE_ENV === "production") {
-            this.$router.push("/login");
-            // window.location.href =
-            //   process.env.VUE_APP_LOGIN_URL +
-            //   "client_id=" +
-            //   process.env.VUE_APP_CLIENTID +
-            //   "&response_type=" +
-            //   process.env.VUE_APP_RESPONSE_TYPE +
-            //   "&redirect_uri=" +
-            //   process.env.VUE_APP_REDIRECT_URI +
-            //   "&isLogout=true";
+            // this.$router.push("/login");
+            window.location.href =
+              process.env.VUE_APP_LOGIN_URL +
+              "&redirectUrl=" +
+              process.env.VUE_APP_REDIRECT_URI;
           } else {
             this.$router.push("/login");
           }

@@ -451,7 +451,7 @@ export default {
       if (sessionStorage.getItem('token')) {//判断浏览器中的cookie中是否存在项目的token
         config.headers.token = sessionStorage.getItem('token')
       }
-      let clientId = process.env.VUE_APP_CLIENTID;
+      let clientId = process.env.VUE_APP_API_CLIENTID;
       let clientSecret = process.env.VUE_APP_CLIENT_SECRET;
       let headerLogin = clientId + ':' + clientSecret;
       if (config.url.indexOf('oauth/token') > 0 || config.url.indexOf('getToken') > 0) {
