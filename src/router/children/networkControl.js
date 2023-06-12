@@ -64,6 +64,17 @@ export const networkControl = [
         component: resolve => require(['@/pages/networkControl/alarmTest/index.vue'], resolve),
     },
     {
+        path: 'meteorologicalStation',
+        name: '气象站监测',
+        meta: {
+            title: '气象站监测',
+            routerCode:'meteorologicalStation',
+            isKeepalive:true,
+            isPage: true,
+        },
+        component: resolve => require(['@/pages/networkControl/meteorologicalStation/index.vue'], resolve),
+    },
+    {
         path: 'errorRecording',
         name: '故障记录',
         meta: {

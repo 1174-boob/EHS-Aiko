@@ -936,6 +936,8 @@ export const gasConfigUpdate = params => post(`${serviceNameList.monitor}/api/eh
 // 废气预警/报警管理-删除
 export const gasConfigDelete = params => post(`${serviceNameList.monitor}/api/ehs/monitor/gas/config/delete`, params);
 
+// 气象站实时数据
+export const getWeatherStation = params => get(`${serviceNameList.monitor}/api/ehs/monitor/weather/station/now`, params);
 
 
 // 教育培训-考生档案-列表

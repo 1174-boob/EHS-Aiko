@@ -179,7 +179,7 @@ export default {
         ],
         series: []
       },
-      // 作业数量
+      // 作业类别
       propertyLossOption: {
         tooltip: {
           ...barObj.tooltip
