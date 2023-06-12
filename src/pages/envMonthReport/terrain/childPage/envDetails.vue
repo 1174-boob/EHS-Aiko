@@ -150,14 +150,11 @@ export default {
     } else {    //新增
       let tableData = aikoMonthDataJson.filter(i => i.nicheItemsCode != 1300);
       tableData.forEach(item => {
-        // if (item.nicheItemsCode == 999) {
-        //   item.dataItem = 99;
-        // } else if (item.nicheItemsCode == 1123 || item.nicheItemsCode < 1087) {
-        //   item.dataItem = 0;
-        // } else {
-        //   item.dataItem = 0;
-        // }
-        item.dataItem = 0;
+        if (item.nicheItemsCode == 999) {
+          item.dataItem = 99;
+        } else {
+          item.dataItem = 0;
+        }
       });
       this.tableData = cloneDeep(tableData)
       this.spinning = false
