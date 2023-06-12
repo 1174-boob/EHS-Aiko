@@ -233,7 +233,7 @@ export default {
             // this.$refs.commonSearchItem.centerIdChange(this.searchFormData.centerId)
             // 转数字
             environmentMonthlyItemList.forEach(item => {
-              item.dataItem = item.dataItem ? item.dataItem - 0 : item.dataItem
+              item.dataItem = item.dataItem - 0
             })
             this.tableData = cloneDeep(environmentMonthlyItemList);
             this.monthlyId = res.data.monthlyId
