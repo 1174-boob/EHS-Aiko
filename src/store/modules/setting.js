@@ -459,16 +459,16 @@ export default {
           } else {
             sessionStorage.clear();
             // currentRouter.push("/login");
-            window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI + '&isLogout=true';
+            window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
           }
         } else {
           sessionStorage.clear();
           if (window.location.pathname.indexOf('register') > -1) {
             // currentRouter.push("/login");
-            window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI + '#/register';
+            window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
           } else {
             // currentRouter.push("/login");
-            window.location.href = process.env.VUE_APP_LOGIN_URL + 'client_id=' + process.env.VUE_APP_CLIENTID + '&response_type=' + process.env.VUE_APP_RESPONSE_TYPE + '&redirect_uri=' + process.env.VUE_APP_REDIRECT_URI;
+            window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
           }
         }
       }
@@ -500,14 +500,7 @@ export default {
                 sessionStorage.clear();
                 if (process.env.NODE_ENV === "production") {
                   // currentRouter.push("/login");
-                  window.location.href = process.env.VUE_APP_LOGIN_URL +
-                    "client_id=" +
-                    process.env.VUE_APP_CLIENTID +
-                    "&response_type=" +
-                    process.env.VUE_APP_RESPONSE_TYPE +
-                    "&redirect_uri=" +
-                    process.env.VUE_APP_REDIRECT_URI +
-                    "&isLogout=true";
+                  window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
                 } else {
                   currentRouter.push("/login");
                 }
@@ -520,14 +513,7 @@ export default {
               sessionStorage.clear();
               if (process.env.NODE_ENV === "production") {
                 // currentRouter.push("/login");
-                window.location.href = process.env.VUE_APP_LOGIN_URL +
-                  "client_id=" +
-                  process.env.VUE_APP_CLIENTID +
-                  "&response_type=" +
-                  process.env.VUE_APP_RESPONSE_TYPE +
-                  "&redirect_uri=" +
-                  process.env.VUE_APP_REDIRECT_URI +
-                  "&isLogout=true";
+                window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
               } else {
                 currentRouter.push("/login");
               }
@@ -739,14 +725,7 @@ export default {
         if (!result.data) {
           sessionStorage.clear();
           // currentRouter.push("/login");
-          window.location.href = process.env.VUE_APP_LOGIN_URL +
-            "client_id=" +
-            process.env.VUE_APP_CLIENTID +
-            "&response_type=" +
-            process.env.VUE_APP_RESPONSE_TYPE +
-            "&redirect_uri=" +
-            process.env.VUE_APP_REDIRECT_URI +
-            "&isLogout=true";
+          window.location.href = process.env.VUE_APP_LOGIN_URL + "&redirectUrl=" + process.env.VUE_APP_REDIRECT_URI;
         }
         if (result && result.data && result.data.resourceId == 'root') {
           menuArr.push(result.data);
