@@ -78,7 +78,7 @@
 
     <a-row :gutter="rowObj.gutter">
       <a-col :span="rowObj.colLeftSpan">
-        <div class="box box1">
+        <!-- <div class="box box1">
           <div class="title">{{`各现地电耗统计(${dateStr})`}}</div>
           <div class="casualties">
             <ElectricQuantity :dateStr="dateStr" />
@@ -88,6 +88,18 @@
           <div class="title">{{`各现地废弃物统计(${dateStr})`}}</div>
           <div class="casualties">
             <Rubbish :dateStr="dateStr" />
+          </div>
+        </div> -->
+        
+        <div class="grade-box box1">
+          <div class="title-content">
+            <div class="title">EHS管理绩效评价 ({{year}}年第{{machChineseLang[quarter]}}季度)</div>
+          </div>
+          <div class="edu-detail">
+            <template v-if="performanceAppr.length">
+              <Grade v-for="item in performanceAppr" :key="item.guid" :gaugeData="item" />
+            </template>
+            <a-empty v-else class="echarts-empty" />
           </div>
         </div>
       </a-col>
@@ -153,17 +165,6 @@
             </router-link>
           </div>
         </div>
-        <div class="grade-box box1">
-          <div class="title-content">
-            <div class="title">EHS管理绩效评价 ({{year}}年第{{machChineseLang[quarter]}}季度)</div>
-          </div>
-          <div class="edu-detail">
-            <template v-if="performanceAppr.length">
-              <Grade v-for="item in performanceAppr" :key="item.guid" :gaugeData="item" />
-            </template>
-            <a-empty v-else class="echarts-empty" />
-          </div>
-        </div>
       </a-col>
     </a-row>
   </div>
@@ -180,7 +181,7 @@ import {
 import { barObj } from "@/pages/hiddenPerils/dataAnalysis/mixin/dataAnalysis.js";
 import Echarts from "@/components/echarts/index.vue";
 import dataAnalysis from "@/pages/hiddenPerils/dataAnalysis/mixin/dataAnalysis.js";
-import { cloneDeep } from "lodash";
+import { cloneDeep ,isEmpty} from "lodash";
 import { GetStaticalaAllNum } from "@/services/networkControl.js";
 import ElectricQuantity from './tpl/electricQuantity.vue'
 import Rubbish from './tpl/rubbish.vue'
@@ -352,12 +353,16 @@ export default {
     this.getPreviewPerformanceAppraisalFn(); //教育培训数量接口
   },
   computed: {
-    // 季度
+    // 季度  2023-6-12 修改内容：获取上一个季度的数据
     quarter() {
       let currMonth = dayJs().month()
       let currQuarter = Math.floor((currMonth % 3 == 0 ? (currMonth / 3) : (currMonth / 3 + 1)));
-      return currQuarter
-    },
+      let prevQuarter = currQuarter - 1;
+      if (prevQuarter < 1) {
+        prevQuarter = 4;
+      }
+      return prevQuarter;
+    }
   },
   methods: {
     //教育培训
@@ -410,10 +415,10 @@ export default {
     // EHS管理绩效评价
     getPreviewPerformanceAppraisalFn() {
       let apiData = {
-        // year: this.year,
-        year: 2022,
-        // quarter: this.quarter,
-        quarter: 3,
+        year: this.year,
+        // year: 2022,
+        quarter: this.quarter,
+        // quarter: 3,
       }
       getPreviewPerformanceAppraisalApi(apiData)
         .then(res => {

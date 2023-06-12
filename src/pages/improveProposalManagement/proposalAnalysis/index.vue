@@ -55,7 +55,7 @@
     </template>
 
     <a-row :gutter="{xl:20,xxl:30}">
-      <a-col :span="12">
+      <a-col :span="24">
         <template title="提案级别分析">
           <div class="injury-box">
             <div class="title">
@@ -73,7 +73,7 @@
           </div>
         </template>
       </a-col>
-      <a-col :span="12"></a-col>
+      <a-col :span="0"></a-col>
     </a-row>
   </div>
 </template>

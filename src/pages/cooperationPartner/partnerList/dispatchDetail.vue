@@ -360,12 +360,13 @@ export default {
     // 批量导入
     batchImport(){
       this.loadVisible = true;
-      this.loadData.companyId = this.dataMsg.companyName;
+      this.loadData.companyId = this.dataMsg.companyCode;
       this.loadData.corporationId = this.dataMsg.corporationId;
       this.loadData.corporationName = this.dataMsg.corporationName;
     },
     closeVisible(value) {
       this.loadVisible = value
+      this.getDataList()
     },
     // 文件上传成功的回调
     globalUploadFileSuccess(res) {
