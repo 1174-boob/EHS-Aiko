@@ -152,7 +152,7 @@ export default {
       let params = {
         username: _this.form.getFieldValue("name"),
         password: _this.encrypt.encrypt(this.form.getFieldValue('password')),
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         grantType: 'password',
       }
       // const formData = new FormData();
@@ -249,7 +249,7 @@ export default {
         // companyId: companyId,
         // userId: userId,
         // type: type,
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
       };
       let result = await getDevMessageBOE({});

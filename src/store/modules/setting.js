@@ -446,7 +446,7 @@ export default {
           let params = {
             userId: sessionStorage.getItem('userId'),
             companyId: sessionStorage.getItem('companyId'),
-            clientId: process.env.VUE_APP_CLIENTID,
+            clientId: process.env.VUE_APP_API_CLIENTID,
             token: sessionStorage.getItem('access_token')
           }
           if (!params.companyId) {
@@ -475,7 +475,7 @@ export default {
       let apiData = {
         code,
         grantType: "iam",
-        clientId: process.env.VUE_APP_CLIENTID
+        clientId: process.env.VUE_APP_API_CLIENTID
       }
       return new Promise((resolve, reject) => {
         getApiToken(apiData)
@@ -543,7 +543,7 @@ export default {
         // companyId: companyId,
         // userId: userId,
         // type: type,
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
       };
       let result = await getDevMessageBOE({});
@@ -589,7 +589,7 @@ export default {
       let params = {
         userId: responseData.userId,
         companyId: responseData.companyId,
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
       }
       return new Promise((resolve, reject) => {
@@ -606,7 +606,7 @@ export default {
       let params = {
         userId: responseData.userId,
         companyId: responseData.companyId,
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         isFindAdminInfo: false,
       }
       return new Promise((resolve, reject) => {
@@ -623,7 +623,7 @@ export default {
       let params = {
         userId: sessionStorage.getItem('userId'),
         companyId: JSON.parse(sessionStorage.getItem('zconsole_userInfo')).company ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).company.companyId : '',
-        clientId: process.env.VUE_APP_CLIENTID,
+        clientId: process.env.VUE_APP_API_CLIENTID,
         token: sessionStorage.getItem('access_token')
       }
       if (!params.companyId) {
