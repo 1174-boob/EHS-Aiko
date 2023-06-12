@@ -27,7 +27,6 @@ const view = {
   blank: () => import('@/layouts/BlankView'),
   page: () => import('@/layouts/PageView')
 }
-console.log(process.env.NODE_ENV)
 
 // 路由配置
 const options = {

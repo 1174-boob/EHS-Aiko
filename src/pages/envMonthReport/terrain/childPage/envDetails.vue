@@ -148,15 +148,16 @@ export default {
     if (this.type > 1) {   //编辑、查看、处理
       this.initData();
     } else {    //新增
-      let tableData = aikoMonthDataJson.filter(i => i.nicheItemsCode < 1300);
+      let tableData = aikoMonthDataJson.filter(i => i.nicheItemsCode != 1300);
       tableData.forEach(item => {
-        if (item.nicheItemsCode == 999) {
-          item.dataItem = 99;
-        } else if (item.nicheItemsCode == 1123 || item.nicheItemsCode < 1087) {
-          item.dataItem = 0;
-        } else {
-          item.dataItem = 0;
-        }
+        // if (item.nicheItemsCode == 999) {
+        //   item.dataItem = 99;
+        // } else if (item.nicheItemsCode == 1123 || item.nicheItemsCode < 1087) {
+        //   item.dataItem = 0;
+        // } else {
+        //   item.dataItem = 0;
+        // }
+        item.dataItem = 0;
       });
       this.tableData = cloneDeep(tableData)
       this.spinning = false
@@ -222,11 +223,11 @@ export default {
           try {
             let environmentMonthlyItemList = res.data.environmentMonthlyItemList || []
             // 回显不需要输入的项
-            aikoMonthDataJson.forEach((item, index) => {
-              if (item.nicheItemsCode == 999) {
-                environmentMonthlyItemList.splice(index, 0, item)
-              }
-            })
+            // aikoMonthDataJson.forEach((item, index) => {
+            //   if (item.nicheItemsCode == 999) {
+            //     environmentMonthlyItemList.splice(index, 0, item)
+            //   }
+            // })
             this.searchFormData = {
               centerId: res.data.centerId,
               corporationId: res.data.corporationId,
@@ -274,7 +275,7 @@ export default {
         this.$antMessage.error("请选择组织！");
         return false
       }
-
+      console.log(this.tableData, 'zzc')
       let isNoAll = this.tableData.some(item => typeof item.dataItem != 'number')
       if (isNoAll) {
         this.$antMessage.error("请正确填报！");

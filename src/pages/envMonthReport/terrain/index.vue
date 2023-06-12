@@ -17,7 +17,7 @@
         <a-button type="primary" @click="handleToFill">数据填报</a-button>
       </div>
       <div>
-        <!-- <a-button type="primary" @click="handleToImport" class="m-l-20">批量导入</a-button> -->
+        <a-button type="primary" @click="handleToImport" class="m-l-20">批量导入</a-button>
         <a-button type="primary" @click="handleTodownload" class="m-l-20">下载模板</a-button>
         <a-button type="primary" @click="handleToexport" class="m-l-20">批量导出</a-button>
       </div>
