@@ -583,6 +583,8 @@ export default {
                         pageSize: 10,
                         total: 0,
                   },
+                  userId:'',
+                  corporationId:'',
                   searchFormData: {},
                   columns: [
                         {
@@ -643,7 +645,6 @@ export default {
       },
       computed: {},
       created() {
-            console.log(this.$route.params);
             this.isCheck = this.$route.params.check;
             this.id = this.$route.params.id;
             this.initData();
@@ -665,7 +666,8 @@ export default {
                               useCheckCount: res.data.useCheckCount,
                               handSignature: res.data.handSignature || null,
                         };
-                        console.log(res);
+                        this.userId = res.data.userId
+                        this.corporationId = res.data.corporationId
                         if (res.data.handSignature) {
                               getPortraitUrlt([res.data.handSignature]).then(
                                     (res) => {
@@ -707,7 +709,13 @@ export default {
                         list: list,
                   }).then((res) => {
                         this.$antMessage.success(`修改成功！`);
-                        this.$router.go(-1);
+                        this.$router.push({
+                              path: '/safeManage/dualControlManage/riskManage/historyTask',
+                              query: {
+                                    userId: this.userId,
+                                    corporationId: this.corporationId
+                              }
+                        })
                   });
             },
             //下载Pdf

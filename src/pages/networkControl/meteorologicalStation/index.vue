@@ -16,7 +16,7 @@
         <li class="ad-block first">
           <div class="title">温度</div>
           <div class="content">{{weatherList.e5}}°C</div>
-          <div class="warn"><b>注意事项：</b>高温作业35℃↑；停止室外露天作业40°C↑；</div>
+          <div class="warn"><b>注意事项：</b>高温作业35°C↑；停止室外露天作业40°C↑；</div>
           <img src="../../../assets/weather/wendu.png">
         </li>
         <li class="ad-block second">
