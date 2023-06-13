@@ -15,7 +15,7 @@
             </a-form-model-item>
             <a-form-model-item label="类型" prop="noticeType" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select v-model="noticeForm.noticeType" placeholder="请选择类型" allowClear>
-                <a-select-option v-for="notice of noticeType" :value="notice.key" :key="notice.id">{{notice.value}}</a-select-option>
+                <a-select-option v-for="notice of noticeType" :value="notice.dictValue" :key="notice.dictValue">{{notice.dictLabel}}</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
@@ -67,7 +67,6 @@ export default {
       editContent: '',
       policyLawId: null,
       fileLists: [],
-      noticeType: [],
       fileDetail: [],
       noticeForm: {
         enterId: undefined,
@@ -102,9 +101,18 @@ export default {
       next()
     }
   },
+  computed: {
+    noticeType() {
+      const dict = this.$store.state.setting.dictTypeData;
+      const noticeInfo = dict.find(item => {
+        return item.dictType == 'notification_announcement_type';
+      });
+      return noticeInfo.dictItem;
+    },
+  },
   created() {
     // 通知公告类型
-    this.noticeType = dictionary('noticeType');
+    // this.noticeType = dictionary('noticeType');
   },
   methods: {
     submitEditor(value) {

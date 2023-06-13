@@ -102,10 +102,10 @@
                     <div class="personal-injury">
                       <div class="personal-injury-title flex">
                         <div></div>
-                        <div>死亡人数</div>
-                        <div>重伤人数</div>
-                        <div>轻伤人数</div>
-                        <div>轻微伤人数</div>
+                        <div>死亡</div>
+                        <div>重伤</div>
+                        <div>轻度伤害</div>
+                        <div>职业病</div>
                       </div>
                       <div class="personal-injury-data flex">
                         <div>人员伤害(人)</div>
@@ -122,14 +122,49 @@
                         <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorWoundLossMoney')" v-model.trim="iForm.minorWoundLossMoney" placeholder="请输入"></a-input></div>
                         <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorInjuryLossMoney')" v-model.trim="iForm.minorInjuryLossMoney" placeholder="请输入"></a-input></div>
                       </div>
+                      <div class="personal-injury-workhours flex">
+                        <div>安全事故导致停产(H)</div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('deathAccStop')" v-model.trim="iForm.deathAccStop" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('seriousInjuryAccStop')" v-model.trim="iForm.seriousInjuryAccStop" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorWoundAccStop')" v-model.trim="iForm.minorWoundAccStop" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorInjuryAccStop')" v-model.trim="iForm.minorInjuryAccStop" placeholder="请输入"></a-input></div>
+                      </div>
+                      <div class="personal-injury-workhours flex">
+                        <div>政府要求停产(H)</div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('deathGoverStop')" v-model.trim="iForm.deathGoverStop" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('seriousInjuryGoverStop')" v-model.trim="iForm.seriousInjuryGoverStop" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorWoundGoverStop')" v-model.trim="iForm.minorWoundGoverStop" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorInjuryGoverStop')" v-model.trim="iForm.minorInjuryGoverStop" placeholder="请输入"></a-input></div>
+                      </div>
+                      <div class="personal-injury-workhours flex">
+                        <div>险兆事件</div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('deathEvilOmen')" v-model.trim="iForm.deathEvilOmen" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('seriousInjuryEvilOmen')" v-model.trim="iForm.seriousInjuryEvilOmen" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorWoundEvilOmen')" v-model.trim="iForm.minorWoundEvilOmen" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorInjuryEvilOmen')" v-model.trim="iForm.minorInjuryEvilOmen" placeholder="请输入"></a-input></div>
+                      </div>
+                      <div class="personal-injury-workhours flex">
+                        <div>医药箱处理事件</div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('deathCabinet')" v-model.trim="iForm.deathCabinet" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('seriousInjuryCabinet')" v-model.trim="iForm.seriousInjuryCabinet" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorWoundCabinet')" v-model.trim="iForm.minorWoundCabinet" placeholder="请输入"></a-input></div>
+                        <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorInjuryCabinet')" v-model.trim="iForm.minorInjuryCabinet" placeholder="请输入"></a-input></div>
+                      </div>
                     </div>
                   </a-form-model-item>
                 </a-col>
               </a-row>
               <a-row>
                 <a-col :span="12">
-                  <a-form-model-item ref="propertyLoss" label="财产损失(元)" prop="propertyLoss">
+                  <a-form-model-item ref="propertyLoss" label="直接经济损失(元)" prop="propertyLoss">
                     <a-input :disabled="disabled" prefix="￥" v-model.trim="iForm.propertyLoss" @change="limitNumber('propertyLoss')" />
+                  </a-form-model-item>
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="12">
+                  <a-form-model-item ref="accidentLevel" label="事故等级" prop="accidentLevel">
+                    <a-input disabled v-model.trim="iForm.accidentLevel" @change="limitNumber('accidentLevel')" />
                   </a-form-model-item>
                 </a-col>
               </a-row>
@@ -235,6 +270,11 @@
                   <a-select-option v-for="item in accidentReasonType" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
+              <a-form-model-item label="原因分类" prop="reasonCategory">
+                <a-select v-model="addModleForm.reasonCategory" show-search placeholder="请选择">
+                  <a-select-option v-for="item in accidentReasonClass" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+                </a-select>
+              </a-form-model-item>
               <a-form-model-item label="事故原因分析" prop="reasonAnalyse">
                 <a-textarea :maxLength="1000" v-model="addModleForm.reasonAnalyse" placeholder="请输入事故原因分析"></a-textarea>
               </a-form-model-item>
@@ -314,6 +354,9 @@ export default {
         reasonType: [
           { required: true, message: "原因类型不能为空", trigger: "change" },
         ],
+        reasonCategory: [
+          { required: true, message: "原因分类不能为空", trigger: "change" },
+        ],
         reasonAnalyse: [
           { required: true, message: "事故原因分析不能为空", trigger: "blur" },
         ],
@@ -325,6 +368,10 @@ export default {
         {
           title: '原因类型',
           scopedSlots: { customRender: 'reasonType' },
+        },
+        {
+          title: '原因分类',
+          scopedSlots: { customRender: 'reasonCategory' },
         },
         {
           title: '事故原因分析',
@@ -442,7 +489,7 @@ export default {
     this.personalInjury = this.getDictItemList("accident_level_person");
     this.propertyLoss = this.getDictItemList("accident_level_money");
     this.accidentReasonType = this.getDictItemList("accident_reason_type");
-    console.log(this.accidentReasonType)
+    this.accidentReasonClass = this.getDictItemList("accident_cause_classification");
     this.userInfo = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
     this.userId = this.userInfo.userId;
   },

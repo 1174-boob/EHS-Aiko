@@ -174,7 +174,11 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="区域" prop="equipmentRegion">
-            <a-input v-model="addForm.equipmentRegion" placeholder="请输入区域" />
+            <a-select v-model="addForm.equipmentRegion" placeholder="请选择区域" allowClear>
+              <a-select-option v-for="item in equipmentRegionAreaList" :key="item.dictValue" :value="item.dictValue">
+                {{ item.dictLabel }}
+              </a-select-option>
+            </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="设备状态" prop="equipmentStatus">
             <a-select v-model="addForm.equipmentStatus" placeholder="请选择" allowClear>
@@ -511,6 +515,13 @@ export default {
   },
   components: { StaffOrDept, UploadBtnStyle },
   computed: {
+    equipmentRegionAreaList() {
+      const dict = this.$store.state.setting.dictTypeData;
+      const areaInfo = dict.find(item => {
+        return item.dictType == 'device_area';
+      });
+      return areaInfo.dictItem;
+    },
     deviceInfo() { //从字典组里获取化学品名称数据
       const dict = this.$store.state.setting.dictTypeData;
       const deviceInfo = dict.find(item => {

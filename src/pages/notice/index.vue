@@ -19,7 +19,7 @@
         <!-- 公告类型 -->
         <a-form-model-item label="公告类型">
           <a-select v-model="formInline.noticeType" placeholder="请选择类型" allowClear>
-            <a-select-option v-for="notice of noticeType" :value="notice.key" :key="notice.id">{{notice.value}}</a-select-option>
+            <a-select-option v-for="notice of noticeType" :value="notice.dictValue" :key="notice.dictValue">{{notice.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
@@ -77,7 +77,6 @@ export default {
   mixins: [teableCenterEllipsis, cancelLoading, dragTable],
   data() {
     return {
-      noticeType: [],
       formInline: {},
       typeObj: {},
       condition: {},
@@ -122,12 +121,21 @@ export default {
       dataList: [],
     }
   },
+  computed: {
+    noticeType() {
+      const dict = this.$store.state.setting.dictTypeData;
+      const noticeInfo = dict.find(item => {
+        return item.dictType == 'notification_announcement_type';
+      });
+      return noticeInfo.dictItem;
+    },
+  },
   created() {
     this.columns.splice(1, 0, this.addCommonColumnItem());
     this.initConfigPage()
     this.getPolicylawList();
-    this.noticeType = dictionary('noticeType');
-    console.log(this.noticeType,'cvcv');
+    // this.noticeType = dictionary('noticeType');
+    // console.log(this.noticeType,'cvcv');
   },
   activated() {
     setTimeout(() => {
