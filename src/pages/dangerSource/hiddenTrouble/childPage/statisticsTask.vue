@@ -95,7 +95,7 @@ export default {
                   ],
                   option: {
                         title: {
-                              text: "{test|作业数量}", //"作业数量",
+                              text: "{test|任务统计}", //"任务统计",
                               x: "left",
                               y: "top",
                               z: 1,
@@ -227,7 +227,6 @@ export default {
                               {
                                     name: "实际完成",
                                     type: "bar",
-                                    stack: "Ad",
                                     emphasis: {
                                           focus: "series",
                                     },
@@ -240,7 +239,6 @@ export default {
                               {
                                     name: "应完成",
                                     type: "bar",
-                                    stack: "Ad",
                                     emphasis: {
                                           focus: "series",
                                     },

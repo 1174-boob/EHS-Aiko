@@ -225,7 +225,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "演练次数（人）",
+            name: "演练次数（次）",
             alignTicks: true,
           },
           {
@@ -272,7 +272,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "演练次数（人）",
+            name: "演练次数（次）",
             alignTicks: true,
           },
           {
@@ -342,7 +342,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "演练次数（人）",
+            name: "演练次数（次）",
             alignTicks: true,
           },
           {

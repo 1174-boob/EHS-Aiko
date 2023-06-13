@@ -15,7 +15,7 @@
                               :disabled="disabledCommonDept"
                               :CommonFormInline="searchFormData"
                         ></CommonSearchItem>
-                        <a-form-model-item label="创建时间">
+                        <a-form-model-item label="安全认证时间">
                               <el-date-picker
                                     v-model="searchFormData.timeArr"
                                     type="daterange"
@@ -163,6 +163,14 @@ export default {
                         yAxis: [
                               {
                                     name: "设备总数",
+                                    min: 0,
+                                    max: 10,
+                                    alignTicks: true,
+                                    axisLabel: {
+                                          formatter: (v) => {
+                                                return parseInt(v);
+                                          },
+                                    },
                               },
                               {
                                     type: "value",
@@ -273,7 +281,7 @@ export default {
       },
       created() {
             this.setRouterCode("deviceStatistics");
-            // 创建时间默认当前月份
+            // 安全认证时间默认当前月份
             console.log(this.setCorporationTree);
             this.initData();
       },

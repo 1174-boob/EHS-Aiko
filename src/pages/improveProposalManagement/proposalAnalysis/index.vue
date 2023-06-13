@@ -279,10 +279,9 @@ export default {
         startTime: this.formInline.auditTime ? this.formInline.auditTime[0] : undefined,
         endTime: this.formInline.auditTime ? this.formInline.auditTime[1] : undefined,
       }
-      if (!isEmpty(this.corporationIdObj)) {
-        // 是否汇总
-        apiData.centerId = this.summary ? undefined : this.corporationIdObj.centerId
-        apiData.corporationId = this.summary ? undefined : this.corporationIdObj.corporationId
+      let list = this.getCommonAddOrgnizeList; //当前登录人的组织列表
+      if (list.length == 1) {
+        apiData.corporationId = list[0].orgId;
       }
       delete apiData.auditTime
       return apiData

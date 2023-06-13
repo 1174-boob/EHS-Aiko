@@ -3,7 +3,8 @@
     <PageTitle>事故事件台账草稿箱</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <CommonDept ref="commonDept" :CommonFormInline="formInline" :hasDepartment="true" @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
+        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <!-- <CommonDept ref="commonDept" :CommonFormInline="formInline" :hasDepartment="true" @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
         <a-form-model-item label="责任部门">
           <a-tree-select
             show-search
@@ -18,7 +19,7 @@
             :treeDefaultExpandAll="false"
           >
           </a-tree-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="事故地点">
           <a-input v-model="formInline.accidentLocation" placeholder="请输入事故地点"></a-input>
         </a-form-model-item>

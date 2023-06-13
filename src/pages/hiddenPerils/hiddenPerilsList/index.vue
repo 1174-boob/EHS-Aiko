@@ -50,16 +50,6 @@
         <a-button type="primary" @click="inClick">批量导入</a-button>
         <a-button type="primary" @click="downTpl" :loading="loadingExport">批量导出</a-button>
       </div>
-      <div class="ttips">
-        <div class="circle-item">
-          <span class="red-circle"></span>
-          <span>红线隐患</span>
-        </div>
-        <div class="circle-item">
-          <span class="yellow-circle"></span>
-          <span>一类隐患</span>
-        </div>
-      </div>
     </DashBtn>
     <!--表格列表 -->
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
