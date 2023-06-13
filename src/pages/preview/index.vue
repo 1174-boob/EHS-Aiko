@@ -341,7 +341,7 @@ export default {
     // if (list1.length == 1 && list2.length == 1) {
     if (list2.length == 1) {
       // this.formInline.centerId = list1[0].corporationCode;
-      this.formInline.corporationId = list2[0].id;
+      this.formInline.corporationId = list2[0].orgId;
     }
 
     this.setRouterCode("preview");
