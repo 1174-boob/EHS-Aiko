@@ -952,7 +952,6 @@ export default {
       // 损失工时时间相加
       let lossMoneyPlusTime = (this.iForm.deathLossMoney - 0) + (this.iForm.seriousInjuryLossMoney - 0) + (this.iForm.minorWoundLossMoney - 0) + (this.iForm.minorInjuryLossMoney - 0);
       // 轻伤事故，重伤事故。死亡事故相加
-      let accidentPlusPerson = (this.iForm.deathNum - 0) + (this.iForm.seriousInjuryNum - 0) + (this.iForm.minorWoundNum -0);
       var backToStart = false;
       if(this.iForm['deathEvilOmen'] > 0 || this.iForm['seriousInjuryEvilOmen'] > 0 || this.iForm['minorWoundEvilOmen'] > 0 || this.iForm['minorInjuryEvilOmen'] > 0 || this.iForm['deathCabinet'] > 0 || this.iForm['seriousInjuryCabinet'] > 0 || this.iForm['minorWoundCabinet'] > 0 || this.iForm['minorInjuryCabinet'] > 0 || (lossMoneyPlusTime > 0 && lossMoneyPlusTime <= 72) || (this.iForm['propertyLoss'] > 0 && this.iForm['propertyLoss'] < 3000)) {
         // 轻微事件
@@ -968,8 +967,8 @@ export default {
         // 严重事故
         this.iForm.accidentLevel = '3';
         backToStart = true;
-      }
-      if(accidentPlusPerson >= 10 || this.iForm['propertyLoss'] >= 300000 || this.iForm['deathGoverStop'] > 0 || this.iForm['seriousInjuryGoverStop'] > 0 || this.iForm['minorWoundGoverStop'] > 0 || this.iForm['minorInjuryGoverStop'] > 0) {
+      } 
+      if(this.iForm['deathNum'] > 0 || this.iForm['seriousInjuryNum'] > 0 || this.iForm['minorWoundNum'] >= 10 || this.iForm['propertyLoss'] >= 300000 || this.iForm['deathGoverStop'] > 0 || this.iForm['seriousInjuryGoverStop'] > 0 || this.iForm['minorWoundGoverStop'] > 0 || this.iForm['minorInjuryGoverStop'] > 0) {
         // 重大事故
         this.iForm.accidentLevel = '4';
         backToStart = true;
