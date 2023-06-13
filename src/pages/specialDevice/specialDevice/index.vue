@@ -153,7 +153,7 @@ export default {
         {
           title: '设备类型',
           scopedSlots: { customRender: 'equipmentType' },
-          width: 150
+          width: 200
         },
         {
           title: '设备位置',
