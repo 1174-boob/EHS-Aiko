@@ -109,7 +109,6 @@
                       </div>
                       <div class="personal-injury-data flex">
                         <div>人员伤害(人)</div>
-                        <!--  :formatter="limitNumber" -->
                         <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('deathNum')" v-model.trim="iForm.deathNum" placeholder="请输入"></a-input></div>
                         <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('seriousInjuryNum')" v-model.trim="iForm.seriousInjuryNum" placeholder="请输入"></a-input></div>
                         <div><a-input :disabled="disabled" type="number" :min="0" @change="limitNumber('minorWoundNum')" v-model.trim="iForm.minorWoundNum" placeholder="请输入"></a-input></div>
@@ -164,7 +163,9 @@
               <a-row>
                 <a-col :span="12">
                   <a-form-model-item ref="accidentLevel" label="事故等级" prop="accidentLevel">
-                    <a-input disabled v-model.trim="iForm.accidentLevel" @change="limitNumber('accidentLevel')" />
+                    <a-select v-model="iForm.accidentLevel" placeholder="请选择事故等级" :disabled="disabled" allowClear>
+                      <a-select-option v-for="notice of accidentLevelList" :value="notice.dictValue" :key="notice.dictValue">{{notice.dictLabel}}</a-select-option>
+                    </a-select>
                   </a-form-model-item>
                 </a-col>
               </a-row>
@@ -211,6 +212,9 @@
                     >
                       <div slot="reasonType" slot-scope="record">
                         {{getMappingValue(accidentReasonType, "dictValue", record.reasonType).dictLabel}}
+                      </div>
+                      <div slot="reasonCategory" slot-scope="record">
+                        {{getMappingValue(accidentReasonClass, "dictValue", record.reasonCategory).dictLabel}}
                       </div>
                       <div slot="action" slot-scope="record">
                         <span class="color-0067cc cursor-pointer m-r-15" @click="tableRowEdit(record)">编辑</span>
@@ -402,6 +406,23 @@ export default {
         seriousInjuryLossMoney: 0,
         minorWoundLossMoney: 0,
         minorInjuryLossMoney: 0,
+        deathAccStop: 0,
+        seriousInjuryAccStop: 0,
+        minorWoundAccStop: 0,
+        minorInjuryAccStop: 0,
+        deathGoverStop: 0,
+        seriousInjuryGoverStop: 0,
+        minorWoundGoverStop: 0,
+        minorInjuryGoverStop: 0,
+        deathEvilOmen: 0,
+        seriousInjuryEvilOmen: 0,
+        minorWoundEvilOmen: 0,
+        minorInjuryEvilOmen: 0,
+        deathCabinet: 0,
+        seriousInjuryCabinet: 0,
+        minorWoundCabinet: 0,
+        minorInjuryCabinet: 0,
+        accidentLevel: null
       },
       rules: { // 调岗
         applicant: [
@@ -476,7 +497,13 @@ export default {
       processNode: "",
       btnLoading: false,
       isReject: false,//是否是驳回，否则通过
-      approveVisible: false
+      approveVisible: false,
+      accidentLevelList: [
+        { dictLabel: '轻微事故', dictValue: '1' },
+        { dictLabel: '一般事故', dictValue: '2' },
+        { dictLabel: '严重事故', dictValue: '3' },
+        { dictLabel: '重大事故', dictValue: '4' },
+      ]
     };
   },
   async created() {
@@ -484,7 +511,6 @@ export default {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
       this.$set(this.iForm, 'deptId', adminDeptId ? [adminDeptId] : []);
     }
-    console.log(this.$route.meta)
     this.accidentType = this.getDictItemList("accident_type");
     this.personalInjury = this.getDictItemList("accident_level_person");
     this.propertyLoss = this.getDictItemList("accident_level_money");
@@ -543,7 +569,6 @@ export default {
       this.treeData = treeData;
     },
     deptChange(a,b,c) {
-      // console.log(a,b,c,'...8989');
       // this.$set(this.iForm, "dutyDeptName", b && b[0]);
       this.$set(this.iForm, "dutyDeptNameList", b);
     },
@@ -569,7 +594,6 @@ export default {
       }
     },
     getUserInfo() {
-      console.log(this.userInfo)
       let iForm = {
         applicant: this.userInfo.jobNumber ? this.userInfo.name + '/' + this.userInfo.jobNumber : this.userInfo.name,
         draftPersonId: this.userInfo.userId,
@@ -580,7 +604,6 @@ export default {
       this.spinning = false;
     },
     deptFormValidator(val) {
-      console.log(val)
       formValidator.formItemValidate(this, 'dutyDeptIdList', 'iForm')
     },
     // 象形图图片上传
@@ -590,7 +613,6 @@ export default {
         arr = this.$refs.uploadPictureList1.fileList.map(item => {
           return item.id
         })
-        console.log(arr);
         this.$set(this.iForm, "accidentScenePictureList", arr);
         formValidator.formItemValidate(this, 'accidentScenePictureList', 'iForm')
       } else if (num == 2) {
@@ -638,12 +660,10 @@ export default {
       formValidator.formItemValidate(this, 'accidentAnalyseMeasuresList', 'iForm')
     },
     tableRowEdit(row) {
-      console.log(row);
       this.addModleForm = { ...row };
       this.addCasNoModelShow = true;
     },
     tableRowDel(row) {
-      console.log(row);
       let ind;
       for (let i = 0; i < this.iForm.accidentAnalyseMeasuresList.length; i++) {
         if (this.iForm.accidentAnalyseMeasuresList[i]._id == row._id) {
@@ -682,7 +702,6 @@ export default {
 
         // 附件回显
         iForm.echoFileList = this.handleFileRedisplay(iForm.fileList);
-        console.log(iForm.echoFileList)
         iForm.fileList = this.handleFileIdS(iForm.fileList);
 
         // 表格回显
@@ -763,9 +782,7 @@ export default {
     },
     // 提交 新建
     async onSubmit() {
-      console.log(this.iForm,'...ii');
       this.$refs.iForm.validate((valid, object) => {
-        console.log(this.iForm, valid);
         if (!valid) {
           this.scrollView(object);
         }
@@ -828,7 +845,6 @@ export default {
     },
     // 待办推送
     async pushTask() {
-      console.log(this.dataMsg, this.iForm);
       let formId = this.pushPara.formId || this.accidentId
       const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/emergencyManagement/accidentManagement/accidentResolve&accidentId=${formId}`
       if (this.pushPara.handle) {
@@ -903,7 +919,6 @@ export default {
           })
         }
       } catch (err) {
-        console.log(err);
         this.btnLoading = false;
       } 
     },
@@ -920,14 +935,49 @@ export default {
       let val = this.iForm[key];
       let value;
       if (typeof val === "string") {
-        value = !isNaN(Number(val)) ? val.replace(/\./g, "") : 0;
+        if(val === '') {
+          value = 0;
+        } else {
+          value = !isNaN(Number(val)) ? val.replace(/\./g, 0) : 0;
+        }
       } else if (typeof val === "number") {
-        value = !isNaN(val) ? String(val).replace(/\./g, "") : 0;
+        value = !isNaN(val) ? String(val).replace(/\./g, 0) : 0;
       } else {
         value = 0;
       }
       this.iForm[key] = value;
-    }  
+      this.calculateAccidentLevel()
+    },
+    calculateAccidentLevel() {
+      // 损失工时时间相加
+      let lossMoneyPlusTime = (this.iForm.deathLossMoney - 0) + (this.iForm.seriousInjuryLossMoney - 0) + (this.iForm.minorWoundLossMoney - 0) + (this.iForm.minorInjuryLossMoney - 0);
+      // 轻伤事故，重伤事故。死亡事故相加
+      let accidentPlusPerson = (this.iForm.deathNum - 0) + (this.iForm.seriousInjuryNum - 0) + (this.iForm.minorWoundNum -0);
+      var backToStart = false;
+      if(this.iForm['deathEvilOmen'] > 0 || this.iForm['seriousInjuryEvilOmen'] > 0 || this.iForm['minorWoundEvilOmen'] > 0 || this.iForm['minorInjuryEvilOmen'] > 0 || this.iForm['deathCabinet'] > 0 || this.iForm['seriousInjuryCabinet'] > 0 || this.iForm['minorWoundCabinet'] > 0 || this.iForm['minorInjuryCabinet'] > 0 || (lossMoneyPlusTime > 0 && lossMoneyPlusTime <= 72) || (this.iForm['propertyLoss'] > 0 && this.iForm['propertyLoss'] < 3000)) {
+        // 轻微事件
+        this.iForm.accidentLevel = '1';
+        backToStart = true;
+      }
+      if((this.iForm['minorWoundNum'] > 0 && this.iForm['minorWoundNum'] < 3) || (this.iForm['propertyLoss'] >= 3000 && this.iForm['propertyLoss'] < 30000)) {
+        // 一般事故
+        this.iForm.accidentLevel = '2';
+        backToStart = true;
+      }
+      if((this.iForm['minorWoundNum'] >= 3 && this.iForm['minorWoundNum'] < 10) || this.iForm['minorInjuryNum'] > 0 || this.iForm['deathAccStop'] > 0 || this.iForm['seriousInjuryAccStop'] > 0 || this.iForm['minorWoundAccStop'] > 0 || this.iForm['minorInjuryAccStop'] > 0 || (this.iForm['propertyLoss'] >= 30000 && this.iForm['propertyLoss'] < 300000)) {
+        // 严重事故
+        this.iForm.accidentLevel = '3';
+        backToStart = true;
+      }
+      if(accidentPlusPerson >= 10 || this.iForm['propertyLoss'] >= 300000 || this.iForm['deathGoverStop'] > 0 || this.iForm['seriousInjuryGoverStop'] > 0 || this.iForm['minorWoundGoverStop'] > 0 || this.iForm['minorInjuryGoverStop'] > 0) {
+        // 重大事故
+        this.iForm.accidentLevel = '4';
+        backToStart = true;
+      }
+      if(!backToStart) {
+        this.iForm.accidentLevel = null;
+      }
+    }
   },
 };
 </script>

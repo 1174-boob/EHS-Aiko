@@ -1,21 +1,49 @@
 <template>
-  <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
+  <div
+    class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff"
+  >
     <SearchTerm>
       <a-form-model layout="inline" :model="searchFormData" :colon="false">
-        <CommonSearchItem ref="commonSearchItem" :hasDepartment="true" :CommonFormInline="searchFormData"></CommonSearchItem>
+        <CommonSearchItem
+          ref="commonSearchItem"
+          :hasDepartment="true"
+          :CommonFormInline="searchFormData"
+        ></CommonSearchItem>
         <a-form-model-item label="设备状态">
-          <a-select v-model="searchFormData.equipmentStatus" placeholder="请选择" allowClear>
-            <a-select-option v-for="item in deviceList" :key="item.value" :value="item.key">{{ item.value }}</a-select-option>
+          <a-select
+            v-model="searchFormData.equipmentStatus"
+            placeholder="请选择"
+            allowClear
+          >
+            <a-select-option
+              v-for="item in deviceList"
+              :key="item.value"
+              :value="item.key"
+              >{{ item.value }}</a-select-option
+            >
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="设备ID">
-          <a-input v-model="searchFormData.equipmentCode" :maxLength="30" placeholder="请输入设备ID" allowClear></a-input>
+          <a-input
+            v-model="searchFormData.equipmentCode"
+            :maxLength="30"
+            placeholder="请输入设备ID"
+            allowClear
+          ></a-input>
         </a-form-model-item>
         <a-form-model-item label="安全认证时间">
-          <el-date-picker v-model="searchFormData.timeArr" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+          <el-date-picker
+            v-model="searchFormData.timeArr"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
         </a-form-model-item>
         <a-form-model-item class="float-right">
-          <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
+          <a-button type="primary" :loading="loading" @click="iSearch"
+            >查询</a-button
+          >
           <a-button @click="iRest">重置</a-button>
         </a-form-model-item>
       </a-form-model>
@@ -23,7 +51,11 @@
     <div class="pe-data-container">
       <h4 class="pe-data-title">{{ deviceDateR }}设备数据</h4>
       <div>
-        <div @click="changeTab(1)" class="pe-data-item total-pe-num" :class="[curIndex === 1 ? 'active' : '']">
+        <div
+          @click="changeTab(1)"
+          class="pe-data-item total-pe-num"
+          :class="[curIndex === 1 ? 'active' : '']"
+        >
           <span class="pe-data-body">
             设备总数
             {{ deviceTypeData.equipmentNum || 0 }}
@@ -32,7 +64,11 @@
           <p class="en-illus">total equipment</p>
           <i></i>
         </div>
-        <div @click="changeTab(2)" class="pe-data-item expire-num" :class="[curIndex === 2 ? 'active' : '']">
+        <div
+          @click="changeTab(2)"
+          class="pe-data-item expire-num"
+          :class="[curIndex === 2 ? 'active' : '']"
+        >
           <span class="pe-data-body">
             认证到期
             {{ deviceTypeData.expireNum || 0 }} 台
@@ -40,7 +76,11 @@
           <p class="en-illus">certification expires</p>
           <i></i>
         </div>
-        <div @click="changeTab(3)" class="pe-data-item passed-pe-num" :class="[curIndex === 3 ? 'active' : '']">
+        <div
+          @click="changeTab(3)"
+          class="pe-data-item passed-pe-num"
+          :class="[curIndex === 3 ? 'active' : '']"
+        >
           <span class="pe-data-body">
             认证完成
             {{ deviceTypeData.completeNum || 0 }}
@@ -49,7 +89,11 @@
           <p class="en-illus">certification complete</p>
           <i></i>
         </div>
-        <div @click="changeTab(4)" class="pe-data-item exception-pe-num" :class="[curIndex === 4 ? 'active' : '']">
+        <div
+          @click="changeTab(4)"
+          class="pe-data-item exception-pe-num"
+          :class="[curIndex === 4 ? 'active' : '']"
+        >
           <span class="pe-data-body">
             认证合格
             {{ deviceTypeData.qualifiedNum || 0 }}
@@ -58,7 +102,11 @@
           <p class="en-illus">certification Qualified</p>
           <i></i>
         </div>
-        <div @click="changeTab(5)" class="pe-data-item forbid-pe-num" :class="[curIndex === 5 ? 'active' : '']">
+        <div
+          @click="changeTab(5)"
+          class="pe-data-item forbid-pe-num"
+          :class="[curIndex === 5 ? 'active' : '']"
+        >
           <span class="pe-data-body">
             认证超期
             {{ deviceTypeData.overdueNum || 0 }}
@@ -75,8 +123,19 @@
         <a-button type="dashed" @click="addDevice">
           <a-icon type="plus" />新建
         </a-button>
-        <a-button type="dashed" @click="handleDownloadTemplate">下载模板</a-button>
-        <UploadBtnStyle :action="action" :showAcceptText="false" :accept="['.xlsx', '.xls']" :showUploadList="false" :btnText="'批量导入'" :btnType="'dashed'" :btnIcon="false" class="upload-btn-style"></UploadBtnStyle>
+        <a-button type="dashed" @click="handleDownloadTemplate"
+          >下载模板</a-button
+        >
+        <UploadBtnStyle
+          :action="action"
+          :showAcceptText="false"
+          :accept="['.xlsx', '.xls']"
+          :showUploadList="false"
+          :btnText="'批量导入'"
+          :btnType="'dashed'"
+          :btnIcon="false"
+          class="upload-btn-style"
+        ></UploadBtnStyle>
         <!-- <a-button type="dashed">批量导入</a-button> -->
         <a-button type="dashed" @click="handelDownload">导出Excel</a-button>
       </div>
@@ -96,8 +155,21 @@
       </div>
     </DashBtn>
     <!-- 表格 -->
-    <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
-      <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{ isHover: true }" :data="tableList">
+    <CommonTable
+      :spinning="tableSpinning"
+      :page="page"
+      :pageNoChange="pageNoChange"
+      :showSizeChange="showSizeChange"
+    >
+      <vxe-table
+        class="vxe-scrollbar beauty-scroll-fireBox"
+        border
+        show-header-overflow
+        show-overflow
+        align="center"
+        :row-config="{ isHover: true }"
+        :data="tableList"
+      >
         <template v-for="(item, index) in columnsAll">
           <vxe-column
             :key="item.id"
@@ -106,20 +178,21 @@
             :title="item.title"
           >
             <template #default="{ row }">
-              <template v-if="index != 6">
-                <span :class="circleFn(row)" v-if="index == 0"></span>
+              <template v-if="index == 6">
                 <span>
-                  {{
-                  row[item.props]
-                  }}
+                  {{ row[item.props] | deviceStatus }}
                 </span>
               </template>
+              <template v-else-if="index == 2">
+                <span>{{getMappingValue(deviceInfo, "dictValue", row[item.props]).dictLabel}}</span>
+              </template>
+              <template v-else-if="index == 5">
+                <span>{{getMappingValue(equipmentRegionAreaList, "dictValue", row[item.props]).dictLabel}}</span>
+              </template>
               <template v-else>
+                <span :class="circleFn(row)" v-if="index == 0"></span>
                 <span>
-                  {{
-                  row[item.props]
-                  | deviceStatus
-                  }}
+                  {{ row[item.props] }}
                 </span>
               </template>
             </template>
@@ -129,10 +202,24 @@
           <template #default="{ row }">
             <div class="table-btn-box">
               <!-- {{row}} 认证履历   变更记录   编辑   删除-->
-              <span class="color-0067cc cursor-pointer" @click="handleToRecord(row)">认证履历</span>
-              <span class="color-0067cc cursor-pointer" @click="handleToLog(row)">变更记录</span>
-              <span class="color-0067cc cursor-pointer" @click="editDevice(row)">编辑</span>
-              <span class="color-ff4d4f cursor-pointer" @click="handleDeleteDevice(row)">删除</span>
+              <span
+                class="color-0067cc cursor-pointer"
+                @click="handleToRecord(row)"
+                >认证履历</span
+              >
+              <span
+                class="color-0067cc cursor-pointer"
+                @click="handleToLog(row)"
+                >变更记录</span
+              >
+              <span class="color-0067cc cursor-pointer" @click="editDevice(row)"
+                >编辑</span
+              >
+              <span
+                class="color-ff4d4f cursor-pointer"
+                @click="handleDeleteDevice(row)"
+                >删除</span
+              >
             </div>
           </template>
         </vxe-column>
@@ -144,7 +231,11 @@
       </vxe-table>
     </CommonTable>
     <!-- 弹框 -->
-    <CommonModal :title="modalTitle" :visible="addVisible" :cancelFn="addCancle">
+    <CommonModal
+      :title="modalTitle"
+      :visible="addVisible"
+      :cancelFn="addCancle"
+    >
       <template slot="form">
         <a-form-model
           ref="addForm"
@@ -152,40 +243,78 @@
           :rules="addFormRules"
           :label-col="{ style: { width: '125px' } }"
           :wrapper-col="{
-                                    style: { width: 'calc(100% - 125px)' },
-                              }"
+            style: { width: 'calc(100% - 125px)' },
+          }"
           :colon="false"
           labelAlign="right"
         >
-          <CommonSearchItem ref="commonSearchItemAdd" :CommonFormInline="addForm" :notTablePage="true" :hasDepartment="true" :deptLabel="'部门'"></CommonSearchItem>
+          <CommonSearchItem
+            ref="commonSearchItemAdd"
+            :CommonFormInline="addForm"
+            :notTablePage="true"
+            :hasDepartment="true"
+            :deptLabel="'部门'"
+          ></CommonSearchItem>
           <!-- @corporationDeptChange="corporationDeptChange" -->
           <a-form-model-item class="flex" label="设备ID" prop="equipmentCode">
-            <a-input v-model="addForm.equipmentCode" placeholder="请输入设备ID" />
+            <a-input
+              v-model="addForm.equipmentCode"
+              placeholder="请输入设备ID"
+            />
           </a-form-model-item>
           <a-form-model-item class="flex" label="设备名称" prop="equipmentName">
-            <a-input v-model="addForm.equipmentName" placeholder="请输入设备名称" />
+            <a-input
+              v-model="addForm.equipmentName"
+              placeholder="请输入设备名称"
+            />
           </a-form-model-item>
           <a-form-model-item class="flex" label="设备类型" prop="equipmentType">
             <!-- <a-input v-model="addForm.equipmentType" placeholder="请输入设备类型" /> -->
-            <a-select v-model="addForm.equipmentType" placeholder="请选择" allowClear>
-              <a-select-option v-for="item in deviceInfo" :key="item.dictValue" :value="item.dictValue">
+            <a-select
+              v-model="addForm.equipmentType"
+              placeholder="请选择"
+              allowClear
+            >
+              <a-select-option
+                v-for="item in deviceInfo"
+                :key="item.dictValue"
+                :value="item.dictValue"
+              >
                 {{ item.dictLabel }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="区域" prop="equipmentRegion">
-            <a-select v-model="addForm.equipmentRegion" placeholder="请选择区域" allowClear>
-              <a-select-option v-for="item in equipmentRegionAreaList" :key="item.dictValue" :value="item.dictValue">
+            <a-select
+              v-model="addForm.equipmentRegion"
+              placeholder="请选择区域"
+              allowClear
+            >
+              <a-select-option
+                v-for="item in equipmentRegionAreaList"
+                :key="item.dictValue"
+                :value="item.dictValue"
+              >
                 {{ item.dictLabel }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item class="flex" label="设备状态" prop="equipmentStatus">
-            <a-select v-model="addForm.equipmentStatus" placeholder="请选择" allowClear>
-              <a-select-option v-for="item in deviceList" :key="item.value" :value="item.key">
-                {{
-                item.value
-                }}
+          <a-form-model-item
+            class="flex"
+            label="设备状态"
+            prop="equipmentStatus"
+          >
+            <a-select
+              v-model="addForm.equipmentStatus"
+              placeholder="请选择"
+              allowClear
+            >
+              <a-select-option
+                v-for="item in deviceList"
+                :key="item.value"
+                :value="item.key"
+              >
+                {{ item.value }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -201,45 +330,53 @@
             :checkAbel="false"
             :deptTreeId="addForm.deptId"
           />
-          <a-form-model-item class="flex" label="设备量产时间" prop="equipmentProductionDate">
+          <a-form-model-item
+            class="flex"
+            label="设备量产时间"
+            prop="equipmentProductionDate"
+          >
             <el-date-picker
-              v-model="
-                                                addForm.equipmentProductionDate
-                                          "
+              v-model="addForm.equipmentProductionDate"
               type="date"
               value-format="yyyy-MM-dd"
               placeholder="选择日期"
             ></el-date-picker>
           </a-form-model-item>
-          <a-form-model-item class="flex" label="初次认证时间" prop="initialCertificationDate">
+          <a-form-model-item
+            class="flex"
+            label="初次认证时间"
+            prop="initialCertificationDate"
+          >
             <el-date-picker
-              v-model="
-                                                addForm.initialCertificationDate
-                                          "
+              v-model="addForm.initialCertificationDate"
               type="date"
               value-format="yyyy-MM-dd"
               placeholder="选择日期"
             ></el-date-picker>
           </a-form-model-item>
-          <a-form-model-item class="flex" label="安全认证时间" prop="securityCertificationDate">
+          <a-form-model-item
+            class="flex"
+            label="安全认证时间"
+            prop="securityCertificationDate"
+          >
             <el-date-picker
-              v-model="
-                                                addForm.securityCertificationDate
-                                          "
+              v-model="addForm.securityCertificationDate"
               type="date"
               @change="handleNextTimeCounntD"
               value-format="yyyy-MM-dd"
               placeholder="选择日期"
             ></el-date-picker>
           </a-form-model-item>
-          <a-form-model-item class="flex" label="安全认证周期" prop="securityCertificationCycle">
+          <a-form-model-item
+            class="flex"
+            label="安全认证周期"
+            prop="securityCertificationCycle"
+          >
             <!-- <a-input v-model="addForm.securityCertificationCycle"
                                  placeholder="请输入认证周期"
             addon-after="年" />-->
             <a-input-number
-              v-model="
-                                                addForm.securityCertificationCycle
-                                          "
+              v-model="addForm.securityCertificationCycle"
               @change="handleNextTimeCounnt"
               :formatter="(v) => `${v}年`"
               :precision="0"
@@ -248,11 +385,13 @@
               addon-after="年"
             />
           </a-form-model-item>
-          <a-form-model-item class="flex" label="下次安全认证时间" prop="nextCertificationDate">
+          <a-form-model-item
+            class="flex"
+            label="下次安全认证时间"
+            prop="nextCertificationDate"
+          >
             <el-date-picker
-              v-model="
-                                                addForm.nextCertificationDate
-                                          "
+              v-model="addForm.nextCertificationDate"
               type="date"
               :disabled="true"
               value-format="yyyy-MM-dd"
@@ -263,7 +402,9 @@
       </template>
       <template slot="btn">
         <a-button class="m-r-15" @click="addCancle">取消</a-button>
-        <a-button type="primary" :loading="addLoading" @click="addConfirm">确定</a-button>
+        <a-button type="primary" :loading="addLoading" @click="addConfirm"
+          >确定</a-button
+        >
       </template>
     </CommonModal>
   </div>
@@ -292,7 +433,7 @@ import dayJs from "dayjs";
 export default {
   data() {
     return {
-      tableSpinning:false,
+      tableSpinning: false,
       // 导入文件地址
       action: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.ehsEquip}/api/ehs/equip/equipment/account/importEquipment`,
       searchFormData: {},
@@ -517,15 +658,16 @@ export default {
   computed: {
     equipmentRegionAreaList() {
       const dict = this.$store.state.setting.dictTypeData;
-      const areaInfo = dict.find(item => {
-        return item.dictType == 'device_area';
+      const areaInfo = dict.find((item) => {
+        return item.dictType == "device_area";
       });
       return areaInfo.dictItem;
     },
-    deviceInfo() { //从字典组里获取化学品名称数据
+    deviceInfo() {
+      //从字典组里获取化学品名称数据
       const dict = this.$store.state.setting.dictTypeData;
-      const deviceInfo = dict.find(item => {
-        return item.dictType == 'equipment_type';
+      const deviceInfo = dict.find((item) => {
+        return item.dictType == "equipment_type";
       });
       return deviceInfo.dictItem;
     },
@@ -537,12 +679,12 @@ export default {
   },
   activated() {
     setTimeout(() => {
-      if(!this.keepalive){
-        this.initConfigPage()
-        this.iRest()
+      if (!this.keepalive) {
+        this.initConfigPage();
+        this.iRest();
       }
     }, 20);
- },
+  },
   filters: {
     deviceStatus(val) {
       if (val == "0") {
@@ -555,50 +697,43 @@ export default {
     },
   },
   methods: {
-    initConfigPage(){
+    initConfigPage() {
       this.initTime();
     },
     initTime() {
       this.deviceDateR = dayJs(new Date()).format("YYYY年MM月");
       this.deviceDataTime = {
         securityCertificationEndDate: dayJs(new Date()).format("YYYY-MM-DD"),
-        securityCertificationStartDate: dayJs(new Date()).format("YYYY-MM") + "-01",
+        securityCertificationStartDate:
+          dayJs(new Date()).format("YYYY-MM") + "-01",
       };
     },
     initData() {
       if (this.searchFormData.timeArr) {
-        this.searchFormData.securityCertificationStartDate =
-          this.searchFormData.timeArr[0]
-            ? dayJs(
-              this.searchFormData.timeArr[0]
-            ).format("YYYY-MM-DD")
-            : "";
-        this.searchFormData.securityCertificationEndDate = this
-          .searchFormData.timeArr[1]
-          ? dayJs(this.searchFormData.timeArr[1]).format(
-            "YYYY-MM-DD"
-          )
+        this.searchFormData.securityCertificationStartDate = this.searchFormData
+          .timeArr[0]
+          ? dayJs(this.searchFormData.timeArr[0]).format("YYYY-MM-DD")
+          : "";
+        this.searchFormData.securityCertificationEndDate = this.searchFormData
+          .timeArr[1]
+          ? dayJs(this.searchFormData.timeArr[1]).format("YYYY-MM-DD")
           : "";
         this.deviceDataTime = {
           securityCertificationStartDate:
-            this.searchFormData
-              .securityCertificationStartDate,
+            this.searchFormData.securityCertificationStartDate,
           securityCertificationEndDate:
-            this.searchFormData
-              .securityCertificationEndDate,
+            this.searchFormData.securityCertificationEndDate,
         };
         this.deviceDateR =
-          dayJs(
-            this.searchFormData
-              .securityCertificationStartDate
-          ).format("YYYY年MM月") +
+          dayJs(this.searchFormData.securityCertificationStartDate).format(
+            "YYYY年MM月"
+          ) +
           "-" +
-          dayJs(
-            this.searchFormData
-              .securityCertificationEndDate
-          ).format("YYYY年MM月");
+          dayJs(this.searchFormData.securityCertificationEndDate).format(
+            "YYYY年MM月"
+          );
       }
-      this.tableSpinning = true
+      this.tableSpinning = true;
       getDeviceInfoList({
         ...this.searchFormData,
         ...this.page,
@@ -610,29 +745,28 @@ export default {
               : "--";
             item.securityCertificationCycle =
               item.securityCertificationCycle ||
-                item.securityCertificationCycle == 0
-                ? item.securityCertificationCycle +
-                "年"
+              item.securityCertificationCycle == 0
+                ? item.securityCertificationCycle + "年"
                 : "--";
             // item.equipmentStatusName = item.equipmentStatus == 0 ? '在用' : item.equipmentStatus == 1 ? '停用' : '拆除'securityCertificationCycle
             return item;
           });
           this.page.total = res.data.total;
         })
-        .catch(err => { })
-        .finally(()=>{
-          this.tableSpinning = false
-        })
+        .catch((err) => {})
+        .finally(() => {
+          this.tableSpinning = false;
+        });
       // 获取数据信息
       let apiData = {
         ...this.searchFormData,
-        ...this.deviceDataTime
-      }
+        ...this.deviceDataTime,
+      };
       getDeviceInfoData(apiData)
         .then((res) => {
           this.deviceTypeData = res.data;
         })
-        .catch(err => { })
+        .catch((err) => {});
     },
     // 查询
     iSearch() {
@@ -736,18 +870,16 @@ export default {
       this.modalTitle = "编辑";
       this.addVisible = true;
       this.operationEquipmentId = e.equipmentId;
-      getDeviceDetails({ equipmentId: e.equipmentId }).then(
-        (res) => {
-          this.addForm = res.data;
-          this.$refs.commonSearchItemAdd.corporationChange(
-            res.data.corporationId,
-            res.data.deptId
-          );
-          this.checkedTreeNode = res.data.responsibility
-            ? [res.data.responsibility]
-            : [];
-        }
-      );
+      getDeviceDetails({ equipmentId: e.equipmentId }).then((res) => {
+        this.addForm = res.data;
+        this.$refs.commonSearchItemAdd.corporationChange(
+          res.data.corporationId,
+          res.data.deptId
+        );
+        this.checkedTreeNode = res.data.responsibility
+          ? [res.data.responsibility]
+          : [];
+      });
     },
     //删除设备
     handleDeleteDevice(e) {
@@ -755,16 +887,12 @@ export default {
       this.$antConfirm({
         title: "确定删除设备吗?",
         onOk() {
-          deviceDelete({ equipmentId: e.equipmentId }).then(
-            (res) => {
-              _this.$antMessage.success(
-                "删除成功！"
-              );
-              _this.initData();
-            }
-          );
+          deviceDelete({ equipmentId: e.equipmentId }).then((res) => {
+            _this.$antMessage.success("删除成功！");
+            _this.initData();
+          });
         },
-        onCancel() { },
+        onCancel() {},
       });
     },
     //新增修改
@@ -826,7 +954,9 @@ export default {
     //下载模板
     handleDownloadTemplate() {
       window.open(
-        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/importEquipment.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/importEquipment.xlsx`
+        window.location.host.indexOf("localhost") < 0
+          ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/importEquipment.xlsx`
+          : `${process.env.VUE_APP_API_BASE_URL}file/template/importEquipment.xlsx`
       );
     },
     //计算下次认证时间
@@ -836,14 +966,9 @@ export default {
         this.addForm.securityCertificationDate &&
         this.addForm.securityCertificationCycle
       ) {
-        let Y = this.addForm.securityCertificationDate.slice(
-          0,
-          4
-        );
+        let Y = this.addForm.securityCertificationDate.slice(0, 4);
         let t = this.addForm.securityCertificationDate.slice(4);
-        let sumY =
-          Number(Y) +
-          Number(this.addForm.securityCertificationCycle);
+        let sumY = Number(Y) + Number(this.addForm.securityCertificationCycle);
         this.addForm.nextCertificationDate = sumY + t;
       }
     },
@@ -853,9 +978,7 @@ export default {
       if (this.addForm.securityCertificationCycle) {
         let Y = e.slice(0, 4);
         let t = e.slice(4);
-        let sumY =
-          Number(Y) +
-          Number(this.addForm.securityCertificationCycle);
+        let sumY = Number(Y) + Number(this.addForm.securityCertificationCycle);
         this.addForm.nextCertificationDate = sumY + t;
         this.$forceUpdate();
       }

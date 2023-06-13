@@ -49,7 +49,7 @@
         :components="drag(columns)"
       >
         <div slot="noticeType" slot-scope="record">
-          <span>{{record.noticeType ? typeObj[record.noticeType]?typeObj[record.noticeType] : "--":'--'}}</span>
+          <span>{{record.noticeType | userFilter('notification_announcement_type')}}</span>
         </div>
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="noticePreview(record)">预览</span>
