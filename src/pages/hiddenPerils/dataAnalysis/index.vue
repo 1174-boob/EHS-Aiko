@@ -92,8 +92,8 @@
 
     <SearchTerm>
       <a-form-model layout="inline" :model="formInlineTwoObj" :colon="false">
-        <!-- <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem> -->
-        <CommonDept
+        <CommonSearchItem ref="commonSearchItemTwo" :CommonFormInline="formInlineTwoObj" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <!-- <CommonDept
           ref="commonSearchItemTwo"
           :CommonFormInline="formInlineTwoObj"
           :hasDepartment="true"
@@ -113,7 +113,7 @@
               formInlineTwoObj.corporationId ? '请选择' : '请先选择所属组织'
             "
           ></a-tree-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="月份">
           <el-date-picker v-model="formInlineTwoObj.mouthTime" type="month" placeholder="选择月" class="mouthEl"></el-date-picker>
         </a-form-model-item>
