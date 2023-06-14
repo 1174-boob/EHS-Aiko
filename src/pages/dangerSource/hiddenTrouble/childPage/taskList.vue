@@ -27,56 +27,53 @@
             </div>
           </div>
           <div v-else>
-            <div class="head-l-module">
-              <span class="no-check-person"
-                >检查人：
-                <UploadBtnStyle
-                  :accept="['.png', '.jpg', '.JPGE']"
-                  :maxSize="10"
-                  :limit="1"
-                  @handleSuccess="handleSuccessRefFile"
-                  :showUploadList="false"
-                  :useSlot="true"
-                  :fileLists="fileList"
-                >
-                  <img
-                    v-if="imageUrl"
-                    :src="imageUrl"
-                    alt="avatar"
-                    class="signImg"
-                  />
-                  <div v-else>
-                    <a-button>
-                      <a-icon type="upload" />
-                      上传签名
-                    </a-button>
-                  </div>
-                </UploadBtnStyle>
-                <a-button
-                  v-if="imageUrl"
-                  type="link"
-                  size="small"
-                  class="left-margin"
-                  @click="hadleDeleteFile"
-                  ghost
-                >
-                  删除
-                </a-button>
-              </span>
-              <a-form-model ref="baseInfoData" :model="baseInfoData" :rules="iRules">
-                <a-form-model-item
-                  ref="checkTime"
-                  label="检查时间"
-                  prop="checkTime"
-                >
-                  <a-date-picker
-                    style="width: 100%"
-                    v-model="baseInfoData.checkTime"
-                    placeholder="请选择检查时间"
-                  />
-                </a-form-model-item>
+              <a-form-model ref="baseInfoData" :model="baseInfoData" :rules="iRules" :label-col="labelCol" :wrapper-col="wrapperCol">
+                  <a-form-model-item
+                    ref="checkTime"
+                    label="检查时间"
+                    prop="checkTime"
+                  >
+                    <a-date-picker
+                      v-model="baseInfoData.checkTime"
+                      placeholder="请选择检查时间"
+                    />
+                  </a-form-model-item>
               </a-form-model>
-            </div>
+            <span class="no-check-person"
+              >检查人：
+              <UploadBtnStyle
+                :accept="['.png', '.jpg', '.JPGE']"
+                :maxSize="10"
+                :limit="1"
+                @handleSuccess="handleSuccessRefFile"
+                :showUploadList="false"
+                :useSlot="true"
+                :fileLists="fileList"
+              >
+                <img
+                  v-if="imageUrl"
+                  :src="imageUrl"
+                  alt="avatar"
+                  class="signImg"
+                />
+                <div v-else>
+                  <a-button>
+                    <a-icon type="upload" />
+                    上传签名
+                  </a-button>
+                </div>
+              </UploadBtnStyle>
+              <a-button
+                v-if="imageUrl"
+                type="link"
+                size="small"
+                class="left-margin"
+                @click="hadleDeleteFile"
+                ghost
+              >
+                删除
+              </a-button>
+            </span>
           </div>
         </div>
       </SearchTerm>
@@ -395,6 +392,8 @@ export default {
       iRules: {
         checkTime: [{ required: true, message: "检查日不能为空", trigger: "change" }]
       },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
     };
   },
   computed: {},
@@ -562,11 +561,11 @@ export default {
 }
 // 任务头部盒子
 .head-module {
-  padding-bottom: 15px;
+  // padding-bottom: 15px;
 }
 .head-module > div {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 .head-l-module {
@@ -665,6 +664,7 @@ export default {
 
 .no-check-person {
   width: 310px;
+  padding-bottom: 20px;
 }
 .signImg {
   width: auto;
