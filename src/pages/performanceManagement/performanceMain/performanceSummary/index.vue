@@ -164,42 +164,39 @@ export default {
         {
           title: '是否有否决性指标',
           scopedSlots: { customRender: 'isNoIndex' },
-          width: 200,
         },
         {
           title: '安全管理扣分分值',
           dataIndex: 'securityDeductScore',
-          width: 200,
+          minWidth: 180,
         },
         {
           title: '消防管理扣分分值',
           dataIndex: 'controlDeductScore',
-          width: 200,
+          minWidth: 180,
         },
         {
           title: '环境管理扣分分值',
           dataIndex: 'environmentDeductScore',
-          width: 200,
+          minWidth: 180,
         },
         {
           title: '职业健康管理扣分分值',
           dataIndex: 'healthyDeductScore',
-          width: 200,
+          minWidth: 180,
         },
         {
           title: '其他管理事项扣分分值',
           dataIndex: 'otherDeductScore',
-          width: 200,
+          minWidth: 150,
         },
         {
           title: '总扣分值',
           dataIndex: 'deductDeductScore',
-          width: 200,
         },
         {
           title: '总得分',
           dataIndex: 'score',
-          width: 200,
         },
         {
           title: '分档',
