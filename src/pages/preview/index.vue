@@ -308,7 +308,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "隐患量",
+            name: "作业数量",
             alignTicks: true
           },
           {
