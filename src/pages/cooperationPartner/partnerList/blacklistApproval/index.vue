@@ -5,7 +5,7 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonDept ref="commonDept" :CommonFormInline="formInline" :hasDepartment="true" @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
         <a-form-model-item label="企业全称">
-          <a-input v-model="formInline.companyName" placeholder="请输入企业名称"></a-input>
+          <a-input v-model="formInline.supplierName" placeholder="请输入企业名称"></a-input>
         </a-form-model-item>
         <a-form-model-item label="企业简称">
           <a-input v-model="formInline.companyAbbreviation" placeholder="请输入企业简称"></a-input>
@@ -98,12 +98,11 @@ export default {
       },
       tableList: [],
       userId: "",
-      companyName: "",
+      supplierName: "",
       treeData: [],
     }
   },
   created() {
-    this.$set(this.formInline, "companyName", this.$route.query.companyName);
     this.initConfigPage()
     this.getTableList();
   },
@@ -151,11 +150,19 @@ export default {
     },
     // 变岗审批列表
     getTableList() {
+      if (this.$route.query.approvalStatus) {
+        this.formInline.supplierName = this.$route.query.companyName;
+        this.formInline.approvalStatus = this.$route.query.approvalStatus
+      }
       let apiData = {
         pageNo: this.page.pageNo,
         pageSize: this.page.pageSize,
         // draftStatus: 2,
-        ...this.formInline,
+        approvalStatus:this.formInline.approvalStatus ? this.formInline.approvalStatus:'',
+        corporationId:this.formInline.corporationId,
+        corporationName:this.formInline.corporationName,
+        companyAbbreviation:this.formInline.companyAbbreviation,
+        supplierName:this.formInline.supplierName ? this.formInline.supplierName :'',
         startTime: this.formInline.createDate ? this.formInline.createDate[0] : "",
         endTime: this.formInline.createDate ? this.formInline.createDate[1] : "",
       }
@@ -197,6 +204,8 @@ export default {
         total: 0,
       }
       this.formInline = {};
+      this.$route.query.companyName = '',
+      this.$route.query.approvalStatus = '',
       this.getTableList()
     }, 250, { leading: true, trailing: false }),
     // 按钮-详情

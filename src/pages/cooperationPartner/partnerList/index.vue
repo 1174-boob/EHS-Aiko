@@ -27,6 +27,7 @@
                 <span class="color-0067cc cursor-pointer" @click="action(record,1)">查看</span>
                 <span class="color-0067cc cursor-pointer" @click="actionDispatchDetail(record)">派工</span>
                 <span class="color-0067cc cursor-pointer" @click="actionPunishmentRecord1(record, 'companyCode')">处罚记录</span>
+                <span class="color-0067cc cursor-pointer" v-if="record.flag == true" @click="jumpApprove(record)">审批记录</span>
                 <span class="color-0067cc cursor-pointer" v-if="record.approvalStatus == 1" @click="actionApprovalRecord(record)">审批记录</span>
                 <span class="color-ff4d4f cursor-pointer" @click="delDataList(record)">删除</span>
               </div>
@@ -237,6 +238,11 @@ export default {
         companyId = record.companyCode;
       }
       this.$router.push({ path: '/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/partnerDetail', query: { id: record.invitationId, partner, companyId, corporationId: record.corporationId } })
+    },
+    // 审批记录按钮 跳转到黑名单审批
+    jumpApprove(record){
+      this.$router.push({ path: '/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/blacklistApprovalList', 
+      query: { companyName: record.companyName, approvalStatus: "2" } })
     },
     // 派工
     actionDispatch(record) {
