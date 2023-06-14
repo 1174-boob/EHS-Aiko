@@ -4,7 +4,7 @@
     <PageTitle>数据统计分析</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <CommonSearchItem ref="commonSearchItem" @corporationChange="getSubjectlist" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
         <!-- <CommonDept
           ref="commonSearchItem"
           :CommonFormInline="formInline"
@@ -245,7 +245,8 @@ export default {
     getSubjectlist() {
       let apiData = {
         pageNo: "",
-        pageSize: ""
+        pageSize: "",
+        corporationId:this.formInline.corporationId
       }
       GetSubjectlist(apiData)
         .then((res) => {
