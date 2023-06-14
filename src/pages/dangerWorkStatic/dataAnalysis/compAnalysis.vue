@@ -5,7 +5,8 @@
     <div class="line_Div"></div>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <CommonDept
+        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <!-- <CommonDept
           ref="commonSearchItem"
           :CommonFormInline="formInline"
           :hasDepartment="true"
@@ -23,7 +24,7 @@
             :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
             :placeholder="formInline.corporationId?'请选择': '请先选择所属组织'"
           ></a-tree-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="月份">
           <a-month-picker v-model="formInline.mouthTime" :allowClear="false" valueFormat="YYYY-MM" class="search-range-picker" format="YYYY-MM" style="width: 200px" :placeholder="'请选择'" />
         </a-form-model-item>
