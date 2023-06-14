@@ -4,7 +4,8 @@
     <PageTitle>数据统计分析</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <CommonDept
+        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <!-- <CommonDept
           ref="commonSearchItem"
           :CommonFormInline="formInline"
           :hasDepartment="true"
@@ -22,7 +23,7 @@
             :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
             :placeholder="formInline.corporationId?'请选择': '请先选择所属组织'"
           ></a-tree-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="创建时间">
           <a-range-picker v-model="formInline.auditTime" valueFormat="YYYY-MM-DD" class="search-range-picker" format="YYYY-MM-DD" style="width: 200px" :placeholder="['开始时间','结束时间']" />
         </a-form-model-item>
