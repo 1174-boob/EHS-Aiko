@@ -27,7 +27,7 @@
               <a-select-option v-for="item in accidentType" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item label="人员伤害">
+          <!-- <a-form-model-item label="人员伤害">
             <a-select v-model="formInline.accidentLevelHurt" placeholder="请选择事故类型">
               <a-select-option v-for="item in personalInjury" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
             </a-select>
@@ -35,6 +35,11 @@
           <a-form-model-item label="财产损失">
             <a-select v-model="formInline.accidentLevelLoss" placeholder="请选择事故类型">
               <a-select-option v-for="item in propertyLoss" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+            </a-select>
+          </a-form-model-item> -->
+          <a-form-model-item label="事故等级">
+            <a-select v-model="formInline.accidentLevel" placeholder="请选择事故等级">
+              <a-select-option v-for="item in accidentLevelList" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item label="审核状态">
@@ -72,7 +77,7 @@
             {{getMappingValue(accidentType, "dictValue", record.accidentType).dictLabel}}
           </div>
           <div slot="accidentLevel" slot-scope="record">
-            {{record.accidentLevelHurt != 'person_none' ? getMappingValue(personalInjury, "dictValue", record.accidentLevelHurt).dictLabel : getMappingValue(propertyLoss, "dictValue", record.accidentLevelLoss).dictLabel}}
+            {{getMappingValue(accidentLevelList, "dictValue", record.accidentLevel).dictLabel}}
           </div>
           <div slot="createUser" slot-scope="record">
             {{record.draftPersonName ? (record.draftPersonName + "/" + record.draftPersonJobNumber) : record.draftPersonJobNumber}}
@@ -123,8 +128,13 @@ export default {
             dataIndex: 'accidentLocation',
             width: 200
           },
+          // {
+          //   title: '事故级别',
+          //   scopedSlots: { customRender: 'accidentLevel' },
+          //   width: 200
+          // },
           {
-            title: '事故级别',
+            title: '事故等级',
             scopedSlots: { customRender: 'accidentLevel' },
             width: 200
           },
@@ -176,6 +186,12 @@ export default {
         dangerousPostAll: [],
         userId: "",
         treeData: [],
+        accidentLevelList: [
+          { dictLabel: '轻微事故', dictValue: '1' },
+          { dictLabel: '一般事故', dictValue: '2' },
+          { dictLabel: '严重事故', dictValue: '3' },
+          { dictLabel: '重大事故', dictValue: '4' },
+        ]
       }
     },
     created() {
