@@ -21,11 +21,11 @@
             <EmissionConcent ref="emissionConcent" :formInline="formInline" />
           </div>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="排放值速率数据">
+        <!-- <a-tab-pane key="2" tab="排放值速率数据">
           <div v-if="activeKey=='2'">
             <EmissionRate ref="emissionRate" :formInline="formInline" />
           </div>
-        </a-tab-pane>
+        </a-tab-pane> -->
       </a-tabs>
     </div>
   </div>

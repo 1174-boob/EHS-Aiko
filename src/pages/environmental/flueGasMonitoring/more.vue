@@ -40,7 +40,7 @@
               </vxe-table>
             </CommonTable>
           </a-tab-pane>
-          <a-tab-pane key="2" tab="速率监测值(kg/h)">
+          <!-- <a-tab-pane key="2" tab="速率监测值(kg/h)">
             <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
               <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" :cell-style="cellStyle" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
                 <vxe-column field="nowTime" :min-width="120" title="监控时间"></vxe-column>
@@ -120,7 +120,7 @@
                 </template>
               </vxe-table>
             </CommonTable>
-          </a-tab-pane>
+          </a-tab-pane> -->
         </a-tabs>
       </div>
     </a-spin>
