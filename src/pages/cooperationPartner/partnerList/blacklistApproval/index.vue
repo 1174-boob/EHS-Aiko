@@ -64,9 +64,9 @@
           <template #default="{ row }">
             <div class="vex-table-btn">
               <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(row)">查看</span>
-              <span v-if="row.approvalStatus == 3" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(row)">编辑</span>
+              <span v-if="row.approvalStatus == 3 || row.approvalStatus == 4" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(row)">编辑</span>
               <span v-if="row.handle && row.handle.includes(userId)" v-show="row.approvalStatus == 1" class="color-0067cc cursor-pointer m-r-15" @click="toResolve(row)">处理</span>
-              <span v-if="row.approvalStatus == 3 || row.approvalStatus == 2" class="color-0067cc cursor-pointer" @click="actionDel(row)">删除</span>
+              <span v-if="row.approvalStatus == 3 || row.approvalStatus == 2 || row.approvalStatus == 4" class="color-0067cc cursor-pointer" @click="actionDel(row)">删除</span>
             </div>
           </template>
         </vxe-column>
