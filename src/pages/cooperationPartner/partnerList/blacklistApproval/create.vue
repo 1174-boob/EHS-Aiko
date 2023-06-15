@@ -109,6 +109,7 @@ export default {
       labelCol: { style: { width: '150px' } },
       wrapperCol: { style: { width: 'calc(100% - 150px)' } },
       iForm: {},
+      newIform: {},
       rules: {
         relieveReason: [
           { required: true, message: "移除黑名单申请原因不能为空", trigger: "blur" },
@@ -184,6 +185,7 @@ export default {
         blackBeforeAddDetail(apiData)
           .then(res => {
             let resData = res.data || {};
+            this.newIform = res.data || {};
             this.iForm = {
               draftPersonId: this.userInfo.userId,
               email: this.userInfo.email,
@@ -294,6 +296,8 @@ export default {
       let apiData = {
         ...this.iForm
       }
+      apiData.deptName = this.newIform.departmentName,
+      apiData.deptId = this.newIform.departmentId,
       apiData.draftStatus = 2;
       return promiseFn(apiData)
         .then(res => {
