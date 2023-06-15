@@ -52,9 +52,7 @@
         <vxe-column field="classificationName" :min-width="120" title="预警分类"></vxe-column>
         <vxe-column field="warningTime" :min-width="150" title="预警时间"></vxe-column>
         <vxe-column field="nowConcentration" :min-width="140" title="实时浓度(mg/m3)"></vxe-column>
-        <vxe-column field="nowRate" :min-width="130" title="实时速率(kg/h)"></vxe-column>
         <vxe-column field="alarmConcentration" :min-width="150" title="浓度预警值(mg/m3)"></vxe-column>
-        <vxe-column field="alarmRate" :min-width="120" title="速率预警值"></vxe-column>
         <vxe-column field="relieveTime" :min-width="150" title="解除时间"></vxe-column>
         <vxe-column field="relieveValue" :min-width="120" title="解除值"></vxe-column>
         <vxe-column field="alarmDuration" :min-width="150" title="报警持续时间(小时)"></vxe-column>

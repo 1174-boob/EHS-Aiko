@@ -68,36 +68,36 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="标准排放值" required>
-            <div class="wrapper-content">
+            <div class="wrapper-contentNew">
               <span>浓度</span>
               <a-form-model-item class="inner-content" prop="standardConcentration">
                 <a-input v-model="gasForm.standardConcentration" placeholder="请输入浓度" allowClear :disabled="disabled"></a-input>
               </a-form-model-item>
               <span>(mg/m3)</span>
             </div>
-            <div class="wrapper-content">
+            <!-- <div class="wrapper-content">
               <span>速率</span>
               <a-form-model-item class="inner-content" prop="standardRate">
                 <a-input v-model="gasForm.standardRate" placeholder="请输入浓度" allowClear :disabled="disabled"></a-input>
               </a-form-model-item>
               <span>(kg/h)</span>
-            </div>
+            </div> -->
           </a-form-model-item>
           <a-form-model-item class="flex" label="环评中要求排放标准值" required>
-            <div class="wrapper-content">
+            <div class="wrapper-contentNew">
               <span>浓度</span>
               <a-form-model-item class="inner-content" prop="requireConcentration">
                 <a-input v-model="gasForm.requireConcentration" placeholder="请输入浓度" allowClear :disabled="disabled"></a-input>
               </a-form-model-item>
               <span>(mg/m3)</span>
             </div>
-            <div class="wrapper-content">
+            <!-- <div class="wrapper-content">
               <span>速率</span>
               <a-form-model-item class="inner-content" prop="requireRate">
                 <a-input v-model="gasForm.requireRate" placeholder="请输入浓度" allowClear :disabled="disabled"></a-input>
               </a-form-model-item>
               <span>(kg/h)</span>
-            </div>
+            </div> -->
           </a-form-model-item>
           <a-form-model-item class="flex" label="恒值报警时间" required>
             <div class="wrapper-content">
@@ -248,10 +248,10 @@ export default {
       gasRules: {
         instrumentPollutantRelId: [{ required: true, message: "不能为空", trigger: ['blur', 'change'] },],
         standardConcentration: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
-        standardRate: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
+        // standardRate: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
         stackHeight: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
         requireConcentration: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
-        requireRate: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
+        // requireRate: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
         constantAlarmTime: [{ required: true, message: "不能为空", trigger: ['blur', 'change'] },],
       },
       waterRules: {
@@ -617,6 +617,13 @@ export default {
 .wrapper-content {
   display: inline-block;
   width: 50%;
+  .inner-content {
+    width: 50%;
+  }
+}
+.wrapper-contentNew {
+  display: inline-block;
+  width: 100%;
   .inner-content {
     width: 50%;
   }
