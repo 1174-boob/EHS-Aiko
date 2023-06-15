@@ -12,6 +12,9 @@
               <a-form-model-item class="flex text-form-item" label="企业全称">
                 <div>{{iForm.supplierName || "--"}}</div>
               </a-form-model-item>
+              <a-form-model-item class="flex text-form-item" label="起草人部门">
+                <div>{{iForm.departmentName || "--"}}</div>
+              </a-form-model-item>
               <a-form-model-item class="flex text-form-item" label="联系电话">
                 <div>{{iForm.phone || "--"}}</div>
               </a-form-model-item>
@@ -46,7 +49,7 @@
                 @corporationChange="corporationChange"
                 @corporationDeptChange="corporationDeptChange"
               ></CommonDept>
-              <a-form-model-item class="flex" label="起草人部门" prop="deptId">
+              <!-- <a-form-model-item class="flex" label="起草人部门" prop="deptId">
                 <a-tree-select
                   v-model="iForm.deptId"
                   style="width: 100%"
@@ -58,7 +61,7 @@
                   tree-default-expand-all
                   @change="deptChange"
                 ></a-tree-select>
-              </a-form-model-item>
+              </a-form-model-item> -->
               <a-form-model-item class="flex" ref="relieveReason" label="移除黑名单申请原因" prop="relieveReason">
                 <a-textarea :disabled="isResolve || isView" v-model.trim="iForm.relieveReason" :maxLength="50" placeholder="请输入移除黑名单申请原因"></a-textarea>
               </a-form-model-item>
@@ -110,9 +113,9 @@ export default {
         relieveReason: [
           { required: true, message: "移除黑名单申请原因不能为空", trigger: "blur" },
         ],
-        deptId: [
-          { required: true, message: "起草人部门不能为空", trigger: "change" },
-        ],
+        // deptId: [
+        //   { required: true, message: "起草人部门不能为空", trigger: "change" },
+        // ],
         email: [
           { required: true, message: "邮箱不能为空", trigger: "blur" },
         ],
@@ -164,7 +167,7 @@ export default {
   methods: {
     getDictTarget,
     corporationChange(a, b) {
-      this.$set(this.iForm, "deptId", undefined);
+      // this.$set(this.iForm, "deptId", undefined);
     },
     corporationDeptChange(treeData) {
       this.treeData = treeData;
