@@ -945,7 +945,7 @@ export const getCandidateFileList = params => post(`${serviceNameList.course}/ap
 // 教育培训-考生档案-详情-用户信息-内部
 export const getCandidateFileDetailUserInfoApi = params => get(`${serviceNameList.course}/api/push/getUserInfo`, params);
 // 教育培训-考生档案-详情-用户信息-外部
-export const getCandidateFileDetailOutUserInfoApi = params => post(`${serviceNameList.danger}/api/ehs/invitation/candidateUserInfo`, params);
+export const getCandidateFileDetailOutUserInfoApi = params => post(`ehs-customer/api/ehs/invitation/candidateUserInfo`, params);
 // 教育培训-考生档案-详情-培训详情
 export const getCandidateFileDetailCourse = params => post(`${serviceNameList.course}/api/push/candidate/course/list/page`, params);
 // 教育培训-考生档案-详情-考试情况
