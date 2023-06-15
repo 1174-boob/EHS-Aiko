@@ -331,7 +331,7 @@ export default {
         .then(res => {
           this.$antMessage.success("保存成功");
           this.$router.push({
-            path: '/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/blacklistDraft'
+            path: '/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/blacklistApprovalList'
           })
         })
         .catch(err => { })
