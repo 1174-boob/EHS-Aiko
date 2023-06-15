@@ -487,7 +487,7 @@ export default {
         obj.series[0].data = [];
         let chartData = res.data || [];
         for (let i = 0; i < chartData.length; i++) {
-          obj.xAxis.data.push(this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", chartData[i].xdata).orgAbbrName)
+          obj.xAxis.data.push(this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", chartData[i].xdata).orgName)
           obj.series[0].data.push(chartData[i].list && chartData[i].list[0] && chartData[i].list[0].value)
         }
         // obj.xAxis.data = res.data || [];
