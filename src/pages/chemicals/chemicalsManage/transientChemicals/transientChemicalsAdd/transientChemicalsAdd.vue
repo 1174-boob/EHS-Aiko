@@ -420,6 +420,12 @@ export default {
     // 流程key
     this.DEPLOYID = this.getChemicalDictValue("approvalType", 'TEMPAPPROVAL');
     this.userInfo = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.iFrom.deptId = adminDeptId ? adminDeptId: ''
+      this.$set(this.iFrom, 'deptName', adminDeptName ? adminDeptName : '');
+    }
     this.userId = this.userInfo.userId;
   },
   computed: {
