@@ -1,8 +1,5 @@
 <template>
   <HasFixedBottomWrapper>
-    <div class="tip">
-      <i>!</i>请您遵守国家相关规定，切勿上传低俗色情、暴力恐怖、谣言诈骗、侵权盗版等相关内容，工业互联网平台保有依据国家规定及平台规则进行处理的权利。
-    </div>
     <div class="m-t-20 border-b-e7">
       <PageTitle>基本信息</PageTitle>
     </div>
