@@ -43,7 +43,7 @@
                 </vxe-table>
               </CommonTable>
             </a-tab-pane>
-            <a-tab-pane key="w01010" tab="水温">
+            <!-- <a-tab-pane key="w01010" tab="水温">
               <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
                 <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
                   <vxe-column field="nowTime" :min-width="150" title="监控时间"></vxe-column>
@@ -55,7 +55,7 @@
                   </template>
                 </vxe-table>
               </CommonTable>
-            </a-tab-pane>
+            </a-tab-pane> -->
           </a-tabs>
         </template>
 
@@ -97,7 +97,7 @@
                 </vxe-table>
               </CommonTable>
             </a-tab-pane>
-            <a-tab-pane key="w01010" tab="水温">
+            <!-- <a-tab-pane key="w01010" tab="水温">
               <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
                 <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
                   <vxe-column field="nowTime" :min-width="150" title="监控时间"></vxe-column>
@@ -109,7 +109,7 @@
                   </template>
                 </vxe-table>
               </CommonTable>
-            </a-tab-pane>
+            </a-tab-pane> -->
           </a-tabs>
         </template>
       </div>
