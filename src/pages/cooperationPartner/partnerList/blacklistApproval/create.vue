@@ -13,7 +13,8 @@
                 <div>{{iForm.supplierName || "--"}}</div>
               </a-form-model-item>
               <a-form-model-item class="flex text-form-item" label="起草人部门">
-                <div>{{iForm.departmentName || "--"}}</div>
+                <div v-if="isCreate || isEdit">{{userInfo.adminDeptName ? userInfo.adminDeptName : "--"}}</div>
+                <div v-else>{{ iForm.deptName ? iForm.deptName : "--"}}</div>
               </a-form-model-item>
               <a-form-model-item class="flex text-form-item" label="联系电话">
                 <div>{{iForm.phone || "--"}}</div>
@@ -21,7 +22,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item class="flex text-form-item" label="起草人">
-                <div v-if="isCreate">{{userInfo.jobNumber ? userInfo.name + '/' + userInfo.jobNumber : userInfo.name || "--"}}</div>
+                <div v-if="isCreate || isEdit">{{userInfo.jobNumber ? userInfo.name + '/' + userInfo.jobNumber : userInfo.name || "--"}}</div>
                 <div v-else>{{draftPersonMsg}}</div>
               </a-form-model-item>
               <a-form-model-item class="flex text-form-item" label="企业简称">
@@ -255,7 +256,7 @@ export default {
             list[i].endTime = list[i].handerTime;
           }
           if (idArr.length >= 1) {
-            return this.getUserAndJobNumber([...new Set(idArr)])
+            return this.getUserAndJobNumber([...new Set(idArr),this.iForm.draftPersonId])
               .then(res => { //全局方法
                 let obj = res || {};
                 if (this.iForm.draftPersonId && obj[this.iForm.draftPersonId]) {

@@ -673,6 +673,12 @@ export default {
     },
   },
   created() {
+    if(sessionStorage.getItem("zconsole_userInfo")) {
+      let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.addForm.deptId = adminDeptId ? adminDeptId: ''
+      this.addForm.deptName = adminDeptName ? adminDeptName: ''
+    }
     this.setRouterCode("deviceInfo");
     this.initConfigPage();
     this.initData();

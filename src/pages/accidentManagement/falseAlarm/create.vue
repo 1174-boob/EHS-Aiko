@@ -285,7 +285,13 @@ export default {
   created() {
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
-      this.$set(this.iForm, 'deptId', adminDeptId ? [adminDeptId] : []);
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      // this.iForm.deptId = adminDeptId ?[adminDeptId] : []
+      // this.$set(this.iFrom, 'deptId', adminDeptId ? adminDeptId : []);
+      // this.$set(this.iFrom, 'deptName', adminDeptName ? adminDeptName : []);
+      this.iFrom.deptId = adminDeptId ? adminDeptId: ''
+      this.iFrom.deptName = adminDeptName ? adminDeptName: ''
+      console.log(this.iFrom.deptId,this.iFrom.deptName,'xxx');
     }
     this.setRouterCode('falseAlarm')
     this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
@@ -349,7 +355,7 @@ export default {
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
       this.$set(this.iFrom, 'responseDeptId', undefined)
-      this.$set(this.iFrom, 'deptId', undefined)
+      // this.$set(this.iFrom, 'deptId', undefined)
     },
     deptFormValidator(val) {
       formValidator.formItemValidate(this, 'applicationDepartmentId', 'ruleForm')
@@ -381,10 +387,10 @@ export default {
       this.iFrom.workNum = user.jobNumber
       this.iFrom.applicationDepartmentId = user.adminDeptId || undefined
       if (this.getCommonAddOrgnizeList && this.getCommonAddOrgnizeList.length > 0) {
-        this.iFrom.corporationId = this.getCommonAddOrgnizeList[0].id;
+        this.iFrom.corporationId = this.getCommonAddOrgnizeList[0].orgId;
         // this.iFrom.deptId = user.adminDeptId || undefined
         // this.iFrom.deptName = user.adminDeptName || undefined
-        this.$refs.commonSearchItem.corporationChange(this.getCommonAddOrgnizeList[0].id, user.adminDeptId)
+        this.$refs.commonSearchItem.corporationChange(this.getCommonAddOrgnizeList[0].orgId, user.adminDeptId)
       }
       this.iFrom = { ...this.iFrom }
     },

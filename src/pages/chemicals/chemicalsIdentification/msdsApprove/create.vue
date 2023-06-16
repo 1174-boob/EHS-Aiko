@@ -321,10 +321,10 @@ export default {
       this.form.applicantId = user.userId
       this.form.applicationDepartmentId = user.adminDeptId || undefined
       if (this.getCommonAddOrgnizeList && this.getCommonAddOrgnizeList.length > 0) {
-        this.form.corporationId = this.getCommonAddOrgnizeList[0].id;
+        this.form.corporationId = this.getCommonAddOrgnizeList[0].orgId;
         this.form.deptId = user.adminDeptId || undefined
         this.form.deptName = user.adminDeptName || undefined
-        this.$refs.commonSearchItem.corporationChange(this.getCommonAddOrgnizeList[0].id, user.adminDeptId)
+        this.$refs.commonSearchItem.corporationChange(this.getCommonAddOrgnizeList[0].orgId, user.adminDeptId)
       }
       this.form = { ...this.form }
     },

@@ -170,7 +170,7 @@ export default {
   data() {
     return {
       emForm: {
-        draftDepartCode: undefined,
+        // draftDepartCode: undefined,
         planTime: null,
       },
       portalStatus: "",
@@ -279,9 +279,16 @@ export default {
   },
 
   created() {
+    // if(sessionStorage.getItem("zconsole_userInfo")) {
+    //   let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+    //   this.$set(this.emForm, 'draftDepartCode', adminDeptId ? [adminDeptId] : []);
+    // }
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
-      this.$set(this.emForm, 'draftDepartCode', adminDeptId ? [adminDeptId] : []);
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.emForm.draftDepartCode = adminDeptId ? adminDeptId: ''
+      this.$set(this.emForm, 'draftDepartName', adminDeptName ? adminDeptName : '');
+      console.log(this.emForm.draftDepartCode,'xxx');
     }
     const user = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
     this.emForm.draftName = user.name ? user.name : '';
@@ -393,10 +400,10 @@ export default {
     },
     // 组织改变
     corporationChange(val, deptId) {
-      this.$set(this.emForm, 'draftDepartCode', undefined);
+      // this.$set(this.emForm, 'draftDepartCode', undefined);
       this.$set(this.emForm, 'planDepartCode', undefined);
       this.$set(this.emForm, 'innerDepartCode', undefined);
-      this.emForm.draftDepartName = undefined;
+      // this.emForm.draftDepartName = undefined;
       this.emForm.planDepartName = undefined;
       this.emForm.innerDepartName = undefined;
     },
