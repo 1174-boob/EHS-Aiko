@@ -148,7 +148,7 @@ export default {
       tableDataList: [],
       rules: {
         reportDate: [
-          { required: true, message: '请选择月份', trigger: ['change', 'blur'] }
+          { required: true, message: '请选择月份', trigger: ['change'] }
         ]
       }
     }
