@@ -85,7 +85,7 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 17 },
       emForm: {
-        draftDepartcode: undefined,
+        // draftDepartcode: undefined,
         eplanDepartcode: undefined,
       },
       loading: false,
@@ -122,9 +122,15 @@ export default {
     }
   },
   created() {
+    // if(sessionStorage.getItem("zconsole_userInfo")) {
+    //   let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
+    //   this.$set(this.emForm, 'draftDepartcode', adminDeptId ? [adminDeptId] : []);
+    // }
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
-      this.$set(this.emForm, 'draftDepartcode', adminDeptId ? [adminDeptId] : []);
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.$set(this.emForm, 'draftDepartcode', adminDeptId ? adminDeptId : '');
+      this.$set(this.emForm, 'draftDepart', adminDeptName ? adminDeptName : '');
     }
     this.setRouterCode("emergencyDatabase");
     const user = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user;
@@ -178,9 +184,9 @@ export default {
     },
     // 组织改变
     corporationChange(val, deptId) {
-      this.emForm.draftDepartcode = undefined;
+      // this.emForm.draftDepartcode = undefined;
       this.emForm.eplanDepartcode = undefined;
-      this.emForm.draftDepart = '';
+      // this.emForm.draftDepart = '';
       this.emForm.eplanDepart = '';
     },
     draftChange(id,name) {

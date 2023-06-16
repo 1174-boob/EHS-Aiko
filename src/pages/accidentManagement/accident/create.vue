@@ -509,7 +509,11 @@ export default {
   async created() {
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
-      this.$set(this.iForm, 'deptId', adminDeptId ? [adminDeptId] : []);
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.iForm.deptId = adminDeptId ? adminDeptId: ''
+      // this.iForm.deptName = adminDeptName ? adminDeptName: ''
+      this.$set(this.iForm, 'deptName', adminDeptName ? adminDeptName : '');
+      console.log(this.iForm.deptId,this.iForm.deptName,'xxx');
     }
     this.accidentType = this.getDictItemList("accident_type");
     this.personalInjury = this.getDictItemList("accident_level_person");
@@ -562,8 +566,8 @@ export default {
       this.$set(this.iForm, "dutyDeptIdList", undefined);
       this.$set(this.iForm, "corporationDeptId", b);
       this.$set(this.iForm, "dutyDeptNameList", undefined);
-      this.$set(this.iForm, "deptId", undefined);
-      this.$set(this.iForm, "deptIdName", undefined);
+      // this.$set(this.iForm, "deptId", undefined);
+      // this.$set(this.iForm, "deptIdName", undefined);
     },
     corporationDeptChange(treeData) {
       this.treeData = treeData;
