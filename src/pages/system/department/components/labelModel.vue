@@ -14,7 +14,6 @@
                   zIndex: 9999,
                 }"
                 tree-checkable
-                @select="onSearchSelect" 
                 placeholder="请选择标签组"
                 :tree-data="treeData"
                 :replace-fields="{ title: 'labelItemName', key: 'labelItemId', value: 'labelItemId' , children: 'labelItemList' }"
@@ -80,6 +79,8 @@ export default {
       // 条件列表
       labelItemList: [],
       userLabelList:[],
+      // 传的List
+      userLabelResultList:[],
       userDeptRelsListInit: [
         {
           // // guid: 1,
@@ -114,22 +115,32 @@ export default {
     // },
   },
   methods: {
-    getSelectLabel(data){
-      const dataLabel = JSON.parse(data)
-      console.log(dataLabel,'dataLabel');
-      // 如果被替换的标签与当前选中的标签labelId相同 则替换
-      // 如果被替换的标签与当前选中的标签labelId不同或者为空 则push
-      if(dataLabel.labelId == this.userDeptRelsListInit.labelId){
-        // this.userDeptRelsListInit = dataLabel
-      } else if(dataLabel.labelId != this.userDeptRelsListInit.labelId){
-        this.userDeptRelsListInit.push(dataLabel)
+    findDataById(id, treeData) {
+      for (let i = 0; i < treeData.length; i++) {
+        const curNode = treeData[i];
+        if (curNode.labelItemId === id) {
+          return curNode;
+        } else if (curNode.labelItemList) {
+          const found = this.findDataById(id, curNode.labelItemList);
+          if (found) {
+            return found;
+          }
+        }
       }
-
+      return null;
     },
-    onSearchSelect(value, node, extra){
-      console.log(value,'value');
-      console.log(node,'node');
-      console.log(extra,'extra');
+    fun(){
+      this.userLabelResultList = []
+      const selectedIds = this.userLabelList;
+      const result = [];
+      for (let i = 0; i < selectedIds.length; i++) {
+        const curData = this.findDataById(selectedIds[i], this.treeData);
+        if (curData) {
+          result.push(curData);
+        }
+        this.userLabelResultList = result
+        console.log(result,'resultresultresult');
+      }
     },
     // 初始化弹窗数据
     initDepAndPosModel() {
@@ -153,7 +164,7 @@ export default {
           // dataObj.deptLabelDtos.forEach(item => {
           //   item.guid = this.guid()
           // })
-          this.userDeptRelsList = dataObj.deptLabelDtos.length ? dataObj.deptLabelDtos : cloneDeep(this.userDeptRelsListInit)
+          this.userLabelList = dataObj.deptLabelDtos.length ? dataObj.deptLabelDtos.map(item => item.labelItemId) : []
           return Promise.resolve()
         })
         .catch((err) => {
@@ -182,20 +193,19 @@ export default {
     // 选择字段弹框-确定
     submitBtn() {
       console.log(this.userLabelList, 'ccc')
-
-      return
+      this.fun()
       this.userDeptRelsList.forEach(item => {
         item.deptId = this.labelModelData.deptId
       })
       let apiData = {
         deptId: this.labelModelData.deptId,
-        deptLabelRels: this.userLabelList
+        deptLabelRels: this.userLabelResultList
       }
-      console.log('apiData',apiData);
-      // return
+      console.log('apiData.deptLabelRels',apiData.deptLabelRels);
       saveDeptAndGroupApi(apiData)
         .then(res => {
           this.$message.success("提交成功");
+          this.userLabelList = []
           this.$emit("getTableList");
           this.closeModel();
         })

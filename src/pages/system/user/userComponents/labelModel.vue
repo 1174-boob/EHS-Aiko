@@ -4,31 +4,21 @@
       <a-spin :spinning="spinning" wrapperClassName="a-spin">
         <div class="filter-form-box">
           <div class="filter-form-tips">分配标签</div>
-          <a-form-model v-for="(item,index) in userDeptRelsList" :key="item.guid" ref="filterForm" class="filter-form" :model="item" :rules="rulesAuth" layout="inline">
-            <a-form-model-item ref="labelId" prop="labelId" class="filter-form-item filter-form-left">
+          <a-form-model ref="filterForm" class="filter-form" :model="formData" :rules="rulesAuth" layout="inline">
+            <a-form-model-item ref="userLabelList" prop="userLabelList" class="filter-form-item filter-form-left">
               <a-tree-select
-                v-model="item.labelId"
+                v-model="userLabelList"
                 :dropdown-style="{
                   maxHeight: '400px',
                   overflow: 'auto',
                   zIndex: 9999,
                 }"
-                allow-clear
-                @select="onSearchSelect" 
+                tree-checkable
                 placeholder="请选择标签组"
                 :tree-data="treeData"
-                :replace-fields="{ title: 'labelName', key: 'labelId', value: 'labelId' }"
+                :replace-fields="{ title: 'labelItemName', key: 'labelItemId', value: 'labelItemId' , children: 'labelItemList' }"
               ></a-tree-select>
             </a-form-model-item>
-            <a-form-model-item ref="labelItemId" prop="labelItemId" class="filter-form-item filter-form-right">
-              <a-select v-model="item.labelItemId" allow-clear placeholder="请选择标签">
-                <a-select-option v-for="item in labelItemList" :key="item.labelItemId" :value="item.labelItemId">{{ item.labelItemName }}</a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <div class="filter-form-btn-box">
-              <img class="btn-icon add-btn" @click="addUserDeptRels" v-if="index == userDeptRelsList.length-1" src="@/assets/depAndPosModel/add-icon.svg" />
-              <img class="btn-icon btn-rm" v-if="userDeptRelsList.length > 1" @click="rmUserDeptRels(item)" src="@/assets/depAndPosModel/rm-icon.svg" />
-            </div>
           </a-form-model>
         </div>
       </a-spin>
@@ -78,30 +68,31 @@ export default {
   data() {
     return {
       spinning: false,
-       // 在子组件中定义一个 data 属性
-      treeData: [],
       loading: false,
+      // 在子组件中定义一个 data 属性
+      treeData: [],
       rulesAuth: {
         labelId: [
           { required: false, message: `标签组不能为空`, trigger: "change" },
         ],
-        labelItemId: [
-          { required: false, message: `标签不能为空`, trigger: "change" },
-        ],
       },
       // 条件列表
       labelItemList: [],
+      userLabelList:[],
+      // 传的List
+      userLabelResultList:[],
       userDeptRelsListInit: [
         {
-          guid: 1,
-          labelId: undefined,
-          labelItemId: undefined,
-          // 是否主标签组 1.是，2.否
-          // adminDept: 2,
+          // // guid: 1,
+          // labelId: undefined,
+          // labelItemId: undefined,
+          // labelItemName: undefined,
+          // labelName: undefined,
         },
       ],
       // 标签组及标签列表
       userDeptRelsList: [],
+      formData: {},
     };
   },
   created() {
@@ -110,24 +101,46 @@ export default {
   },
   computed: {
     // 取值列表
-    filterValueList() {
-      let filterValueListArr = [];
-      this.labelItemList.some((item) => {
-        if (item.key == this.filterForm.labelItemId) {
-          filterValueListArr = item.options.options;
-          return true;
-        }
-      });
-      // 过滤假值
-      return filterValueListArr;
-    },
+    // filterValueList() {
+    //   let filterValueListArr = [];
+    //   this.labelItemList.some((item) => {
+    //     if (item.key == this.filterForm.labelItemId) {
+    //       filterValueListArr = item.options.options;
+    //       return true;
+    //     }
+    //   });
+    //   console.log(this.labelItemList,'...');
+    //   // 过滤假值
+    //   return filterValueListArr;
+    // },
   },
   methods: {
-    onSearchSelect(value, node, extra){
-      // console.log(value,node);
-      // console.log(node.$options,'node.$options');
-      // console.log(node.$options.propsData.dataRef,'node.$options.propsData.dataRef');
-      this.labelItemList = node.$options.propsData.dataRef.labelItemList
+    findDataById(id, treeData) {
+      for (let i = 0; i < treeData.length; i++) {
+        const curNode = treeData[i];
+        if (curNode.labelItemId === id) {
+          return curNode;
+        } else if (curNode.labelItemList) {
+          const found = this.findDataById(id, curNode.labelItemList);
+          if (found) {
+            return found;
+          }
+        }
+      }
+      return null;
+    },
+    fun(){
+      this.userLabelResultList = []
+      const selectedIds = this.userLabelList;
+      const result = [];
+      for (let i = 0; i < selectedIds.length; i++) {
+        const curData = this.findDataById(selectedIds[i], this.treeData);
+        if (curData) {
+          result.push(curData);
+        }
+        this.userLabelResultList = result
+        console.log(result,'resultresultresult');
+      }
     },
     // 初始化弹窗数据
     initDepAndPosModel() {
@@ -141,16 +154,17 @@ export default {
     },
     // 标签组及标签-弹窗
     openDepAndPosModel() {
-      let apiData = { companyUserInfoId: this.labelModelData.companyUserInfoId }
+      // console.log(this.labelModelData,'this.labelModelData');
+      let apiData = { userId: this.labelModelData.userId }
       return UserDetailInterFace(apiData)
         .then((res) => {
           let dataObj = res.data
           dataObj.deptAndLabelDtos = dataObj.deptAndLabelDtos ? dataObj.deptAndLabelDtos : []
           // 添加id唯一标识
-          dataObj.deptAndLabelDtos.forEach(item => {
-            item.guid = this.guid()
-          })
-          this.userDeptRelsList = dataObj.deptAndLabelDtos.length ? dataObj.deptAndLabelDtos : cloneDeep(this.userDeptRelsListInit)
+          // dataObj.deptAndLabelDtos.forEach(item => {
+          //   item.guid = this.guid()
+          // })
+          this.userLabelList = dataObj.deptAndLabelDtos.length ? dataObj.deptAndLabelDtos.map(item => item.labelItemId) : []
           return Promise.resolve()
         })
         .catch((err) => {
@@ -178,26 +192,20 @@ export default {
     },
     // 选择字段弹框-确定
     submitBtn() {
-      // if (!formValidator.formAllArr(this, "filterForm")) {
-      //   return
-      // }
-      // let hasAdminDept = this.userDeptRelsList.some(item => item.adminDept == 1)
-      // if (!hasAdminDept) {
-      //   this.$message.warn('请设置主标签组')
-      //   return
-      // }
-      this.handleLoading()
+      console.log(this.userLabelList, 'ccc')
+      this.fun()
       this.userDeptRelsList.forEach(item => {
         item.userId = this.labelModelData.userId
-        item.companyId = this.labelModelData.companyId
       })
       let apiData = {
         userId: this.labelModelData.userId,
-        userLabelRels: this.userDeptRelsList
+        userLabelRels: this.userLabelResultList
       }
+      console.log('apiData.userLabelRels',apiData.userLabelRels);
       saveDeptAndLabelApi(apiData)
         .then(res => {
           this.$message.success("提交成功");
+          this.userLabelList = []
           this.$emit("getTableList");
           this.closeModel();
         })
@@ -213,9 +221,11 @@ export default {
     // 新增标签组及标签
     addUserDeptRels() {
       let userDeptRelsItem = {
-        guid: this.guid(),
-        labelId: undefined,
+        // guid: this.guid(),
+        labelId: 1,
         labelItemId: undefined,
+        labelItemName: undefined,
+        labelName: undefined,
       }
       this.userDeptRelsList.push(userDeptRelsItem)
     },
