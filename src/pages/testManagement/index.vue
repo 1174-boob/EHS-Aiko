@@ -208,7 +208,7 @@ export default {
       }
       let companyList1 = [{
         companyId: this.companyId,
-        companyName: this.userTreeData[0].value,
+        companyName: this.chooseStaffDetail.value,
         userList: [...userList1]
       }];
       let companyList2 = []
