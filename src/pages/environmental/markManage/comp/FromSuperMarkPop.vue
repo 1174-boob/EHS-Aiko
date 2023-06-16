@@ -63,20 +63,20 @@ export default {
   created(){
   },
   computed: {
-    // pollutantList() {
-    //   let list = this.scyOptions.filter(item => {
-    //     return (this.form.numberPickInstrumentCodeList || []).includes(item.numberPickInstrumentId) 
-    //   })
-    //   list = list.map(item => {
-    //     return {
-    //       id: item.numberPickInstrumentId,
-    //       name: item.pollutant,
-    //       type: item.numberPickInstrumentType
-    //     }
-    //   })
-    //   console.log(list, '-------')
-    //   return list
-    // }
+    pollutantList() {
+      let list = this.scyOptions.filter(item => {
+        return (this.form.numberPickInstrumentCodeList || []).includes(item.numberPickInstrumentId) 
+      })
+      list = list.map(item => {
+        return {
+          id: item.numberPickInstrumentId,
+          name: item.pollutant,
+          type: item.numberPickInstrumentType
+        }
+      })
+      console.log(list, '-------')
+      return list
+    }
   },
   watch: {
     markItem: {
