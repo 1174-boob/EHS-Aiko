@@ -109,13 +109,6 @@ export default {
               align:'center',
               width: 200,
             },
-            {
-              title: '速率(kg/h)',
-              dataIndex: 'standardRate',
-              key: 'standardRate',
-              align:'center',
-              width: 200,
-            },
           ]
         },
         {
@@ -125,13 +118,6 @@ export default {
               title: '浓度(mg/m3)',
               dataIndex: 'requireConcentration',
               key: 'requireConcentration',
-              align:'center',
-              width: 200,
-            },
-            {
-              title: '速率(kg/h)',
-              dataIndex: 'requireRate',
-              key: 'requireRate',
               align:'center',
               width: 200,
             },
@@ -147,13 +133,6 @@ export default {
               align:'center',
               width: 200,
             },
-            {
-              title: '速率(kg/h)',
-              dataIndex: 'alarmRate',
-              key: 'alarmRate',
-              align:'center',
-              width: 200,
-            },
           ]
         },
         {
@@ -163,13 +142,6 @@ export default {
               title: '浓度(mg/m3)',
               dataIndex: 'warningConcentration',
               key: 'warningConcentration',
-              align:'center',
-              width: 200,
-            },
-            {
-              title: '速率(kg/h)',
-              dataIndex: 'warningRate',
-              key: 'warningRate',
               align:'center',
               width: 200,
             },
