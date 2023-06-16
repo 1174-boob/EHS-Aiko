@@ -18,8 +18,9 @@ export default {
   },
   methods: {
     handleUrl() {
+      console.log(this.courseDetails.url)
       let myBase64 = Base64().Base64
-      let targetUrl = `${this.previewFileBaseUrl}?url=${encodeURIComponent(myBase64.encode(this.courseDetails.url))}`
+      let targetUrl = `${this.previewFileBaseUrl}?url=${encodeURIComponent(myBase64.encode(this.courseDetails.url.replace("ehs", "ehsfile")))}`
       return targetUrl
     },
   },
