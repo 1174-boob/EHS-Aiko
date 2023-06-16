@@ -1790,15 +1790,15 @@ const options = {
               },
               component: resolve => require(['@/pages/system/appAuthRole/appAuthRole.vue'], resolve),
             },
-            {
-              path: 'positionManagement',
-              name: '职位管理',
-              meta: {
-                title: '职位管理',
-                isPage: true,
-              },
-              component: resolve => require(['@/pages/system/positionManagement/index.vue'], resolve),
-            },
+            // {
+            //   path: 'positionManagement',
+            //   name: '职位管理',
+            //   meta: {
+            //     title: '职位管理',
+            //     isPage: true,
+            //   },
+            //   component: resolve => require(['@/pages/system/positionManagement/index.vue'], resolve),
+            // },
             {
               path: 'user',
               name: '用户管理',

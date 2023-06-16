@@ -144,7 +144,7 @@
                 :checkedTreeNode="sendBossId"
                 @getTreeData="getUserTreeData"
               />
-              <staffOrDept 
+              <!-- <staffOrDept 
                 :treeType="'user'" 
                 :labelTitle="'第二负责人'" 
                 :checkAbel="false"
@@ -152,7 +152,7 @@
                 :wrapperCol="{ span: 20 }" 
                 :checkedTreeNode="sendSecondBossId"
                 @getTreeData="getUserTreeData"
-              />
+              /> -->
             <!-- </a-form-model-item> -->
             <!-- <a-form-model-item ref="parentId" label="上级部门" prop="parentId"> -->
               <!-- <a-tree-select
@@ -328,21 +328,21 @@ export default {
             );
           },
         },
-        {
-          title: "第二负责人",
-          dataIndex: "deputyDirectorName",
-          key: "deputyDirectorName",
-          customRender: (text) => {
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
+        // {
+        //   title: "第二负责人",
+        //   dataIndex: "deputyDirectorName",
+        //   key: "deputyDirectorName",
+        //   customRender: (text) => {
+        //     return (
+        //       <a-popover autoAdjustOverflow>
+        //         <div slot="content">
+        //           <p>{{ text }}</p>
+        //         </div>
+        //         <span>{{ text }}</span>
+        //       </a-popover>
+        //     );
+        //   },
+        // },
         {
           title: "描述",
           dataIndex: "description",
@@ -424,7 +424,7 @@ export default {
       labelModelData: undefined,
       sendParentId: [],
       sendBossId: [],
-      sendSecondBossId: []
+      // sendSecondBossId: []
     };
   },
   created() {
@@ -660,7 +660,7 @@ export default {
                 this.btnType = 1;
                 this.sendParentId = [];
                 this.sendBossId = [];
-                this.sendSecondBossId = [];
+                // this.sendSecondBossId = [];
                 this.openModel();
               // }
             // });
@@ -696,7 +696,7 @@ export default {
           };
           this.sendParentId = [this.formDepartment.parentId]
           this.sendBossId = [this.formDepartment.bossId]
-          this.sendSecondBossId = [this.formDepartment.deputyDirectorId]
+          // this.sendSecondBossId = [this.formDepartment.deputyDirectorId]
         })
         .catch((err) => {});
     },
