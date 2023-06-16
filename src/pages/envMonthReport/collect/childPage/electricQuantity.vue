@@ -106,10 +106,10 @@
 
       <vxe-column
         v-for="i in titleList"
-        :key="i.corporationId"
-        :field="i.corporationId"
+        :key="i.orgId"
+        :field="i.orgId"
         minWidth="160"
-        :title="i.orgAbbrName"
+        :title="i.orgName"
       >
       </vxe-column>
       <template #empty>
@@ -169,7 +169,7 @@ export default {
           dataIndex: "january",
           // key: "january",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -178,7 +178,7 @@ export default {
           title: "2月",
           dataIndex: "february",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -187,7 +187,7 @@ export default {
           title: "3月",
           dataIndex: "march",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -196,7 +196,7 @@ export default {
           title: "4月",
           dataIndex: "april",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -205,7 +205,7 @@ export default {
           title: "5月",
           dataIndex: "may",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -214,7 +214,7 @@ export default {
           title: "6月",
           dataIndex: "june",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -223,7 +223,7 @@ export default {
           title: "7月",
           dataIndex: "july",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -232,7 +232,7 @@ export default {
           title: "8月",
           dataIndex: "august",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -241,7 +241,7 @@ export default {
           title: "9月",
           dataIndex: "september",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -250,7 +250,7 @@ export default {
           title: "10月",
           dataIndex: "october",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -259,7 +259,7 @@ export default {
           title: "11月",
           dataIndex: "november",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -268,7 +268,7 @@ export default {
           title: "12月",
           dataIndex: "december",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
           align: "center",
           width: 150,
@@ -604,7 +604,6 @@ export default {
       const data = await environmentMonthPower();
       const res = data.data;
       this.boeTableDataList = res;
-      console.log(this.boeTableDataList, 'ds')
       const data1 = [];
       const data2 = [];
       for (let item of res) {
@@ -651,7 +650,7 @@ export default {
       this.option.series[0].data = [];
       this.option.series[1].data = [];
       const data = await listEnvironmentMonthlyPowerSubmodule(params);
-      let obj = tableConversion(data.data, 1004);
+      let obj = tableConversion(data.data, 3, 'elec');
       const titleList = obj.titleList;
       const tableData = obj.tableData;
       this.subData = tableData;
@@ -659,15 +658,15 @@ export default {
       const xAxisData = [];
       for (let i of titleList) {
         const arr = this.corporationList.find(
-          (item) => item.corporationId == i
+          (item) => item.orgId == i
         );
         title.push(arr);
-        xAxisData.push(arr.orgAbbrName);
+        xAxisData.push(arr.orgName);
         for (let item of tableData) {
           const code = item.nicheItemsCode;
-          if (code == 1004) {
+          if (code == 3) {
             this.option.series[0].data = [item[i]];
-          } else if (code == 1110) {
+          } else if (code == 150) {
             this.option.series[1].data = [item[i]];
           }
         }

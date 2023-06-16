@@ -159,7 +159,7 @@ export default {
           key: "january",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -168,7 +168,7 @@ export default {
           key: "february",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -177,7 +177,7 @@ export default {
           key: "march",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -186,7 +186,7 @@ export default {
           key: "april",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -195,7 +195,7 @@ export default {
           key: "may",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -204,7 +204,7 @@ export default {
           key: "june",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -213,7 +213,7 @@ export default {
           key: "july",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -222,7 +222,7 @@ export default {
           key: "august",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -231,7 +231,7 @@ export default {
           key: "september",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -240,7 +240,7 @@ export default {
           key: "october",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -249,7 +249,7 @@ export default {
           key: "november",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
         {
@@ -258,7 +258,7 @@ export default {
           key: "december",
           align: "center",
           customRender: (text) => {
-            return text ? text : "--";
+            return (text || text === 0) ? text : "--";
           },
         },
       ],

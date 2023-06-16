@@ -129,14 +129,18 @@ export default {
     // this.searchFormData.dateStr = dayJs(this.searchFormData.month).format(
     //     "YYYY-MM"
     // );
-    // console.log(this.getCommonAddOrgnizeListAll)
-    let keys = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', 'B17', 'B18', "B19"]
+    // let keys = ['爱旭太阳能', '义乌基地', '珠海基地', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', 'B17', 'B18', "B19"]
+    let keys = this.getCommonAddOrgnizeList.filter((item) => {
+      return item.orgName != '爱旭太阳能'
+    }).map((item) => {
+      return item.orgName
+    });
     let columns = this.getCommonAddOrgnizeListAll.map((item, index) => {
       return {
         id: index + 3,
         title: item.orgName,
-        // disabled: keys.includes(item.orgName),
-        // isDefault: keys.includes(item.orgName),
+        disabled: keys.includes(item.orgName),
+        isDefault: keys.includes(item.orgName),
         props: item.orgId,
         corporationId: item.orgId,
       }
@@ -145,9 +149,8 @@ export default {
       return item.orgId
     })
     this.columnsEnd[0].id = this.columnsStart.length + columns.length + 1;
-    this.columnsAll = [...this.columnsStart, ...columns, ...this.columnsEnd]//
+    this.columnsAll = [...this.columnsStart, ...columns, ...this.columnsEnd]
     this.columnsIng = JSON.parse(JSON.stringify(this.columnsAll.filter(i => i.isDefault)))
-    // console.log('columnsIng', this.columnsIng);
     this.initData();
   },
   computed: {
@@ -178,7 +181,6 @@ export default {
       return mergeCellsData
     },
     initData() {
-      console.log(this.columnsAll, 'ccc')
       let apiData = {
         ...this.searchFormData
       }
@@ -190,7 +192,6 @@ export default {
             let tableData = tableDataJson.map((item, index) => {
               // 寻找匹配的数据
               let targetResArr = data[item.nicheItemsCode] ?? []
-
               // 处理匹配的数据---和表头对应
               let targetResData = {}
               this.columnsIng.forEach(item1 => {
@@ -206,7 +207,6 @@ export default {
             })
             this.mergeCells = cloneDeep(this.mergeCellsFn())
             this.tableData = cloneDeep(tableData)
-            console.log(this.tableData);
           } else {
             this.tableData = [];
           }
@@ -242,11 +242,9 @@ export default {
       let sum = 0
       Object.keys(row).forEach(item => {
         if (this.orgAbbrIds.includes(item)) {
-          // console.log(sum, typeof row[item]);
           sum = BigNumber(sum).plus(BigNumber(row[item]))
         }
       })
-      // console.log(sum);
       return (isNaN(sum) || sum === Infinity) ? 0 : sum.toFixed(2);
     },
     // 重置

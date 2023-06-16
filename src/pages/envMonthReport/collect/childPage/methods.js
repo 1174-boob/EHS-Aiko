@@ -1,6 +1,6 @@
 import aikoMonthData from "@/pages/envMonthReport/terrain/childPage/aikoMonthData.js";
 import store from '@/store'
-export const tableConversion = (data, n = 1001) => { // style：样式  Nodes：节点结构体
+export const tableConversion = (data, n = 1, type) => { // style：样式  Nodes：节点结构体
     let tableData = []
     let titleList = []
     for (let key in data) {
@@ -10,7 +10,11 @@ export const tableConversion = (data, n = 1001) => { // style：样式  Nodes：
             if (key == n) {
                 titleList.push(name);
             }
-            item[name] = data[key][i].dataItem
+            if(type == 'elec') {
+                item[name] = data[key][i].scopeSum
+            } else {
+                item[name] = data[key][i].dataItem
+            }
         }
         tableData.push(item)
     }
