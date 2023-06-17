@@ -3,7 +3,8 @@
     <h3 class="top-title">操作日志</h3>
     <div class="log-body">
       <div class="log-item" v-for="item in data" :key="item.handerTime">
-        <h3>虚惊事件审批</h3>
+        <!-- <h3>虚惊事件审批</h3> -->
+        <div class="pd-b-18 font-16 font-weight-bold">{{item.module}}</div>
         <div class="mgt-16"><span>操作人：</span> {{item.hander}}</div>
         <div class="mgt-16"><span>操作时间：</span> {{item.handerTime}}</div>
         <div class="mgt-16"><span>备注：</span> {{item.handerExplain}}</div>
