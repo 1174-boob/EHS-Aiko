@@ -6,6 +6,7 @@
       <div class="item-wrapper clx-show-scroll beauty-scroll pd-l-20 pd-r-20">
         <div class="log-item" v-for="item in flowLogList" :key="item.logId">
           <div class="pd-b-18 font-16 font-weight-bold">{{item.activityName}}</div>
+          <div class="pd-b-18 font-16 font-weight-bold">{{item.module}}</div>
           <div class="border-b-f6">
             <div class="pd-b-16 flex">
               <span class="width-70 color-999">操作人：</span>
