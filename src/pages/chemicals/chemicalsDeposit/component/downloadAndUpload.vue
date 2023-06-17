@@ -97,23 +97,24 @@ export default {
     },
     // 模板下载
     async downTemplate() {
-      this.downLoading = true;
-      this.downDisabled = true;
-      const name = '导入模板'
-      let res = await warehouseTemplateExport();
-      if(res){
-        const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        const downloadElement = document.createElement('a');
-        const href = URL.createObjectURL(blob); //创建下载链接
-        downloadElement.href = href;
-        downloadElement.download = name + '.xlsx';
-        document.body.appendChild(downloadElement);
-        downloadElement.click();
-        document.body.removeChild(downloadElement);// 下载完成移除元素
-        window.URL.revokeObjectURL(href) // 释放掉blob对象
-      }
-      this.downLoading = false;
-      this.downDisabled = false;
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/导入模板.xlsx`)
+      // this.downLoading = true;
+      // this.downDisabled = true;
+      // const name = '导入模板'
+      // let res = await warehouseTemplateExport();
+      // if(res){
+      //   const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      //   const downloadElement = document.createElement('a');
+      //   const href = URL.createObjectURL(blob); //创建下载链接
+      //   downloadElement.href = href;
+      //   downloadElement.download = name + '.xlsx';
+      //   document.body.appendChild(downloadElement);
+      //   downloadElement.click();
+      //   document.body.removeChild(downloadElement);// 下载完成移除元素
+      //   window.URL.revokeObjectURL(href) // 释放掉blob对象
+      // }
+      // this.downLoading = false;
+      // this.downDisabled = false;
     },
     // 上传之前
     beforeUpload(file) {
