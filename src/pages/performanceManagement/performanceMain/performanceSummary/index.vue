@@ -465,7 +465,7 @@ export default {
           console.log(arr);
           for (let i = 0; i < arr.length; i++) {
             if (arr[i]) {
-              brr.push(this.getMappingValue(this.getCommonAddOrgnizeListAll, "id", arr[i]).orgAbbrName);
+              brr.push(this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", arr[i]).orgName);
             }
           }
           this.pieLevel.push({
