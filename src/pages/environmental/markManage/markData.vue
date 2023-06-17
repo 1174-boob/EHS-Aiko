@@ -40,7 +40,7 @@
               <a-radio value="water">废水</a-radio>
             </a-radio-group>
           </a-form-model-item>
-          <a-form-model-item v-if="modelForm.numberPickInstrumentType !== 'water'" class="flex" label="位置" prop="numberPickInstrumentLocation">
+          <a-form-model-item class="flex" label="位置" prop="numberPickInstrumentLocation">
             <a-select v-model="modelForm.numberPickInstrumentLocation" placeholder="请选择位置" option-filter-prop="children" show-search :filter-option="filterOption">
               <a-select-option v-for="item in locationOptions" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
             </a-select>
