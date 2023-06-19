@@ -26,20 +26,6 @@
         </div>
       </a-table>
     </CommonTable>
-    <a-row>
-      <a-col :span="24">
-        <a-form-model-item ref="fileIds" label="资料附件" prop="fileIds" :label-col="labelColEditor" :wrapper-col="wrapperColEditor">
-          <UploadBtnStyle
-            :accept="['.doc', '.docx','.pdf','.xls','.xlsx','.ppt']"
-            :maxSize="20"
-            :limit="20"
-            :onlyShow="true"
-            :fileLists="partnerInfo.fileIdList"
-            @handleSuccess="handleSuccessReferencesAttachment"
-          ></UploadBtnStyle>
-        </a-form-model-item>
-      </a-col>
-    </a-row>
     <FixedBottom>
       <a-button :style="{ marginLeft: '8px' }" @click="back">返回</a-button>
     </FixedBottom>
@@ -51,17 +37,17 @@ import { formValidator } from "@/utils/clx-form-validator.js";
 import FixedBottom from "@/components/commonTpl/fixedBottom";
 import { InvitationDetail, invitationSupplieDetail, invitationClientDetail } from "@/services/api.js";
 import { enterpriseDetail,} from '@/services/chemicalIdentSafetyTipsAdd.js'
-import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import SelfTable from "@/pages/ngform/tpl/selfTable.vue";
 
 export default {
   name: 'parter-detail',
-  components: { FixedBottom, UploadBtnStyle, },
+  components: { FixedBottom, },
   mixins: [teableCenterEllipsis],
   data() {
     return {
-      partnerInfo: null,
+      partnerInfo: {},
+      fileList:[],
       labelColEditor: { span: 1 },
       wrapperColEditor: { span: 23 },
       partner: null,
@@ -181,6 +167,24 @@ export default {
           },
         },
         {
+          title: '附件',
+          dataIndex: 'fileList',
+          customRender: (fileList, record) => {
+            return (
+              <a-popover autoAdjustOverflow title="查看附件">
+                <div slot="content" style={{ display: 'flex', flexDirection: 'column' }}>
+                  {fileList.map((item, index) => (
+                    <a key={index} href={item.filePath}>{item.sourceFileName}</a>
+                  ))}
+                </div>
+                <div style={{ color: "#0067cc"}}>
+                  查看附件
+                </div>
+              </a-popover>
+            );
+          },
+        },
+        {
           title: '备注',
           dataIndex: 'remarks',
           customRender: (text) => {
@@ -216,21 +220,13 @@ export default {
   created() {
     if (this.$route.query && this.$route.query.id) {
       this.partner = this.$route.query.partner;
-      // 获取企业基本信息
-      this.initPage(this.$route.query.id);
       // 获取关联信息数据
       this.getInvitationSupplieDetail();
+      // 获取企业基本信息
+      this.initPage(this.$route.query.id);
     }
   },
   methods: {
-    
-    // 资料附件-文件上传
-    handleSuccessReferencesAttachment(fileList) {
-      this.iFrom.fileIds = fileList.map(item => {
-        return item.id
-      })
-      formValidator.formItemValidate(this, 'fileIds', 'ruleForm')
-    },
     // 获取详情
     initPage(id) {
       this.dataListLoading = true;
@@ -242,9 +238,6 @@ export default {
           this.partnerInfo = null
         }
         this.departmentName = resultObj.departmentName;
-        // 资料附件-回显
-        this.partnerInfo.fileIds = this.handleFileIdS(this.partnerInfo.fileIdList)
-        this.partnerInfo.fileIdList = this.handleFileRedisplay(this.partnerInfo.fileIdList)
         this.toBear = resultObj.toBear;
         this.fromId = resultObj.fromId;
       }).catch(err => {
@@ -270,8 +263,14 @@ export default {
       }
       promiseFn(params).then(res => {
         const data = res.data || {};
-        console.log(res.data,'res.datares.datares.data');
         this.dataSource = data || [];
+        // 资料附件-回显
+        this.fileList = this.dataSource.map(item => item.fileList)
+        this.fileList = this.fileList.map(item => item[0])
+        this.dataSource.fileName = this.fileList.map(item =>item.fileName)
+        this.dataSource.fileURL = this.fileList.map(item =>item.filePath)
+        console.log('this.dataSource.fileName:', this.dataSource.fileName);
+        console.log('this.dataSource.fileURL:', this.dataSource.fileURL);
         this.page.total = data.total;
         let arr = [];
         for (let i = 0; i < this.dataSource.length; i++) {
@@ -292,26 +291,6 @@ export default {
       }).finally(() => {
         this.dataListLoading = false;
       })
-    },
-    // 处理文件id
-    handleFileIdS(list) {
-      list = list ? list : []
-      let ids = list.map(item => {
-        return item.id
-      })
-      ids = ids ? ids : []
-      return ids
-    },
-    // 处理文件回显
-    handleFileRedisplay(list) {
-      let fileList = list ? list : []
-      fileList.forEach(item => {
-        item.uid = item.id
-        item.name = item.sourceFileName
-        item.status = 'done'
-        item.url = item.filePath
-      })
-      return fileList
     },
     // 返回
     back() {
