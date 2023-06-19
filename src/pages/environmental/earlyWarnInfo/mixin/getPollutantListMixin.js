@@ -72,15 +72,16 @@ const getPollutantListMixin = {
     },
     watch: {
         'formInline.corporationId'(newVal, oldVal) {
-            if (newVal) {
-                this.pollutantGasList = this.pollutantGas.filter(item => item.corporationId == newVal)
-                this.pollutantWaterList = this.pollutantWater.filter(item => item.corporationId == newVal)
-
-                // console.log(newVal, this.pollutantAll, this.pollutantGasList, this.pollutantWaterList);
-            } else {
-                this.pollutantGasList = []
-                this.pollutantWaterList = []
-            }
+            setTimeout(()=> {
+                if (newVal) {
+                    this.pollutantGasList = this.pollutantGas.filter(item => item.corporationId == newVal)
+                    this.pollutantWaterList = this.pollutantWater.filter(item => item.corporationId == newVal)
+                    // console.log(newVal, this.pollutantAll, this.pollutantGasList, this.pollutantWaterList);
+                } else {
+                    this.pollutantGasList = []
+                    this.pollutantWaterList = []
+                }
+            }, 500)
         }
     }
 };
