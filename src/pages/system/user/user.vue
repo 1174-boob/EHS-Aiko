@@ -710,7 +710,7 @@ export default {
         this.getUserIdentityList(); //添加用户-角色树 数据
         this.getLabelList();//添加标签
         // this.customField(); //添加用户-获取自定义字段接口
-        UserDetailInterFace({ companyUserInfoId: record.companyUserInfoId })
+        UserDetailInterFace({ userId: record.userId })
           .then((res) => {
             this.formCustom = res.data.userFields || []; //自定义字段
             this.formCustomThing(true); //修改自定义字段格式-事件

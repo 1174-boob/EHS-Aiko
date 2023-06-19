@@ -134,7 +134,7 @@ export default {
     },
     // 部门及职位-弹窗
     openDepAndPosModel() {
-      let apiData = { companyUserInfoId: this.depAndPosModelData.companyUserInfoId }
+      let apiData = { userId: this.depAndPosModelData.userId }
       return UserDetailInterFace(apiData)
         .then((res) => {
           let dataObj = res.data
