@@ -306,7 +306,8 @@ export default {
     pollutantChange(key) {
       const selectPollutant = this.pollutantOptions.find(ele => ele.instrumentPollutantRelId == key);
       console.log("key-----", key, selectPollutant);
-      if (selectPollutant.pollutantNum == "w01001") { //PH值的判定
+      // if (selectPollutant.pollutantNum == "w01001") { // PH值的判定(原厂务对应的字段)
+      if (selectPollutant.pollutantNum == "ph") { // PH值的判定
         this.PH_Pollutant = true;
       } else {
         this.PH_Pollutant = false;
