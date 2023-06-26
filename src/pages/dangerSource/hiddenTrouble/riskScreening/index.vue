@@ -60,7 +60,7 @@
               <a-select-option v-for="item in centerAreaList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item class="flex" label="科室级" prop="deptSublevel">
+          <a-form-model-item class="flex" label="车间级" prop="deptSublevel">
             <a-select v-model="addForm.deptSublevel" placeholder="请选择" prop="operationLine" allowClear>
               <a-select-option v-for="item in centerAreaList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
             </a-select>
@@ -182,7 +182,7 @@ export default {
               },
             },
             {
-              title: "科室级",
+              title: "车间级",
               dataIndex: "deptSublevel",
               fixed: "left",
               align: "center",
