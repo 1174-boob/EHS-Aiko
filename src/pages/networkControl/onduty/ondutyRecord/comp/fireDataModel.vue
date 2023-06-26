@@ -2,6 +2,11 @@
   <CommonModal :title="fireType + '火灾报警控制运行情况'" :visible="inspectionRecordModelShowFire" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model-item ref="fireRoom" label="消防室" prop="fireRoom">
+          <a-select v-model="formModel.fireRoom" placeholder="请选择">
+            <a-select-option v-for="item in fireRoomList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item ref="normal" label="正常" prop="normal">
           <a-select v-model="formModel.normal" placeholder="请选择">
             <a-select-option v-for="item in dicOnly" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
@@ -96,7 +101,12 @@ export default {
       // 新增、修改表单
       formModel: {},
       // 表单验证
+      fireRoomList: [
+        { key: '1', value: '一期' },
+        { key: '2', value: '二期' }
+      ],
       rules: {
+        fireRoom: [{ required: true, message: "不能为空", trigger: "blur" }],
         normal: [{ required: true, message: "不能为空", trigger: "blur" }],
         failure: [{ required: true, message: "不能为空", trigger: "blur" }],
         fireAlarm: [{ required: true, message: "不能为空", trigger: "blur" }],

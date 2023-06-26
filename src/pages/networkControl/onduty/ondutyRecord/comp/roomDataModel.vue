@@ -2,6 +2,11 @@
   <CommonModal :title="roomType + '控制室内其他消防系统运行情况'" :visible="inspectionRecordModelShowRoom" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model-item ref="fireRoom" label="消防室" prop="fireRoom">
+          <a-select v-model="formModel.fireRoom" placeholder="请选择">
+            <a-select-option v-for="item in fireRoomList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item ref="deviceName" label="消防系统设备名称" prop="deviceName">
           <a-input v-model="formModel.deviceName" placeholder="请输入" />
         </a-form-model-item>
@@ -79,8 +84,13 @@ export default {
       wrapperCol: { span: 17 },
       // 新增、修改表单
       formModel: {},
+      fireRoomList: [
+        { key: '1', value: '一期' },
+        { key: '2', value: '二期' }
+      ],
       // 表单验证
       rules: {
+        fireRoom: [{ required: true, message: "不能为空", trigger: "blur" }],
         deviceName: [{ required: true, message: "不能为空", trigger: "blur" }],
         controlState: [{ required: true, message: "不能为空", trigger: "blur" }],
         runningState: [{ required: true, message: "不能为空", trigger: "blur" }],

@@ -2,6 +2,11 @@
   <CommonModal :title="engineType + '消防主机日检查情况记录'" :visible="inspectionRecordModelShowEngine" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model-item ref="fireRoom" label="消防室" prop="fireRoom">
+          <a-select v-model="formModel.fireRoom" placeholder="请选择">
+            <a-select-option v-for="item in fireRoomList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item ref="fireEngineOne" label="消防系统设备名称一" prop="fireEngineOne">
           <a-input v-model="formModel.fireEngineOne" placeholder="请输入消防主机型号一" />
         </a-form-model-item>
@@ -111,8 +116,13 @@ export default {
       wrapperCol: { span: 17 },
       // 新增、修改表单
       formModel: {},
+      fireRoomList: [
+        { key: '1', value: '一期' },
+        { key: '2', value: '二期' }
+      ],
       // 表单验证
       rules: {
+        fireRoom: [{ required: true, message: "不能为空", trigger: "blur" }],
         fireEngineOne: [{ required: true, message: "不能为空", trigger: "blur" }],
         selfTest: [{ required: true, message: "不能为空", trigger: "blur" }],
         silencing: [{ required: true, message: "不能为空", trigger: "blur" }],
@@ -152,7 +162,7 @@ export default {
       if(this.roomType == '编辑') {
         this.$emit('changeModuleList', this.formModel)
       } else {
-        this.formModel.roomTimeStamp = new Date().getTime() + '';
+        this.formModel.engineTimeStamp = new Date().getTime() + '';
         this.$emit('addModuleList', this.formModel)
       }
       this.cancelLoading()

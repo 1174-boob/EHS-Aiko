@@ -85,6 +85,11 @@
                     :row-config="{isHover: true}"
                     :data="iFrom.fireAlarmList"
                   >
+                    <vxe-column field="fireRoom" title="消防室">
+                      <template #default="{ row }">
+                        <span>{{ row.fireRoom ? (row.fireRoom == '1' ? '一期' : '二期') : '--' }}</span>
+                      </template>
+                    </vxe-column>
                     <vxe-column field="normal" title="正常">
                       <template #default="{ row }">
                         <span>{{ row.normal == '1' ? '是' : '否' }}</span>
@@ -170,6 +175,11 @@
                     :row-config="{isHover: true}"
                     :data="iFrom.roomFireFightingList"
                   >
+                    <vxe-column field="fireRoom" title="消防室">
+                      <template #default="{ row }">
+                        <span>{{ row.fireRoom ? (row.fireRoom == '1' ? '一期' : '二期') : '--' }}</span>
+                      </template>
+                    </vxe-column>
                     <vxe-column field="deviceName" width="200" title="消防系统及相关设备名称"></vxe-column>
                     <vxe-column field="controlState" title="控制状态">
                       <template #default="{ row }">
@@ -229,6 +239,11 @@
                     :row-config="{isHover: true}"
                     :data="iFrom.fireEngineCheckList"
                   >
+                    <vxe-column field="fireRoom" title="消防室">
+                      <template #default="{ row }">
+                        <span>{{ row.fireRoom ? (row.fireRoom == '1' ? '一期' : '二期') : '--' }}</span>
+                      </template>
+                    </vxe-column>
                     <vxe-colgroup title="消防主机型号">
                       <vxe-column field="fireEngineOne" title=" "></vxe-column>
                       <vxe-column field="fireEngineTwo" title=" "></vxe-column>
