@@ -83,7 +83,7 @@ export default {
     // 文件大小限制
     maxSize: {
       type: Number,
-      default: 20,
+      default: 1024 * 5,
     },
     // 最大上传数量
     limit: {
