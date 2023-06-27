@@ -61,9 +61,10 @@
           </a-form-model-item>
           <a-form-model-item class="flex" label="污染物" prop="instrumentPollutantRelId">
             <a-select v-model="gasForm.instrumentPollutantRelId" placeholder="请选择" :disabled="gasDisabled">
-              <a-select-option v-for="item in wasteGasModalArr" :key="item.instrumentPollutantRelId" :value="item.instrumentPollutantRelId" :title="item.pollutantName">
-                {{ getChemicalDictText('point_location',item.location) }}{{item.pollutantName}}
-                <span v-if="item.pollutantUnit">({{ item.pollutantUnit }})</span>
+              <a-select-option v-for="item in wasteGasModalArr" :key="item.instrumentPollutantRelId" :value="item.instrumentPollutantRelId">
+                <!-- {{ getChemicalDictText('point_location',item.location) }}{{item.pollutantName}}
+                <span v-if="item.pollutantUnit">({{ item.pollutantUnit }})</span> -->
+                {{ item.pollutantName }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -325,7 +326,7 @@ export default {
       this.$set(this.gasForm, 'instrumentPollutantRelId', undefined);
       this.gasDisabled = false;
       this.wasteGasModalArr = this.pollutantOptions.filter(item => {
-        return item.corporationId == corporationId && item.numberPickInstrumentType == 'gas';;
+        return item.corporationId == corporationId && item.numberPickInstrumentType == 'gas';
       })
     },
     waterCorporationChange(corporationId, deptId) {
@@ -333,7 +334,7 @@ export default {
       this.waterDisabled = false;
       this.PH_Pollutant = false;
       this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
-        return item.corporationId == corporationId && item.numberPickInstrumentType == 'water';;
+        return item.corporationId == corporationId && item.numberPickInstrumentType == 'water';
       })
     },
     tabChange(key) {
@@ -381,17 +382,21 @@ export default {
         if (this.tabKey == '1') {
           this.visible = true;
           this.gasDisabled = false;
-          this.gasForm = { ...record };
-          this.gasForm.constantAlarmTime = '20';
           this.wasteGasModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';;
+            return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';
+          })
+          this.$nextTick(()=>{
+            this.gasForm = { ...record };
+            this.gasForm.constantAlarmTime = '20';
           })
         } else {
           this.waterVisible = true;
           this.waterDisabled = false;
-          this.waterForm = { ...record };
           this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';;
+            return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';
+          })
+          this.$nextTick(()=>{
+            this.waterForm = { ...record };
           })
           this.pollutantChange(this.waterForm.instrumentPollutantRelId);
         }
@@ -401,16 +406,20 @@ export default {
         if (this.tabKey == '1') {
           this.visible = true;
           this.gasDisabled = true;
-          this.gasForm = { ...record };
           this.wasteGasModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';;
+            return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';
+          })
+          this.$nextTick(()=>{
+            this.gasForm = { ...record };
           })
         } else {
           this.waterVisible = true;
           this.waterDisabled = true;
-          this.waterForm = { ...record };
           this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';;
+            return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';
+          })
+          this.$nextTick(()=>{
+            this.waterForm = { ...record };
           })
           this.pollutantChange(this.waterForm.instrumentPollutantRelId);
         }
