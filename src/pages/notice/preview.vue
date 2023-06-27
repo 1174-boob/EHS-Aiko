@@ -12,7 +12,7 @@
       <ul class="download" v-if="fileDetail && fileDetail.length>=1">
         <li v-for="file of fileDetail">
           {{file.name}}
-          <span class="btn" @click="downloadFile(file.url)">下载</span>
+          <span class="btn" @click="downloadFile(file.url,file.name)">下载</span>
         </li>
       </ul>
     </div>
@@ -95,9 +95,32 @@ export default {
         }
       }
     },
+    // 下载文件(原有版本)
+    // downloadFile(url) {
+    //   window.open(url)
+    // },
     // 下载文件
-    downloadFile(url) {
-      window.open(url)
+    downloadFile(url,fileName){
+      var httpRequest = new XMLHttpRequest();
+      //指定响应类型，这决定了浏览器对返回内容的解析方式，设置为空或者text会作为字符解析、json会作为json解析，blob和arraybuffer会作为字节流解析
+      httpRequest.responseType ='arraybuffer';
+      httpRequest.open('GET', url, true);
+      httpRequest.onload  = function () {
+        if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+          //只有responseType为空或者text，才会使用responseText获取内容，其他情况                        httpRequest.response就是你需要的不含http头的返回内容
+          var content = httpRequest.response;
+            var elink = document.createElement('a');
+            elink.download = fileName;
+            elink.style.display = 'none';
+            var blob = new Blob([content]);
+          //创建指向内存中字节流的链接
+            elink.href = URL.createObjectURL(blob);
+            document.body.appendChild(elink);
+              elink.click();
+            document.body.removeChild(elink);
+        }
+      };
+      httpRequest.send();
     },
     back() {
       // console.log("fanhui===",this.fromPath);
