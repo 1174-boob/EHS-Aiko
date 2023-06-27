@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import { Base64 } from '@/utils/base64.js'
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
 import dragTable from "@/mixin/dragTable.js";
@@ -324,8 +325,9 @@ export default {
     //列表资料附件下载
     downUrl(item) {
       console.log(item, '...teim');
+      let myBase64 = Base64().Base64
       if (item.filePath) {
-        window.open(item.filePath)
+        window.open(process.env.NODE_ENV == 'production' ? `https://ehs.aikosolar.com/viewOnline/onlinePreview?url=${encodeURIComponent(myBase64.encode(item.filePath.replace('ehs.aikosolar.com', 'ehsfile.aikosolar.com')))}` : `http://10.254.131.77/viewOnline/onlinePreview?url=${encodeURIComponent(myBase64.encode(item.filePath.replace('ehs.aikosolar.com', 'ehsfile.aikosolar.com')))}`)
       } else {
         this.$antMessage.error('filePath为空下载失败')
       }
