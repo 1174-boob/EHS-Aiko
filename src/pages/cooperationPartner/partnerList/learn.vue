@@ -275,19 +275,65 @@ export default {
     if (!this.dataMsg) {
       this.$router.push("/ehsGerneralManage/cooperationPartner/cooperationBaseInfo/partnerList");
     }
-    this.getDataList(); // 
-    this.getDataListDetail(); // 
-    this.getUserMsg();
+    this.initialize();
     this.getStatistics(); // 
   },
   methods: {
+    async initialize() {
+      await this.getUserMsg(); // 等待getUserMsg方法完成执行
+      await this.getDataList(); // 等待getDataList方法完成执行
+      await this.getDataListDetail(); // 等待getDataListDetail
+      // 所有方法执行完毕后进行其他操作
+    },
     getUserMsg() {
-      GetUserMsg({
-        dispatchId: this.dataMsg.beUserId,
-      }).then(res => {
-        this.userInfo = res.data;
-      }).catch((err) => {
-        console.log(err);
+      return new Promise((resolve, reject) => {
+        GetUserMsg({
+          dispatchId: this.dataMsg.beUserId,
+        })
+          .then(res => {
+            this.userInfo = res.data;
+            resolve(); // 在异步操作完成后调用 resolve 方法
+          })
+          .catch(err => {
+            console.log(err);
+            reject(err); // 在发生错误时调用 reject 方法
+          });
+      });
+    },
+    
+    // 获取推送列表
+    getDataList() {
+      return new Promise((resolve,reject) => {
+        PushCourseList({
+          centerId: this.dataMsg.centerId,
+          corporationId: this.dataMsg.corporationId,
+          pushCompanyId: this.dataMsg.pushCompanyId,
+          userId: this.userInfo.beUserId ? this.userInfo.beUserId : '',
+          companyId: this.dataMsg.companyId
+        })
+        .then((res) => {
+            this.tableDataList = res.data;
+            resolve();
+          }).catch((err) => {
+            console.log(err);
+            reject(err)
+        })
+      })
+    },
+    getDataListDetail() {
+      return new Promise((resolve,reject) => {
+        PushExamList({
+          centerId: this.dataMsg.centerId,
+          corporationId: this.dataMsg.corporationId,
+          userId: this.userInfo.beUserId ? this.userInfo.beUserId : '',
+          companyId: this.dataMsg.companyId
+        }).then((res) => {
+          this.tableDataListDetail = res.data;
+          resolve()
+        }).catch((err) => {
+          console.log(err);
+          reject(err)
+        })
       })
     },
     getStatistics() {
@@ -331,34 +377,8 @@ export default {
     },
     exportFn() {
     },
-    // 获取推送列表
-    getDataList() {
-      PushCourseList({
-        centerId: this.dataMsg.centerId,
-        corporationId: this.dataMsg.corporationId,
-        pushCompanyId: this.dataMsg.pushCompanyId,
-        userId: this.dataMsg.beUserId,
-        companyId: this.dataMsg.companyId
-      }).then((res) => {
-        this.tableDataList = res.data;
-      }).catch((err) => {
-        console.log(err);
-      })
-    },
     detailCancle(record) {
       this.detailVisible = false;
-    },
-    getDataListDetail() {
-      PushExamList({
-        centerId: this.dataMsg.centerId,
-        corporationId: this.dataMsg.corporationId,
-        userId: this.dataMsg.beUserId,
-        companyId: this.dataMsg.companyId
-      }).then((res) => {
-        this.tableDataListDetail = res.data;
-      }).catch((err) => {
-        console.log(err);
-      })
     },
 
     onSelectChange(selectedRowKeys) {
