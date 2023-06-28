@@ -26,7 +26,7 @@
             <a-form-model-item label="型号规格" prop="specialEquipmentDetail.equipmentSpecifications" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentSpecifications" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
-            <a-form-model-item label="底盘编号" prop="specialEquipmentDetail.forkliftChassisNum" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <a-form-model-item label="车架编号" prop="specialEquipmentDetail.forkliftChassisNum" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.forkliftChassisNum" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
             <a-form-model-item label="牌照编号" prop="specialEquipmentDetail.forkliftPlateNum" :label-col="labelCol" :wrapper-col="wrapperCol">
@@ -38,14 +38,14 @@
             <a-form-model-item label="登记证编号" prop="useRegistryNum" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.useRegistryNum" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
-            <a-form-model-item label="运行速度" prop="specialEquipmentDetail.equipmentSpeed" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <!-- <a-form-model-item label="运行速度" prop="specialEquipmentDetail.equipmentSpeed" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input-number :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentSpeed" :min="0" placeholder="运行速度" allowClear :maxLength="50"/> Km/h
-            </a-form-model-item>
+            </a-form-model-item> -->
             <a-form-model-item label="额定载荷" prop="specialEquipmentDetail.equipmentLoadLimit" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input-number :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentLoadLimit" :min="0" placeholder="额定载荷" allowClear :maxLength="50"/> t
             </a-form-model-item>
-            <a-form-model-item label="上牌时间" prop="specialEquipmentDetail.forkliftPlateDate" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-date-picker :disabled="disabled" format="YYYY-MM-DD" v-model.trim="newlyForm.specialEquipmentDetail.forkliftPlateDate" placeholder="请选择上牌时间" allowClear :maxLength="50"/>
+            <a-form-model-item label="登记时间" prop="specialEquipmentDetail.forkliftPlateDate" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-date-picker :disabled="disabled" format="YYYY-MM-DD" v-model.trim="newlyForm.specialEquipmentDetail.forkliftPlateDate" placeholder="请选择登记时间" allowClear :maxLength="50"/>
             </a-form-model-item>
             <a-form-model-item label="设备状态" prop="equipmentStatus" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select :disabled="disabled" v-model="newlyForm.equipmentStatus" placeholder="请选择设备状态" show-search :filter-option="filterOption">
@@ -144,7 +144,7 @@ export default {
           { required: true, message: '请选择登记证编号', trigger: ['blur', 'change'] },
         ],
         'specialEquipmentDetail.forkliftPlateDate': [
-          { required: true, message: '请选择上牌时间', trigger: ['blur', 'change'] },
+          { required: true, message: '请选择登记时间', trigger: ['blur', 'change'] },
         ],
         equipmentStatus: [
           { required: true, message: '请选择设备状态', trigger: ['blur', 'change'] },
