@@ -11,7 +11,7 @@
       <div class="content" id='content' v-html="policyMsg.content"></div>
       <ul class="download" v-if="fileDetail && fileDetail.length>=1">
         <!-- <li v-for="file of fileDetail"><span class="btn" @click="downloadFile(file.url,file.name)">下载</span></li> -->
-        <li style="width:900px" v-for="file of fileDetail">
+        <li v-for="file of fileDetail">
           {{file.name}}
           <span class="btn" @click="downloadFile(file.url,file.name)">下载</span>
         </li>
