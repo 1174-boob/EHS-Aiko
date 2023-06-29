@@ -60,11 +60,10 @@
             <a-input v-model="gasForm.stackHeight" placeholder="请输入排气筒高度" allowClear :disabled="disabled"></a-input>
           </a-form-model-item>
           <a-form-model-item class="flex" label="污染物" prop="instrumentPollutantRelId">
-            <a-select v-model="gasForm.instrumentPollutantRelId" placeholder="请选择" :disabled="gasDisabled">
-              <a-select-option v-for="item in wasteGasModalArr" :key="item.instrumentPollutantRelId" :value="item.instrumentPollutantRelId">
-                <!-- {{ getChemicalDictText('point_location',item.location) }}{{item.pollutantName}}
-                <span v-if="item.pollutantUnit">({{ item.pollutantUnit }})</span> -->
-                {{ item.pollutantName }}
+            <a-select v-model="gasForm.instrumentPollutantRelId" placeholder="请选择" :disabled="gasDisabled" @change="pollutantChange">
+              <a-select-option v-for="item in wasteGasModalArr" :key="item.instrumentPollutantRelId" :value="item.instrumentPollutantRelId" :title="item.pollutantName">
+                {{ getChemicalDictText('point_location',item.location) }}{{item.pollutantName}}
+                <span v-if="item.pollutantUnit">({{ item.pollutantUnit }})</span>
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -382,21 +381,24 @@ export default {
         if (this.tabKey == '1') {
           this.visible = true;
           this.gasDisabled = false;
-          this.wasteGasModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';
-          })
+          
           this.$nextTick(()=>{
             this.gasForm = { ...record };
             this.gasForm.constantAlarmTime = '20';
+            this.wasteGasModalArr = this.pollutantOptions.filter(item => {
+              return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';
+            })
+            this.pollutantChange(this.gasForm.instrumentPollutantRelId);
           })
         } else {
           this.waterVisible = true;
           this.waterDisabled = false;
-          this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';
-          })
+          
           this.$nextTick(()=>{
             this.waterForm = { ...record };
+            this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
+              return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';
+            })
           })
           this.pollutantChange(this.waterForm.instrumentPollutantRelId);
         }
@@ -406,20 +408,20 @@ export default {
         if (this.tabKey == '1') {
           this.visible = true;
           this.gasDisabled = true;
-          this.wasteGasModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';
-          })
           this.$nextTick(()=>{
             this.gasForm = { ...record };
+            this.wasteGasModalArr = this.pollutantOptions.filter(item => {
+              return item.corporationId == this.gasForm.corporationId && item.numberPickInstrumentType == 'gas';
+            })
           })
         } else {
           this.waterVisible = true;
           this.waterDisabled = true;
-          this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
-            return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';
-          })
           this.$nextTick(()=>{
             this.waterForm = { ...record };
+            this.wasteWaterModalArr = this.pollutantOptions.filter(item => {
+              return item.corporationId == this.waterForm.corporationId && item.numberPickInstrumentType == 'water';
+            })
           })
           this.pollutantChange(this.waterForm.instrumentPollutantRelId);
         }
