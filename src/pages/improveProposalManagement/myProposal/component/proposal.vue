@@ -67,7 +67,7 @@
             </a-form-model-item>
             <staffOrDept class="staff-Dept" ref="improveProposalMemberList" :onPreview="disabled" :labelTitle="'提案完善小组成员'" :treeRoles="emRules" :propKey="'improveProposalMemberList'" :checkedTreeNode="improveProposalMemberList" @getTreeData="getImproveProposalMemberList" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
             <staffOrDept class="staff-Dept" ref="departmentReviewerList" :onPreview="(action=='edit' || action=='preview') ? true : false" :labelTitle="'部门级评审员'" :treeRoles="emRules" :propKey="'departmentReviewerList'" :checkedTreeNode="departmentReviewerList" @getTreeData="getReviewerList" :comment="comment" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
-            <staffOrDept v-if="action=='edit'" :onPreview="(emForm.proposalLevel =='1' && action=='edit') ? false : true" class="staff-Dept" ref="deptReviewerList" :labelTitle="'部门级评审员'" :treeRoles="emRules" :propKey="'deptReviewerList'" :checkedTreeNode="deptReviewerList" @getTreeData="getTreeData" :comment="comment1" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
+            <staffOrDept v-if="action=='edit'" :onPreview="(emForm.proposalLevel =='1' && action=='edit') ? false : true" class="staff-Dept" ref="deptReviewerList" :labelTitle="'工厂级评审员'" :treeRoles="emRules" :propKey="'deptReviewerList'" :checkedTreeNode="deptReviewerList" @getTreeData="getTreeData" :comment="comment1" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
           </a-col>
         </a-row>
       </a-form-model>
