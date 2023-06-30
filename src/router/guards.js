@@ -69,6 +69,15 @@ const progressStart = (to, from, next, options) => {
  * @param options
  */
 const loginGuard = (to, from, next, options) => {
+  let userKey = getQueryVariable('userKey');
+  // 首先判断是否为随机登录，如果是，则清空所有信息
+  if(userKey) {
+    if (userKey != sessionStorage.getItem('userKey')) {
+      sessionStorage.clear();
+    } else if (!sessionStorage.getItem('userKey')) {
+      sessionStorage.clear();
+    }
+  }
   // 获取token和用户信息
   let userInfo = sessionStorage.getItem('zconsole_userInfo');
   if (process.env.NODE_ENV == "development") {
@@ -303,45 +312,6 @@ const authorityGuard = (to, from, next, options) => {
           })
         }
       }
-      // // Promise.all([store.dispatch('setting/getMenuAuthList')]).then(() => {
-      //   // return;
-      //   if (!(store.getters["setting/getRouterList"] && store.getters["setting/getRouterList"].length > 0)) {
-      //     // 退出登录
-      //     console.log(222);
-      //     // reLogin(() => {
-      //     //   location.reload();
-      //     // });
-      //     // return
-      //   }
-      //   // getloginUserDataAuth({ routerList: store.getters["setting/getRouterList"] }).then(res => {
-      //   //   sessionStorage.setItem("hasGetloginUserDataAuth", true);
-      //     if (isEmpty(store.state.setting.dictionaryData) || !store.state.userInfo.userInfo || store.state.guard.allButtonCodeList === null) {
-      //       Promise.all([
-      //         store.dispatch('setting/getMenuTree'),
-      //         store.dispatch('setting/getDictionaryData'),
-      //         store.dispatch('setting/getDictTree'),
-      //         store.dispatch('userInfo/getUserInfoFromLoc'),
-      //         store.dispatch('guard/getAllButtonCodeListFn'),
-      //         store.dispatch('setting/getCorporationList'),
-      //         store.dispatch('setting/getCorporationTree'),
-      //         store.dispatch('setting/getLoginCorporation'),
-      //         store.dispatch('setting/getDeptCache'),
-      //         store.dispatch('setting/getMenuAuthList'),
-      //       ]).finally(() => {
-      //         next();
-      //       })
-      //     } else {
-      //       next();
-      //     }
-      //   // }).catch((err) => {
-      //   //   // 退出登录
-      //   //   reLogin(() => {
-      //   //     location.reload();
-      //   //   });
-      //   // })
-      // // }).catch(() => {
-      // //   next();
-      // // })
     } else {
       setTimeout(() => {
         store.commit('userInfo/setUser', undefined)

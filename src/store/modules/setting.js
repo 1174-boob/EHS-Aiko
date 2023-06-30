@@ -440,8 +440,74 @@ export default {
     // 获取token
     async getDevTokenData({ dispatch, commit }, responseData) {
       let code = getQueryVariable('code');
+      let userKey = getQueryVariable('userKey');
       // let companyId = getQueryVariable('companyId');
-      if (!code) {
+      if (userKey) {
+        let params = {
+          userKey: userKey,
+          grantType: 'random',
+          clientId: process.env.VUE_APP_API_CLIENTID
+        }
+        return new Promise((resolve, reject) => {
+          getApiToken(params)
+            .then(res => {
+              if (res.code == 20000) {
+                sessionStorage.setItem('userKey', userKey);
+                console.log(res, 'dddsss')
+                let tokenData = res.data;
+                sessionStorage.setItem('access_token', tokenData.accessToken);
+                sessionStorage.setItem('token_type', tokenData.tokenType);
+                sessionStorage.setItem('userId', tokenData.expireIn);
+                if (tokenData.companyId) {
+                  sessionStorage.setItem('companyId', tokenData.companyId);
+                }
+                sessionStorage.setItem('expires_in', tokenData.expires_in);
+                sessionStorage.setItem('userId', tokenData.userId);
+                sessionStorage.setItem('userName', tokenData.userName);
+                resolve(tokenData)
+              } else {
+                // 添加提示语
+                Vue.prototype.$antMessage.warn('系统异常，获取token失败！3秒后自动跳转登录页')
+                setTimeout(() => {
+                  sessionStorage.clear();
+                  if (process.env.NODE_ENV === "production") {
+                    // currentRouter.push("/login");
+                    window.location.href =
+                      process.env.VUE_APP_API_BASE_OUT_URL +
+                      "client_id=" +
+                      process.env.VUE_APP_CLIENTID +
+                      "&response_type=" +
+                      process.env.VUE_APP_RESPONSE_TYPE +
+                      "&redirectUrl=" +
+                      process.env.VUE_APP_REDIRECT_URI;
+                  } else {
+                    currentRouter.push("/login");
+                  }
+                }, 3000);
+              }
+            }).catch(err => {
+              // 添加提示语
+              Vue.prototype.$antMessage.warn('系统异常，获取token失败！3秒后自动跳转登录页')
+              setTimeout(() => {
+                sessionStorage.clear();
+                if (process.env.NODE_ENV === "production") {
+                  // currentRouter.push("/login");
+                  window.location.href =
+                    process.env.VUE_APP_API_BASE_OUT_URL +
+                    "client_id=" +
+                    process.env.VUE_APP_CLIENTID +
+                    "&response_type=" +
+                    process.env.VUE_APP_RESPONSE_TYPE +
+                    "&redirectUrl=" +
+                    process.env.VUE_APP_REDIRECT_URI;
+                } else {
+                  currentRouter.push("/login");
+                }
+              }, 3000);
+              reject(err)
+            })
+        })
+      } else if (!code) {
         if (sessionStorage.getItem('access_token')) {
           let params = {
             userId: sessionStorage.getItem('userId'),
