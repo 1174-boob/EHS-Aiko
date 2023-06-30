@@ -20,6 +20,11 @@
               <dept-tree :disabled="disabled" :placeholder="'请选择保管部门'" v-model="newlyForm.saveDeptCode" :deptData="deptData" @change="(id,name)=>saveDeptChange(id,name)" allowClear></dept-tree>
             </a-form-model-item>
             <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="false" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
+            <a-form-model-item label="车辆归属" prop="belongTo" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-select :disabled="disabled" v-model="newlyForm.belongTo" placeholder="请选择" show-search :filter-option="filterOption">
+                <a-select-option v-for="item in belongToList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+              </a-select>
+            </a-form-model-item>
             <a-form-model-item label="动力形式" prop="specialEquipmentDetail.forkliftPowerType" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.forkliftPowerType" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
@@ -85,6 +90,7 @@ import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import { specialEquipmentInsert, specialEquipmentUpdate, specialEquipmentDetail } from "@/services/specialDevice.js";
 import moment from "moment";
 import { formValidator } from "@/utils/clx-form-validator.js";
+import dictionary from "@/utils/dictionary";
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 
 import staffOrDept from "@/components/staffOrDept";
@@ -102,6 +108,8 @@ export default {
       addEdit: "add", //add 新建，edit编辑
       checkedTreeNode:[],
       deptDisabled: false,
+      dictionary,
+      belongToList:[],
       flowData: {},
       labelCol: { span: 6 },
       wrapperCol: { span: 17 },
@@ -149,6 +157,9 @@ export default {
         equipmentStatus: [
           { required: true, message: '请选择设备状态', trigger: ['blur', 'change'] },
         ],
+        belongTo: [
+          { required: true, message: '请选择车辆归属', trigger: ['blur', 'change'] },
+        ],
         checkDate: [
           { required: true, message: '请选择检验日期', trigger: ['blur', 'change'] },
         ],
@@ -165,6 +176,7 @@ export default {
   computed: {
   },
   created() {
+    this.belongToList = dictionary("belongTo");
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
       this.$set(this.newlyForm, 'draftDeptCode', adminDeptId ? [adminDeptId] : []);
