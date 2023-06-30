@@ -19,7 +19,7 @@
                 </a-form-model-item>
                 <div class="m-b-20" v-if="iFrom.beforeUser || iFrom.beforeTime">
                   <span>作业确认人：{{iFrom.beforeUser}}</span>
-                  <span class="m-l-20">确认时间：{{iFrom.beforeTime | dateFilter}}</span>
+                  <span class="m-l-20">确认时间：{{iFrom.beforeTime ? iFrom.beforeTime.slice(0,3).join('-') : '--'}}{{iFrom.beforeTime ? iFrom.beforeTime.slice(3,6).join(':') : '--'}}</span>
                 </div>
 
                 <template title="作业环境测定" v-if="iFromDefault.operateType == 'space_work'">
