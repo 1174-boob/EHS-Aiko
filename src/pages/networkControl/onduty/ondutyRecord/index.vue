@@ -520,10 +520,10 @@ export default {
     },
     editInspectionRecordItemEngine(row) {
       let currentIndex;
-      this.iFrom.engineAlarmList.forEach((item, index)=>{
+      this.iFrom.fireEngineCheckList.forEach((item, index)=>{
         row.engineTimeStamp == item.engineTimeStamp && (currentIndex = index);
       })
-      Object.assign(this.iFrom.engineAlarmList[currentIndex], row)
+      Object.assign(this.iFrom.fireEngineCheckList[currentIndex], row)
     },
     rmFireRecordItem(row) {
       let currentIndex;
