@@ -159,7 +159,7 @@ export default {
       }
       this.handleLoading()
       this.formModel.checkTime = dayJs(this.formModel.checkTime).format("YYYY-MM-DD HH:mm:ss")
-      if(this.roomType == '编辑') {
+      if(this.engineType == '编辑') {
         this.$emit('changeModuleList', this.formModel)
       } else {
         this.formModel.engineTimeStamp = new Date().getTime() + '';
