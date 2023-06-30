@@ -20,8 +20,8 @@
               <dept-tree :disabled="disabled" :placeholder="'请选择保管部门'" v-model="newlyForm.saveDeptCode" :deptData="deptData" @change="(id,name)=>saveDeptChange(id,name)" allowClear></dept-tree>
             </a-form-model-item>
             <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="false" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
-            <a-form-model-item label="车辆归属" prop="belongTo" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-select :disabled="disabled" v-model="newlyForm.belongTo" placeholder="请选择" show-search :filter-option="filterOption">
+            <a-form-model-item label="车辆归属" prop="specialEquipmentDetail.belongTo" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-select :disabled="disabled" placeholder="'请选择车辆归属'" v-model.trim="newlyForm.specialEquipmentDetail.belongTo"  show-search :filter-option="filterOption">
                 <a-select-option v-for="item in belongToList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
               </a-select>
             </a-form-model-item>
@@ -69,6 +69,9 @@
             <a-form-model-item label="附件" :label-col="labelCol" :wrapper-col="wrapperCol">
               <UploadBtnStyle :onlyShow="disabled" :showAcceptText="true" :accept="['.doc','.docx','.pdf','.xls','.xlsx','.ppt']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccess"></UploadBtnStyle>
             </a-form-model-item>
+            <a-form-model-item label="附图" prop="specialVehicleImagesList" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <upload-can-remove ref="editModel" :maxSize="10" :limit="20" :headImgs="specialVehicleImagesList" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :disabled="disabled"></upload-can-remove>
+            </a-form-model-item>
           </a-col>
           <a-col :span="12"></a-col>
         </a-row>
@@ -88,6 +91,7 @@
 <script>
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import { specialEquipmentInsert, specialEquipmentUpdate, specialEquipmentDetail } from "@/services/specialDevice.js";
+import UploadCanRemove from "@/components/upload/uploadCanRemove.vue";
 import moment from "moment";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import dictionary from "@/utils/dictionary";
@@ -100,7 +104,8 @@ export default {
   components: {
     FixedBottom,
     UploadBtnStyle,
-    staffOrDept
+    staffOrDept,
+    UploadCanRemove
     // OrganizeLazyTreeStaff
   },
   data() {
@@ -110,6 +115,7 @@ export default {
       deptDisabled: false,
       dictionary,
       belongToList:[],
+      specialVehicleImagesList: [],
       flowData: {},
       labelCol: { span: 6 },
       wrapperCol: { span: 17 },
@@ -157,7 +163,7 @@ export default {
         equipmentStatus: [
           { required: true, message: '请选择设备状态', trigger: ['blur', 'change'] },
         ],
-        belongTo: [
+        'specialEquipmentDetail.belongTo': [
           { required: true, message: '请选择车辆归属', trigger: ['blur', 'change'] },
         ],
         checkDate: [
@@ -189,6 +195,15 @@ export default {
     }
   },
   methods: {
+    // 附图上传
+    async addFormUploadSuccess(fileList) {
+      let photoList = [];
+      for(let item of fileList) {
+        photoList.push(item.id)
+      }
+      this.newlyForm.specialVehicleImagesList = photoList;
+      this.specialVehicleImagesList = fileList;
+    },
     saveConfirm() {
       if (!formValidator.formAll(this, 'newlyForm')) {
         return;

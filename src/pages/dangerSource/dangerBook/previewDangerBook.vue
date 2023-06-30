@@ -54,7 +54,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="可能导致事件" prop="possibleEvents">
-                <a-select v-model="iFrom.possibleEvents" placeholder="请选择" :disabled='true' >
+                <a-select v-model="iFrom.possibleEvents" placeholder="请选择" :disabled='true' mode="multiple">
                   <a-select-option v-for="item in dangerLeadtheevent" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -355,6 +355,7 @@ export default {
     getAccountDetail(id){
       selectAccountDetail({id}).then(res=>{
         this.iFrom = res.data;
+        this.iFrom.possibleEvents = JSON.parse(this.iFrom.possibleEvents);
         this.$refs.commonSearchItem.corporationChange(res.data.corporationId,res.data.deptId)
       }).catch(err=>{
         console.log(err);

@@ -76,6 +76,25 @@ const mixin = {
           ...data.specialEquipmentDetailDto,
         },
       }
+      const specialVehicleImagesList = data.specialEquipmentDetailDto.specialVehicleImagesFileList; 
+      if( specialVehicleImagesList && specialVehicleImagesList.length > 0) {
+        const fileLists = [];
+        const photoList = [];
+        for (let index = 0; index < specialVehicleImagesList.length; index++) {
+          const item = specialVehicleImagesList[index];
+          let fileObj = {
+            uid: item.id,
+            id: item.id,
+            name: item.fileName,
+            url: item.filePath,
+            status: 'done',
+          };
+          fileLists.push(fileObj);
+          photoList.push(item.id);
+        }
+        this.specialVehicleImagesList = fileLists;
+        this.newlyForm.specialVehicleImagesList = photoList;
+      }
       //起草人
       this.newlyForm.applicant = this.newlyForm.draftName + '/' + this.newlyForm.draftNum
       //保管人

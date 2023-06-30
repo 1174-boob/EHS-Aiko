@@ -69,7 +69,7 @@
       >
         <!-- <template slot="deptId" slot-scope="record">
           {{record.deptId ? deptCache[record.deptId] : '--'}}
-        </template>-->
+        </template> -->
         <div slot="action" slot-scope="record">
           <span v-if="record.infoStatus =='status1' || record.infoStatus =='status4'" class="color-0067cc cursor-pointer m-r-15" @click="actionEdit(record.id)">编辑</span>
           <span v-if="record.infoStatus =='status2' || record.infoStatus =='status3'" class="color-0067cc cursor-pointer m-r-15" @click="actionPreview(record.id)">查看</span>
@@ -221,6 +221,7 @@ export default {
       },
       riskLevel: [],
       editForm: {},
+      possibleEventsList: null,
       columns: [
         {
           title: '状态',
@@ -299,17 +300,18 @@ export default {
           dataIndex: 'possibleEvents',
           width: 150,
           customRender: (text, record, index) => {
-            return text ? text : '--';
+            let dictText = text ? JSON.parse(text) : [];
+            let list = this.possibleEventsList, arr = [];
+            dictText.forEach(item1=> {
+              list.forEach(item2=> {
+                if(item1 == item2.dictValue) {
+                  arr.push(item2.dictLabel)
+                }
+              })
+            })
+            return arr.length > 1 ? arr.join(',') : '--';
           },
         },
-        // {
-        //   title: '危险等级',
-        //   dataIndex: 'hazardLevel',
-        //   width: 150,
-        //   customRender: (text,record) => {
-        //     return text ? dictionary('hazardLevel', text) : "--";
-        //   },
-        // },
         {
           title: '风险分级',
           dataIndex: 'riskClassification',
@@ -469,6 +471,7 @@ export default {
     }
   },
   created() {
+    this.possibleEventsList = this.getDictItemList('wxy_leadtheevent');
     this.setRouterCode("dangerBook");
     this.columns.splice(2, 0, this.addCommonColumnItem(150));
     this.detailColumns.splice(0, 0, this.addCommonColumnItem(150));
@@ -783,7 +786,6 @@ export default {
         factoryList: [factoryList],
         riskReviewExpertDtoList,
       }
-      console.log(params, 11);
       reviewSave(params).then(res => {
         let {id} = res.data
         for (let row of this.selectedRow) {

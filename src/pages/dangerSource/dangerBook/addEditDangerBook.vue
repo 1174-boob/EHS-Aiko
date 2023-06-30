@@ -53,8 +53,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="可能导致事件" prop="possibleEvents">
-                <a-select v-model="iFrom.possibleEvents" placeholder="请选择"  >
+              <a-form-model-item label="可能导致事件" prop="possibleEventsList">
+                <a-select mode="multiple" v-model="iFrom.possibleEventsList" placeholder="请选择"  >
                   <a-select-option v-for="item in dangerLeadtheevent" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -229,7 +229,7 @@ export default {
         //危险源
         riskType: undefined,
         riskClass: undefined,
-        possibleEvents: undefined,
+        possibleEventsList: undefined,
         partsBodyInjury: undefined,
         riskDescription: undefined,
         //作业条件危险性评价
@@ -259,7 +259,7 @@ export default {
         //危险源
         riskType: [{ required: true, message: "危险源类型不能为空", trigger: "change" },],
         riskClass: [{ required: true, message: "危险源种类不能为空", trigger: "change" },],
-        possibleEvents: [{ required: true, message: "可能导致事件不能为空", trigger: "change" },],
+        possibleEventsList: [{ required: true, message: "可能导致事件不能为空", trigger: "change" },],
         partsBodyInjury: [{ required: true, message: "可能接触伤害的部位不能为空", trigger: "change" },],
         riskDescription: [{ required: true, message: "风险描述不能为空", trigger: "change" },],
         

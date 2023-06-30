@@ -110,6 +110,7 @@ export default {
       formInline: {
         corporationId: undefined,
       },
+      possibleEventsList: null,
       classDictObj: {}, //所属分类数据
       // deptData: [],
       dangerApproveForm: {},
@@ -184,6 +185,18 @@ export default {
           title: '可能导致的事件',
           dataIndex: 'possibleEvents',
           width: 150,
+          customRender: (text, record, index) => {
+            let dictText = text ? JSON.parse(text) : [];
+            let list = this.possibleEventsList, arr = [];
+            dictText.forEach(item1=> {
+              list.forEach(item2=> {
+                if(item1 == item2.dictValue) {
+                  arr.push(item2.dictLabel)
+                }
+              })
+            })
+            return arr.length > 1 ? arr.join(',') : '--';
+          },
         },
         {
           title: '操作',
@@ -199,6 +212,7 @@ export default {
   },
   created() {
     this.setRouterCode("dangerApprove");
+    this.possibleEventsList = this.getDictItemList('wxy_leadtheevent');
     this.getDataList();
     this.initConfigPage()
   },
