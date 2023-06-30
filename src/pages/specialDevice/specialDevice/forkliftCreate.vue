@@ -21,7 +21,7 @@
             </a-form-model-item>
             <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="false" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
             <a-form-model-item label="车辆归属" prop="specialEquipmentDetail.belongTo" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-select :disabled="disabled" placeholder="'请选择车辆归属'" v-model.trim="newlyForm.specialEquipmentDetail.belongTo"  show-search :filter-option="filterOption">
+              <a-select :disabled="disabled" :placeholder="'请选择车辆归属'" v-model.trim="newlyForm.specialEquipmentDetail.belongTo"  show-search :filter-option="filterOption">
                 <a-select-option v-for="item in belongToList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
               </a-select>
             </a-form-model-item>
