@@ -45,6 +45,8 @@
                      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange,fixed:true }"
                      rowKey="equipmentId"
                      bordered>
+                <div slot="equipmentType" slot-scope="record">{{getMappingValue(deviceInfo, "dictValue", record.equipmentType).dictLabel}}</div>
+                <div slot="equipmentRegion" slot-scope="record">{{getMappingValue(equipmentRegionAreaList, "dictValue", record.equipmentRegion).dictLabel}}</div>
             </a-table>
         </CommonTable>
     </div>
@@ -107,14 +109,12 @@ export default {
                 },
                 {
                     title: "设备类型",
-                    dataIndex: "equipmentType",
-                    key: "equipmentType",
+                    scopedSlots: { customRender: 'equipmentType' },
                     align: "center",
                 },
                 {
                     title: "区域",
-                    dataIndex: "equipmentRegion",
-                    key: "equipmentRegion",
+                    scopedSlots: { customRender: 'equipmentRegion' },
                     align: "center",
                 },
                 {
@@ -166,13 +166,30 @@ export default {
             selectedRow: [],
         };
     },
-    computed: {},
+    computed: {
+        equipmentRegionAreaList() {
+            const dict = this.$store.state.setting.dictTypeData;
+            const areaInfo = dict.find((item) => {
+                return item.dictType == "device_area";
+            });
+            console.log(areaInfo.dictItem, 'sss')
+            return areaInfo.dictItem;
+        },
+        deviceInfo() {
+            //从字典组里获取化学品名称数据
+            const dict = this.$store.state.setting.dictTypeData;
+            const deviceInfo = dict.find((item) => {
+                return item.dictType == "equipment_type";
+            });
+            console.log(deviceInfo.dictItem, 'aaa')
+            return deviceInfo.dictItem;
+        },
+    },
     created () {
         this.selectedRow = cloneDeep(this.selectedRowOld)
         this.selectedRowKeys = this.selectedRowOld.map(item => item[this.tableRowKey]).filter(item => item || item === 0)
         this.initData();
     },
-    mounted () { },
     methods: {
         // 页码改变
         pageNoChange (page) {
