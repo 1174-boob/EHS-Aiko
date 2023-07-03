@@ -560,7 +560,7 @@ export default {
     }
     this.setRouterCode("deviceAuth");
     this.type = this.$route.query.type || getQueryVariable('type')
-    this.manage = this.$route.query.manage ? this.$route.query.manage : false;
+    this.manage = this.$route.query.manage || getQueryVariable('manage');
     let user = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user || {};
     this.userId = user.userId;
     if (this.type > 1) {
