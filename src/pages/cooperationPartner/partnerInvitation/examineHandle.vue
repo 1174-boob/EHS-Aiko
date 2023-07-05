@@ -338,7 +338,7 @@ export default {
     },
     // 获取页面详情
     getPageDetail() {
-      let invitationId = this.$route.query.invitationId
+      let invitationId = this.invitationId;
       let apiData = { invitationId }
       return new Promise((resove, rej) => {
         enterpriseDetail(apiData)

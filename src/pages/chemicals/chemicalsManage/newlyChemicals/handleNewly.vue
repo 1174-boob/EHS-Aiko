@@ -328,8 +328,9 @@ export default {
       this.deptData = value;
     },
     getNewlyDetail(importId) {
+      const userKey = getQueryVariable("userKey");
       const handleNewly = sessionStorage.getItem("handleNewly");
-      this.handleNewly = handleNewly == 1 ? true : false;
+      this.handleNewly = (handleNewly == 1 || userKey) ? true : false;
       manageDetail({importId}).then(res=>{
         const data = res.data;
         this.newlyForm = data;
