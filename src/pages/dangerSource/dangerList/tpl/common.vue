@@ -64,7 +64,7 @@
         <a-form-model-item label="可能导致事件">
           <a-select v-model="formInline.possibleEvents" placeholder="请选择">
             <a-select-option
-              v-for="item in chemicalsList"
+              v-for="item in wxyLeadtheevent"
               :key="item.dictValue"
               :value="item.dictValue"
               >{{ item.dictLabel }}</a-select-option
@@ -222,6 +222,7 @@ export default {
     return {
       tableSpinning:false,
       loadingExport: false,
+      possibleEventsList: null,
       outOrganizeTreeList: [],
       riskClassList: dictionary("riskLevel"), //风险分级
       //导入弹窗开关
@@ -335,16 +336,18 @@ export default {
           title: "可能导致事件",
           dataIndex: "possibleEvents",
           width: 150,
-          customRender: (text) => {
-            text = text ? text : "";
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
+          customRender: (text, record, index) => {
+            let dictText = text ? JSON.parse(text) : [];
+            let list = this.possibleEventsList, arr = [];
+            dictText.forEach(item1=> {
+              list.forEach(item2=> {
+                if(item1 == item2.dictValue) {
+                  arr.push(item2.dictLabel)
+                }
+              })
+            })
+            console.log(arr, 'aaa')
+            return arr.length > 0 ? arr.join(',') : '--';
           },
         },
         {
@@ -389,11 +392,19 @@ export default {
     };
   },
   created() {
+    this.possibleEventsList = this.getDictItemList('wxy_leadtheevent');
     this.getDataList(); //获取列表
     this.initConfigPage()
   },
   computed: {
     ...mapState("setting", ["deptCache"]),
+    wxyLeadtheevent() {
+      const dict = this.$store.state.setting.dictTypeData;
+      const wxyLeadtheevent = dict.find((item) => {
+        return item.dictType == "wxy_leadtheevent";
+      });
+      return wxyLeadtheevent.dictItem;
+    },
   },
   activated() {
     setTimeout(() => {

@@ -544,12 +544,13 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
+    const userKey = getQueryVariable('userKey');
     const id = to.query.id || getQueryVariable('dangerId');
     const code = to.query.code || getQueryVariable('dangerCode');
     if (id) {
       next(vm => {
         vm.setRouterCode("dangerApprove");
-        vm.processReview = sessionStorage.getItem('processReview');
+        vm.processReview = userKey ? '2' : sessionStorage.getItem('processReview');
         vm.dangerApproveId = id;
         vm.dangerApproveCode = code;
         vm.getApproveDetail(id,code);

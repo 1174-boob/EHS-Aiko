@@ -172,7 +172,6 @@ export default {
             const areaInfo = dict.find((item) => {
                 return item.dictType == "device_area";
             });
-            console.log(areaInfo.dictItem, 'sss')
             return areaInfo.dictItem;
         },
         deviceInfo() {
@@ -181,7 +180,6 @@ export default {
             const deviceInfo = dict.find((item) => {
                 return item.dictType == "equipment_type";
             });
-            console.log(deviceInfo.dictItem, 'aaa')
             return deviceInfo.dictItem;
         },
     },

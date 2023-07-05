@@ -109,7 +109,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="可能导致事件" prop="possibleEvents">
-                <a-select v-model="iFrom.possibleEvents" placeholder="请选择">
+                <a-select v-model="iFrom.possibleEvents" placeholder="请选择" mode="multiple">
                   <a-select-option
                     v-for="item in dangerLeadtheevent"
                     :key="item.dictValue"
@@ -562,7 +562,7 @@ export default {
             //危险源
             riskType: res.data.riskType || undefined,
             riskClass: res.data.riskClass || undefined,
-            possibleEvents: res.data.possibleEvents || undefined,
+            possibleEvents: res.data.possibleEvents ? JSON.parse(res.data.possibleEvents || []) : [],
             partsBodyInjury: res.data.partsBodyInjury || undefined,
             riskDescription: res.data.riskDescription || undefined,
             //作业条件危险性评价

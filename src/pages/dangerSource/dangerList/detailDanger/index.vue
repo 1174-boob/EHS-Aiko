@@ -130,6 +130,7 @@
                   v-model="iFrom.possibleEvents"
                   placeholder="请选择"
                   :disabled="true"
+                  mode="multiple"
                 >
                   <a-select-option
                     v-for="item in dangerLeadtheevent"
@@ -576,7 +577,7 @@ export default {
             //危险源
             riskType: res.data.riskType || undefined,
             riskClass: res.data.riskClass || undefined,
-            possibleEvents: res.data.possibleEvents || undefined,
+            possibleEvents: res.data.possibleEvents ? JSON.parse(res.data.possibleEvents || []) : [],
             partsBodyInjury: res.data.partsBodyInjury || undefined,
             riskDescription: res.data.riskDescription || undefined,
             //作业条件危险性评价
