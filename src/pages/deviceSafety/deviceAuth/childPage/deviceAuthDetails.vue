@@ -124,7 +124,7 @@
                   </a-col>
                   <a-col :span="4">
                     设备类型：{{
-                    i.equipmentType
+                    getMappingValue(deviceInfo, "dictValue", i.equipmentType).dictLabel
                     }}
                   </a-col>
                   <a-col :span="4">
@@ -552,6 +552,16 @@ export default {
       // 主键
       approvalId: undefined
     };
+  },
+  computed: {
+    deviceInfo() {
+      //从字典组里获取化学品名称数据
+      const dict = this.$store.state.setting.dictTypeData;
+      const deviceInfo = dict.find((item) => {
+        return item.dictType == "equipment_type";
+      });
+      return deviceInfo.dictItem;
+    },
   },
   created() {
     if(sessionStorage.getItem("zconsole_userInfo")) {

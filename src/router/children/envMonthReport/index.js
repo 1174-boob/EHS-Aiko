@@ -24,7 +24,7 @@ export const envMonthReport = [
     name: '环境月报信息',
     meta: {
         title: '环境月报信息',
-        routerCode:'terrain',
+        routerCode:'envDetails',
         isPage: true,
         invisible: true,
     },

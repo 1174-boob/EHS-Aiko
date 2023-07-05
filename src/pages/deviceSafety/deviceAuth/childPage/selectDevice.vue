@@ -135,8 +135,8 @@ export default {
                 },
                 {
                     title: "责任担当",
-                    dataIndex: "responsibility",
-                    key: "responsibility",
+                    dataIndex: "responsibilityName",
+                    key: "responsibilityName",
                     align: "center",
                 }, {
                     title: "设备量产时间",

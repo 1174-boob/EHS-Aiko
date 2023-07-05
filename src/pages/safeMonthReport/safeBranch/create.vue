@@ -32,6 +32,7 @@ import moment from 'moment'
 import { safeMonthList, checkReportData, safeMonthProcessSave, safeMonthProcessResolve, safeMonthProcessReject, getSafeLog } from '@/services/safeMonth'
 import { queryDeptTree, PushTask } from '@/services/api'
 import { debounce, cloneDeep } from 'lodash'
+import { getQueryVariable } from "@/utils/util.js";
 
 export default {
   components: { FixedBottom, OPLog, ApproveModal },
@@ -66,7 +67,7 @@ export default {
       return this.$route.meta && (this.$route.meta.isView || this.$route.meta.isResolve)
     },
     isToApprove() {
-      return this.$route.query && +this.$route.query.status === 2
+      return this.$route.query && (+this.$route.query.status === 2 || getQueryVariable('status') == '2')
     },
     isResolve() {
       return this.$route.meta && this.$route.meta.isResolve
@@ -82,10 +83,10 @@ export default {
     },
     para() {
       return {
-        centerId: this.$route.query.cId,
-        corporationId: this.$route.query.corpId,
-        reportDate: this.$route.query.date,
-        state: this.$route.query.state
+        // centerId: this.$route.query.cId || getQueryVariable('type'),
+        corporationId: this.$route.query.corpId || getQueryVariable('corpId'),
+        reportDate: this.$route.query.date || getQueryVariable('date'),
+        state: this.$route.query.state || getQueryVariable('state')
       }
     }
   },
@@ -98,7 +99,7 @@ export default {
       })
       if (this.isView || this.isResolve) {
         let para = {
-          operateId: this.$route.query.id
+          operateId: this.$route.query.id || getQueryVariable('id')
         }
         const { data } = await getSafeLog(para)
         this.opData = data
