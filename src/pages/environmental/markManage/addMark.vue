@@ -51,6 +51,7 @@ export default {
       return {
         uuid:'',
         code: 1,
+        dataSource:{},
         markItem: null,
         dataLength: 0,
         isRerender: false,
@@ -115,6 +116,27 @@ export default {
           pointId: this.pointId
         }
         const { data } = await markPointDetail(para)
+        this.dataSource = data
+        if (data.monitorPointLabelVoList && data.monitorPointLabelVoList.length >= 1) {
+          this.$nextTick(()=>{
+            let annotationElements = document.getElementsByClassName("annotation");
+            if (annotationElements && annotationElements.length >= data.monitorPointLabelVoList.length) {
+              for (var i = 0; i < data.monitorPointLabelVoList.length; i++) {
+                annotationElements[i].innerText = data.monitorPointLabelVoList[i].pointItemName;
+                annotationElements[i].style.color = "white";
+                annotationElements[i].style.fontSize = "14px";
+                annotationElements[i].style.display = "flex";
+                annotationElements[i].style.justifyContent = "center";
+                annotationElements[i].style.alignItems = "center";
+                annotationElements[i].style.borderRadius = "10px";
+              }
+            } else {
+              console.log("Cannot find the annotation elements or there are not enough elements.");
+            }
+          })
+        } else {
+          console.log("Empty monitorPointLabelVoList or monitorPointLabelVoList is not defined.");
+        }
         if (data) {
           this.uuid = data.pointId
           this.currentImage = data.picturePath
@@ -303,8 +325,8 @@ export default {
   display: none;
 }
 /deep/.annotation{
-  opacity: 0.8;
-  background: rgb(255,165,0);
+  opacity: 0.9;
+  background: #0067cc;
   &.selected{
     opacity: 0.6;
   }
