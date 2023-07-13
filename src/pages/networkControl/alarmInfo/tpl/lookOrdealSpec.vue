@@ -6,7 +6,7 @@
     <div :class="['flex-1', 'position-rel', disabled ? 'pd-b-10' : 'pd-b-80']">
       <div :class="['scroll-center-box', disabled ? '' : 'pd-l-50-box']">
         <!-- 顶部 -->
-        <div class="m-t-20 w-90-b">
+        <!-- <div class="m-t-20 w-90-b">
           <a-form-model
             :label-col="{ style: { width: '108px' } }"
             class="form-page"
@@ -45,13 +45,13 @@
               </a-col>
             </a-row>
           </a-form-model>
-        </div>
-        <div class="title">
+        </div> -->
+        <!-- <div class="title">
           <PageTitle>报警曲线</PageTitle>
-        </div>
+        </div> -->
 
         <!-- 中间-eharts -->
-        <div>
+        <!-- <div>
           <div v-if="alarmList.length == 0">
             <a-empty />
           </div>
@@ -60,7 +60,7 @@
             id="hazard-level"
             :class="['h-400', disabled ? 'w-100-b' : 'w-68-b']"
           ></div>
-        </div>
+        </div> -->
 
         <!-- 底部 -->
         <div :class="[disabled ? 'pd-l-50-box' : '']">

@@ -88,7 +88,7 @@
                   </a-form-model-item>
                 </template>
 
-                <a-form-model-item class="work-picture" v-if="step == 3" ref="operateAfterPicture" label="作业后确认" prop="operateAfterPicture">
+                <a-form-model-item class="work-picture" v-if="step == 3 || step == 4" ref="operateAfterPicture" label="作业后确认" prop="operateAfterPicture">
                   <template v-if="isHandlePage">
                     <UploadCanRemove ref="operateAfterPictureUploadCanRemove" :maxSize="5" :limit="20" :headImgs="iFrom.operateAfterPictureList" @handleSuccess="handleOperateAfterPicture"></UploadCanRemove>
                   </template>
