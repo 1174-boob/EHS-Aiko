@@ -1,6 +1,6 @@
 <template>
   <div class="upload-can-remove-box">
-    <a-upload name='multipartFile' :action="action" list-type="picture-card" :disabled="loading || disabled" :headers="headers" :before-upload="beforeUpload" :file-list="fileList" @preview="handlePreview" @change="handleChange">
+    <a-upload name='multipartFile' :multiple="multiple" :action="action" list-type="picture-card" :disabled="loading || disabled" :headers="headers" :before-upload="beforeUpload" :file-list="fileList" @preview="handlePreview" @change="handleChange">
       <div class="upload-can-remove-box-main" v-if="fileList.length < limit">
         <a-icon class="ant-upload-icon" :type="loading ? 'loading' : 'plus'" />
         <span class="ant-upload-text">文件上传</span>
@@ -23,6 +23,11 @@ export default {
     headImgs: {
       type: Array,
       default: () => [],
+    },
+    // 批量上传
+    multiple: {
+      type: Boolean,
+      default: false,
     },
     disabled: {
       type: Boolean,
@@ -53,7 +58,7 @@ export default {
   },
   methods: {
     handlePreview(item) {
-      this.previewImg(item.url);
+      this.previewImg(item.response.data.url);
     },
   },
 };

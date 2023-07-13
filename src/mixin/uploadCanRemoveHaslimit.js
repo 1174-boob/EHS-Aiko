@@ -80,7 +80,6 @@ const uploadMinxin = {
     methods: {
         // 上传之前
         beforeUpload(file) {
-            console.log("上传之前文件file--", file);
             if (!this.fileTypeAndSizeTest(file)) return false;
             // 存储当前文件对象
             this.file = file;
@@ -111,7 +110,7 @@ const uploadMinxin = {
                 case "uploading":
                     break;
                 case "done":
-                    this.uploadDone(info.file.response);
+                    this.uploadDone(info.file.response, info.file);
                     break;
                 case "error":
                     this.fileList.pop()
@@ -131,23 +130,45 @@ const uploadMinxin = {
             }
         },
         // 上传成功
-        uploadDone(res) {
-            // console.log('上传成功', res.data);
-            let { id, url } = res.data
-            let { uid, name, type, size } = this.file
-            console.log(this.file);
-            if (this.addFileList) {
-                this.addFileList.push({ name, type, size, id, url, fileSize: size });
+        uploadDone(res, file) {
+            if(this.multiple) {
+                var ifLast = false;
+                for(let i = 0;i < this.fileList.length;i++) {
+                    (this.fileList[this.fileList.length - 1].response && this.fileList[this.fileList.length - 1].response.data.id == res.data.id) ? (ifLast = true) : (ifLast = false);
+                }
+                if (res.data) {
+                    let { id, url, fileName } = res.data;
+                    this.fileList.some((item) => {
+                        if (item.uid == file.uid) {
+                            this.$set(item, "id", id);
+                            this.$set(item, "url", url);
+                            this.$set(item, "fileName", fileName);
+                            return true;
+                        }
+                    });
+                }
+                if(ifLast) {
+                    this.$antMessage.success(`上传成功`);
+                    this.$emit(this.handleSuccessName, this.fileList);
+                    setTimeout(() => {
+                        this.loading = false
+                    }, 600);
+                }
+            } else {
+                let { id, url } = res.data
+                let { uid, name, type, size } = this.file
+                if (this.addFileList) {
+                    this.addFileList.push({ name, type, size, id, url, fileSize: size });
+                }
+                let fileData = { id, uid, name, status: 'done', url, }
+                this.fileList.pop()
+                this.fileList = [...this.fileList, fileData];
+                this.$antMessage.success(`上传成功`);
+                this.$emit(this.handleSuccessName, this.fileList);
+                setTimeout(() => {
+                    this.loading = false
+                }, 600);
             }
-            let fileData = { id, uid, name, status: 'done', url, }
-            this.fileList.pop()
-            this.fileList = [...this.fileList, fileData];
-            console.log(this.handleSuccessName, '...this.handleSuccessName');
-            this.$antMessage.success(`上传成功`);
-            this.$emit(this.handleSuccessName, this.fileList);
-            setTimeout(() => {
-                this.loading = false
-            }, 600);
         },
         // 上传失败
         uploadError(res) {

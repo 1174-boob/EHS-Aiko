@@ -219,7 +219,7 @@ export default {
           break;
         case "done":
           if (info.file.response.code == 20000) {
-            this.uploadDone(info.file.response);
+            this.uploadDone(info.file.response, info.file);
           } else {
             this.uploadError(info.file.response);
           }
@@ -234,28 +234,56 @@ export default {
       }
     },
     // 上传成功
-    uploadDone(res) {
-      if (res.data) {
-        let { id, url, fileName } = res.data;
-        this.fileList.some((item) => {
-          if (item.uid == this.file.uid) {
-            this.$set(item, "id", id);
-            this.$set(item, "url", url);
-            this.$set(item, "fileName", fileName);
-            return true;
+    uploadDone(res, file) {
+      if(this.multiple) {
+        var ifLast = false;
+        for(let i = 0;i < this.fileList.length;i++) {
+          (this.fileList[this.fileList.length - 1].response && this.fileList[this.fileList.length - 1].response.data.id == res.data.id) ? (ifLast = true) : (ifLast = false);
+        }
+        if (res.data) {
+          let { id, url, fileName } = res.data;
+          this.fileList.some((item) => {
+            if (item.uid == file.uid) {
+              this.$set(item, "id", id);
+              this.$set(item, "url", url);
+              this.$set(item, "fileName", fileName);
+              return true;
+            }
+          });
+        }
+        if(ifLast) {
+          if (res.data && res.data.code == 20001) {
+            this.resultText = res.data.result;
+          } else {
+            this.$antMessage.success(`上传成功`);
           }
-        });
-      }
-      console.log(this.fileList, "...666");
-      this.$emit("handleSuccess", this.fileList);
-      if (res.data && res.data.code == 200001) {
-        this.resultText = res.data.result;
+          this.$emit("handleSuccess", this.fileList);
+          setTimeout(() => {
+            this.loading = false
+          }, 600);
+        }
       } else {
-        this.$antMessage.success(`上传成功`);
+        if (res.data) {
+          let { id, url, fileName } = res.data;
+          this.fileList.some((item) => {
+            if (item.uid == this.file.uid) {
+              this.$set(item, "id", id);
+              this.$set(item, "url", url);
+              this.$set(item, "fileName", fileName);
+              return true;
+            }
+          });
+        }
+        this.$emit("handleSuccess", this.fileList);
+        if (res.data && res.data.code == 200001) {
+          this.resultText = res.data.result;
+        } else {
+          this.$antMessage.success(`上传成功`);
+        }
+        setTimeout(() => {
+          this.loading = false;
+        }, 600);
       }
-      setTimeout(() => {
-        this.loading = false;
-      }, 600);
     },
     // 上传失败
     uploadError(res) {

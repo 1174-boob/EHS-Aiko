@@ -34,6 +34,7 @@
               <upload-can-remove
                 :disabled="disabled"
                 ref="editModel"
+                :multiple="true"
                 :maxSize="5"
                 :limit="20"
                 :headImgs="emForm.headImgs"
@@ -396,8 +397,12 @@ export default {
     },
     // 演练现场照片上传
     addFormUploadSuccess(fileList) {
-      let photoIds = this.handleFileIdS(fileList).join(',');
-      this.$set(this.emForm, "photoId", photoIds);
+      let arr = [];
+      // let photoIds = this.handleFileIdS(fileList).join(',');
+      for(let i = 0;i < fileList.length;i++) {
+        arr.push(fileList[i].id)
+      }
+      this.$set(this.emForm, "photoId", arr.join(','));
       formValidator.formItemValidate(this, "photoId", "emForm")
     },
     // 文件成功上传回调

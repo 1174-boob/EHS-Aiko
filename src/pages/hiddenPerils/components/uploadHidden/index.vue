@@ -31,6 +31,7 @@
           <UploadBtnStyle
             :showAcceptText="true"
             :onlyShow="false"
+            :multiple="true"
             :accept="['.jpg', '.jpeg', '.png']"
             :showUploadList="true"
             :btnText="'上传图片'"
