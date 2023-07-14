@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import { Base64 } from '@/utils/base64.js'
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
 import dragTable from "@/mixin/dragTable.js";
