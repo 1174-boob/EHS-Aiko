@@ -365,8 +365,10 @@ export default {
       if (pollutantObj) {
         if (pollutantObj.pollutantNum == 'lvqi') {
           this.realTimeOption.series[0].type = 'line'
+          this.realTimeOption.dataZoom = this.getdataZoom(95, 100)
         } else {
           this.realTimeOption.series[0].type = 'bar'
+          this.realTimeOption.dataZoom = this.getdataZoom(80, 100)
         }
       }
       return getFlueExhaustECRealTimeOptionApi(apiData)
