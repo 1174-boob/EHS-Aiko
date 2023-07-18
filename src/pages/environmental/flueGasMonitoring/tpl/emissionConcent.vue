@@ -361,6 +361,14 @@ export default {
       let apiData = {
         ...this.getApiData()
       }
+      let pollutantObj = this.matchPollutant(this.formInline.instrumentPollutantRelId, true)
+      if (pollutantObj) {
+        if (pollutantObj.pollutantNum == 'lvqi') {
+          this.realTimeOption.series[0].type = 'line'
+        } else {
+          this.realTimeOption.series[0].type = 'bar'
+        }
+      }
       return getFlueExhaustECRealTimeOptionApi(apiData)
         .then(res => {
           let ajaxData = res.data
