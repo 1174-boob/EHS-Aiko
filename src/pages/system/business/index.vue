@@ -856,4 +856,10 @@ export default {
   width: 100% !important;
 }
 
+@media screen and (max-width: 1367px) {
+  ::v-deep .ant-modal-content{
+    width: 700px;
+  }
+}
+
 </style>
