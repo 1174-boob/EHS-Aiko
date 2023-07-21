@@ -355,7 +355,7 @@ export default {
   computed: {
     // 季度  2023-6-12 修改内容：获取上一个季度的数据
     quarter() {
-      let currMonth = dayJs().month()
+      let currMonth = dayJs().month() + 1
       let currQuarter = Math.floor((currMonth % 3 == 0 ? (currMonth / 3) : (currMonth / 3 + 1)));
       let prevQuarter = currQuarter - 1;
       if (prevQuarter < 1) {
