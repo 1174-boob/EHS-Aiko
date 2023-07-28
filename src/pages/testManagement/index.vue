@@ -170,6 +170,7 @@ export default {
       sessionStorage.removeItem("pathFrom");
       // this.permission = this.canClickBtnMixin("testManagement-del") ? true : false;
       this.companyId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyId;
+      this.companyName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyName;
     },
     //跳转新增、编辑页面
     jumpAddOrDetail(type, record) {
@@ -203,12 +204,14 @@ export default {
         userList1.push({
           userId: this.checkedUserTitle[i].key,
           userName: this.checkedUserTitle[i].name,
-          deptName: this.checkedUserTitle[i].deptName
+          deptName: this.checkedUserTitle[i].deptName,
+          deptId: this.checkedUserTitle[i].deptId,
+          workNum: this.checkedUserTitle[i].workNum,
         });
       }
       let companyList1 = [{
         companyId: this.companyId,
-        companyName: this.chooseStaffDetail.value,
+        companyName: this.companyName,
         userList: [...userList1]
       }];
       let companyList2 = []
