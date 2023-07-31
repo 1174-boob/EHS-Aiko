@@ -60,6 +60,7 @@
     <DashBtn>
       <div class="m-b-20">
         <a-button type="dashed" @click="exportExcel">导出Excel</a-button>
+        <a-button type="dashed" @click="batchProcessing">批量处理</a-button>
       </div>
     </DashBtn>
     <CommonTable
@@ -69,6 +70,11 @@
       :showSizeChange="onShowSizeChange"
     >
       <a-table
+        :row-selection="{
+          selectedRowKeys: selectedRowKeys,
+          onChange: onSelectChange,
+          getCheckboxProps: getCheckboxProps,
+        }"
         :columns="columns"
         :scroll="{ x: 800 }"
         :locale="{ emptyText: emptyText }"
@@ -486,6 +492,26 @@ export default {
       });
     },
 
+    
+    // 批量处理
+    batchProcessing() {
+      if (!this.selectedRowKeys.length) {
+        this.$antMessage.info("请先选择一条数据");
+        return;
+      }
+      this.$router.push({
+        name: "特气处理查看",
+        params: { idList: this.selectedRowKeys, type: "deal" },
+      });
+    },
+
+    getCheckboxProps(record) {
+      return {
+        props: {
+          disabled: record.status == 2,
+        },
+      };
+    },
     findText(arr, key, val) {
       // key：字段值， val：过滤值
       if (val == 0) val = 0 + "";
