@@ -81,7 +81,7 @@
         :data-source="tableDataList"
         :rowKey="
           (record, index) => {
-            return index;
+            return record.equipGasId;
           }
         "
         :pagination="false"

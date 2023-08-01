@@ -405,6 +405,7 @@ export default {
         disposalProcessPhotosList: undefined,
         type: "2",
         alarmId: this.detailObj.idList[0],
+        idList: this.detailObj.idList,
       };
       DealAlarmProcess(params)
         .then(() => {
