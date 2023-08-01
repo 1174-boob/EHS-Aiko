@@ -209,6 +209,21 @@
             ></a-table>
           </CommonTable>
         </a-form-model-item>
+        <a-form-model-item label="特种操作证" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
+          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessTwo" :fileLists="iFrom.tzczzList"></UploadBtnStyle>
+        </a-form-model-item>
+        <a-form-model-item label="环境安全告知书" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
+          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessFive" :fileLists="iFrom.hjaqgzsList"></UploadBtnStyle>
+        </a-form-model-item>
+        <a-form-model-item label="施工人员名单" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
+          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessThree" :fileLists="iFrom.sgryqdList"></UploadBtnStyle>
+        </a-form-model-item>
+        <a-form-model-item label="教育记录" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
+          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessOne" :fileLists="iFrom.jyjlList"></UploadBtnStyle>
+        </a-form-model-item>
+        <a-form-model-item label="安全施工方案orJHA工作危害分析" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
+          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessFour" :fileLists="iFrom.aqsgfaorjhagzwhfxList"></UploadBtnStyle>
+        </a-form-model-item>
       </template>
     </template>
   </a-form-model>
@@ -221,11 +236,12 @@ import { getDangerWorkStaticDetailApi, } from '@/services/dangerWorkStatic.js'
 import { DeptUserTree } from '@/services/api'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import dictionary from "@/utils/dictionary";
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue"
 import { getConsoleOrganizeLazyLoadListApi } from '@/services/chemicalIdentSafetyTipsAdd.js'
 import StaffOrDept from "@/components/staffOrDept";
 import deptAndUser from '@/pages/dangerWorkStatic/mixin/deptAndUser.js'
 export default {
-  components: { StaffOrDept },
+  components: { StaffOrDept ,UploadBtnStyle},
   mixins: [teableCenterEllipsis, chemicalDict, deptAndUser],
   props: {
     iFromDefault: {
@@ -240,8 +256,18 @@ export default {
       xxlSpan: 12,
       userTreeFields: { value: 'key' },
       labelCol: { span: 7 },
+      labelColSpec: { span: 3 },
+      labelColSpecLong: { span: 5 },
       wrapperCol: { span: 17 },
-      iFrom: {},
+      wrapperColSpec: { span: 21 },
+      wrapperColSpecLong: { span: 19 },
+      iFrom: {
+        jyjlList: [], //教育记录
+        tzczzList: [], //特种操作证
+        sgryqdList: [], //施工人员清单
+        aqsgfaorjhagzwhfxList: [], //安全施工方案orJHA工作危害分析
+        hjaqgzsList: [], //环境安全告知书
+      },
       iRules: {
         applyDepartCode: [{ required: true, message: "起草人部门不能为空", trigger: "change" },],
         applyUserCode: [{ required: true, message: "责任担当不能为空", trigger: "change" },],
@@ -383,6 +409,53 @@ export default {
     // 页面初始化
     initPage() {
       let iFrom = cloneDeep(this.iFromDefault)
+      iFrom.jyjlList = (iFrom.jyjlList || []).map(item => {
+        return {
+          url: item.url,
+          name: item.EducationalRecord
+        }
+      })
+      iFrom.tzczzList = (iFrom.tzczzList || []).map(item => {
+        return {
+          url: item.url,
+          name: item.SpecialOperationCertificate
+        }
+      })
+      iFrom.sgryqdList = (iFrom.sgryqdList || []).map(item => {
+        return {
+          url: item.url,
+          name: item.ListOfConstructors
+        }
+      })
+      iFrom.aqsgfaorjhagzwhfxList = (iFrom.aqsgfaorjhagzwhfxList || []).map(item => {
+        return {
+          url: item.url,
+          name: item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+        }
+      })
+      iFrom.hjaqgzsList = (iFrom.hjaqgzsList || []).map(item => {
+        return {
+          url: item.url,
+          name: item.EnvironmentalsafetyNotice
+        }
+      })
+      iFrom.jyjlList = this.addGuid(this.iFromDefault.jyjlList)
+      iFrom.tzczzList = this.addGuid(this.iFromDefault.tzczzList)
+      iFrom.sgryqdList = this.addGuid(this.iFromDefault.sgryqdList)
+      iFrom.aqsgfaorjhagzwhfxList = this.addGuid(this.iFromDefault.aqsgfaorjhagzwhfxList)
+      iFrom.hjaqgzsList = this.addGuid(this.iFromDefault.hjaqgzsList)
+
+      iFrom.jyjlList = this.handleFileIdS(this.iFromDefault.jyjlList)
+      iFrom.tzczzList = this.handleFileIdS(this.iFromDefault.tzczzList)
+      iFrom.sgryqdList = this.handleFileIdS(this.iFromDefault.sgryqdList)
+      iFrom.aqsgfaorjhagzwhfxList = this.handleFileIdS(this.iFromDefault.aqsgfaorjhagzwhfxList)
+      iFrom.hjaqgzsList = this.handleFileIdS(this.iFromDefault.hjaqgzsList)
+
+      iFrom.jyjlList = this.handleFileRedisplayOne(this.iFromDefault.jyjlList)
+      iFrom.tzczzList = this.handleFileRedisplayTwo(this.iFromDefault.tzczzList)
+      iFrom.sgryqdList = this.handleFileRedisplayThree(this.iFromDefault.sgryqdList)
+      iFrom.aqsgfaorjhagzwhfxList = this.handleFileRedisplayFour(this.iFromDefault.aqsgfaorjhagzwhfxList)
+      iFrom.hjaqgzsList = this.handleFileRedisplayFive(this.iFromDefault.hjaqgzsList)
       iFrom.dangerGuardian = this.addGuid(iFrom.dangerGuardian)
       iFrom.dangerSpecialPerson = this.addGuid(iFrom.dangerSpecialPerson)
       this.operateTypeChange(iFrom.operateType, false)
@@ -411,6 +484,107 @@ export default {
       // }
       rm && this.$set(this.iFrom, 'operateLevel', undefined)
     },
+    handleFileSuccessOne(file) {
+      this.iFrom.jyjlList = file.map(item => {
+        return {
+          id: item.guid,
+          url: item.url,
+          name: item.EducationalRecord
+        }
+      }) || []
+    },
+    handleFileSuccessTwo(file) {
+      this.iFrom.tzczzList = file.map(item => {
+        return {
+          id: item.guid,
+          url: item.url,
+          name: item.SpecialOperationCertificate
+        }
+      }) || []
+    },
+    handleFileSuccessThree(file) {
+      this.iFrom.sgryqdList = file.map(item => {
+        return {
+          id: item.guid,
+          url: item.url,
+          name: item.ListOfConstructors
+        }
+      }) || []
+    },
+    handleFileSuccessFour(file) {
+      this.iFrom.aqsgfaorjhagzwhfxList = file.map(item => {
+        return {
+          id: item.guid,
+          url: item.url,
+          name: item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+        }
+      }) || []
+    },
+    handleFileSuccessFive(file) {
+      this.iFrom.hjaqgzsList = file.map(item => {
+        return {
+          id: item.guid,
+          url: item.url,
+          name: item.EnvironmentalsafetyNotice
+        }
+      }) || []
+    },
+    // 处理文件id
+    handleFileIdS(list) {
+      list = list ? list : []
+      let ids = list.map(item => {
+        return item.guid
+      })
+      ids = ids ? ids : []
+      return ids
+    },
+    // 处理文件回显
+    handleFileRedisplayOne(list) {
+      let fileList = list ? list : []
+      fileList.forEach(item => {
+        item.name = item.EducationalRecord
+        item.status = 'done'
+        item.uid = item.guid
+      })
+      return fileList
+    },
+    handleFileRedisplayTwo(list) {
+      let fileList = list ? list : []
+      fileList.forEach(item => {
+        item.name = item.SpecialOperationCertificate
+        item.status = 'done'
+        item.uid = item.guid
+      })
+      return fileList
+    },
+    handleFileRedisplayThree(list) {
+      let fileList = list ? list : []
+      fileList.forEach(item => {
+        item.name = item.ListOfConstructors
+        item.status = 'done'
+        item.uid = item.guid
+      })
+      return fileList
+    },
+    handleFileRedisplayFour(list) {
+      let fileList = list ? list : []
+      fileList.forEach(item => {
+        item.name = item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+        item.status = 'done'
+        item.uid = item.guid
+      })
+      return fileList
+    },
+    handleFileRedisplayFive(list) {
+      let fileList = list ? list : []
+      fileList.forEach(item => {
+        item.name = item.EnvironmentalsafetyNotice
+        item.status = 'done'
+        item.uid = item.guid
+      })
+      return fileList
+    },
+
     // 列表添加guid
     addGuid(list) {
       (list || []).forEach(item => {

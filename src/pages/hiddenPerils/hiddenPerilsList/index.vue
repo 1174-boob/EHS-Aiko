@@ -494,6 +494,8 @@ export default {
             ...apiData,
             exportType: true,
           };
+          params.draftDeptId = this.formInline.deptId ? this.formInline.deptId : ""
+          params.deptId = undefined
           this.loadingExport = true;
           ExportHiddenList(params)
             .then((res) => {
@@ -510,6 +512,8 @@ export default {
             ...apiData,
             exportType: false,
           };
+          params.draftDeptId = this.formInline.deptId ? this.formInline.deptId : ""
+          params.deptId = undefined
           this.loadingExport = true;
           ExportHiddenList(params)
             .then((res) => {
