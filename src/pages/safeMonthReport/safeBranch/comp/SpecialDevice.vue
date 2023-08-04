@@ -221,7 +221,7 @@ export default {
         },
         {
           title: '本月到期年检数量',
-          dataIndex: 'deviceExpire',
+          dataIndex: 'attachExpire',
           width: 200,
           align: 'center'
         },
