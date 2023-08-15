@@ -83,9 +83,9 @@ export default {
   },
   methods: {
     // 退出
-    logout() {
-      this.logoutFn();
-    },
+    // logout() {
+    //   this.logoutFn();
+    // },
     // changeCompany() {
     //   changeCompany().then(res => {
     //     if (res.code == 20000) {
@@ -101,28 +101,28 @@ export default {
     //     }
     //   })
     // },
-    logoutFn() {
-      this.$antConfirm({
-        title: "确认退出登录？",
-        onOk: () => {
-          sessionStorage.clear();
-          if (process.env.NODE_ENV === "production") {
-            // this.$router.push("/login");
-            window.location.href =
-              process.env.VUE_APP_API_BASE_OUT_URL +
-              "client_id=" +
-              process.env.VUE_APP_CLIENTID +
-              "&response_type=" +
-              process.env.VUE_APP_RESPONSE_TYPE +
-              "&redirectUrl=" +
-              process.env.VUE_APP_REDIRECT_URI;
-          } else {
-            this.$router.push("/login");
-          }
-        },
-        onCancel() { },
-      });
-    },
+    // logoutFn() {
+    //   this.$antConfirm({
+    //     title: "确认退出登录？",
+    //     onOk: () => {
+    //       sessionStorage.clear();
+    //       if (process.env.NODE_ENV === "production") {
+    //         // this.$router.push("/login");
+    //         window.location.href =
+    //           process.env.VUE_APP_API_BASE_OUT_URL +
+    //           "client_id=" +
+    //           process.env.VUE_APP_CLIENTID +
+    //           "&response_type=" +
+    //           process.env.VUE_APP_RESPONSE_TYPE +
+    //           "&redirectUrl=" +
+    //           process.env.VUE_APP_REDIRECT_URI;
+    //       } else {
+    //         this.$router.push("/login");
+    //       }
+    //     },
+    //     onCancel() { },
+    //   });
+    // },
     // 跳转帮助中心
     goHelpCenter() {
       window.location.href = process.env.VUE_APP_ZCLOUD_URL + "/#/documentCenter";
@@ -247,13 +247,14 @@ export default {
   }
   // 退出按钮
   .avatar-menu-logout {
-    padding: 0.3rem 0 !important;
-    .avatar-menu-logout-btn {
-      height: 0.5rem;
-      & > span {
-        font-size: 0.16rem;
-      }
-    }
+    display: none;
+    // padding: 0.3rem 0 !important;
+    // .avatar-menu-logout-btn {
+    //   height: 0.5rem;
+    //   & > span {
+    //     font-size: 0.16rem;
+    //   }
+    // }
   }
   .ant-dropdown-menu-item-divider {
     margin: 0 !important;

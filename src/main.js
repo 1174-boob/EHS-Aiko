@@ -242,7 +242,7 @@ Vue.component('DeptOrgTree', deptOrgTree);
 // msg提示的最大数量
 Vue.prototype.$antMessage = message;
 Vue.prototype.$antMessage.config({
-  maxCount: 2,
+  maxCount: 1,
 });
 Vue.prototype.$antNotification = notification;
 Vue.prototype.$antInfo = Modal.info;

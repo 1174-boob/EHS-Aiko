@@ -340,20 +340,21 @@ export default {
     //   this.logoutFn();
     // },
     logoutFn() {
-      sessionStorage.clear();
-      if (process.env.NODE_ENV === "production") {
-        // this.$router.push("/login");
-        window.location.href =
-          process.env.VUE_APP_API_BASE_OUT_URL +
-          "client_id=" +
-          process.env.VUE_APP_CLIENTID +
-          "&response_type=" +
-          process.env.VUE_APP_RESPONSE_TYPE +
-          "&redirectUrl=" +
-          process.env.VUE_APP_REDIRECT_URI;
-      } else {
-        this.$router.push("/login");
-      }
+      console.log('关闭页面');
+      // sessionStorage.clear();
+      // if (process.env.NODE_ENV === "production") {
+      //   // this.$router.push("/login");
+      //   window.location.href =
+      //     process.env.VUE_APP_API_BASE_OUT_URL +
+      //     "client_id=" +
+      //     process.env.VUE_APP_CLIENTID +
+      //     "&response_type=" +
+      //     process.env.VUE_APP_RESPONSE_TYPE +
+      //     "&redirectUrl=" +
+      //     process.env.VUE_APP_REDIRECT_URI;
+      // } else {
+      //   this.$router.push("/login");
+      // }
     },
     //获取头部下拉菜单权限
     // getheaderlist() {

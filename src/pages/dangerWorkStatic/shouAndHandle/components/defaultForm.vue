@@ -412,31 +412,31 @@ export default {
       iFrom.jyjlList = (iFrom.jyjlList || []).map(item => {
         return {
           url: item.url,
-          name: item.EducationalRecord
+          name: item.name
         }
       })
       iFrom.tzczzList = (iFrom.tzczzList || []).map(item => {
         return {
           url: item.url,
-          name: item.SpecialOperationCertificate
+          name: item.name
         }
       })
       iFrom.sgryqdList = (iFrom.sgryqdList || []).map(item => {
         return {
           url: item.url,
-          name: item.ListOfConstructors
+          name: item.name
         }
       })
       iFrom.aqsgfaorjhagzwhfxList = (iFrom.aqsgfaorjhagzwhfxList || []).map(item => {
         return {
           url: item.url,
-          name: item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+          name: item.name
         }
       })
       iFrom.hjaqgzsList = (iFrom.hjaqgzsList || []).map(item => {
         return {
           url: item.url,
-          name: item.EnvironmentalsafetyNotice
+          name: item.name
         }
       })
       iFrom.jyjlList = this.addGuid(this.iFromDefault.jyjlList)
@@ -489,7 +489,7 @@ export default {
         return {
           id: item.guid,
           url: item.url,
-          name: item.EducationalRecord
+          name: item.name
         }
       }) || []
     },
@@ -498,7 +498,7 @@ export default {
         return {
           id: item.guid,
           url: item.url,
-          name: item.SpecialOperationCertificate
+          name: item.name
         }
       }) || []
     },
@@ -507,7 +507,7 @@ export default {
         return {
           id: item.guid,
           url: item.url,
-          name: item.ListOfConstructors
+          name: item.name
         }
       }) || []
     },
@@ -516,7 +516,7 @@ export default {
         return {
           id: item.guid,
           url: item.url,
-          name: item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+          name: item.name
         }
       }) || []
     },
@@ -525,7 +525,7 @@ export default {
         return {
           id: item.guid,
           url: item.url,
-          name: item.EnvironmentalsafetyNotice
+          name: item.name
         }
       }) || []
     },
@@ -542,7 +542,7 @@ export default {
     handleFileRedisplayOne(list) {
       let fileList = list ? list : []
       fileList.forEach(item => {
-        item.name = item.EducationalRecord
+        // item.name = item.EducationalRecord
         item.status = 'done'
         item.uid = item.guid
       })
@@ -551,7 +551,7 @@ export default {
     handleFileRedisplayTwo(list) {
       let fileList = list ? list : []
       fileList.forEach(item => {
-        item.name = item.SpecialOperationCertificate
+        // item.name = item.SpecialOperationCertificate
         item.status = 'done'
         item.uid = item.guid
       })
@@ -560,7 +560,7 @@ export default {
     handleFileRedisplayThree(list) {
       let fileList = list ? list : []
       fileList.forEach(item => {
-        item.name = item.ListOfConstructors
+        // item.name = item.ListOfConstructors
         item.status = 'done'
         item.uid = item.guid
       })
@@ -569,7 +569,7 @@ export default {
     handleFileRedisplayFour(list) {
       let fileList = list ? list : []
       fileList.forEach(item => {
-        item.name = item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+        // item.name = item.SafetyConstructionSchemeORJHAworkHazardAnalysis
         item.status = 'done'
         item.uid = item.guid
       })
@@ -578,7 +578,7 @@ export default {
     handleFileRedisplayFive(list) {
       let fileList = list ? list : []
       fileList.forEach(item => {
-        item.name = item.EnvironmentalsafetyNotice
+        // item.name = item.EnvironmentalsafetyNotice
         item.status = 'done'
         item.uid = item.guid
       })

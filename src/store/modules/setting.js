@@ -467,7 +467,7 @@ export default {
                 resolve(tokenData)
               } else {
                 // 添加提示语
-                Vue.prototype.$antMessage.warn('系统异常，获取token失败！3秒后自动跳转登录页')
+                // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
                 setTimeout(() => {
                   sessionStorage.clear();
                   if (process.env.NODE_ENV === "production") {
@@ -487,7 +487,7 @@ export default {
               }
             }).catch(err => {
               // 添加提示语
-              Vue.prototype.$antMessage.warn('系统异常，获取token失败！3秒后自动跳转登录页')
+              // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
               setTimeout(() => {
                 sessionStorage.clear();
                 if (process.env.NODE_ENV === "production") {
@@ -568,7 +568,7 @@ export default {
               resolve(tokenData)
             } else {
               // 添加提示语
-              Vue.prototype.$antMessage.warn('系统异常，获取token失败！3秒后自动跳转登录页')
+              // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
               setTimeout(() => {
                 sessionStorage.clear();
                 if (process.env.NODE_ENV === "production") {
@@ -588,7 +588,7 @@ export default {
             }
           }).catch(err => {
             // 添加提示语
-            Vue.prototype.$antMessage.warn('系统异常，获取token失败！3秒后自动跳转登录页')
+            // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
             setTimeout(() => {
               sessionStorage.clear();
               if (process.env.NODE_ENV === "production") {
