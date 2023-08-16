@@ -465,6 +465,10 @@ export default {
                 sessionStorage.setItem('userId', tokenData.userId);
                 sessionStorage.setItem('userName', tokenData.userName);
                 resolve(tokenData)
+              } else if(res.code == 20021) {
+                  setTimeout(()=>{
+                    window.location.href = process.env.VUE_APP_GOHOME
+                  }, 3000);
               } else {
                 // 添加提示语
                 // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
@@ -566,7 +570,11 @@ export default {
               sessionStorage.setItem('userId', tokenData.userId);
               sessionStorage.setItem('userName', tokenData.userName);
               resolve(tokenData)
-            } else {
+            } else if(res.code == 20021) {
+                setTimeout(()=>{
+                  window.location.href = process.env.VUE_APP_GOHOME
+                }, 3000);
+            }  else {
               // 添加提示语
               // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
               setTimeout(() => {
@@ -587,24 +595,29 @@ export default {
               }, 3000);
             }
           }).catch(err => {
+            if(err.code == 20021) {
+              setTimeout(()=>{
+                window.location.href = process.env.VUE_APP_GOHOME
+              }, 3000);
+            }
             // 添加提示语
             // Vue.prototype.$antMessage.warn('暂无权限，请联系管理员开通')
-            setTimeout(() => {
-              sessionStorage.clear();
-              if (process.env.NODE_ENV === "production") {
-                // currentRouter.push("/login");
-                window.location.href =
-                  process.env.VUE_APP_API_BASE_OUT_URL +
-                  "client_id=" +
-                  process.env.VUE_APP_CLIENTID +
-                  "&response_type=" +
-                  process.env.VUE_APP_RESPONSE_TYPE +
-                  "&redirectUrl=" +
-                  process.env.VUE_APP_REDIRECT_URI;
-              } else {
-                currentRouter.push("/login");
-              }
-            }, 3000);
+            // setTimeout(() => {
+            //   sessionStorage.clear();
+            //   if (process.env.NODE_ENV === "production") {
+            //     // currentRouter.push("/login");
+            //     window.location.href =
+            //       process.env.VUE_APP_API_BASE_OUT_URL +
+            //       "client_id=" +
+            //       process.env.VUE_APP_CLIENTID +
+            //       "&response_type=" +
+            //       process.env.VUE_APP_RESPONSE_TYPE +
+            //       "&redirectUrl=" +
+            //       process.env.VUE_APP_REDIRECT_URI;
+            //   } else {
+            //     currentRouter.push("/login");
+            //   }
+            // }, 3000);
             reject(err)
           })
       })
