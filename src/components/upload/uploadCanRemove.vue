@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     handlePreview(item) {
-      this.previewImg(item.response.data.url);
+      this.previewImg(item.url?item.url:item.response.data.url);//  item.response.data.url
     },
   },
 };

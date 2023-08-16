@@ -402,6 +402,7 @@ export default {
       for(let i = 0;i < fileList.length;i++) {
         arr.push(fileList[i].id)
       }
+      // console.log('fileList',fileList);
       this.$set(this.emForm, "photoId", arr.join(','));
       formValidator.formItemValidate(this, "photoId", "emForm")
     },

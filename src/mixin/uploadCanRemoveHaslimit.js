@@ -148,11 +148,13 @@ const uploadMinxin = {
                     });
                 }
                 if(ifLast) {
-                    this.$antMessage.success(`上传成功`);
-                    this.$emit(this.handleSuccessName, this.fileList);
-                    setTimeout(() => {
+                    setTimeout(()=>{
+                        this.$emit(this.handleSuccessName, this.fileList);
                         this.loading = false
-                    }, 600);
+                        this.$antMessage.success(`上传成功`);
+                    },10000);
+                    // setTimeout(() => {
+                    // }, 600);
                 }
             } else {
                 let { id, url } = res.data
@@ -187,7 +189,7 @@ const uploadMinxin = {
         },
         // 图片预览
         previewImg(imgUrl) {
-            this.$hevueImgPreview(imgUrl);
+            this.$hevueImgPreview({url: imgUrl, clickMaskCLose: true});
         },
         // 设置header
         setAuthorization() {
