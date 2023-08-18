@@ -152,7 +152,7 @@ const uploadMinxin = {
                         this.$emit(this.handleSuccessName, this.fileList);
                         this.loading = false
                         this.$antMessage.success(`上传成功`);
-                    },10000);
+                    },2000);
                     // setTimeout(() => {
                     // }, 600);
                 }

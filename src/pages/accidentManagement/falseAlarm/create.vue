@@ -94,14 +94,14 @@
           <a-row>
             <a-col :span="12">
               <a-form-model-item label="现场图片" prop="eventScenePicList" :label-col="labelCol" :wrapper-col="wrapperCol">
-                <UploadCanRemove :disabled="disabled" ref="pictureListUploadCanRemove" :maxSize="5" :limit="1" :headImgs="iFrom.eventScenePicList" @handleSuccess="handleSceneSuccess"></UploadCanRemove>
+                <UploadCanRemove :disabled="disabled" ref="pictureListUploadCanRemove" :maxSize="5" :limit="20" :headImgs="iFrom.eventScenePicList" @handleSuccess="handleSceneSuccess"></UploadCanRemove>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
               <a-form-model-item label="分析示意图" prop="eventAnalysisPicList" :label-col="labelCol" :wrapper-col="wrapperCol">
-                <UploadCanRemove :disabled="disabled" ref="pictureListUploadCanRemove" :maxSize="5" :limit="1" :headImgs="iFrom.eventAnalysisPicList" @handleSuccess="handleAnalysisSuccess"></UploadCanRemove>
+                <UploadCanRemove :disabled="disabled" ref="pictureListUploadCanRemove" :maxSize="5" :limit="20" :headImgs="iFrom.eventAnalysisPicList" @handleSuccess="handleAnalysisSuccess"></UploadCanRemove>
               </a-form-model-item>
             </a-col>
           </a-row>
