@@ -441,15 +441,15 @@ export default {
           align: "center",
           width: 200
         },
-        {
-          title: "所属组织",
-          dataIndex: "siteCode",
-          key: "siteCode",
-          align: "center",
-          customRender: (text, record, index) => {
-            return this.corporationDict[text] ? this.corporationDict[text] : "--";
-          },
-        },
+        // {
+        //   title: "所属组织",
+        //   dataIndex: "siteCode",
+        //   key: "siteCode",
+        //   align: "center",
+        //   customRender: (text, record, index) => {
+        //     return this.corporationDict[text] ? this.corporationDict[text] : "--";
+        //   },
+        // },
         {
           title: "资料名称",
           dataIndex: "infoName",
@@ -732,7 +732,7 @@ export default {
     }
   },
   created() {
-    // this.msdsColumns.splice(1, 0, this.addCommonColumnItem());
+    this.msdsColumns.splice(1, 0, this.addCommonColumnItem());
     this.getTipsList();
     this.getMsdsList();
     this.getSafeList();
