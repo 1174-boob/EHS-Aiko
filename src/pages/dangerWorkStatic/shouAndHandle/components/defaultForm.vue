@@ -210,19 +210,24 @@
           </CommonTable>
         </a-form-model-item>
         <a-form-model-item label="特种操作证" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
-          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessTwo" :fileLists="iFrom.tzczzList"></UploadBtnStyle>
+          <ul id="tzczzList"></ul>
+          <!-- <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessTwo" :fileLists="iFrom.tzczzList"></UploadBtnStyle> -->
         </a-form-model-item>
         <a-form-model-item label="环境安全告知书" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
-          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessFive" :fileLists="iFrom.hjaqgzsList"></UploadBtnStyle>
+          <ul id="hjaqgzsList"></ul>
+          <!-- <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessFive" :fileLists="iFrom.hjaqgzsList"></UploadBtnStyle> -->
         </a-form-model-item>
         <a-form-model-item label="施工人员名单" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
-          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessThree" :fileLists="iFrom.sgryqdList"></UploadBtnStyle>
+          <ul id="sgryqdList"></ul>
+          <!-- <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessThree" :fileLists="iFrom.sgryqdList"></UploadBtnStyle> -->
         </a-form-model-item>
         <a-form-model-item label="教育记录" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
-          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessOne" :fileLists="iFrom.jyjlList"></UploadBtnStyle>
+          <ul id="jyjlList"></ul>
+          <!-- <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessOne" :fileLists="iFrom.jyjlList"></UploadBtnStyle> -->
         </a-form-model-item>
         <a-form-model-item label="安全施工方案orJHA工作危害分析" :label-col="labelColSpec" :wrapper-col="wrapperColSpec">
-          <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessFour" :fileLists="iFrom.aqsgfaorjhagzwhfxList"></UploadBtnStyle>
+          <ul id="aqsgfaorjhagzwhfxList"></ul>
+          <!-- <UploadBtnStyle :maxSize="20" :onlyShow="true" @handleSuccess="handleFileSuccessFour" :fileLists="iFrom.aqsgfaorjhagzwhfxList"></UploadBtnStyle> -->
         </a-form-model-item>
       </template>
     </template>
@@ -415,47 +420,123 @@ export default {
           name: item.name
         }
       })
+      // 获取ul元素
+      var jyjlListElement = document.getElementById("jyjlList");
+      // 遍历列表数据
+      iFrom.jyjlList.forEach(function(item) {
+        // 创建li元素
+        var jyjlListItem = document.createElement("li");
+        // 创建a元素作为链接
+        var jyjlLink = document.createElement("a");
+        jyjlLink.href = item.url;
+        jyjlLink.textContent = item.name;
+        // 将链接添加到列表项中
+        jyjlListItem.appendChild(jyjlLink);
+        // 将列表项添加到无序列表中
+        jyjlListElement.appendChild(jyjlListItem);
+      });
       iFrom.tzczzList = (iFrom.tzczzList || []).map(item => {
         return {
           url: item.url,
           name: item.name
         }
       })
+      // 获取ul元素
+      var tzczzListElement = document.getElementById("tzczzList");
+      // 遍历列表数据
+      iFrom.tzczzList.forEach(function(item) {
+        // 创建li元素
+        var tzczzListItem = document.createElement("li");
+        // 创建a元素作为链接
+        var tzczzLink = document.createElement("a");
+        tzczzLink.href = item.url;
+        tzczzLink.textContent = item.name;
+        // 将链接添加到列表项中
+        tzczzListItem.appendChild(tzczzLink);
+        // 将列表项添加到无序列表中
+        tzczzListElement.appendChild(tzczzListItem);
+      });
       iFrom.sgryqdList = (iFrom.sgryqdList || []).map(item => {
         return {
           url: item.url,
           name: item.name
         }
       })
+      // 获取ul元素
+      var sgryqdListElement = document.getElementById("sgryqdList");
+      // 遍历列表数据
+      iFrom.sgryqdList.forEach(function(item) {
+        // 创建li元素
+        var sgryqdListItem = document.createElement("li");
+        // 创建a元素作为链接
+        var sgryqdLink = document.createElement("a");
+        sgryqdLink.href = item.url;
+        sgryqdLink.textContent = item.name;
+        // 将链接添加到列表项中
+        sgryqdListItem.appendChild(sgryqdLink);
+        // 将列表项添加到无序列表中
+        sgryqdListElement.appendChild(sgryqdListItem);
+      });
       iFrom.aqsgfaorjhagzwhfxList = (iFrom.aqsgfaorjhagzwhfxList || []).map(item => {
         return {
           url: item.url,
           name: item.name
         }
       })
+      // 获取ul元素
+      var aqsgfaorjhagzwhfxListElement = document.getElementById("aqsgfaorjhagzwhfxList");
+      // 遍历列表数据
+      iFrom.aqsgfaorjhagzwhfxList.forEach(function(item) {
+        // 创建li元素
+        var aqsgfaorjhagzwhfxListItem = document.createElement("li");
+        // 创建a元素作为链接
+        var aqsgfaorjhagzwhfxLink = document.createElement("a");
+        aqsgfaorjhagzwhfxLink.href = item.url;
+        aqsgfaorjhagzwhfxLink.textContent = item.name;
+        // 将链接添加到列表项中
+        aqsgfaorjhagzwhfxListItem.appendChild(aqsgfaorjhagzwhfxLink);
+        // 将列表项添加到无序列表中
+        aqsgfaorjhagzwhfxListElement.appendChild(aqsgfaorjhagzwhfxListItem);
+      });
       iFrom.hjaqgzsList = (iFrom.hjaqgzsList || []).map(item => {
         return {
           url: item.url,
           name: item.name
         }
       })
-      iFrom.jyjlList = this.addGuid(this.iFromDefault.jyjlList)
-      iFrom.tzczzList = this.addGuid(this.iFromDefault.tzczzList)
-      iFrom.sgryqdList = this.addGuid(this.iFromDefault.sgryqdList)
-      iFrom.aqsgfaorjhagzwhfxList = this.addGuid(this.iFromDefault.aqsgfaorjhagzwhfxList)
-      iFrom.hjaqgzsList = this.addGuid(this.iFromDefault.hjaqgzsList)
+      // 获取ul元素
+      var hjaqgzsListElement = document.getElementById("hjaqgzsList");
+      // 遍历列表数据
+      iFrom.hjaqgzsList.forEach(function(item) {
+        // 创建li元素
+        var hjaqgzsListItem = document.createElement("li");
+        // 创建a元素作为链接
+        var hjaqgzsLink = document.createElement("a");
+        hjaqgzsLink.href = item.url;
+        hjaqgzsLink.textContent = item.name;
+        // 将链接添加到列表项中
+        hjaqgzsListItem.appendChild(hjaqgzsLink);
+        // 将列表项添加到无序列表中
+        hjaqgzsListElement.appendChild(hjaqgzsListItem);
+      });
 
-      iFrom.jyjlList = this.handleFileIdS(this.iFromDefault.jyjlList)
-      iFrom.tzczzList = this.handleFileIdS(this.iFromDefault.tzczzList)
-      iFrom.sgryqdList = this.handleFileIdS(this.iFromDefault.sgryqdList)
-      iFrom.aqsgfaorjhagzwhfxList = this.handleFileIdS(this.iFromDefault.aqsgfaorjhagzwhfxList)
-      iFrom.hjaqgzsList = this.handleFileIdS(this.iFromDefault.hjaqgzsList)
+      // iFrom.jyjlList = this.addGuid(this.iFromDefault.jyjlList)
+      // iFrom.tzczzList = this.addGuid(this.iFromDefault.tzczzList)
+      // iFrom.sgryqdList = this.addGuid(this.iFromDefault.sgryqdList)
+      // iFrom.aqsgfaorjhagzwhfxList = this.addGuid(this.iFromDefault.aqsgfaorjhagzwhfxList)
+      // iFrom.hjaqgzsList = this.addGuid(this.iFromDefault.hjaqgzsList)
 
-      iFrom.jyjlList = this.handleFileRedisplayOne(this.iFromDefault.jyjlList)
-      iFrom.tzczzList = this.handleFileRedisplayTwo(this.iFromDefault.tzczzList)
-      iFrom.sgryqdList = this.handleFileRedisplayThree(this.iFromDefault.sgryqdList)
-      iFrom.aqsgfaorjhagzwhfxList = this.handleFileRedisplayFour(this.iFromDefault.aqsgfaorjhagzwhfxList)
-      iFrom.hjaqgzsList = this.handleFileRedisplayFive(this.iFromDefault.hjaqgzsList)
+      // iFrom.jyjlList = this.handleFileIdS(this.iFromDefault.jyjlList)
+      // iFrom.tzczzList = this.handleFileIdS(this.iFromDefault.tzczzList)
+      // iFrom.sgryqdList = this.handleFileIdS(this.iFromDefault.sgryqdList)
+      // iFrom.aqsgfaorjhagzwhfxList = this.handleFileIdS(this.iFromDefault.aqsgfaorjhagzwhfxList)
+      // iFrom.hjaqgzsList = this.handleFileIdS(this.iFromDefault.hjaqgzsList)
+
+      // iFrom.jyjlList = this.handleFileRedisplayOne(this.iFromDefault.jyjlList)
+      // iFrom.tzczzList = this.handleFileRedisplayTwo(this.iFromDefault.tzczzList)
+      // iFrom.sgryqdList = this.handleFileRedisplayThree(this.iFromDefault.sgryqdList)
+      // iFrom.aqsgfaorjhagzwhfxList = this.handleFileRedisplayFour(this.iFromDefault.aqsgfaorjhagzwhfxList)
+      // iFrom.hjaqgzsList = this.handleFileRedisplayFive(this.iFromDefault.hjaqgzsList)
       iFrom.dangerGuardian = this.addGuid(iFrom.dangerGuardian)
       iFrom.dangerSpecialPerson = this.addGuid(iFrom.dangerSpecialPerson)
       this.operateTypeChange(iFrom.operateType, false)
@@ -484,106 +565,106 @@ export default {
       // }
       rm && this.$set(this.iFrom, 'operateLevel', undefined)
     },
-    handleFileSuccessOne(file) {
-      this.iFrom.jyjlList = file.map(item => {
-        return {
-          id: item.guid,
-          url: item.url,
-          name: item.name
-        }
-      }) || []
-    },
-    handleFileSuccessTwo(file) {
-      this.iFrom.tzczzList = file.map(item => {
-        return {
-          id: item.guid,
-          url: item.url,
-          name: item.name
-        }
-      }) || []
-    },
-    handleFileSuccessThree(file) {
-      this.iFrom.sgryqdList = file.map(item => {
-        return {
-          id: item.guid,
-          url: item.url,
-          name: item.name
-        }
-      }) || []
-    },
-    handleFileSuccessFour(file) {
-      this.iFrom.aqsgfaorjhagzwhfxList = file.map(item => {
-        return {
-          id: item.guid,
-          url: item.url,
-          name: item.name
-        }
-      }) || []
-    },
-    handleFileSuccessFive(file) {
-      this.iFrom.hjaqgzsList = file.map(item => {
-        return {
-          id: item.guid,
-          url: item.url,
-          name: item.name
-        }
-      }) || []
-    },
+    // handleFileSuccessOne(file) {
+    //   this.iFrom.jyjlList = file.map(item => {
+    //     return {
+    //       id: item.guid,
+    //       url: item.url,
+    //       name: item.name
+    //     }
+    //   }) || []
+    // },
+    // handleFileSuccessTwo(file) {
+    //   this.iFrom.tzczzList = file.map(item => {
+    //     return {
+    //       id: item.guid,
+    //       url: item.url,
+    //       name: item.name
+    //     }
+    //   }) || []
+    // },
+    // handleFileSuccessThree(file) {
+    //   this.iFrom.sgryqdList = file.map(item => {
+    //     return {
+    //       id: item.guid,
+    //       url: item.url,
+    //       name: item.name
+    //     }
+    //   }) || []
+    // },
+    // handleFileSuccessFour(file) {
+    //   this.iFrom.aqsgfaorjhagzwhfxList = file.map(item => {
+    //     return {
+    //       id: item.guid,
+    //       url: item.url,
+    //       name: item.name
+    //     }
+    //   }) || []
+    // },
+    // handleFileSuccessFive(file) {
+    //   this.iFrom.hjaqgzsList = file.map(item => {
+    //     return {
+    //       id: item.guid,
+    //       url: item.url,
+    //       name: item.name
+    //     }
+    //   }) || []
+    // },
     // 处理文件id
-    handleFileIdS(list) {
-      list = list ? list : []
-      let ids = list.map(item => {
-        return item.guid
-      })
-      ids = ids ? ids : []
-      return ids
-    },
-    // 处理文件回显
-    handleFileRedisplayOne(list) {
-      let fileList = list ? list : []
-      fileList.forEach(item => {
-        // item.name = item.EducationalRecord
-        item.status = 'done'
-        item.uid = item.guid
-      })
-      return fileList
-    },
-    handleFileRedisplayTwo(list) {
-      let fileList = list ? list : []
-      fileList.forEach(item => {
-        // item.name = item.SpecialOperationCertificate
-        item.status = 'done'
-        item.uid = item.guid
-      })
-      return fileList
-    },
-    handleFileRedisplayThree(list) {
-      let fileList = list ? list : []
-      fileList.forEach(item => {
-        // item.name = item.ListOfConstructors
-        item.status = 'done'
-        item.uid = item.guid
-      })
-      return fileList
-    },
-    handleFileRedisplayFour(list) {
-      let fileList = list ? list : []
-      fileList.forEach(item => {
-        // item.name = item.SafetyConstructionSchemeORJHAworkHazardAnalysis
-        item.status = 'done'
-        item.uid = item.guid
-      })
-      return fileList
-    },
-    handleFileRedisplayFive(list) {
-      let fileList = list ? list : []
-      fileList.forEach(item => {
-        // item.name = item.EnvironmentalsafetyNotice
-        item.status = 'done'
-        item.uid = item.guid
-      })
-      return fileList
-    },
+    // handleFileIdS(list) {
+    //   list = list ? list : []
+    //   let ids = list.map(item => {
+    //     return item.guid
+    //   })
+    //   ids = ids ? ids : []
+    //   return ids
+    // },
+    // // 处理文件回显
+    // handleFileRedisplayOne(list) {
+    //   let fileList = list ? list : []
+    //   fileList.forEach(item => {
+    //     // item.name = item.EducationalRecord
+    //     item.status = 'done'
+    //     item.uid = item.guid
+    //   })
+    //   return fileList
+    // },
+    // handleFileRedisplayTwo(list) {
+    //   let fileList = list ? list : []
+    //   fileList.forEach(item => {
+    //     // item.name = item.SpecialOperationCertificate
+    //     item.status = 'done'
+    //     item.uid = item.guid
+    //   })
+    //   return fileList
+    // },
+    // handleFileRedisplayThree(list) {
+    //   let fileList = list ? list : []
+    //   fileList.forEach(item => {
+    //     // item.name = item.ListOfConstructors
+    //     item.status = 'done'
+    //     item.uid = item.guid
+    //   })
+    //   return fileList
+    // },
+    // handleFileRedisplayFour(list) {
+    //   let fileList = list ? list : []
+    //   fileList.forEach(item => {
+    //     // item.name = item.SafetyConstructionSchemeORJHAworkHazardAnalysis
+    //     item.status = 'done'
+    //     item.uid = item.guid
+    //   })
+    //   return fileList
+    // },
+    // handleFileRedisplayFive(list) {
+    //   let fileList = list ? list : []
+    //   fileList.forEach(item => {
+    //     // item.name = item.EnvironmentalsafetyNotice
+    //     item.status = 'done'
+    //     item.uid = item.guid
+    //   })
+    //   return fileList
+    // },
 
     // 列表添加guid
     addGuid(list) {
