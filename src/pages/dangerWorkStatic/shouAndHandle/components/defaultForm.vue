@@ -420,6 +420,9 @@ export default {
           name: item.name
         }
       })
+      // iFrom.jyjlList[0].url = 'http://oa.aikosolar.com/weaver/weaver.file.FileDownload?download=1&fileid=3414562'
+      // iFrom.jyjlList[0].url = 'http://10.254.131.77/file/template/danger.xlsx'
+      // iFrom.jyjlList[0].name = '施工人员清单.pdf'
       // 获取ul元素
       var jyjlListElement = document.getElementById("jyjlList");
       // 遍历列表数据
@@ -427,9 +430,18 @@ export default {
         // 创建li元素
         var jyjlListItem = document.createElement("li");
         // 创建a元素作为链接
-        var jyjlLink = document.createElement("a");
-        jyjlLink.href = item.url;
+        // var jyjlLink = document.createElement("a");
+        // jyjlLink.href = item.url;
+        // 创建点击事件处理函数
+        var openLink = function() {
+            window.open(item.url);
+        };
+        // 创建span元素作为文本内容
+        var jyjlLink = document.createElement("span");
+        // 添加点击事件处理函数到span元素
+        jyjlLink.addEventListener("click", openLink);
         jyjlLink.textContent = item.name;
+        jyjlLink.classList.add("colored-text"); // 添加颜色样式类
         // 将链接添加到列表项中
         jyjlListItem.appendChild(jyjlLink);
         // 将列表项添加到无序列表中
@@ -447,10 +459,19 @@ export default {
       iFrom.tzczzList.forEach(function(item) {
         // 创建li元素
         var tzczzListItem = document.createElement("li");
-        // 创建a元素作为链接
-        var tzczzLink = document.createElement("a");
-        tzczzLink.href = item.url;
+        // // 创建a元素作为链接
+        // var tzczzLink = document.createElement("a");
+        // tzczzLink.href = item.url;
+        // 创建点击事件处理函数
+        var openLink = function() {
+            window.open(item.url);
+        };
+        // 创建span元素作为文本内容
+        var tzczzLink = document.createElement("span");
+        // 添加点击事件处理函数到span元素
+        tzczzLink.addEventListener("click", openLink);
         tzczzLink.textContent = item.name;
+        tzczzLink.classList.add("colored-text"); // 添加颜色样式类
         // 将链接添加到列表项中
         tzczzListItem.appendChild(tzczzLink);
         // 将列表项添加到无序列表中
@@ -468,10 +489,19 @@ export default {
       iFrom.sgryqdList.forEach(function(item) {
         // 创建li元素
         var sgryqdListItem = document.createElement("li");
-        // 创建a元素作为链接
-        var sgryqdLink = document.createElement("a");
-        sgryqdLink.href = item.url;
+        // // 创建a元素作为链接
+        // var sgryqdLink = document.createElement("a");
+        // sgryqdLink.href = item.url;
+        // 创建点击事件处理函数
+        var openLink = function() {
+            window.open(item.url);
+        };
+        // 创建span元素作为文本内容
+        var sgryqdLink = document.createElement("span");
+        // 添加点击事件处理函数到span元素
+        sgryqdLink.addEventListener("click", openLink);
         sgryqdLink.textContent = item.name;
+        sgryqdLink.classList.add("colored-text"); // 添加颜色样式类
         // 将链接添加到列表项中
         sgryqdListItem.appendChild(sgryqdLink);
         // 将列表项添加到无序列表中
@@ -489,10 +519,19 @@ export default {
       iFrom.aqsgfaorjhagzwhfxList.forEach(function(item) {
         // 创建li元素
         var aqsgfaorjhagzwhfxListItem = document.createElement("li");
-        // 创建a元素作为链接
-        var aqsgfaorjhagzwhfxLink = document.createElement("a");
-        aqsgfaorjhagzwhfxLink.href = item.url;
+        // // 创建a元素作为链接
+        // var aqsgfaorjhagzwhfxLink = document.createElement("a");
+        // aqsgfaorjhagzwhfxLink.href = item.url;
+        // 创建点击事件处理函数
+        var openLink = function() {
+            window.open(item.url);
+        };
+        // 创建span元素作为文本内容
+        var aqsgfaorjhagzwhfxLink = document.createElement("span");
+        // 添加点击事件处理函数到span元素
+        aqsgfaorjhagzwhfxLink.addEventListener("click", openLink);
         aqsgfaorjhagzwhfxLink.textContent = item.name;
+        aqsgfaorjhagzwhfxLink.classList.add("colored-text"); // 添加颜色样式类
         // 将链接添加到列表项中
         aqsgfaorjhagzwhfxListItem.appendChild(aqsgfaorjhagzwhfxLink);
         // 将列表项添加到无序列表中
@@ -510,10 +549,20 @@ export default {
       iFrom.hjaqgzsList.forEach(function(item) {
         // 创建li元素
         var hjaqgzsListItem = document.createElement("li");
-        // 创建a元素作为链接
-        var hjaqgzsLink = document.createElement("a");
-        hjaqgzsLink.href = item.url;
+        // // 创建a元素作为链接
+        // var hjaqgzsLink = document.createElement("a");
+        // hjaqgzsLink.href = item.url;
+        // 创建点击事件处理函数
+        var openLink = function() {
+            window.open(item.url);
+        };
+        // 创建span元素作为文本内容
+        var hjaqgzsLink = document.createElement("span");
+        // 添加点击事件处理函数到span元素
+        hjaqgzsLink.addEventListener("click", openLink);
         hjaqgzsLink.textContent = item.name;
+        hjaqgzsLink.classList.add("colored-text"); // 添加颜色样式类
+
         // 将链接添加到列表项中
         hjaqgzsListItem.appendChild(hjaqgzsLink);
         // 将列表项添加到无序列表中
@@ -685,6 +734,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::v-deep .colored-text{
+  color: #0067cc;/* 设置文本颜色为蓝色 */
+}
 .ttile {
   display: flex;
   align-items: center;
