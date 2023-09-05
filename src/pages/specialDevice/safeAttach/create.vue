@@ -45,6 +45,9 @@
             <a-form-model-item label="检验报告编号" prop="checkReportNum" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.checkReportNum" placeholder="请输入检验报告编号" allowClear :maxLength="50"/>
             </a-form-model-item>
+            <a-form-model-item label="附件" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <UploadBtnStyle :onlyShow="disabled" :showAcceptText="true" :accept="['.doc','.docx','.pdf','.xls','.xlsx','.ppt']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccess"></UploadBtnStyle>
+            </a-form-model-item>
           </a-col>
           <a-col :span="12"></a-col>
         </a-row>
@@ -66,6 +69,7 @@ import { safeAnnexInsert, safeAnnexUpdate, safeAnnexDetail } from "@/services/sp
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import moment from "moment";
 import mixin from '../mixin'
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { queryDeptTree, GetfileMsgList } from '@/services/api'
 import { debounce } from 'lodash'
@@ -74,7 +78,8 @@ export default {
   mixins: [mixin],
   components: {
     FixedBottom,
-    staffOrDept
+    staffOrDept,
+    UploadBtnStyle
   },
   data() {
     return {
@@ -94,7 +99,7 @@ export default {
       accept: '.doc,.docx,.pdf,.ppt',
       testDate: null,
       newlyForm: {
-        
+        specialEquipmentDetail:{infoFileIdList: [],}
       },
       chemicalDict: {},
       // treeData: [],
