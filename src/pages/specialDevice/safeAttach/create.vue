@@ -98,6 +98,7 @@ export default {
       wrapperCol: { span: 17 },
       accept: '.doc,.docx,.pdf,.ppt',
       testDate: null,
+      infoFileIdList: [],
       newlyForm: {
         specialEquipmentDetail:{infoFileIdList: [],}
       },
@@ -191,7 +192,17 @@ export default {
       }).then(res => {
         this.deptData = res.data ? [res.data] : []
       }).catch(err => {console.log(err)})
-      let result = await GetfileMsgList(this.newlyForm.specialEquipmentDetail.infoFileIdList) || {}
+      if (this.newlyForm.specialEquipmentDetail.infoFileIdList && this.newlyForm.specialEquipmentDetail.infoFileIdList.length > 0) {
+        let result = await GetfileMsgList(this.newlyForm.specialEquipmentDetail.infoFileIdList) || {}
+        this.infoFileIdList = (result.data || []).map(item => {
+          return {
+            uid: item.id,
+            name: item.sourceFileName,
+            status: 'done',
+            url: item.filePath
+          }
+        })
+      }
     },
     //安全附件保存
     safeAttachSave: debounce(function () {
