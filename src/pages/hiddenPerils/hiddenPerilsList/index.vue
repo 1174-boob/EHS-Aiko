@@ -480,6 +480,9 @@ export default {
 
     // 导出模板下载
     downTpl() {
+      if (!this.canClickBtnMixin("toExportHiddenDangerTemplate")) {
+        return;
+      }
       let startTime = this.formInline.timeArr.length && this.formInline.timeArr[0] ? dayJs(this.formInline.timeArr[0]).format("YYYY-MM-DD") : undefined;
       let endTime = this.formInline.timeArr.length && this.formInline.timeArr[1] ? dayJs(this.formInline.timeArr[1]).format("YYYY-MM-DD") : undefined;
       let apiData = {
