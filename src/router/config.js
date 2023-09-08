@@ -1360,6 +1360,64 @@ const options = {
               ]
             },
             {
+              path: 'securityArchiveManagement',
+              name: '安全档案管理',
+              meta: {
+                title: '安全档案管理',
+                icon: 'none',
+              },
+              component: NoBreadcrumb,
+              children: [
+                {
+                  path: 'certificatesManagement',
+                  name: '证书管理',
+                  meta: {
+                    title: '证书管理',
+                    routerCode:'certificatesManagement',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/certificatesManagement/index.vue'], resolve),
+                },
+                {
+                  path: 'employeesMessagesSet',
+                  name: '消息推送设置',
+                  meta: {
+                    title: '消息推送设置',
+                    routerCode:'employeesMessagesSet',
+                    isPage: true,
+                    invisible: true,
+                    isKeepalive:true,
+                  },
+                  component: resolve => require(['@/pages/certificatesManagement/employeesMessagesSet.vue'], resolve),
+                },
+                {
+                  path: 'occupationalHazardNotification',
+                  name: '职业危害告知书',
+                  meta: {
+                    title: '职业危害告知书',
+                    routerCode:'occupationalHazardNotification',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/occupationalHazardNotification/index.vue'], resolve),
+                  children: []
+                },
+                {
+                  path: 'safetyResponsibilityLetter',
+                  name: '安全责任书',
+                  meta: {
+                    title: '安全责任书',
+                    routerCode:'safetyResponsibilityLetter',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/safetyResponsibilityLetter/index.vue'], resolve),
+                  children: []
+                },
+              ]
+            },
+            {
               path: 'cooperationPartner',
               name: '相关方管理',
               meta: {
