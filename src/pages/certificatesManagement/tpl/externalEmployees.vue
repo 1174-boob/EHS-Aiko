@@ -322,8 +322,8 @@ export default {
         ...this.formInline,
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
-        validityPeriodStart: this.formInline.validityPeriod[0] || '',
-        validityPeriodEnd: this.formInline.validityPeriod[1] || '',
+        validityPeriodStart :this.formInline.validityPeriod[0] ? moment(this.formInline.validityPeriod[0]).format('YYYY-MM-DD') : '',
+        validityPeriodEnd :this.formInline.validityPeriod[1] ? moment(this.formInline.validityPeriod[1]).format('YYYY-MM-DD') : '',
         inOutType: "2" 
       }
       const {code, data } = await getCertificateCount(params1)
@@ -554,6 +554,7 @@ export default {
           await certificateDelete(para)
           this.$antMessage.success('删除成功')
           this.getDataList()
+          this.getCertCount()
         }
       })
     },
