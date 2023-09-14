@@ -37,7 +37,7 @@
         <a-form-model-item label="起草人">
           <a-input v-model="formInline.drafter" placeholder="请输入"></a-input>
         </a-form-model-item>
-        <a-form-model-item label="时间">
+        <a-form-model-item label="创建时间">
           <a-range-picker format="YYYY-MM-DD" v-model="formInline.timeArr" :placeholder="['开始日期', '结束日期']" />
         </a-form-model-item>
         <a-form-model-item class="float-right">
