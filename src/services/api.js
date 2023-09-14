@@ -694,6 +694,25 @@ export const feathJobPosition = params => post(`${serviceNameList.health}/api/eh
 //体检审批记录
 export const getTaskComments = params => get(`${serviceNameList.btp}/api/ehs/camunda/getTaskComments`, params);
 
+// 安全档案管理
+// 证书管理-新增
+export const certificateAdd = params => post(`${serviceNameList.health}/api/ehs/security/certificate/add`, params);
+// 证书管理-删除
+export const certificateDelete = params => post(`${serviceNameList.health}/api/ehs/security/certificate/delete`, params);
+// 证书管理-编辑
+export const certificateEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/edit`, params);
+// 证书管理-详情
+export const certificateDetail = params => post(`${serviceNameList.health}/api/ehs/security/certificate/detail`, params);
+// 证书管理-分页
+export const getCertificateCount = params => post(`${serviceNameList.health}/api/ehs/security/certificate/count`, params);
+// 证书管理-分页
+export const getCertificateList = params => post(`${serviceNameList.health}/api/ehs/security/certificate/list/page`, params);
+// 证书管理-消息管理详情
+export const getPushNotifyDetail = params => post(`${serviceNameList.health}/api/ehs/security/certificate/push/notify/detail`, params);
+// 证书管理-消息管理编辑
+export const getPushNotifyEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/push/notify/edit`, params);
+// 证书管理-批量导入
+export const getCertificateImport = params => post(`${serviceNameList.health}/api/ehs/security/certificate/file/import`, params);
 
 
 // 危害岗位信息数据库
