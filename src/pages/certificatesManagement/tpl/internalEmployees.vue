@@ -221,19 +221,6 @@ export default {
         {
           title: '证书编号',
           scopedSlots: { customRender: 'certNum' },
-          // customRender: (text, record) => {
-          //   text = text ? text : ''
-          //   const isValid = record.validityStatus == 0;
-          //   return (
-          //     <a-popover autoAdjustOverflow>
-          //       <div slot="content">
-          //         <p>{{ text }}</p>
-          //       </div>
-          //       <span>
-          //       {isValid && <span style="color: red;">• </span>}{{ text }}</span>
-          //     </a-popover>
-          //   );
-          // },
           width: 260
         },
         {
@@ -306,7 +293,7 @@ export default {
       this.getDataList()
       this.getCertCount()
     },
-    // 获取到那三个格子的详情数据  等待接口ing...  
+    // 获取到那三个格子的详情数据
     async getCertCount(){
       let params1 = {
         ...this.formInline,
@@ -397,12 +384,7 @@ export default {
       this.editForm.holdUserName = this.editForm.holdUserName.toString();
       console.log('想要提交的数据editForm',this.editForm);
       let params = {
-        ...this.editForm,
-        // classesId:this.editForm.certTypeId,
-        // certTypeId:undefined,
-        // planStartDate :this.editForm.planDate ? this.editForm.planDate[0] : "",
-        // planEndDate : this.editForm.planDate ? this.editForm.planDate[1] : "",
-        // planId: this.titleText == "编辑" ? this.scalId : undefined,
+        ...this.editForm
       };
       params.inOutType = '1'
       let PromiseFn = this.titleText == "编辑" ? certificateEdit : certificateAdd;
@@ -684,15 +666,6 @@ export default {
 .pe-red{
   color:#FF1212;
 }
-// .pe-data-title{
-//   margin-bottom: 30px;
-//   padding-bottom:20px;
-//   font-size: 16px;
-//   color: rgba(0,0,0,0.85);
-//   line-height: 24px;
-//   font-weight: 500;
-//   border-bottom: 1px solid #f4f4f4;
-// }
 .pe-data-body{
   margin-top: 15px;
 }
