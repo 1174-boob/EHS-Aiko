@@ -26,7 +26,7 @@
           <i></i>
         </div>
         <div @click="changeTab(1)" class="pe-data-item exception-pe-num" :class="[curIndex === 1 ? 'active' : '']">
-          <span class="pe-data-body">到期前 {{countInfo.preliminaryStartTimeValue}} 个{{countInfo.preliminaryStartTimeUnit}} {{countInfo.temporary_count}} 张</span>
+          <span class="pe-data-body">到期前 {{countInfo.preliminaryStartTimeValue}}</span><span class="pe-data-body" v-show="countInfo.preliminaryStartTimeUnit == '月'">个</span>{{countInfo.preliminaryStartTimeUnit}} {{countInfo.temporary_count}} 张
           <p class="en-illus">before expiration</p>
           <i></i>
         </div>
