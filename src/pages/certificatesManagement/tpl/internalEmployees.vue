@@ -221,7 +221,7 @@ export default {
         {
           title: '证书编号',
           scopedSlots: { customRender: 'certNum' },
-          width: 260
+          width: 210
         },
         {
           title: '持证人',
@@ -231,6 +231,7 @@ export default {
         {
           title: '证书类型',
           scopedSlots: { customRender: 'certTypeName' },
+          width: 160
         },
         {
           title: '证书',
@@ -240,7 +241,10 @@ export default {
               <a-popover autoAdjustOverflow title="查看证书">
                 <div slot="content" style={{ display: 'flex', flexDirection: 'column' }}>
                   {fileList.map((item, index) => (
-                    <a key={index} href={item.filePath}>{item.sourceFileName}</a>
+                    <a key={index} href={item.filePath} onClick={(e) => {
+                      e.preventDefault(); // 阻止默认的链接跳转行为
+                      window.open(item.filePath, '_blank'); // 在新窗口中打开链接
+                    }}>{item.sourceFileName}</a>
                   ))}
                 </div>
                 <div style={{ color: "#0067cc"}}>

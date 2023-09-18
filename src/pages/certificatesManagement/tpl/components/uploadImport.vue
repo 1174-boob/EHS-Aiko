@@ -64,7 +64,6 @@ export default {
   data() {
     return {
       loading: false,
-      actions: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.safe}/api/ehs/safe/hide/danger/upload`,
       labelCol: { span: 4 }, // 设置左边label宽度
       wrapperCol: { span: 17 }, // 设置右边表单宽度
       addForm: {
