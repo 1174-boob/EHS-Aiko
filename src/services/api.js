@@ -703,7 +703,7 @@ export const certificateDelete = params => post(`${serviceNameList.health}/api/e
 export const certificateEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/edit`, params);
 // 证书管理-详情
 export const certificateDetail = params => post(`${serviceNameList.health}/api/ehs/security/certificate/detail`, params);
-// 证书管理-分页
+// 证书管理-分页(三个格)
 export const getCertificateCount = params => post(`${serviceNameList.health}/api/ehs/security/certificate/count`, params);
 // 证书管理-分页
 export const getCertificateList = params => post(`${serviceNameList.health}/api/ehs/security/certificate/list/page`, params);
@@ -713,6 +713,18 @@ export const getPushNotifyDetail = params => post(`${serviceNameList.health}/api
 export const getPushNotifyEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/push/notify/edit`, params);
 // 证书管理-批量导入
 export const getCertificateImport = params => post(`${serviceNameList.health}/api/ehs/security/certificate/file/import`, params);
+
+// 职业危害告知书导入
+export const getNotificationImport = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/file/import`, params);
+// 职业危害告知书-分页
+export const getNotificationList = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/list/page`, params);
+// 职业危害告知书-分页(三个格)
+export const getNotificationCount = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/count`, params);
+// 职业危害告知书-批量推送
+export const pushNotification = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/push`, params);
+// 职业危害告知书-删除 
+export const notificationDelete = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/delete`, params);
+
 
 
 // 危害岗位信息数据库

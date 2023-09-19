@@ -166,7 +166,7 @@ import moment from 'moment'
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import { debounce, cloneDeep } from 'lodash'
 import StaffOrDept from "@/components/staffOrDept";
-import { healthManageList, getCertificateCount, getCertificateList, certificateAdd, certificateDelete, certificateEdit, certificateDetail} from "@/services/api.js"
+import {getCertificateCount, getCertificateList, certificateAdd, certificateDelete, certificateEdit, certificateDetail} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
