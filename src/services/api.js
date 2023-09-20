@@ -116,6 +116,8 @@ export const GetIsCompany = params => get(`ehs-customer/api/company/detail`, par
 export const GetContractCount = params => get(`${serviceNameList.contract}/api/contract/open/contractSize`, params);
 //获取新闻公告列表总览页-右下角
 export const GetNewsBulletin = params => post(`${serviceNameList.notice}/api/notice/publish/page/list`, params);
+//系统公告导出
+export const noticeExport = params => postExcel(`ehs-customer/api/ehs/policylaw/file/download`, params);
 //ehs政策法规新增
 export const InsertPolicyLaw = params => post(`ehs-customer/api/ehs/policylaw/insertPolicyLaw`, params);
 //ehs政策法规编辑
