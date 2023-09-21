@@ -55,6 +55,16 @@
             <a-form-model-item class="flex" label="计划所属部门" prop="planDepartCode">
               <dept-tree :disabled="disabled" :placeholder="'请选择计划所属部门'" v-model="emForm.planDepartCode" :deptData="deptData" @change="(id,name)=>planDeptChange(id,name,'planDepartName')" allowClear></dept-tree>
             </a-form-model-item>
+            <StaffOrDept
+              :onPreview="disabled"
+              :treeType="'user'"
+              :propKey="'dockingPersonOfDrillDepartmentUserId'"
+              :labelTitle="'对接人'"
+              :label-col="labelColSpec"
+              :wrapper-col="wrapperColSpec"
+              @getTreeData="personThingOne"
+              :checkedTreeNode="emForm.dockingPersonOfDrillDepartmentUserId"
+            />
             <a-form-model-item class="flex" label="应急演练名称" prop="drillName">
               <a-input :disabled="disabled" v-model="emForm.drillName" :maxLength="50" placeholder="请输入应急演练名称" allowClear></a-input>
             </a-form-model-item>
@@ -146,12 +156,13 @@ import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import dictionary from '@/utils/dictionary';
 import moment from "moment";
 import chemicalDict from "@/mixin/chemicalDict.js";
+import StaffOrDept from "@/components/staffOrDept";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { PushTask, planPageList, addDrillPlan, editDrillPlan, viewDetailPlan, editDraftDrillPlan, drillPlanAdjust } from "@/services/api.js";
 export default {
   mixins: [chemicalDict, teableCenterEllipsis],
   components: {
-    FixedBottom,
+    FixedBottom,StaffOrDept
   },
   props: {
     plan: {
@@ -182,6 +193,8 @@ export default {
       drill_type: undefined,
       labelCol: { style: { width: '100px' } },
       wrapperCol: { style: { width: 'calc(100% - 100px)' } },
+      labelColSpec: { span: 3 }, // 设置左边label宽度
+      wrapperColSpec: { span: 21 }, // 设置右边表单宽度
       deptId: undefined,
       selectedKeys: [],
       selectedRowKeys: [],
@@ -283,6 +296,7 @@ export default {
     //   let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
     //   this.$set(this.emForm, 'draftDepartCode', adminDeptId ? [adminDeptId] : []);
     // }
+    this.getInit();
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
       let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
@@ -303,8 +317,6 @@ export default {
       title: "预案部门"
     }));
     this.disabled = (this.plan && this.plan == "preview") || this.adjust;
-    this.getInit();
-
   },
   methods: {
     // 编辑预览初始化
@@ -316,6 +328,8 @@ export default {
           this.$refs.commonSearchItem.corporationChange(data.corporationId);
           this.emForm = { ...data };
           this.emForm.planTime = moment(data.planTime);
+          this.emForm.dockingPersonOfDrillDepartmentUserId = [data.dockingPersonOfDrillDepartmentUserId]
+          console.log('this.emForm.dockingPersonOfDrillDepartmentUserId',this.emForm.dockingPersonOfDrillDepartmentUserId);
           this.planList = [data.temergentdrillPrep];
           this.safeKeys = data.temergentdrillPrep.prepId.split(",");
           this.portalStatus = data.portalStatus ? dictionary("dirllPlanApproveStatus", data.portalStatus) : '--';
@@ -351,6 +365,10 @@ export default {
     },
     // 确认
     emConfirm(operationType) { //operationType 0保存 1确定
+      if (this.emForm.dockingPersonOfDrillDepartmentUserId && this.emForm.dockingPersonOfDrillDepartmentUserId.length > 1) {
+        this.$antMessage.warn('只能选择一名对接人！')
+        return;
+      }
       if (!formValidator.formAll(this, 'emForm')) {
         return;
       }
@@ -374,6 +392,9 @@ export default {
         ...emTime,
         prepId: this.planList[0].prepId,
       }
+      params.dockingPersonOfDrillDepartmentUserId = params.dockingPersonOfDrillDepartmentUserId ? params.dockingPersonOfDrillDepartmentUserId[0] : ''
+      params.dockingPersonOfDrillDepartmentUserName = params.dockingPersonOfDrillDepartmentUserName ? params.dockingPersonOfDrillDepartmentUserName[0] : ''
+      params.dockingPersonOfDrillDepartmentUserJobNumber = params.dockingPersonOfDrillDepartmentUserJobNumber ? params.dockingPersonOfDrillDepartmentUserJobNumber[0] : ''
       params.innerDepartCode = params.innerDepartCode ? params.innerDepartCode.join(",") : "";
       const api = this.planId ? this.plan === 'draft' ? editDraftDrillPlan : this.plan === 'adjust' ? drillPlanAdjust : editDrillPlan : addDrillPlan;
       this.loadingConfirm = true;
@@ -415,6 +436,33 @@ export default {
     planDeptChange(id, name, key) {
       this.emForm[key] = name.join();
       this.colsePlanModal();
+    },
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
+      }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
+    },
+    //对接人
+    personThingOne(data) {
+      this.emForm.dockingPersonOfDrillDepartmentUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.emForm.dockingPersonOfDrillDepartmentUserName = this.getName(list);
+      this.emForm.dockingPersonOfDrillDepartmentUserJobNumber = this.getWorkNum(list);
     },
     // 取消选中的应急预案
     colsePlanModal(value) {
