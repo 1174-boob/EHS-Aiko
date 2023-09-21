@@ -471,16 +471,18 @@ export const selectPolicy = params => post(`ehs-customer/api/ehs/policylaw/selec
 export const PushTask = params => post(`ehs-customer/api/ehs/task/pushTask`, params);
 
 // 设备信息维护
-// 火灾-分页查-增-改-删
+// 火灾-分页查-增-改-删-导出
 export const firePageList = params => post(`${serviceNameList.danger}/api/ehs/equip/fire/page/list`, params);
 export const fireInsert = params => post(`${serviceNameList.danger}/api/ehs/equip/fire/insert`, params);
 export const fireUpdate = params => post(`${serviceNameList.danger}/api/ehs/equip/fire/update`, params);
 export const fireDelete = params => get(`${serviceNameList.danger}/api/ehs/equip/fire/delete`, params);
-// 特气-分页查-增-改-删
+export const fireExport = params => postExcel(`${serviceNameList.danger}/api/ehs/equip/fire/file/download`, params);
+// 特气-分页查-增-改-删-导出
 export const gasPageList = params => post(`${serviceNameList.danger}/api/ehs/equip/gas/page/list`, params);
 export const gasInsert = params => post(`${serviceNameList.danger}/api/ehs/equip/gas/insert`, params);
 export const gasUpdate = params => post(`${serviceNameList.danger}/api/ehs/equip/gas/update`, params);
 export const gasDelete = params => get(`${serviceNameList.danger}/api/ehs/equip/gas/delete`, params);
+export const gasExport = params => postExcel(`${serviceNameList.danger}/api/ehs/equip/gas/file/download`, params);
 
 // 黑名单
 // 违规记录分页查-增-改-删
