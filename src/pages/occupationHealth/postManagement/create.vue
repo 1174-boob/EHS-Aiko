@@ -173,6 +173,9 @@
                   <a-form-model-item v-if="isShowTime" label="调岗体检时间" prop="transferTime">
                     <a-date-picker :disabled="!(dataMsg.nodeStatus.indexOf('__002') > -1)" placeholder="请选择时间" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" v-model="form.transferTime" />
                   </a-form-model-item>
+                  <a-form-model-item v-if="isShowFile" label="体检通知单"  prop="physicalExaminationNoticeFileIdList">
+                    <UploadBtnStyle :onlyShow="dataMsg.nodeStatus.indexOf('_Over') > -1" :showAcceptText="true" :accept="['.pdf']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccessSpec"></UploadBtnStyle>
+                  </a-form-model-item> 
                   <a-form-model-item v-if="isShowUpLoad" label="体检报告" prop="fileId">
                     <UploadEhs
                       :limit="1"
@@ -259,16 +262,17 @@
 import FixedBottom from "@/components/commonTpl/fixedBottom"
 import Log from "@/components/flowLog/flowLog.vue"
 
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import { formValidator } from "@/utils/clx-form-validator.js"
 import UploadEhs from "@/components/upload/uploadBtnStyle.vue"
 import dictionary from '@/utils/dictionary'
 import cancelLoading from '@/mixin/cancelLoading'
 
-import { getSelectStaffList, getStaffDetail, getDangerousPost, getAllFactor, postSave, postUpdate, postDetail, getIsSafety, postEndEvent, GetFirstNode, selectNodeUser, CreateProcess, GetNextTask, ApprovedTask, GetNodeDetail, RejectedTask, getFlowLogApi, PushTask } from '@/services/api'
+import { getSelectStaffList, GetfileMsgList,getStaffDetail, getDangerousPost, getAllFactor, postSave, postUpdate, postDetail, getIsSafety, postEndEvent, GetFirstNode, selectNodeUser, CreateProcess, GetNextTask, ApprovedTask, GetNodeDetail, RejectedTask, getFlowLogApi, PushTask } from '@/services/api'
 import { getQueryVariable } from "@/utils/util.js";
 import { debounce } from 'lodash'
 export default {
-  components: { FixedBottom, UploadEhs, Log },
+  components: { FixedBottom, UploadEhs, Log ,UploadBtnStyle},
   mixins: [cancelLoading],
   data() {
     return {
@@ -276,6 +280,7 @@ export default {
       deployId: "",
       dataMsg: {},
       isSafety: "",
+      infoFileIdList: [],
       isShowTime: false,
       isShowUpLoad: false,
       labelCol: { span: 8 }, // 设置左边label宽度
@@ -343,7 +348,7 @@ export default {
       processId: "",
       docNumber: '',
       isHiddenRejectBtn: false, // 是都隐藏驳回按钮，true隐藏  false展示
-
+      isShowFile:false,
       // 节点信息
       taskId: null,
       infoStatus: null,
@@ -451,6 +456,24 @@ export default {
         }
         this.form = { ...data };
         this.dataMsg = { ...data };
+        if (this.form.physicalExaminationNoticeFileList && this.form.physicalExaminationNoticeFileList.length > 0) {
+          const fileIdDetailList = this.form.physicalExaminationNoticeFileList.map((item)=> {
+            return item.id
+          })
+          GetfileMsgList(fileIdDetailList).then((res) => {
+            let result = res.data || []
+            this.infoFileIdList = (result || []).map(item => {
+              return {
+                uid: item.id,
+                name: item.sourceFileName,
+                status: 'done',
+                url: item.filePath
+              }
+            }) 
+          }).catch((err) =>{
+            console.log(err)
+          }) 
+        }
         this.changeTypeFn();
         if (!this.isEdit) {
           this.userIdT = data.healthyUserId//处理
@@ -467,6 +490,11 @@ export default {
           } else {
             this.isShowTime = false;
           }
+        }
+        if (this.dataMsg.nodeStatus.indexOf('__002')> -1 || this.dataMsg.nodeStatus.indexOf('_Over')> -1){
+          this.isShowFile = true
+        } else {
+          this.isShowFile = false
         }
         if (this.dataMsg.nodeStatus.indexOf("__011") > -1) {
           this.isShowUpLoad = true;
@@ -517,6 +545,14 @@ export default {
         }
       }) || [];
       this.form = { ...this.form };
+    },
+    handleSuccessSpec(fileList){
+      let newList = []
+      newList = fileList.map((item) => {
+        return item.id
+      })
+      console.log(newList,999);
+      this.form.physicalExaminationNoticeFileIdList = newList
     },
     // 查询变岗人员
     getTaskList() {
