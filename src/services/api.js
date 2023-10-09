@@ -717,6 +717,8 @@ export const getPushNotifyDetail = params => post(`${serviceNameList.health}/api
 export const getPushNotifyEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/push/notify/edit`, params);
 // 证书管理-批量导入
 export const getCertificateImport = params => post(`${serviceNameList.health}/api/ehs/security/certificate/file/import`, params);
+// 证书管理-新增外部员工时搜索厂商
+export const getInvitationSupplier = params => post(`ehs-customer/api/ehs/invitation/supplier/no/page`, params);
 
 // 职业危害告知书导入
 export const getNotificationImport = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/file/import`, params);
@@ -728,6 +730,33 @@ export const getNotificationCount = params => post(`${serviceNameList.health}/ap
 export const pushNotification = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/push`, params);
 // 职业危害告知书-删除 
 export const notificationDelete = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/delete`, params);
+// 职业危害告知书-详情 
+export const notificationDetail = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/detail`, params);
+// 职业危害告知书-发送短信验证码
+export const notificationSendCode = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/send/code`, params);
+// 职业危害告知书-签署
+export const notificationSign = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/sign`, params);
+// 职业危害告知书-公司盖章后导入
+export const notificationImportSignPDF = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/file/import/signPDF`, params);
+
+// 安全责任书-删除
+export const responsibilityDelete = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/delete`, params);
+// 安全责任书-详情
+export const responsibilityDetail = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/detail`, params);
+// 安全责任书-人员导入
+export const responsibilityFileImport = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/file/import`, params);
+// 安全责任书-分页
+export const getResponsibilityList = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/list/page`, params);
+// 安全责任书-分页(三个格)
+export const getResponsibilityCount = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+// 安全责任书-批量推送
+export const pushResponsibility = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/push`, params);
+// 安全责任书-发送短信验证码
+export const responsibilitySendCode = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/send/code`, params);
+// 安全责任书-签署
+export const responsibilitySign = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign`, params);
+// 安全责任书-批量签署
+export const responsibilitySignBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign/batch`, params);
 
 
 

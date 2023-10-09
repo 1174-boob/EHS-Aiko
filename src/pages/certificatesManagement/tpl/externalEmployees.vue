@@ -102,7 +102,24 @@
             <a-input :maxLength="50" v-model="editForm.certNum" placeholder="请输入证书编号"></a-input>
           </a-form-model-item>
           <a-form-model-item class="flex" label="厂商名称" prop="manufacturerName">
-            <a-input :maxLength="50" v-model="editForm.manufacturerName" placeholder="请输入厂商名称"></a-input>
+            <!-- <a-input @change="changeManufacturerName" :maxLength="50" v-model="editForm.manufacturerName" placeholder="请输入厂商名称"></a-input> -->
+            <a-select
+              show-search
+              size="large"
+              v-model="editForm.manufacturerName"
+              :not-found-content="fetching ? undefined : null"
+              :placeholder="'请输入厂商名称'"
+              style="width: 100%;font-size: 14px;"
+              :filter-option="false"
+              @search="fetchUser"
+              @select="selectChange"
+            >
+              <a-spin v-if="fetching" slot="notFoundContent" size="small" />
+              <a-select-option
+                v-for="item in searchTreeList"
+                :key="JSON.stringify(item)"
+              >{{ item.companyName }}</a-select-option>
+            </a-select>
           </a-form-model-item>
           <a-form-model-item class="flex" label="持证人" prop="holdUserName">
             <a-input :maxLength="50" v-model="editForm.holdUserName" placeholder="请输入持证人"></a-input>
@@ -166,7 +183,7 @@ import moment from 'moment'
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import { debounce, cloneDeep } from 'lodash'
 import StaffOrDept from "@/components/staffOrDept";
-import {getCertificateCount, getCertificateList, certificateAdd, certificateDelete, certificateEdit, certificateDetail} from "@/services/api.js"
+import {getCertificateCount, getCertificateList, certificateAdd, certificateDelete, certificateEdit, certificateDetail, getInvitationSupplier} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
@@ -174,8 +191,12 @@ export default {
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   components: { StaffOrDept,UploadBtnStyle, Upload},
   data() {
+    this.fetchUser = debounce(this.fetchUser, 800);
     return {
       dictionary,
+      selectValue: [],
+      fetching: false,
+      searchTreeList: [],
       formInline: {
         validityPeriodStart: undefined,
         validityPeriodEnd: undefined,
@@ -306,6 +327,46 @@ export default {
     this.init()
   },
   methods: {
+    // 新建厂商时添加搜索
+    // changeManufacturerName: debounce(function () {
+    //   let para = {
+    //     name :this.editForm.manufacturerName
+    //   }
+    //   getInvitationSupplier(para).then((res)=>{
+    //     console.log(res.data,8888888);
+    //   })
+    // }, 250),
+
+
+    // 搜索事件
+    fetchUser(value) {
+      this.fetching = true;
+      this.searchTreeList = [];
+      // var pattern1 = /[\u4e00-\u9fa5]{2,}/;
+      // var pattern2 = /\d{5,}$/;
+      // if (!pattern1.test(value) && !pattern2.test(value)) {
+      //   return
+      // }
+      let apiData = { name: value }
+      getInvitationSupplier(apiData).then((res) => {
+        this.searchTreeList = res.data;
+        // console.log('this.searchTreeList',this.searchTreeList );
+      }).catch((e) => {
+        console.log(e,'err');
+      })
+    },
+    selectChange(value, options) {
+      value = JSON.parse(value);
+      console.log(value.companyName,'valuevaluevalue');
+      this.editForm.manufacturerName = value.companyName
+      this.editForm.manufacturerId = value.invitationId
+      this.fetching = false
+      // Object.assign(this, {
+      //   value,
+      //   data: [],
+      //   fetching: false,
+      // });
+    },
     getValidityStatusColor(validityStatus) {
       switch (validityStatus) {
         case '1':
@@ -398,6 +459,8 @@ export default {
     },
     // 排班弹框-确定
     editConfirm() {
+      console.log(this.editForm);
+      return
       if (!formValidator.formAll(this, "editForm")) {
         return;
       }
