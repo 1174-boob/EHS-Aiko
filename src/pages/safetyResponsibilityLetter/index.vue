@@ -8,7 +8,7 @@
         </a-form-model-item>
         <a-form-model-item label="签署状态">
           <a-select allowClear show-search v-model="formInline.signatureStatus" placeholder="请选择状态">
-            <a-select-option v-for="item in dictionary('signatureStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+            <a-select-option v-for="item in dictionary('signatureStatus2')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="模板分类">
@@ -384,14 +384,7 @@ export default {
         this.$antMessage.warning('请选择推送人员！')
         return
       }
-      const condition = (item) => {
-        return item.signatureStatus != 0;
-      };
-      const canNotSign = this.choosedArr.some(condition);
-      if (canNotSign) {
-        this.$antMessage.warning('请正确选择推送人员！')
-        return;
-      } else {
+      if (this.choosedArr.some(item => item.signatureStatus == 0 || item.signatureStatus == 1)) {
         const personIds = this.choosedArr.map(item => {
           return item.id
         })
@@ -406,6 +399,9 @@ export default {
           this.getDataList()
           this.getCertCount()
         }
+      } else {
+        this.$antMessage.warning('请正确选择推送人员！')
+        return;
       }
     },
     // 批量签署

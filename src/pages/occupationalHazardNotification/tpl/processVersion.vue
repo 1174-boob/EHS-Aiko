@@ -372,14 +372,7 @@ export default {
         this.$antMessage.warning('请选择推送人员！')
         return
       }
-      const condition = (item) => {
-        return item.signatureStatus != 0;
-      };
-      const canNotSign = this.choosedArr.some(condition);
-      if (canNotSign) {
-        this.$antMessage.warning('请正确选择推送人员！')
-        return;
-      } else {
+      if (this.choosedArr.some(item => item.signatureStatus == 0 || item.signatureStatus == 1)) {
         const personIds = this.choosedArr.map(item => {
           return item.id
         })
@@ -394,6 +387,9 @@ export default {
           this.getDataList()
           this.getCertCount()
         }
+      } else {
+        this.$antMessage.warning('请正确选择推送人员！')
+        return;
       }
     },
     // 批量下载
