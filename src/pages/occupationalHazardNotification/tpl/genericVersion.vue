@@ -55,9 +55,8 @@
         <a-button type="primary" @click="batchPush">批量推送</a-button>
         <a-button type="primary" @click="batchExport">批量下载</a-button>
         <UploadBtnStyle
-          :action="action"
           :showAcceptText="false"
-          :accept="['.xlsx', '.xls',]"
+          :accept="['.pdf',]"
           :showUploadList="false"
           :btnText="'导入文件'"
           :btnType="'primary'"
@@ -65,9 +64,6 @@
           @handleSuccess="handleSuccess"
         ></UploadBtnStyle>
       </div>
-      <!-- <div>
-        <a-button type="primary" class="btn" @click="exportExcel">导出Excel</a-button>
-      </div> -->
     </DashBtn>
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
       <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, selectedRows: choosedArr, onChange: onSelectChange, onSelectAll: onSelectAllSelect }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
@@ -81,7 +77,8 @@
         <div slot="signatureRecordList" slot-scope="record">{{ record.signatureRecordList }}</div>
         <div slot="signatureFinalDate" slot-scope="record">{{ record.signatureFinalDate }}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="signFile(record)">签署</span>
+          <!-- <span class="color-0067cc cursor-pointer" v-if="record.signatureStatus == 1 " @click="signFile(record)">签署</span> -->
+          <span class="color-0067cc cursor-pointer" v-if="record.signatureStatus == 1 && record.signatoriesHandlerUserId == userId" @click="signFile(record)">签署</span>
           <span class="color-0067cc cursor-pointer" v-if="record.signatureStatus == 0" @click="pushFile(record)">推送</span>
           <span class="color-0067cc cursor-pointer" @click="viewFile(record)">预览</span>
           <span class="color-ff4d4f cursor-pointer" @click="reSend(record)">删除</span>
@@ -105,7 +102,7 @@ import moment from 'moment'
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import { debounce, cloneDeep } from 'lodash'
 import serviceNameList from '@/config/default/service.config.js'
-import {getNotificationCount, getNotificationList, pushNotification, notificationDelete, certificateEdit, certificateDetail} from "@/services/api.js"
+import {getNotificationCount, getNotificationList, pushNotification, notificationDelete, notificationImportSignPDF, certificateDetail} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
@@ -115,8 +112,6 @@ export default {
   data() {
     return {
       dictionary,
-      // 导入文件地址
-      action: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.chemicals}/api/ehs/safe/remind/upload`,
       formInline: {
         entryDateStart: undefined,
         entryDateEnd: undefined,
@@ -188,39 +183,57 @@ export default {
         },
         {
           title: '入职日期',
-          scopedSlots: { customRender: 'entryDate' },
+          dataIndex: 'entryDate',
           width: 150,
+          customRender: (text) => {
+            text = text ? text: '--'
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
           title: '签署记录',
-          scopedSlots: { customRender: 'signatureRecordList' },
+          dataIndex:'securitySignRecordList',
+          customRender: (text) => {
+            if (!text) {
+              return '--';
+            }
+            text = text ? text[0] : '--';
+            const signatoriesJobNumber = text && text.signatoriesJobNumber ? text.signatoriesJobNumber : '--';
+            const signatoriesName = text && text.signatoriesName ? text.signatoriesName : '--';
+            const signatoriesTime = text && text.signatoriesTime ? text.signatoriesTime.split(' ')[0] : '--';
+            return (
+              <a-popover autoAdjustOverflow title="签署人">
+                <div slot="content">
+                  本人签署：<p>{signatoriesName}/{signatoriesJobNumber}&nbsp;&nbsp;&nbsp;{signatoriesTime}</p> 
+                </div>
+                <span>查看记录</span>
+              </a-popover>
+            );
+          },
           width: 150,
         },
         {
-        //   title: '签署记录',
-        //   dataIndex:'certFileList',
-        //   customRender: (fileList, record) => {
-        //     return fileList ? (
-        //       <a-popover autoAdjustOverflow title="签署记录">
-        //         <div slot="content" style={{ display: 'flex', flexDirection: 'column' }}>
-        //           {fileList.map((item, index) => (
-        //             <a key={index} href={item.filePath}>{item.sourceFileName}</a>
-        //           ))}
-        //         </div>
-        //         <div style={{ color: "#0067cc"}}>
-        //           查看证书
-        //         </div>
-        //       </a-popover>
-        //     ) : (
-        //       <div>/</div>
-        //     );
-        //   },
-        //   width: 250,
-        },
-        {
           title: '签署完成日期',
-          scopedSlots: { customRender: 'signatureFinalDate' },
-          width: 150
+          dataIndex: 'signatureFinalDate',
+          width: 150,
+          customRender: (text) => {
+            text = text ? text: '--'
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
         },
         {
           title: '操作',
@@ -231,6 +244,7 @@ export default {
       ],
       tableDataList: [],
       classificationList: [],
+      userId: undefined
     }
   },
   created() {
@@ -241,6 +255,13 @@ export default {
     }, true));
     this.classificationList = this.getMappingValue(this.dictTypeData, "dictType", "security_occupational_hazard_notification").dictItem;
     this.init()
+    let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+    this.userId = zconsole_userInfo.user.userId
+  },
+  activated(){
+    if(this.$route.query.activeKey == 3){
+      this.init()
+    }
   },
   methods: {
     async init() {
@@ -248,8 +269,24 @@ export default {
       this.getCertCount()
       this.getPeDate()
     },
-    // 批量导入成功
+    // 导入成功
     handleSuccess(fileList) {
+      console.log('导入文件',fileList);
+      if (fileList.length > 0) {
+        const fileId = fileList[fileList.length - 1].id;
+        console.log('fileId ', fileId);
+        notificationImportSignPDF({ fileId, securityOccupationalHazardNotificationType: 1 })
+        .then((res) => {
+          if (res.code === 20000) {
+            this.$antMessage.success('导入成功');
+            this.getDataList()
+            this.getCertCount()
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
       this.getDataList()
     },
     // 获取到那三个格子的详情数据
@@ -263,7 +300,7 @@ export default {
         signatureFinalDateEnd :this.formInline.signatureFinalDate[1] ? moment(this.formInline.signatureFinalDate[1]).format('YYYY-MM-DD') : '',
         entryDateStart :this.formInline.entryDate[0] ? moment(this.formInline.entryDate[0]).format('YYYY-MM-DD') : '',
         entryDateEnd :this.formInline.entryDate[1] ? moment(this.formInline.entryDate[1]).format('YYYY-MM-DD') : '',
-        type: "1" 
+        securityOccupationalHazardNotificationType: "1" 
       }
       const {code, data } = await getNotificationCount(params1)
       if (+code === 20000) {
@@ -291,7 +328,7 @@ export default {
       let signatureFinalDateStart = this.formInline.signatureFinalDate[0] ? moment(this.formInline.signatureFinalDate[0]).format('YYYY-MM-DD') : ''
       let signatureFinalDateEnd = this.formInline.signatureFinalDate[1] ? moment(this.formInline.signatureFinalDate[1]).format('YYYY-MM-DD') : ''
       let params = {
-        type:1,
+        securityOccupationalHazardNotificationType:1,
         ...this.formInline,
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
@@ -323,83 +360,49 @@ export default {
       this.choosedArr = []
       this.getDataList()
     },
-    // 批量推送 (等接口吧......)
+    // 批量推送
     async batchPush() {
-      console.log('先获取到批量推送的数据，有才能推',this.choosedArr);
+      console.log(this.choosedArr);
       if (!this.choosedArr.length) {
         this.$antMessage.warning('请选择推送人员！')
         return
       }
-      const personIds = this.choosedArr.map(item => {
-        return item.id
-      })
-      let para = {
-        idList: personIds
-      }
-      const { code } = await pushNotification(para)
-      if (+code === 20000) {
-        this.$antMessage.success('批量推送成功')
-        this.selectedRowKeys = []
-        this.choosedArr = []
-        this.getDataList()
+      const condition = (item) => {
+        return item.signatureStatus != 0;
+      };
+      const canNotSign = this.choosedArr.some(condition);
+      if (canNotSign) {
+        this.$antMessage.warning('请正确选择推送人员！')
+        return;
+      } else {
+        const personIds = this.choosedArr.map(item => {
+          return item.id
+        })
+        let para = {
+          idList: personIds
+        }
+        const { code } = await pushNotification(para)
+        if (+code === 20000) {
+          this.$antMessage.success('批量推送成功')
+          this.selectedRowKeys = []
+          this.choosedArr = []
+          this.getDataList()
+          this.getCertCount()
+        }
       }
     },
-    // 批量下载 (等接口吧......)
+    // 批量下载
     async batchExport() {
-      console.log('先获取到批量下载的数据，有才能推',this.choosedArr);
+      console.log('批量下载',this.choosedArr);
       if (!this.choosedArr.length) {
-        this.$antMessage.warning('请选择下载人员！')
+        this.$antMessage.warning('至少选择一条数据！')
         return
       }
-      const personIds = this.choosedArr.map(item => {
-        return item.personId
+      this.choosedArr.forEach(item => {
+        window.open(item.file.filePath);
       })
-      let para = {
-        personIds: personIds
-      }
-      // const { code } = await notifyNotCheck(para)
-      // if (+code === 20000) {
-      //   this.$antMessage.success('批量下载成功')
-      //   this.getDataList()
-      // }
+      this.choosedArr = []
     },
-    // 导出Excel（暂时用不上）
-    // async exportExcel() {
-    //   console.log('导出excel999');
-    //   const personIds = this.choosedArr.map(item => {
-    //     return item.personId
-    //   }) || []
-    //   if (!personIds.length) {
-    //     this.$antMessage.warning('请选择人员')
-    //     return
-    //   }
-    //   let para = {
-    //     ...this.formInline,
-    //     pageSize: this.page.pageSize,
-    //     pageNo: this.page.pageNo,
-    //     entryDateStart:this.formInline.entryDate[0] ? moment(this.formInline.entryDate[0]).format('YYYY-MM-DD') : '',
-    //     entryDateEnd:this.formInline.entryDate[1] ? moment(this.formInline.entryDate[1]).format('YYYY-MM-DD') : '',
-    //     signatureFinalDateStart:this.formInline.signatureFinalDate[0] ? moment(this.formInline.signatureFinalDate[0]).format('YYYY-MM-DD') : '',
-    //     signatureFinalDateEnd:this.formInline.signatureFinalDate[1] ? moment(this.formInline.signatureFinalDate[1]).format('YYYY-MM-DD') : '',
-    //     checkDateStart: this.formInline.checkDate[0] || '',
-    //     checkDateEnd: this.formInline.checkDate[1] || '',
-    //     filterType: this.curIndex === -1 ? null : this.curIndex + 1,
-    //     personIds: personIds
-    //   }
-    //   let res = await healthCheckExport(para)
-    //   if(res){
-    //     const name = '体检管理导出'
-    //     const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
-    //     const downloadElement = document.createElement('a')
-    //     const href = URL.createObjectURL(blob) //创建下载链接
-    //     downloadElement.href = href
-    //     downloadElement.download = name + '.xlsx'
-    //     document.body.appendChild(downloadElement)
-    //     downloadElement.click()
-    //     document.body.removeChild(downloadElement)// 下载完成移除元素
-    //     window.URL.revokeObjectURL(href) // 释放掉blob对象
-    //   }
-    // },
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.choosedArr = selectedRows
@@ -523,8 +526,33 @@ export default {
       return fileList
     },
     // 签署
-    signFile(){
-      console.log('打印签署');
+    signFile(row){
+      if (!this.canClickBtnMixin("hazardNoticeSign")) {
+        return;
+      }
+      let query = {
+        id: row.id,
+        activeKey:'1'
+      }
+      this.$router.push({
+        path: '/ehsGerneralManage/securityArchiveManagement/occupationalPreview',
+        query
+      })
+    },
+    // 预览
+    viewFile(row){
+      if (!this.canClickBtnMixin("hazardNoticePreview")) {
+        return;
+      }
+      let query = {
+        id: row.id,
+        filePreview: true,
+        activeKey:'1'
+      }
+      this.$router.push({
+        path: '/ehsGerneralManage/securityArchiveManagement/occupationalPreview',
+        query,
+      })
     },
     // 推送
     pushFile(row){
@@ -536,12 +564,9 @@ export default {
         if(res.code == 20000){
           this.$antMessage.success('推送成功')
           this.getDataList()
+          this.getCertCount()
         }
       })
-    },
-    // 预览
-    viewFile(){
-      console.log('打印预览');
     },
     // 删除
     reSend(row){

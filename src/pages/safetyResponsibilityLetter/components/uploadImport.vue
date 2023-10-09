@@ -49,7 +49,7 @@
 import serviceNameList from "@/config/default/service.config.js";
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { formValidator } from "@/utils/clx-form-validator.js";
-import { getNotificationImport } from "@/services/api.js";
+import { responsibilityFileImport } from "@/services/api.js";
 export default {
   components: { UploadBtnStyle,},
   props: {
@@ -101,9 +101,9 @@ export default {
         return;
       }
       this.loading = true;
-      getNotificationImport({
+      responsibilityFileImport({
         fileId: this.addForm.fileListExel[0].id,
-        securityOccupationalHazardNotificationType: this.type,
+        // type: this.type,
         pushStatus: this.addForm.pushStatus
         // fileName: this.addForm.fileListExel[0].name,
       })
@@ -134,15 +134,9 @@ export default {
 
     //下载模板
     downTemplate() {
-      if(this.type == 1){
-        window.open(
-          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（内部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（内部员工）.xlsx`
-        );
-      } else if (this.type == 2){
-        window.open(
-          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（外部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（外部员工）.xlsx`
-        );
-      }
+      window.open(
+        window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（内部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（内部员工）.xlsx`
+      );
     },
   },
 };

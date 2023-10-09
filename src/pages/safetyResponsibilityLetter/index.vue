@@ -1,37 +1,26 @@
 <template>
   <div class="clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
-    <h3 class="top-tittle">
-      安全责任书******（待开发）
-    </h3>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="true" deptLabel="所属部门"></CommonSearchItem>
-        <a-form-model-item label="姓名11111">
-          <a-input v-model="formInline.name" placeholder="请输入姓名"></a-input>
+        <a-form-model-item label="签署人">
+          <a-input v-model="formInline.signatureUserJobNumberOrName" placeholder="请输入签署人"></a-input>
         </a-form-model-item>
-        <a-form-model-item label="工号">
-          <a-input v-model="formInline.workNum" placeholder="请输入工号"></a-input>
-        </a-form-model-item>
-        <a-form-model-item label="手机号">
-          <a-input v-model="formInline.phone" placeholder="请输入手机号"></a-input>
-        </a-form-model-item>
-        <a-form-model-item label="岗位">
-          <a-select allowClear show-search v-model="formInline.post" placeholder="请选择岗位">
-            <a-select-option v-for="item in postOptions" :key="item.value" :value="item.value">{{item.label}}</a-select-option>
+        <a-form-model-item label="签署状态">
+          <a-select allowClear show-search v-model="formInline.signatureStatus" placeholder="请选择状态">
+            <a-select-option v-for="item in dictionary('signatureStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="体检日期">
-          <a-range-picker format="YYYY-MM-DD"  v-model="formInline.checkDate" :placeholder="['开始日期','结束日期']"/>
-        </a-form-model-item>
-        <a-form-model-item label="体检类型">
-          <a-select allowClear show-search v-model="formInline.checkType" placeholder="请选择体检类型">
-            <a-select-option v-for="item in checkTypeOptions" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+        <a-form-model-item label="模板分类">
+          <a-select allowClear show-search v-model="formInline.templateClassificationId" placeholder="请选择模板分类">
+            <a-select-option v-for="item in classificationList" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="体检结论">
-          <a-select allowClear show-search v-model="formInline.checkResult" placeholder="请选择体检结论" @change="handleCheckResultChange">
-            <a-select-option v-for="item in checkResultOptions" :key="item.value" :value="item.key">{{item.value}}</a-select-option>
-          </a-select>
+        <a-form-model-item label="入职日期">
+          <a-range-picker format="YYYY-MM-DD" v-model="formInline.entryDate" :placeholder="['开始日期','结束日期']"/>
+        </a-form-model-item>
+        <a-form-model-item label="签署日期">
+          <a-range-picker format="YYYY-MM-DD" v-model="formInline.signatureFinalDate" :placeholder="['开始日期','结束日期']"/>
         </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
@@ -41,80 +30,84 @@
       </a-form-model>
     </SearchTerm>
     <div class="pe-data-container">
-      <h4 class="pe-data-title">{{peDate}}体检数据</h4>
+      <h4 class="pe-data-title">{{peDate}}数据</h4>
       <div>
         <div @click="changeTab(0)" class="pe-data-item total-pe-num" :class="[curIndex === 0 ? 'active' : '']">
-          <span class="pe-data-body">体检 {{countInfo.checkPersonNum}} 人</span>
-          <p class="en-illus">health examination</p>
+          <span class="pe-data-body">总数 {{countInfo.total==0? '0':countInfo.total}} 份</span>
+          <p class="en-illus">total quantity</p>
+          <i></i>
+        </div>
+        <div @click="changeTab(1)" class="pe-data-item forbid-pe-num" :class="[curIndex === 1 ? 'active' : '']">
+          <span class="pe-data-body">签署完成 {{countInfo.signingComplete}} 份</span>
+          <p class="en-illus">sign off</p>
           <i></i>
         </div>
         <div @click="changeTab(2)" class="pe-data-item exception-pe-num" :class="[curIndex === 2 ? 'active' : '']">
-          <span class="pe-data-body">体检异常 {{countInfo.checkExceptionNum}} 人</span>
-          <p class="en-illus">Physical abnormalities</p>
-          <i></i>
-        </div>
-        <div @click="changeTab(3)" class="pe-data-item forbid-pe-num" :class="[curIndex === 3 ? 'active' : '']">
-          <span class="pe-data-body">禁忌人员 {{countInfo.checkTabooNum}} 人</span>
-          <p class="en-illus">Taboo personnel</p>
+          <span class="pe-data-body">待签署 {{countInfo.toBeSigned}} 份</span>
+          <p class="en-illus">to be signed</p>
           <i></i>
         </div>
       </div>
     </div>
     <DashBtn>
       <div>
-        <a-button type="primary" size="small" @click="toDraftPage">草稿箱</a-button>
-        <a-button type="primary" size="small" @click="toApprovePage">体检审核</a-button>
-        <!-- <a-button type="primary" size="small" @click="toDraftPage">批量导出</a-button> -->
-        <a-button type="primary" size="small" @click="toMultiPEBook">批量预约</a-button>
-        <a-button type="primary" size="small" @click="multUpdateConclusion">批量更新体检结论</a-button>
-        <a-button type="primary" size="small" @click="sendNotify">体检通知</a-button>
-      </div>
-      <div>
-        <a-button type="primary" class="btn" @click="exportExcel">导出Excel</a-button>
+        <a-button type="primary" @click="importPersonnel">导入人员</a-button>
+        <a-button type="primary" @click="batchPush">批量推送</a-button>
+        <a-button type="primary" @click="batchSign">批量签署</a-button>
+        <a-button type="primary" @click="batchExport">批量下载</a-button>
       </div>
     </DashBtn>
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-      <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, selectedRows: choosedArr, onChange: onSelectChange, onSelectAll: onSelectAllSelect }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
-        <div slot="checkType" slot-scope="record">{{ record.checkType | systemFilter('healthCheckType') }}</div>
-        <div slot="checkResult" :class="[['normal', 'radiationWork'].includes(record.checkResult) ? 'pe-green' : 'pe-red']" slot-scope="record">{{ record.checkResult | systemFilter('checkResult') }}</div>
-        <div slot="isSick" slot-scope="record">{{ record.isSick | systemFilter('universal') }}</div>
-        <div slot="checkStatus" slot-scope="record">{{ record.checkStatus | systemFilter('checkStatus') }}</div>
-        <div slot="tellStatus" slot-scope="record">{{ record.tellStatus | systemFilter('tellStatus') }}</div>
-        <!-- <div slot="siteCode" slot-scope="record">{{ getSite(record.siteCode) }}</div> -->
-        <div slot="corporationId" slot-scope="record">
-          <span>{{getMappingValue($refs.commonSearchItem.commonAddOrgnizeList, "id", record.corporationId).orgName}}</span>
-        </div>
-        <div slot="post" slot-scope="record">{{ postLabel(record.post)}}</div>
-        <div slot="checkFileData" slot-scope="record"><span class="link-span" @click="dowonloadFile(record.checkFileData)"> 体检报告 </span></div>
+      <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, selectedRows: choosedArr, onChange: onSelectChange, onSelectAll: onSelectAllSelect }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
+        <div slot="num" slot-scope="record">{{ record.num }}</div>
+        <div slot="templateTypeName" slot-scope="record">{{ record.templateTypeName }}</div>
+        <div slot="templateClassificationName" slot-scope="record">{{ record.templateClassificationName }}</div>
+        <div slot="signatureUserName" slot-scope="record">{{ record.signatureUserName }}/{{ record.signatureUserJobNumber }}</div>
+        <div slot="launchUserName" slot-scope="record">{{ record.launchUserName }}/{{ record.launchUserJobNumber }}</div>
+        <div slot="signatureStatus" slot-scope="record">{{ record.signatureStatus }}</div>
+        <div slot="entryDate" slot-scope="record">{{ record.entryDate }}</div>
+        <div slot="signatureRecordList" slot-scope="record">{{ record.signatureRecordList }}</div>
+        <div slot="signatureFinalDate" slot-scope="record">{{ record.signatureFinalDate }}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="viewDetail(record)">详情</span>
-          <span v-if="record.checkResult !== 'review'" class="color-0067cc cursor-pointer" @click="toBookPE(record)">预约体检</span>
-          <span v-if="record.checkResult === 'review'" class="color-0067cc cursor-pointer" @click="toBookReCheck(record)">复查预约</span>
-          <span v-if="record.tellStatus === 'tellErr'" class="color-0067cc cursor-pointer" @click="reSend(record)">重新发送</span>
+          <!-- <span class="color-0067cc cursor-pointer" v-if="record.signatureStatus == 1 " @click="signFile(record)">签署</span> -->
+          <span class="color-0067cc cursor-pointer" v-if="record.signatureStatus == 1 && record.signatoriesHandlerUserId == userId" @click="signFile(record)">签署</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.signatureStatus == 0" @click="pushFile(record)">推送</span>
+          <span class="color-0067cc cursor-pointer" @click="viewFile(record)">预览</span>
+          <span class="color-ff4d4f cursor-pointer" @click="reSend(record)">删除</span>
         </div>
       </a-table>
     </CommonTable>
-    <CommonModal title="批量更新体检结论" :visible="multUpdateConclutionVisible" :cancelFn="conclusionCancelFn">
+    <CommonModal :title="'签署告知书'" :visible="signVisible" :cancelFn="signCancle">
       <template slot="form">
-        <a-form-model ref="conclusionFormRef" :rules="conclusionFormRule" :label-col="{ style: { width: '115px' } }"
-          :wrapper-col="{ style: { width: 'calc(100% - 115px)' } }" :model="conclusionForm" :colon="false">
-          <a-form-model-item class="flex" label="是否构成职业病" prop="isSick">
-            <a-select allowClear show-search v-model="conclusionForm.isSick" placeholder="请选择是否构成职业病">
-              <a-select-option v-for="item in universalOptions" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item class="flex" label="体检结论" prop="checkResult">
-            <a-select allowClear show-search v-model="conclusionForm.checkResult" placeholder="请选择体检结论">
-              <a-select-option v-for="item in checkResultOptions" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-            </a-select>
+        <a-form-model
+          ref="editForm"
+          :model="editForm"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="签名区域" prop="sealData">
+            <div class="test">
+              <div id="testEle" class="testInfo"></div>
+            </div>
+            <a-button type="primary" class="m-l-15 m-t-10" @click="signUndo">
+              撤销
+            </a-button>
+            <a-button type="primary" class="m-l-15 m-t-10" @click="signRedo">
+              重签
+            </a-button>
           </a-form-model-item>
         </a-form-model>
       </template>
       <template slot="btn">
-        <a-button @click="conclusionCancelFn">取消</a-button>
-        <a-button type="primary" class="m-l-15" @click="confirmUpdate">确定</a-button>
+        <a-button @click="signCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="signConfirm"
+          >确定</a-button
+        >
       </template>
     </CommonModal>
+    <!-- 上传 -->
+    <Upload :importVisible="importVisible" @closeAddVisible="closeAddVisible" :pushStatus='pushStatus' :type="type"/>
   </div>
 </template>
 <script>
@@ -123,171 +116,222 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis"
 import cancelLoading from '@/mixin/cancelLoading'
 import { formValidator } from "@/utils/clx-form-validator.js"
 import { mapState } from 'vuex'
+import Upload from '@/pages/safetyResponsibilityLetter/components/uploadImport.vue'
 import dayJs from "dayjs"
+import '@/utils/dzjm.min.js'
+import dictionary from "@/utils/dictionary";
 import moment from 'moment'
-import uploadCanRemove from "@/mixin/uploadCanRemove"
 import { debounce, cloneDeep } from 'lodash'
-import { healthManageList, healthNumCount, updateCheckResult, notifyNotCheck, sendOneNotify, healthCheckExport, feathJobPosition } from "@/services/api.js"
+import serviceNameList from '@/config/default/service.config.js'
+import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch, certificateDetail} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
 export default {
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
-  components: { },
+  components: { Upload },
   data() {
     return {
+      dictionary,
+      signVisible: false,
+      mSign: null,
+      editForm:{},
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
+      labelColSpec: { span: 6 },
+      wrapperColSpec: { span: 18 },
       formInline: {
-        checkDate: []
+        entryDateStart: undefined,
+        entryDateEnd: undefined,
+        entryDate: [],
+        signatureFinalDateStart: undefined,
+        signatureFinalDateEnd: undefined,
+        signatureFinalDate: []
       },
+      choosedArr: [],
+      selectedRowKeys: [],
       page: {
         pageNo: 1,
         pageSize: 10,
         total: 0
       },
+      pushStatus: 1,
       peDate: '',
       curIndex: -1,
-      equipTypeList: [],
-      userId: '',
-      choosedArr: [],
-      selectedRowKeys: [],
+      signatureStatus2:'',
+      importVisible: false,
+      type: 0,
       countInfo: {
-        checkPersonNum: '',
-        checkQualifiedNum: '',
-        checkExceptionNum: '',
-        checkTabooNum: ''
+        total: '', //总数
+        signingComplete: '', //签署成功
+        toBeSigned: '', //待签署
       },
       tableSpinning: false,
       columns:  [
         {
-          title: '姓名',
-          dataIndex: 'name',
-          width: 150
-        },{
-          title: '工号',
-          dataIndex: 'workNum',
-          width: 150
-        },{
-          title: '手机号码',
-          dataIndex: 'phone',
+          title: '编号',
+          scopedSlots: { customRender: 'num' },
+          width: 200
+        },
+        {
+          title: '模板名称',
+          scopedSlots: { customRender: 'templateTypeName' },
+          width: 180
+        },
+        {
+          title: '模板分类',
+          scopedSlots: { customRender: 'templateClassificationName' },
+          width: 180
+        },
+        {
+          title: '目标责任人',
+          scopedSlots: { customRender: 'signatureUserName' },
           width: 150
         },
-        // {
-        //   title: '所属部门',
-        //   dataIndex: 'departmentName',
-        //   width: 150
-        // },
         {
-          title: '岗位',
-          scopedSlots: { customRender: 'post' },
-          width: 150
-        },{
-          title: '体检日期',
-          dataIndex: 'checkDate',
-          width: 150
-        },{
-          title: '体检类型',
-          scopedSlots: { customRender: 'checkType' },
-          width: 150
-        },{
-          title: '体检状态',
-          scopedSlots: { customRender: 'checkStatus' },
-          width: 150
-        },{
-          title: '体检提醒日期',
-          dataIndex: 'tellDate',
-          width: 150
-        },{
-          title: '体检通知状态',
-          scopedSlots: { customRender: 'tellStatus' },
-          width: 150
-        },{
-          title: '是否构成职业病',
-          scopedSlots: { customRender: 'isSick' },
+          title: '发起人',
+          scopedSlots: { customRender: 'launchUserName' },
           width: 150
         },
-        // {
-        //   title: '体检报告',
-        //   scopedSlots: { customRender: 'checkFileData' },
-        //   width: 150
-        // },
         {
-          title: '体检结论',
-          scopedSlots: { customRender: 'checkResult' },
-          width: 150
-        },{
+          title: '签署状态',
+          dataIndex: 'signatureStatus',
+          width: 150,
+          customRender: (text) => {
+            text = text ? this.getNumStatus(text) : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+        },
+        {
+          title: '入职日期',
+          dataIndex: 'entryDate',
+          width: 150,
+          customRender: (text) => {
+            text = text ? text: '--'
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+        },
+        {
+          title: '签署记录',
+          dataIndex:'securitySignRecordList',
+          customRender: (text) => {
+            if (!text) {
+              return '--';
+            }
+            text[0] = text ? text[0] : '--';
+            const signatoriesJobNumberFirst = text[0] && text[0].signatoriesJobNumber ? text[0].signatoriesJobNumber : '--';
+            const signatoriesNameFirst = text[0] && text[0].signatoriesName ? text[0].signatoriesName : '--';
+            const signatoriesTimeFirst = text[0] && text[0].signatoriesTime ? text[0].signatoriesTime.split(' ')[0] : '--';
+            text[1] = text ? text[1] : '--';
+            const signatoriesJobNumberSecond = text[1] && text[1].signatoriesJobNumber ? text[1].signatoriesJobNumber : '--';
+            const signatoriesNameSecond = text[1] && text[1].signatoriesName ? text[1].signatoriesName : '--';
+            const signatoriesTimeSecond = text[1] && text[1].signatoriesTime ? text[1].signatoriesTime.split(' ')[0] : '--';
+            return (
+              <a-popover autoAdjustOverflow title="签署人">
+                <div slot="content">
+                  目标责任人：<p>{signatoriesNameFirst}/{signatoriesJobNumberFirst}&nbsp;&nbsp;&nbsp;{signatoriesTimeFirst}</p> 
+                  部门负责人：<p>{signatoriesNameSecond}/{signatoriesJobNumberSecond}&nbsp;&nbsp;&nbsp;{signatoriesTimeSecond}</p> 
+                </div>
+                <span>查看记录</span>
+              </a-popover>
+            );
+          },
+          width: 150,
+        },
+        {
+          title: '签署完成日期',
+          dataIndex: 'signatureFinalDate',
+          width: 150,
+          customRender: (text) => {
+            text = text ? text: '--'
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+        },
+        {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           fixed: 'right', // 固定操作列
-          width: 300 // 宽度根据操作自定义设置
+          width: 200 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
-
-      /**批量更新体检结论start */
-      multUpdateConclutionVisible: false,
-      conclusionForm: {
-        isSick: undefined,
-        checkResult: undefined
-      },
-      conclusionFormRule: {
-        isSick: [
-          { required: true, trigger: 'change', message: '请选择是否构成职业病'}
-        ],
-        checkResult: [
-          { required: true, trigger: 'change', message: '请选择体检结论'}
-        ]
-      }
-      /**批量更新体检结论end */
+      classificationList: [],
+      userId: undefined
     }
   },
   created() {
-    this.setRouterCode('physicalExam')
     this.columns.splice(1, 0, this.addCommonColumnItem(150, true));
     this.columns.splice(2, 0, this.addCommonColumnDepartment({
       title: "所属部门",
       width: 150
     }, true));
+    this.classificationList = this.getMappingValue(this.dictTypeData, "dictType", "safety_responsibility_statement").dictItem;
     this.init()
+    let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+    this.userId = zconsole_userInfo.user.userId
   },
-  activated() {
-    setTimeout(() => {
-      if(!this.keepalive){
-        this.initConfigPage()
-        this.iRest()
-      }
-    }, 20);
+  activated(){
+    if(this.$route.query.activeKey == 3){
+      this.init()
+    }
   },
   methods: {
-    initConfigPage(){
-      this.getPeDate()
-      this.getHealthNumCount()
-    },
     async init() {
       this.getDataList()
-      this.initConfigPage()
+      this.getCertCount()
+      this.getPeDate()
     },
-    async getHealthNumCount() {
+    // 批量导入成功
+    handleSuccess(fileList) {
+      this.getDataList()
+    },
+    // 获取到那三个格子的详情数据
+    async getCertCount(){
       let params1 = {
         ...this.formInline,
+        signatureStatus2:this.signatureStatus2,
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
-        checkDateStart: this.formInline.checkDate[0] || '',
-        checkDateEnd: this.formInline.checkDate[1] || '',
-        filterType: this.curIndex === -1 ? null : this.curIndex + 1,
+        signatureFinalDateStart :this.formInline.signatureFinalDate[0] ? moment(this.formInline.signatureFinalDate[0]).format('YYYY-MM-DD') : '',
+        signatureFinalDateEnd :this.formInline.signatureFinalDate[1] ? moment(this.formInline.signatureFinalDate[1]).format('YYYY-MM-DD') : '',
+        entryDateStart :this.formInline.entryDate[0] ? moment(this.formInline.entryDate[0]).format('YYYY-MM-DD') : '',
+        entryDateEnd :this.formInline.entryDate[1] ? moment(this.formInline.entryDate[1]).format('YYYY-MM-DD') : '',
+        type: "1" 
       }
-      const {code, data } = await healthNumCount(params1)
+      const {code, data } = await getResponsibilityCount(params1)
       if (+code === 20000) {
         this.countInfo = data
       }
     },
     getPeDate() {
-      if (!this.formInline.checkDate || !this.formInline.checkDate.length) {
+      if (!this.formInline.entryDate || !this.formInline.entryDate.length) {
         this.peDate = new Date().getFullYear() + '年' + (new Date().getMonth() + 1) + '月'
       } else {
-        let startMonth = new Date(this.formInline.checkDate[0]).getMonth() + 1
-        let startYear = new Date(this.formInline.checkDate[0]).getFullYear()
-        let endMonth = new Date(this.formInline.checkDate[1]).getMonth() + 1
-        let endYear = new Date(this.formInline.checkDate[1]).getFullYear()
+        let startMonth = new Date(this.formInline.entryDate[0]).getMonth() + 1
+        let startYear = new Date(this.formInline.entryDate[0]).getFullYear()
+        let endMonth = new Date(this.formInline.entryDate[1]).getMonth() + 1
+        let endYear = new Date(this.formInline.entryDate[1]).getFullYear()
         if (startMonth === endMonth) {
           this.peDate = startYear + '年' + startMonth + '月'
         } else {
@@ -296,18 +340,23 @@ export default {
       }
     },
     async getDataList() {
-      let checkDateStart = this.formInline.checkDate[0] ? moment(this.formInline.checkDate[0]).format('YYYY-MM-DD') : ''
-      let checkDateEnd = this.formInline.checkDate[1] ? moment(this.formInline.checkDate[1]).format('YYYY-MM-DD') : ''
+      let entryDateStart = this.formInline.entryDate[0] ? moment(this.formInline.entryDate[0]).format('YYYY-MM-DD') : ''
+      let entryDateEnd = this.formInline.entryDate[1] ? moment(this.formInline.entryDate[1]).format('YYYY-MM-DD') : ''
+      let signatureFinalDateStart = this.formInline.signatureFinalDate[0] ? moment(this.formInline.signatureFinalDate[0]).format('YYYY-MM-DD') : ''
+      let signatureFinalDateEnd = this.formInline.signatureFinalDate[1] ? moment(this.formInline.signatureFinalDate[1]).format('YYYY-MM-DD') : ''
       let params = {
+        type:1,
         ...this.formInline,
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
-        checkDateStart: checkDateStart,
-        checkDateEnd: checkDateEnd,
-        filterType: this.curIndex === -1 ? null : this.curIndex + 1
+        entryDateStart: entryDateStart,
+        entryDateEnd: entryDateEnd,
+        signatureFinalDateStart: signatureFinalDateStart,
+        signatureFinalDateEnd: signatureFinalDateEnd,
+        signatureStatus2:this.signatureStatus2
       }
       this.tableSpinning = true
-      const { code, data } = await  healthManageList(params)
+      const { code, data } = await getResponsibilityList(params)
       this.tableSpinning = false
       if (+code === 20000 && data) {
         this.tableDataList = data.list
@@ -316,20 +365,145 @@ export default {
     },
     changeTab(tabIndex) {
       this.curIndex = this.curIndex === tabIndex ? -1 : tabIndex
+      if (tabIndex == 0){
+        this.signatureStatus2 = ''
+      } else if (tabIndex == 1) {
+        this.signatureStatus2 = '3'
+      } else if (tabIndex == 2) {
+        this.signatureStatus2 = '1'
+      }
       this.page.pageNo = 1
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
     },
+    // 批量推送
+    async batchPush() {
+      console.log(this.choosedArr);
+      if (!this.choosedArr.length) {
+        this.$antMessage.warning('请选择推送人员！')
+        return
+      }
+      const condition = (item) => {
+        return item.signatureStatus != 0;
+      };
+      const canNotSign = this.choosedArr.some(condition);
+      if (canNotSign) {
+        this.$antMessage.warning('请正确选择推送人员！')
+        return;
+      } else {
+        const personIds = this.choosedArr.map(item => {
+          return item.id
+        })
+        let para = {
+          idList: personIds
+        }
+        const { code } = await pushResponsibility(para)
+        if (+code === 20000) {
+          this.$antMessage.success('批量推送成功')
+          this.selectedRowKeys = []
+          this.choosedArr = []
+          this.getDataList()
+          this.getCertCount()
+        }
+      }
+    },
+    // 批量签署
+    async batchSign() {
+      // console.log('批量签署',this.choosedArr);
+      if (!this.choosedArr.length) {
+        this.$antMessage.warning('至少选择一条数据！')
+        return
+      }
+      const condition = (item) => {
+        return item.signatoriesHandlerUserId != this.userId || item.signatureStatus != 2;
+      };
+      const canNotSign = this.choosedArr.some(condition);
+      if (canNotSign) {
+        this.$antMessage.warning('请正确选择签署文件！')
+        return;
+      } else {
+        this.signVisible = true
+        this.$nextTick(()=>{
+          //所有功能演示代码
+          this.mSign = new EleSign({
+            ele: null
+          });
+          this.mSign.init();
+          this.mSign.moutedEle(document.getElementById("testEle"))
+        })
+        console.log(this.selectedRowKeys,'idList999');
+      }
+    },
+    // 批量下载
+    async batchExport() {
+      console.log('批量下载',this.choosedArr);
+      if (!this.choosedArr.length) {
+        this.$antMessage.warning('至少选择一条数据！')
+        return
+      }
+      this.choosedArr.forEach(item => {
+        window.open(item.file.filePath);
+      })
+      this.choosedArr = []
+    },
+    // 点击确定按钮
+    signConfirm(){
+      if(JSON.parse(this.mSign.toJson()).data.length > 0) {
+        var baseUrl = this.mSign.toJpeg();
+        var dataWithoutPrefix = baseUrl.split(',')[1];
+        // console.log(baseUrl, '生成的base64')
+      } else {
+        this.$antMessage.warn('请签署姓名!')
+      }
+      if (!formValidator.formAll(this, "editForm")) return;
+      let params = {
+        idList: this.selectedRowKeys,
+        sealData: dataWithoutPrefix,
+      }
+      responsibilitySignBatch(params).then((res)=>{
+        if(res.code == 20000){
+          this.$antMessage.success("签署成功！");
+          this.signVisible = false
+          this.selectedRowKeys = []
+          this.choosedArr = []
+          this.getDataList()
+        }
+      })
+    },
+    signUndo() {
+      this.mSign.undo();
+    },
+    signRedo() {
+      this.mSign.clear();
+    },
+    // 点击取消按钮
+    signCancle() {
+      this.signVisible = false;
+      this.editForm = {};
+    },
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.choosedArr = selectedRows
+      console.log('selectedRowKeys111',selectedRowKeys,'selectedRows222',selectedRows);
     },
     onSelectAllSelect(selected, selectedRows, changeRows) {
       this.selectedRowKeys = selectedRows.map((item,index) => {
-        return index
+        return item.id
       }) || []
       this.choosedArr = selectedRows
+    },
+    // 根据列表签署状态转为文字
+    getNumStatus(num){
+      if(num == '0'){
+        return '待推送'
+      } else if(num == '1'){
+        return '待签署'
+      } else if(num == '2'){
+        return '已签署'
+      } else if(num == '3'){
+        return '签署完成'
+      }
     },
     // 页码改变
     pageNoChange(page) {
@@ -346,8 +520,8 @@ export default {
     },
     // 查询
     iSearch() {
-      // 获取列表
       this.getPeDate()
+      // 获取列表
       this.page.pageNo = 1
       this.getDataList(this.formInline)
         .finally(() => {
@@ -355,7 +529,7 @@ export default {
         })
       this.selectedRowKeys = []
       this.choosedArr = []
-      this.getHealthNumCount()
+      this.getCertCount()
     },
     // 重置
     iRest: debounce(function () {
@@ -366,167 +540,146 @@ export default {
         total: 0,
       }
       this.formInline = {
-        checkDate: []
+        entryDate: [],
+        signatureFinalDate: [],
       }
+      this.signatureStatus2 = ''
+      this.curIndex = -1
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
+      this.getCertCount()
+      this.getPeDate()
     }, 250, { leading: true, trailing: false }),
     format(val) {
       return moment(val).format('YYYY-MM-DD')
     },
-    getSite(siteCode){
-      return (this.corporationList.find(item => {
-        return item.corporationId === siteCode
-      }) || {}).orgAbbrName
+    // 导入人员-打开弹框
+    importPersonnel() {
+      this.importVisible = true
+      this.type = 1
+      this.pushStatus = 1
     },
-    viewDetail(row) {
-      this.$router.push({
-        path: '/occupationHealth/PEBookDetail',
-        query: { id: row.checkId, personId: row.personId }
-      })
-    },
-    toBookPE(row) {
-      this.$router.push({
-        path: '/occupationHealth/PEBook',
-        query: { id: row.checkId, personId: row.personId }
-      })
-    },
-    toMultiPEBook(row) {
-      this.$router.push({
-        path: '/occupationHealth/multiPEBook',
-      })
-    },
-    toBookReCheck(row) {
-      this.$router.push({
-        path: '/occupationHealth/PERecheck',
-        query: { id: row.checkId, personId: row.personId }
-      })
-    },
-    multUpdateConclusion() {
-      if (!this.choosedArr.length) {
-        this.$antMessage.warning('请选择体检人员')
-        return
+    //关闭批量导入弹窗
+    closeAddVisible(flag) {
+      if (flag) {
+        this.formInline = {
+          entryDateStart: undefined,
+          entryDateEnd: undefined,
+          entryDate: [],
+          signatureFinalDateStart: undefined,
+          signatureFinalDateEnd: undefined,
+          signatureFinalDate: []
+        },
+        this.getDataList();
+        this.getCertCount()
       }
-      this.multUpdateConclutionVisible = true
+      this.importVisible = false;
+      this.type = 0
+      this.pushStatus = 1
     },
-    toDraftPage() {
-      this.$router.push({
-        path: '/occupationHealth/physicalExamDraftList'
+    // 处理文件id
+    handleFileIdS(list) {
+      list = list ? list : []
+      let ids = list.map(item => {
+        return item.id
       })
+      ids = ids ? ids : []
+      return ids
     },
-    toApprovePage() {
-      this.$router.push({
-        path: '/occupationHealth/physicalExamApprove'
+    // 处理文件回显
+    handleFileRedisplay(list) {
+      // console.log(888,list);
+      list = list ? list : []
+      let fileList = []
+      list.forEach(item => {
+        let itemObj = {
+          id: item.id,
+          uid: item.id,
+          name: item.sourceFileName,
+          status: 'done',
+          url: item.filePath,
+        }
+        fileList.push(itemObj)
       })
+      return fileList
     },
-    async exportExcel() {
-      const personIds = this.choosedArr.map(item => {
-        return item.personId
-      }) || []
-      if (!personIds.length) {
-        this.$antMessage.warning('请选择人员')
-        return
+    // 签署
+    signFile(row){
+      if (!this.canClickBtnMixin("safetyResponsibilitySign")) {
+        return;
       }
+      let query = {
+        id: row.id,
+        activeKey:'1'
+      }
+      this.$router.push({
+        path: '/ehsGerneralManage/securityArchiveManagement/safetyResponsibilityPreview',
+        query
+      })
+    },
+    // 预览
+    viewFile(row){
+      if (!this.canClickBtnMixin("safetyResponsibilityView")) {
+        return;
+      }
+      let query = {
+        id: row.id,
+        filePreview: true
+      }
+      this.$router.push({
+        path: '/ehsGerneralManage/securityArchiveManagement/safetyResponsibilityPreview',
+        query,
+      })
+    },
+    // 推送
+    pushFile(row){
       let para = {
-        ...this.formInline,
-        pageSize: this.page.pageSize,
-        pageNo: this.page.pageNo,
-        checkDateStart: this.formInline.checkDate[0] || '',
-        checkDateEnd: this.formInline.checkDate[1] || '',
-        filterType: this.curIndex === -1 ? null : this.curIndex + 1,
-        personIds: personIds
+        idList: [row.id]
       }
-      let res = await healthCheckExport(para)
-      if(res){
-        const name = '体检管理导出'
-        const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
-        const downloadElement = document.createElement('a')
-        const href = URL.createObjectURL(blob) //创建下载链接
-        downloadElement.href = href
-        downloadElement.download = name + '.xlsx'
-        document.body.appendChild(downloadElement)
-        downloadElement.click()
-        document.body.removeChild(downloadElement)// 下载完成移除元素
-        window.URL.revokeObjectURL(href) // 释放掉blob对象
-      }
-    },
-    async sendNotify() {
-      if (!this.choosedArr.length) {
-        this.$antMessage.warning('请选择体检通知人员')
-        return
-      }
-      const personIds = this.choosedArr.map(item => {
-        return item.personId
-      })
-      let para = {
-        personIds: personIds
-      }
-      const { code } = await notifyNotCheck(para)
-      if (+code === 20000) {
-        this.$antMessage.success('体检通知成功')
-        this.getDataList()
-      }
-    },
-    async reSend(row) {
-      let para = {
-        personId: row.personId
-      }
-      const { code, data } = await sendOneNotify(para)
-      if (+code === 20000) {
-        this.$antMessage.success('重新发送成功')
-        this.getDataList()
-      }
-    },
-    
-    /**批量更新体检结论 start */
-    conclusionCancelFn() {
-      this.$refs.conclusionFormRef.resetFields()
-      this.multUpdateConclutionVisible = false
-    },
-    handleCheckResultChange() {
-      //更新体检结论时，体检tab查询重置
-      this.curIndex = -1
-    },
-    dowonloadFile(file) {
-      if (file && file.length) {
-        file = file[0]
-      }
-      if (file && file.filePath) {
-        window.location.href = file.filePath
-      }
-    },
-    confirmUpdate: debounce(function(){
-      this.$refs.conclusionFormRef.validate(async valid => {
-        if (valid) {
-          const personIds = this.choosedArr.map(item => {
-            return item.personId
-          })
-          let para = {
-            personIds: personIds,
-            isSick: this.conclusionForm.isSick,
-            checkResult: this.conclusionForm.checkResult
-          }
-          const { code, data } = await updateCheckResult(para)
-          if (+code === 20000) {
-            this.conclusionCancelFn()
-            this.$antMessage.success('更新成功')
-            this.getHealthNumCount()
-            this.getDataList()
-          }
+      pushResponsibility(para)
+      .then((res) =>{
+        if(res.code == 20000){
+          this.$antMessage.success('推送成功')
+          this.getDataList()
+          this.getCertCount()
         }
       })
-    })
+    },
+    // 删除
+    reSend(row){
+      this.$antConfirm({
+        title: '确认删除？',
+        onOk: async () => {
+          let para = {
+           id:row.id
+          }
+          await responsibilityDelete(para)
+          this.$antMessage.success('删除成功')
+          this.getDataList()
+          this.getCertCount()
+        }
+      })
+    },
   }
 }
 </script>
 
 <style lang="less" scoped>
-.top-tittle{
-  padding: 20px 0 30px 0;
-  font-size: 20px;
-  color: #000;
-  font-weight: 400;
+
+::v-deep .dashed-btn{
+  .ant-btn-primary {
+    background: #f1f4ff;
+    color: #0067cc;
+    border: 1px dashed #9fcaf5 !important;
+  }
+  .ant-btn-primary:hover {
+    border: 1px dashed #0067cc !important;
+  }
+}
+.testInfo {
+  border: 2px dashed grey;
+  overflow: hidden;
 }
 .pe-data-item{
   display: inline-block;
@@ -589,13 +742,13 @@ export default {
 }
 .forbid-pe-num{
   &.active{
-    border: 1px solid rgba(255,18,18,1);
-    box-shadow: 0px 0px 10px 0px rgba(255,18,18,0.1);
+    border: 1px solid rgba(87,234,201,1);
+    box-shadow: 0px 0px 10px 0px rgba(87,234,201,0.1);
     .pe-data-body,.en-illus{
-      color: #FF1212;
+      color: #57eac9;
     }
     i {
-      background-color:rgba(255,18,18,1);
+      background-color:rgba(87,234,201,1);
     }
   }
 }

@@ -1404,6 +1404,16 @@ const options = {
                   children: []
                 },
                 {
+                  path: 'occupationalPreview',
+                  name: '签署告知书',
+                  meta: {
+                    title: '签署告知书',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/occupationalHazardNotification/occupationalPreview.vue'], resolve),
+                },
+                {
                   path: 'safetyResponsibilityLetter',
                   name: '安全责任书',
                   meta: {
@@ -1415,6 +1425,16 @@ const options = {
                   component: resolve => require(['@/pages/safetyResponsibilityLetter/index.vue'], resolve),
                   children: []
                 },
+                {
+                  path: 'safetyResponsibilityPreview',
+                  name: '签署责任书',
+                  meta: {
+                    title: '签署责任书',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyResponsibilityLetter/safetyResponsibilityPreview.vue'], resolve),
+                }
               ]
             },
             {
