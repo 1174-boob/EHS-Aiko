@@ -359,14 +359,14 @@ export default {
       value = JSON.parse(value);
       console.log(value,'valuevaluevalue');
       this.editForm.manufacturerName = value.companyName
-      this.editForm.manufacturerId = value.invitationId
+      // this.editForm.manufacturerId = value.invitationId
       this.fetching = false
     },
     selectChange(value, options) {
       value = JSON.parse(value);
       console.log(value.companyName,'valuevaluevalue');
       this.editForm.manufacturerName = value.companyName
-      this.editForm.manufacturerId = value.invitationId
+      // this.editForm.manufacturerId = value.invitationId
       this.fetching = false
       // Object.assign(this, {
       //   value,
@@ -467,7 +467,7 @@ export default {
     // 排班弹框-确定
     editConfirm() {
       console.log(this.editForm);
-      return
+      // return
       if (!formValidator.formAll(this, "editForm")) {
         return;
       }
