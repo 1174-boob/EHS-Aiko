@@ -102,24 +102,20 @@
             <a-input :maxLength="50" v-model="editForm.certNum" placeholder="请输入证书编号"></a-input>
           </a-form-model-item>
           <a-form-model-item class="flex" label="厂商名称" prop="manufacturerName">
-            <!-- <a-input @change="changeManufacturerName" :maxLength="50" v-model="editForm.manufacturerName" placeholder="请输入厂商名称"></a-input> -->
-            <a-select
-              show-search
-              size="large"
+            <a-auto-complete
+              placeholder="请输入厂商名称"
               v-model="editForm.manufacturerName"
-              :not-found-content="fetching ? undefined : null"
-              :placeholder="'请输入厂商名称'"
-              style="width: 100%;font-size: 14px;"
-              :filter-option="false"
-              @search="fetchUser"
-              @select="selectChange"
+              @dropdownVisibleChange="dropdownVisibleChange"
+              @select="onSelect"
+              @search="handleSearch"
             >
-              <a-spin v-if="fetching" slot="notFoundContent" size="small" />
-              <a-select-option
-                v-for="item in searchTreeList"
-                :key="JSON.stringify(item)"
-              >{{ item.companyName }}</a-select-option>
-            </a-select>
+              <template slot="dataSource">
+                <a-spin v-if="fetching" slot="notFoundContent" size="small" />
+                <a-select-option v-for="item in dataSource" :key="JSON.stringify(item)" :title="item.companyName">
+                  {{ item.companyName }}
+                </a-select-option>
+              </template>
+            </a-auto-complete>
           </a-form-model-item>
           <a-form-model-item class="flex" label="持证人" prop="holdUserName">
             <a-input :maxLength="50" v-model="editForm.holdUserName" placeholder="请输入持证人"></a-input>
@@ -191,8 +187,9 @@ export default {
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   components: { StaffOrDept,UploadBtnStyle, Upload},
   data() {
-    this.fetchUser = debounce(this.fetchUser, 800);
+    this.handleSearch = debounce(this.handleSearch, 800);
     return {
+      dataSource: [],
       dictionary,
       selectValue: [],
       fetching: false,
@@ -336,24 +333,34 @@ export default {
     //     console.log(res.data,8888888);
     //   })
     // }, 250),
-
-
-    // 搜索事件
-    fetchUser(value) {
+    dropdownVisibleChange(open) {
+      if(open) {
+        this.fetching = true;
+        this.dataSource = [];
+        let apiData = { name: '' }
+        getInvitationSupplier(apiData).then((res) => {
+          this.dataSource = res.data;
+        }).catch((e) => {
+          console.log(e,'err');
+        })
+      }
+    },
+    handleSearch(value) {
       this.fetching = true;
-      this.searchTreeList = [];
-      // var pattern1 = /[\u4e00-\u9fa5]{2,}/;
-      // var pattern2 = /\d{5,}$/;
-      // if (!pattern1.test(value) && !pattern2.test(value)) {
-      //   return
-      // }
+      this.dataSource = [];
       let apiData = { name: value }
       getInvitationSupplier(apiData).then((res) => {
-        this.searchTreeList = res.data;
-        // console.log('this.searchTreeList',this.searchTreeList );
+        this.dataSource = res.data;
       }).catch((e) => {
         console.log(e,'err');
       })
+    },
+    onSelect(value) {
+      value = JSON.parse(value);
+      console.log(value,'valuevaluevalue');
+      this.editForm.manufacturerName = value.companyName
+      this.editForm.manufacturerId = value.invitationId
+      this.fetching = false
     },
     selectChange(value, options) {
       value = JSON.parse(value);
