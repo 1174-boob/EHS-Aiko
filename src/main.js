@@ -36,6 +36,8 @@ import deptOrgTree from "@/components/deptOrgTree/index.vue"; //选择平台组�
 import global from '@/mixin/global.js'
 import '@/utils/ployfill.js'
 Vue.mixin(global)
+// 引入手写签名
+import '@/utils/dzjm.min.js'
 
 // 按需加载
 import XEUtils from 'xe-utils'

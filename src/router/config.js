@@ -1434,7 +1434,18 @@ const options = {
                     invisible: true,
                   },
                   component: resolve => require(['@/pages/safetyResponsibilityLetter/safetyResponsibilityPreview.vue'], resolve),
-                }
+                },
+                {
+                  path: 'safetyEduArchives',
+                  name: '三级安全教育',
+                  meta: {
+                    title: '三级安全教育',
+                    routerCode:'safetyEduArchives',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduArchives/index.vue'], resolve),
+                },
               ]
             },
             {
