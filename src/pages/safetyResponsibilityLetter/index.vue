@@ -451,6 +451,7 @@ export default {
         // console.log(baseUrl, '生成的base64')
       } else {
         this.$antMessage.warn('请签署姓名!')
+        return
       }
       if (!formValidator.formAll(this, "editForm")) return;
       let params = {
