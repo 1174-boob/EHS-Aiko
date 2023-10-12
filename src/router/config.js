@@ -1446,6 +1446,16 @@ const options = {
                   },
                   component: resolve => require(['@/pages/safetyEduArchives/index.vue'], resolve),
                 },
+                {
+                  path: 'signManagement',
+                  name: '签名管理',
+                  meta: {
+                    title: '签名管理',
+                    routerCode:'signManagement',
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/signManagement/index.vue'], resolve),
+                },
               ]
             },
             {

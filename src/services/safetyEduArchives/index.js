@@ -16,9 +16,14 @@ export const signBatchSafetyEduApi = params => post(`${serviceNameList.health}/a
 export const signSingleSafetyEduApi = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
 // 三级安全教育-批量导出
 export const exportSafetyEduListApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
-
 // 三级安全教育-删除
 export const rmSafetyEduItemApi = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
 
+// 签名管理-获取签名
+export const getSignManagementDataApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+// 签名管理-保存签名
+export const saveSignManagementDataApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+// 签名管理-删除签名
+export const rmSignManagementDataApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
 
 
