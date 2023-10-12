@@ -136,8 +136,10 @@ export default {
       signVisible: false,
       mSign: null,
       editForm:{},
-      labelCol: { span: 3 },
-      wrapperCol: { span: 21 },
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
+      labelColSpec: { span: 6 },
+      wrapperColSpec: { span: 18 },
       formInline: {
         entryDateStart: undefined,
         entryDateEnd: undefined,
@@ -661,11 +663,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-::v-deep .ant-modal-content {
-  .model-content-form {
-    padding: 0 111px 0 102px !important;
-  }
-}
+
 ::v-deep .dashed-btn{
   .ant-btn-primary {
     background: #f1f4ff;

@@ -78,8 +78,8 @@
             ref="editForm"
             :model="editForm"
             :rules="editFormRules"
-            :label-col="labelColLong"
-            :wrapper-col="wrapperColLong"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol"
             labelAlign="left"
           >
             <a-form-model-item class="flex" label="签名区域" prop="sealData">
@@ -96,7 +96,7 @@
             <a-form-model-item class="flex" :label-col="labelColSpec" :wrapper-col="wrapperColSpec" label="发送短信手机号">
               <span style="font-Size:24px">{{userPhone}}</span>
             </a-form-model-item>
-            <a-form-model-item class="flex" :label-col="labelCol" :wrapper-col="wrapperCol" label="验证码" prop="code">
+            <a-form-model-item class="flex" label="验证码" prop="code">
               <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input><a-button @click="sendCode">发送短信</a-button>
             </a-form-model-item>
           </a-form-model>
@@ -146,8 +146,6 @@ export default {
       id: undefined,
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
-      labelColLong: { span: 3 },
-      wrapperColLong: { span: 21 },
       labelColSpec: { span: 6 },
       wrapperColSpec: { span: 18 },
       signVisible: false,
@@ -289,7 +287,6 @@ export default {
         // console.log(baseUrl, '生成的base64')
       } else {
         this.$antMessage.warn('请签署姓名!')
-        return
       }
       if (!formValidator.formAll(this, "editForm")) return;
       let params = {
@@ -351,11 +348,6 @@ export default {
 </script>
 
 <style scoped lang='less'>
-::v-deep .ant-modal-content {
-  .model-content-form {
-    padding: 0 111px 0 102px !important;
-  }
-}
 .testInfo {
   border: 2px dashed grey;
   overflow: hidden;
