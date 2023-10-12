@@ -1436,6 +1436,40 @@ const options = {
                   component: resolve => require(['@/pages/safetyResponsibilityLetter/safetyResponsibilityPreview.vue'], resolve),
                 },
                 {
+                  path: 'safetyEduManagement',
+                  name: '三级安全教育管理',
+                  meta: {
+                    title: '三级安全教育管理',
+                    routerCode:'safetyEduManagement',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduManagement/index.vue'], resolve),
+                },
+                {
+                  path: 'safetyEduInitiate',
+                  name: '三级安全教育管理发起',
+                  meta: {
+                    title: '发起',
+                    routerCode:'safetyEduInitiate',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduManagement/safetyEduInitiate/index.vue'], resolve),
+                },
+                {
+                  path: 'safetyEduCorrectionGrades',
+                  name: '三级安全教育管理成绩纠错',
+                  meta: {
+                    title: '成绩纠错',
+                    routerCode:'safetyEduCorrectionGrades',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduManagement/safetyEduCorrectionGrades/index.vue'], resolve),
+                },
+
+                {
                   path: 'safetyEduArchives',
                   name: '三级安全教育',
                   meta: {
