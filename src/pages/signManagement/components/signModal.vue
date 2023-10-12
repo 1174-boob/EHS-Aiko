@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { saveSignManagementDataApi } from "@/services/safetyEduArchives"
+import { addSignManagementDataApi, editSignManagementDataApi } from "@/services/safetyEduArchives"
 import cancelLoading from "@/mixin/cancelLoading";
 import SignComp from '@/components/signComp/index.vue'
 export default {
@@ -24,7 +24,7 @@ export default {
   model: {
     prop: 'signModalShow',
   },
-  props: ['signModalShow', 'signTargetData'],
+  props: ['signModalShow', 'sealDataId'],
   data() {
     return {
       editForm: {},
@@ -46,25 +46,23 @@ export default {
         return
       }
       this.handleLoading()
-      this.signBatchSafetyEdu(base64UrlWithoutPrefix)
-      .then(res=>{
-        this.$emit('signOnOk')
-        this.closeModel()
-      })
-      .catch(err=>{})
-      .finally(()=>{
-        setTimeout(() => {
-          this.changeLoading()
-        }, 300);
-      })
-    },
-    // 批量签署api
-    async signBatchSafetyEdu(sealData){
+      const apiName = this.sealDataId ? editSignManagementDataApi : addSignManagementDataApi
+
       let params = {
-        idList: this.signTargetData,
-        sealData,
+        sealData: base64UrlWithoutPrefix,
+        sealDataId: this.sealDataId,
       }
-      await saveSignManagementDataApi(params)
+      apiName(params)
+        .then(res => {
+          this.$emit('signOnOk')
+          this.closeModel()
+        })
+        .catch(err => { })
+        .finally(() => {
+          setTimeout(() => {
+            this.changeLoading()
+          }, 300);
+        })
     },
     // 取消-关闭model
     closeModel() {

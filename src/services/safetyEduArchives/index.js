@@ -20,10 +20,12 @@ export const exportSafetyEduListApi = params => postExcel(`${serviceNameList.hea
 export const rmSafetyEduItemApi = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
 
 // 签名管理-获取签名
-export const getSignManagementDataApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+export const getSignManagementDataApi = params => post(`${serviceNameList.health}/api/ehs/security/seal/data/list/page`, params);
 // 签名管理-保存签名
-export const saveSignManagementDataApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+export const addSignManagementDataApi = params => post(`${serviceNameList.health}/api/ehs/security/seal/data/add`, params);
+// 签名管理-更改签名
+export const editSignManagementDataApi = params => post(`${serviceNameList.health}/api/ehs/security/seal/data/edit`, params);
 // 签名管理-删除签名
-export const rmSignManagementDataApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+export const rmSignManagementDataApi = params => post(`${serviceNameList.health}/api/ehs/security/seal/data/delete`, params);
 
 
