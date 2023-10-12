@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       editForm: {},
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
+      labelCol: { span: 3 },
+      wrapperCol: { span: 21 },
       rules: {
         shanggangyijian: [{ required: true, message: "不能为空", trigger: "change" }],
       },
@@ -102,5 +102,9 @@ export default {
   }
 };
 </script>
-
+::v-deep .ant-modal-content {
+  .model-content-form {
+    padding: 0 111px 0 102px !important;
+  }
+}
 <style lang="less" scoped></style>
