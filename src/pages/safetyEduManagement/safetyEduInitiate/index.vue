@@ -33,7 +33,7 @@
           </a-form-model-item>
         </template> -->
 
-        <!-- <template description="安全教育培训讲师">
+        <template description="安全教育培训讲师">
           <div>
             <div class="m-t-20 border-b-e7">
               <PageTitle>安全教育培训讲师</PageTitle>
@@ -60,7 +60,7 @@
             :treePlaceholder="'请选择'" :checkedTreeNode="checkedTreeNodeAssign" :deptTreeId="deptTreeId" :checkAbel="false"
             :onPreview="!isChangePost"
             @getTreeData="(value) => handleStaffFormData(value, 'peixunfuzeren', 'peixunfuzerenname', 'checkedTreeNodeAssign')" />
-        </template> -->
+        </template>
 
         <template title="模板">
           <div>
@@ -76,13 +76,23 @@
             </div>
             <div class="m-t-20"></div>
           </div>
-          <a-form-model-item ref="moban" label=" " prop="moban" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            11111
+          <a-form-model-item ref="selTempList" label=" " prop="selTempList" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+            <ul class="sel-tempList">
+              <li class="selTempItem" v-for="item in iFrom.selTempList" :key="item.id">
+                <img class="pic" :src="item.coverUrl" :alt="item.templateName">
+                <div class="mask">
+                  <div class="maskBtn">
+                    <a-icon class="eyeBtn" type="eye" @click="openTempPreviewModel(item)"/>
+                    <a-icon class="deleteBtn" type="delete" @click="rmSelTempItem(item)"/>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </a-form-model-item>
         </template>
 
 
-        <!-- <template description="培训人员">
+        <template description="培训人员">
           <div>
             <div class="ttile border-b-e7">
               <PageTitle class="ttile-text">培训人员</PageTitle>
@@ -105,7 +115,7 @@
               </a-table>
             </CommonTable>
           </a-form-model-item>
-        </template> -->
+        </template>
 
       </a-form-model>
     </a-spin>
@@ -119,9 +129,11 @@
       </FixedBottom>
     </div>
 
-    <!-- 添加现场监护人弹窗 -->
-    <SelTempDrawer v-model="selTempDrawerShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian"
-      :deptTreeId="deptTreeId" @changeModuleList="changeModuleList" />
+    <!-- 选择模板抽屉 -->
+    <SelTempDrawer v-model="selTempDrawerShow" :selTempList="iFrom.selTempList" @changeSelTempDrawerList="changeSelTempDrawerList" />
+
+    <!-- 预览模板弹窗 -->
+    <TempPreviewModel v-model="tempPreviewModelShow" :previewData="previewData" :readOnly="true"/>
 
     <UploadImport v-model="uploadImportShow" />
 
@@ -135,6 +147,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import SelTempDrawer from "./components/selTempDrawer.vue";
+import TempPreviewModel from './components/tempPreviewModel.vue';
 import { addDangerWorkStaticApi, getDangerWorkStaticDetailApi, editDangerWorkStaticApi } from '@/services/dangerWorkStatic.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
@@ -142,12 +155,16 @@ import { PushTask } from '@/services/api'
 import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
 import UploadImport from '@/pages/safetyEduManagement/safetyEduInitiate/components/uploadImport.vue'
+
 export default {
-  components: { FixedBottom, SelTempDrawer, StaffOrDept, UploadImport },
+  components: { FixedBottom, SelTempDrawer, StaffOrDept, UploadImport,TempPreviewModel },
   mixins: [teableCenterEllipsis, chemicalDict, cancelLoading],
   data() {
     return {
       getDictTarget,
+
+      tempPreviewModelShow:false,
+      previewData:{},
 
       uploadImportShow: false,
       spinning: true,
@@ -158,6 +175,8 @@ export default {
         biaoti: [{ required: true, message: "标题不能为空", trigger: "blur" },],
         leixing: [{ required: true, message: "类型不能为空", trigger: "change" },],
         qianshujiezhiriqi: [{ required: true, message: "签署截止日期不能为空", trigger: "change" },],
+
+        selTempList: [{ required: true, message: "模板不能为空", trigger: "change" },],
 
       },
       // 主要成分table
@@ -319,8 +338,11 @@ export default {
       console.log('e', e);
       this.isChangePost = e == 2
     },
-
-    moment,
+    // 预览模板弹窗
+    openTempPreviewModel(item) {
+      this.previewData = item
+      this.tempPreviewModelShow = true
+    },
     // 页面初始化
     initPage() {
       if (this.isAddPage) {
@@ -505,9 +527,21 @@ export default {
       this.selTempDrawerShow = true;
     },
     // 现场监护人-添加、修改一行
-    changeModuleList(moduleDataList) {
-      this.$set(this.iFrom, 'dangerGuardian', moduleDataList)
-      formValidator.formItemValidate(this, 'dangerGuardian', 'ruleForm')
+    changeSelTempDrawerList(selTempList) {
+      this.$set(this.iFrom, 'selTempList', selTempList)
+      formValidator.formItemValidate(this, 'selTempList', 'ruleForm')
+    },
+    // 删除选择的模板
+    rmSelTempItem(rmItem){
+      this.$antConfirm({
+        title: '确认删除？',
+        onOk: () => {
+          const newSelTempList = this.iFrom.selTempList.filter(item=>item.id != rmItem.id)
+          this.$set(this.iFrom, 'selTempList', newSelTempList)
+          formValidator.formItemValidate(this, 'selTempList', 'ruleForm')
+          return Promise.resolve()
+        }
+      })
     },
   }
 }
@@ -560,4 +594,68 @@ export default {
 ::v-deep .el-input__icon.el-range__icon.el-icon-time {
   display: none;
 }
+
+.sel-tempList {
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 18px;
+    grid-row-gap: 18px;
+
+    .selTempItem {
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        .mask {
+          display: flex;
+        }
+      }
+
+      .selRadioBox {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        padding: 4px 8px 4px;
+        z-index: 2;
+
+        ::v-deep .ant-radio-inner {
+          border-color: #0067cc;
+        }
+      }
+
+      .pic {
+        width: 100%;
+      }
+
+      .mask {
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.5);
+        align-items: center;
+        justify-content: center;
+
+        .maskBtn {
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .eyeBtn {
+            font-size: 24px;
+            margin-right: 20px;
+            cursor: pointer;
+          }
+          .deleteBtn{
+            font-size: 22px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
 </style>
