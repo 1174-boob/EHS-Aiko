@@ -758,6 +758,24 @@ export const responsibilitySign = params => post(`${serviceNameList.health}/api/
 // 安全责任书-批量签署
 export const responsibilitySignBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign/batch`, params);
 
+// 三级安全教育管理-选择模板
+export const managementListPage = params => post(`${serviceNameList.health}/api/ehs/security/template/management/list/page`, params);
+// 三级安全教育管理-导入excel获取批量的培训用户
+export const educationImportUser = params => post(`${serviceNameList.health}/api/ehs/security/education/import/user`, params);
+// 三级安全教育管理-三级安全教育管理发起
+export const educationAdd = params => post(`${serviceNameList.health}/api/ehs/security/education/add`, params);
+// 三级安全教育管理-三级安全教育管理删除
+export const educationDelete = params => post(`${serviceNameList.health}/api/ehs/security/education/delete`, params);
+// 三级安全教育管理-三级安全教育管理详情
+export const educationDetail = params => post(`${serviceNameList.health}/api/ehs/security/education/detail`, params);
+// 三级安全教育管理-三级安全教育管理列表分页
+export const getEducationListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/list/page`, params);
+// 三级安全教育管理-三级安全教育管理详情子集查询
+export const getEducationUserListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/records/user/list/page`, params);
+// 三级安全教育管理-成绩纠错
+export const educationCorrect = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/correct`, params);
+// 三级安全教育管理-成绩确认
+export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
 
 
 // 危害岗位信息数据库
