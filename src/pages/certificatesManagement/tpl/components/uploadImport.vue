@@ -118,11 +118,11 @@ export default {
     downTemplate() {
       if(this.inOutType == 1){
         window.open(
-          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（内部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（内部员工）.xlsx`
+          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/证书批量导入（内部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/证书批量导入（内部员工）.xlsx`
         );
       } else if (this.inOutType == 2){
         window.open(
-          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（外部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（外部员工）.xlsx`
+          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/证书批量导入（外部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/证书批量导入（外部员工）.xlsx`
         );
       }
     },
