@@ -33,7 +33,7 @@
           </a-form-model-item>
         </template>
 
-        <template description="安全教育培训讲师">
+        <!-- <template description="安全教育培训讲师">
           <div>
             <div class="m-t-20 border-b-e7">
               <PageTitle>安全教育培训讲师</PageTitle>
@@ -60,9 +60,8 @@
             :treePlaceholder="'请选择'" :checkedTreeNode="checkedTreeNodeAssign" :deptTreeId="deptTreeId" :checkAbel="false"
             :onPreview="!isChangePost"
             @getTreeData="(value) => handleStaffFormData(value, 'peixunfuzeren', 'peixunfuzerenname', 'checkedTreeNodeAssign')" />
-        </template>
 
-        <!-- <template title="模板">
+          <template title="模板">
             <div>
               <div class="ttile border-b-e7">
                 <PageTitle class="ttile-text">模板</PageTitle>
@@ -79,7 +78,8 @@
             <a-form-model-item ref="moban" label=" " prop="moban" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
               11111
             </a-form-model-item>
-          </template> -->
+          </template>
+        </template> -->
 
 
         <template description="培训人员">
@@ -88,7 +88,7 @@
               <PageTitle class="ttile-text">培训人员</PageTitle>
               <DashBtn class="ttile-bbtn">
                 <div>
-                  <a-button type="dashed" @click="opeUploadImportModel">
+                  <a-button type="dashed" @click="opeUploadImportModel()">
                     <a-icon type="plus" />批量导入
                   </a-button>
                 </div>
@@ -96,14 +96,23 @@
             </div>
             <div class="m-t-20"></div>
           </div>
-          <a-form-model-item ref="dangerGuardian" label=" " prop="dangerGuardian" :label-col="{ span: 0 }"
-            :wrapper-col="{ span: 24 }">
-            <CommonTable :noPaging="true">
-              <a-table style="width:100%;" :columns="columns" :scroll="{ x: tableScrollX() }"
-                :locale="{ emptyText: emptyText }" :data-source="iFrom.dangerGuardian" :rowKey="(record, index) => index"
-                :pagination="false">
-              </a-table>
-            </CommonTable>
+          <a-form-model-item ref="peixunrenyuan" label=" " prop="peixunrenyuan" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+            <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :data="tableList">
+
+              <vxe-column field="xingming" title="姓名" :min-width="120"></vxe-column>
+              <vxe-column field="gonghao" title="工号" :min-width="120"></vxe-column>
+              <vxe-column field="bumen" title="部门" :min-width="120"></vxe-column>
+              <vxe-column field="gangwei" title="岗位" :min-width="120"></vxe-column>
+              <vxe-column field="xingbie" title="性别" :min-width="120"></vxe-column>
+              <vxe-column field="shenfenzhenghao" title="身份证号" :min-width="160"></vxe-column>
+              <vxe-column field="jiatingzhuzhi" title="家庭住址" :min-width="180"></vxe-column>
+
+              <template #empty>
+                <div style="padding:16px 0;">
+                  <a-empty />
+                </div>
+              </template>
+            </vxe-table>
           </a-form-model-item>
         </template>
 
@@ -124,8 +133,7 @@
     <AddCasNoModel v-model="addCasNoModelShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian"
       :deptTreeId="deptTreeId" @changeModuleList="changeModuleList" />
 
-    <UploadImport v-model="uploadImportShow" />
-
+    <UploadImport v-model="uploadImportShow"/>
   </HasFixedBottomWrapper>
 </template>
 <script>
@@ -145,13 +153,13 @@ import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
 import UploadImport from '@/pages/safetyEduManagement/safetyEduInitiate/components/uploadImport.vue'
 export default {
-  components: { FixedBottom, AddCasNoModel, StaffOrDept, UploadImport },
+  components: { FixedBottom, AddCasNoModel, StaffOrDept,UploadImport },
   mixins: [teableCenterEllipsis, chemicalDict, cancelLoading],
   data() {
     return {
       getDictTarget,
 
-      uploadImportShow: false,
+      uploadImportShow:false,
       spinning: true,
       labelCol: { span: 4 },
       wrapperCol: { span: 15 },
@@ -162,128 +170,14 @@ export default {
         qianshujiezhiriqi: [{ required: true, message: "签署截止日期不能为空", trigger: "change" },],
 
       },
-      // 主要成分table
-      columns: [
+
+      tableList:[
         {
-          title: "姓名",
-          dataIndex: "xingming",
-          key: "xingming",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
+          id:1
         },
-        {
-          title: "工号",
-          dataIndex: "gonghao",
-          key: "gonghao",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
-        },
-        {
-          title: "部门",
-          dataIndex: "bumen",
-          key: "bumen",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
-        },
-        {
-          title: "岗位",
-          dataIndex: "gangwei",
-          key: "gangwei",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
-        },
-        {
-          title: "性别",
-          dataIndex: "xingbie",
-          key: "xingbie",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
-        },
-        {
-          title: "身份证号",
-          dataIndex: "shenfenzhenghao",
-          key: "shenfenzhenghao",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 160,
-        },
-        {
-          title: "家庭住址",
-          dataIndex: "jiatingzhuzhi",
-          key: "jiatingzhuzhi",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 160,
-        },
+        
       ],
+
       // 添加一行弹窗-显示隐藏
       addCasNoModelShow: false,
       addCasNoModelData: {},
@@ -313,9 +207,9 @@ export default {
     this.initPage()
   },
   methods: {
-    opeUploadImportModel() {
+    opeUploadImportModel(){
       this.uploadImportShow = true
-    },
+    },  
     // 类型change 1新员工 2转(复)岗
     changeEmployeeType(e) {
       console.log('e', e);
