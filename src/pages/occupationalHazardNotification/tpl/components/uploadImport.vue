@@ -136,11 +136,11 @@ export default {
     downTemplate() {
       if(this.type == 1){
         window.open(
-          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（内部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（内部员工）.xlsx`
+          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/职业危害告知书（人员导入）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/职业危害告知书（人员导入）.xlsx`
         );
       } else if (this.type == 2){
         window.open(
-          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/axehs/ehs/证书批量导入（外部员工）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/axehs/ehs/证书批量导入（外部员工）.xlsx`
+          window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/职业危害告知书（人员导入）.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/职业危害告知书（人员导入）.xlsx`
         );
       }
     },
