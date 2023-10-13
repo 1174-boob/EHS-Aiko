@@ -4,7 +4,7 @@
     <a-spin :spinning="spinning" wrapperClassName="a-spin">
       <a-form-model ref="ruleForm" :model="iFrom" :rules="iRules" :label-col="labelCol" :wrapper-col="wrapperCol">
 
-        <template description="基本信息">
+        <!-- <template description="基本信息">
           <div>
             <div class="m-t-20 border-b-e7">
               <PageTitle>基本信息</PageTitle>
@@ -31,9 +31,9 @@
             <a-date-picker v-model="iFrom.qianshujiezhiriqi" placeholder="请选择" style="width:100%;"
               valueFormat="YYYY-MM-DD" :disabled-date="disabledDate" />
           </a-form-model-item>
-        </template>
+        </template> -->
 
-        <template description="安全教育培训讲师">
+        <!-- <template description="安全教育培训讲师">
           <div>
             <div class="m-t-20 border-b-e7">
               <PageTitle>安全教育培训讲师</PageTitle>
@@ -60,7 +60,7 @@
             :treePlaceholder="'请选择'" :checkedTreeNode="checkedTreeNodeAssign" :deptTreeId="deptTreeId" :checkAbel="false"
             :onPreview="!isChangePost"
             @getTreeData="(value) => handleStaffFormData(value, 'peixunfuzeren', 'peixunfuzerenname', 'checkedTreeNodeAssign')" />
-        </template>
+        </template> -->
 
         <template title="模板">
           <div>
@@ -68,7 +68,7 @@
               <PageTitle class="ttile-text">模板</PageTitle>
               <DashBtn class="ttile-bbtn">
                 <div>
-                  <a-button type="dashed" @click="openAddCasNoModel()">
+                  <a-button type="dashed" @click="openSelTempDrawer()">
                     <a-icon type="plus" />选择
                   </a-button>
                 </div>
@@ -120,7 +120,7 @@
     </div>
 
     <!-- 添加现场监护人弹窗 -->
-    <AddCasNoModel v-model="addCasNoModelShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian"
+    <SelTempDrawer v-model="selTempDrawerShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian"
       :deptTreeId="deptTreeId" @changeModuleList="changeModuleList" />
 
     <UploadImport v-model="uploadImportShow" />
@@ -134,8 +134,7 @@ import { formValidator } from "@/utils/clx-form-validator.js";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
-import AddCasNoModel from "./components/addCasNoModel.vue";
-import AddSpecialModel from "./components/addSpecialModel.vue";
+import SelTempDrawer from "./components/selTempDrawer.vue";
 import { addDangerWorkStaticApi, getDangerWorkStaticDetailApi, editDangerWorkStaticApi } from '@/services/dangerWorkStatic.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
@@ -144,7 +143,7 @@ import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
 import UploadImport from '@/pages/safetyEduManagement/safetyEduInitiate/components/uploadImport.vue'
 export default {
-  components: { FixedBottom, AddCasNoModel, StaffOrDept, UploadImport },
+  components: { FixedBottom, SelTempDrawer, StaffOrDept, UploadImport },
   mixins: [teableCenterEllipsis, chemicalDict, cancelLoading],
   data() {
     return {
@@ -284,7 +283,7 @@ export default {
         },
       ],
       // 添加一行弹窗-显示隐藏
-      addCasNoModelShow: false,
+      selTempDrawerShow: false,
       addCasNoModelData: {},
       // 是否是转复岗
       isChangePost: false,
@@ -501,14 +500,9 @@ export default {
       this.setKeepalive(true)
       this.$router.go(-1)
     },
-    // 现场监护人-打开窗口-新增、编辑
-    openAddCasNoModel(row) {
-      if (this.iFrom.corporationId) {
-        this.addCasNoModelData = row ? row : {}
-        this.addCasNoModelShow = true;
-      } else {
-        this.$antMessage.warn('请先选择所属组织')
-      }
+    // 选择模板抽屉
+    openSelTempDrawer() {
+      this.selTempDrawerShow = true;
     },
     // 现场监护人-添加、修改一行
     changeModuleList(moduleDataList) {
