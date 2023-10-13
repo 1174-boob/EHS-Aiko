@@ -62,27 +62,27 @@
             @getTreeData="(value) => handleStaffFormData(value, 'peixunfuzeren', 'peixunfuzerenname', 'checkedTreeNodeAssign')" />
         </template>
 
-        <!-- <template title="模板">
-            <div>
-              <div class="ttile border-b-e7">
-                <PageTitle class="ttile-text">模板</PageTitle>
-                <DashBtn class="ttile-bbtn">
-                  <div>
-                    <a-button type="dashed" @click="openAddCasNoModel()">
-                      <a-icon type="plus" />选择
-                    </a-button>
-                  </div>
-                </DashBtn>
-              </div>
-              <div class="m-t-20"></div>
+        <template title="模板">
+          <div>
+            <div class="ttile border-b-e7">
+              <PageTitle class="ttile-text">模板</PageTitle>
+              <DashBtn class="ttile-bbtn">
+                <div>
+                  <a-button type="dashed" @click="openAddCasNoModel()">
+                    <a-icon type="plus" />选择
+                  </a-button>
+                </div>
+              </DashBtn>
             </div>
-            <a-form-model-item ref="moban" label=" " prop="moban" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-              11111
-            </a-form-model-item>
-          </template> -->
+            <div class="m-t-20"></div>
+          </div>
+          <a-form-model-item ref="moban" label=" " prop="moban" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+            11111
+          </a-form-model-item>
+        </template>
 
 
-        <template description="培训人员">
+        <!-- <template description="培训人员">
           <div>
             <div class="ttile border-b-e7">
               <PageTitle class="ttile-text">培训人员</PageTitle>
@@ -105,7 +105,7 @@
               </a-table>
             </CommonTable>
           </a-form-model-item>
-        </template>
+        </template> -->
 
       </a-form-model>
     </a-spin>
@@ -114,8 +114,7 @@
       <FixedBottom>
         <div>
           <a-button class="m-r-15" @click="cancleSubmit">取消</a-button>
-          <a-button type="primary" class="m-r-15" :loading="loadingTwo" @click="iSave">保存</a-button>
-          <a-button type="primary" class="m-r-15" :loading="loading" @click="iSubmit">提交</a-button>
+          <a-button type="primary" class="m-r-15" :loading="loadingTwo" @click="iSave">发起</a-button>
         </div>
       </FixedBottom>
     </div>

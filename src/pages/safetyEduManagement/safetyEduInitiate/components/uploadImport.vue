@@ -45,7 +45,7 @@
 <script>
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { formValidator } from "@/utils/clx-form-validator.js";
-import { responsibilityFileImport } from "@/services/api.js";
+import { educationImportUser } from "@/services/api.js";
 export default {
   components: { UploadBtnStyle,},
   model: {
@@ -82,7 +82,7 @@ export default {
         return;
       }
       this.loading = true;
-      responsibilityFileImport({
+      educationImportUser({
         fileId: this.addForm.fileListExel[0].id,
         // fileName: this.addForm.fileListExel[0].name,
       })
