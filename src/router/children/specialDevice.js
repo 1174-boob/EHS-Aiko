@@ -191,6 +191,90 @@ export const specialDevice = [
     component: resolve => require(['@/pages/specialDevice/specialDevice/vesselCreate.vue'], resolve),
   },
   {
+    path: 'clkchkRecord',
+    name: '点检记录',
+    meta: {
+      title: '点检记录',
+      routerCode: 'clkchkRecord',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/clkchkRecord.vue'], resolve),
+  },
+  {
+    path: 'clkchkDayNew',
+    name: '日常点检新增',
+    meta: {
+      title: '日常点检新增',
+      routerCode: 'clkchkDayNew',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkNewPage.vue'], resolve),
+  },
+  {
+    path: 'clkchkDayDetail',
+    name: '日常点检查看',
+    meta: {
+      title: '日常点检查看',
+      routerCode: 'clkchkDayDetail',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
+  },
+  {
+    path: 'clkchkMonthNew',
+    name: '月度点检新增',
+    meta: {
+      title: '月度点检新增',
+      routerCode: 'clkchkMonthNew',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkNewPage.vue'], resolve),
+  },
+  {
+    path: 'clkchkMonthDetail',
+    name: '月度点检查看',
+    meta: {
+      title: '月度点检查看',
+      routerCode: 'clkchkMonthDetail',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
+  },
+  {
+    path: 'clkchkYearNew',
+    name: '年度点检新增',
+    meta: {
+      title: '年度点检新增',
+      routerCode: 'clkchkYearNew',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkNewPage.vue'], resolve),
+  },
+  {
+    path: 'clkchkYearDetail',
+    name: '年度点检查看',
+    meta: {
+      title: '年度点检查看',
+      routerCode: 'clkchkYearDetail',
+      isPage: true,
+      isView: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
+  },
+  {
     path: 'safeAttachAccount',
     name: '安全附件台帐',
     meta: {

@@ -78,6 +78,7 @@
           <span class="color-0067cc cursor-pointer" @click="viewDetail(record)">查看</span>
           <span :class="[!canUpdate(record) ? 'grey-text' : '']" class="color-0067cc cursor-pointer" @click="toEditPage(record, true)">更新</span>
           <span class="color-0067cc cursor-pointer" @click="toEditPage(record)">编辑</span>
+          <span class="color-0067cc cursor-pointer" @click="clkchkRecord(record)">点检记录</span>
           <span class="color-ff4d4f cursor-pointer" @click="deleteItem(record)">删除</span>
         </div>
       </a-table>
@@ -274,7 +275,12 @@ export default {
     format(val) {
       return moment(val).format('YYYY-MM-DD')
     },
-
+    clkchkRecord(row) {
+      this.$router.push({
+        path: '/safeManage/deviceSafeManage/specialeDevice/clkchkRecord',
+        query: { id: row.specialEquipmentId, equipmentType: row.equipmentType }
+      })
+    },
     deleteItem(row) {
       this.$antConfirm({
         title: '确认删除？',
