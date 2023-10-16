@@ -31,11 +31,11 @@
 
         <div class="selTempListContainer" v-loading="boxLoading">
           <ul class="selTempList" v-if="tempShowList.length">
-            <li class="selTempItem" v-for="item in tempShowList" :key="item.id">
+            <li class="selTempItem" v-for="item in tempShowList" :key="item.templateId">
               <div class="selRadioBox">
-                <a-radio :checked="selTempIds.includes(item.id)" @click="selTempFn(item)"></a-radio>
+                <a-radio :checked="selTempIds.includes(item.templateId)" @click="selTempFn(item)"></a-radio>
               </div>
-              <img class="pic" :src="item.coverUrl" :alt="item.templateName">
+              <img class="pic" :src="item.coverFile?.filePath || ''" :alt="item.templateName">
               <div class="mask">
                 <div class="maskBtn" @click="openTempPreviewModel(item)">
                   <a-icon class="eyeBtn" type="eye" />预览
@@ -110,7 +110,7 @@ export default {
   },
   computed:{
     selTempIds(){
-      return this.selTempListIng.map(item=>item.id)
+      return this.selTempListIng.map(item=>item.templateId)
     },
     templateClassificationList(){
       const dictGroupCode = this.formInline.templateTypeId
@@ -132,10 +132,6 @@ export default {
       return managementListPage(params)
         .then((res) => {
           let { list: tempShowList, total } = res.data ? res.data : { list: [], total: 0 };
-          (tempShowList || []).forEach(item=>{
-            item.id = item.templateId
-            item.coverUrl = 'https://img0.baidu.com/it/u=557569791,1139414725&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=688'
-          })
           this.tempShowList = tempShowList || [];
           this.page.total = total;
           // 处理页码 问题
