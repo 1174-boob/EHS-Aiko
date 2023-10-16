@@ -2,7 +2,7 @@ import {get,post,postExcel} from '@/utils/request.js';
 import serviceNameList from '@/config/default/service.config'
 
 // 三级安全教育-列表-获取
-export const getSafetyEduTableList = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/list/page`, params);
+export const getSafetyEduTableList = params => post(`${serviceNameList.health}/api/ehs/security/education/records/pageList`, params);
 // 三级安全教育-详细人数(五个格)
 export const getSafetyEduPeopleNum = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
 

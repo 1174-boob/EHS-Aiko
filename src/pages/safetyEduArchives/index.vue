@@ -4,10 +4,10 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="true" deptLabel="部门"></CommonSearchItem>
         <a-form-model-item label="姓名">
-          <a-input v-model="formInline.xingming" placeholder="请输入姓名"></a-input>
+          <a-input v-model="formInline.userName" placeholder="请输入姓名"></a-input>
         </a-form-model-item>
         <a-form-model-item label="类型">
-          <a-select allowClear show-search v-model="formInline.leixing" placeholder="请选择类型">
+          <a-select allowClear show-search v-model="formInline.type" placeholder="请选择类型">
             <a-select-option v-for="item in getDictTarget('s','employeeType')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -17,23 +17,23 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="状态">
-          <a-select allowClear show-search v-model="formInline.zhaungtai" placeholder="请选择状态">
+          <a-select allowClear show-search v-model="formInline.status" placeholder="请选择状态">
             <a-select-option v-for="item in getDictTarget('s','educationStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="入职日期">
-          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.entryDate" :placeholder="['开始日期','结束日期']"/>
+          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.employedDate" :placeholder="['开始日期','结束日期']"/>
         </a-form-model-item>
         <a-form-model-item label="签署日期">
-          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.signatureFinalDate" :placeholder="['开始日期','结束日期']"/>
+          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.signDate" :placeholder="['开始日期','结束日期']"/>
         </a-form-model-item>
         <a-form-model-item label="成绩">
-          <a-select allowClear show-search v-model="formInline.chengji" placeholder="请选择成绩">
+          <a-select allowClear show-search v-model="formInline.scoreStatus" placeholder="请选择成绩">
             <a-select-option v-for="item in getDictTarget('s','educationScore')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="上岗意见">
-          <a-select allowClear show-search v-model="formInline.shanggangyijian" placeholder="请选择上岗意见">
+          <a-select allowClear show-search v-model="formInline.bossOpinions" placeholder="请选择上岗意见">
             <a-select-option v-for="item in getDictTarget('s','bossOpinion')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -58,27 +58,27 @@
       <div>
         <div @click="changeTab(1)" class="pe-data-item total-pe-num" :class="[curIndex === 1 ? 'active' : '']">
           <span class="pe-data-body">培训总人数 {{countInfo.total==0? '0':countInfo.total}} 人 </span>
-          <p class="en-illus">certificate total quantity</p>
+          <p class="en-illus">total quantity</p>
           <i></i>
         </div>
         <div @click="changeTab(2)" class="pe-data-item purple-pe-num" :class="[curIndex === 2 ? 'active' : '']">
           <span class="pe-data-body">签署完成 {{countInfo.signingComplete}} 人</span>
-          <p class="en-illus">3 months before maturity</p>
+          <p class="en-illus">signed complete</p>
           <i></i>
         </div>
         <div @click="changeTab(3)" class="pe-data-item cyan-pe-num" :class="[curIndex === 3 ? 'active' : '']">
           <span class="pe-data-body">通过 {{countInfo.toBeSigned}} 人</span>
-          <p class="en-illus">certification Qualified</p>
+          <p class="en-illus">pass</p>
           <i></i>
         </div>
         <div @click="changeTab(4)" class="pe-data-item yellow-pe-num" :class="[curIndex === 4 ? 'active' : '']">
           <span class="pe-data-body">未通过 {{countInfo.toBeSigned}} 人</span>
-          <p class="en-illus">1 month before maturity</p>
+          <p class="en-illus">failed</p>
           <i></i>
         </div>
         <div @click="changeTab(5)" class="pe-data-item red-pe-num" :class="[curIndex === 5 ? 'active' : '']">
           <span class="pe-data-body">未签署 {{countInfo.toBeSigned}} 人 </span>
-          <p class="en-illus">expired certificate</p>
+          <p class="en-illus">to be signed</p>
           <i></i>
         </div>
       </div>
@@ -107,6 +107,16 @@
 
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
       <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
+        <template slot="numSlots" slot-scope="text,record,index">
+           <a-popover autoAdjustOverflow>
+            <div slot="content">
+              <span v-if="index<2" class="red-circle"></span>
+              <span>{{ text }}</span>
+            </div>
+            <span v-if="index<2" class="red-circle"></span>
+            <span>{{ text }}</span>
+          </a-popover>
+        </template>
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="openUpdateCommentsModel(record)">上岗意见</span>
           <span class="color-0067cc cursor-pointer" @click="batchSign(record)">签署</span>
@@ -171,23 +181,15 @@ export default {
         {
           title: '编号',
           dataIndex: 'num',
-          customRender: (text,record) => {
-            text = text ? text : '--'
-            return (
-              <div >
-                <span class="red-circle"></span>
-                <span>{{ text }}</span>
-              </div>
-            );
-          },
-          width: 225
+          scopedSlots: { customRender: 'numSlots' },
+          width: 280
         },
         {
           title: '类型',
-          dataIndex: 'leixing',
+          dataIndex: 'type',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','employeeType','leixing') : ''
+            text = text ? getDictTarget('s','employeeType', text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -200,10 +202,10 @@ export default {
         },
         {
           title: '当前级别',
-          dataIndex: 'dangqianjibie',
+          dataIndex: 'currentLevel',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationLevel','dangqianjibie') : ''
+            text = text ? getDictTarget('s','educationLevel',text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -216,10 +218,11 @@ export default {
         },
         {
           title: '姓名',
-          dataIndex: 'xingming',
+          dataIndex: 'userName',
           width: 150,
-          customRender: (text) => {
-            text = text ? text : ''
+          customRender: (text,scoped) => {
+            const {userName,userJobNumber} = scoped
+            text = userName ? (userJobNumber ? `${userName}/${userJobNumber}` : userName) : userJobNumber
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -232,7 +235,7 @@ export default {
         },
         {
           title: '部门',
-          dataIndex: 'bumen',
+          dataIndex: 'deptName',
           width: 150,
           customRender: (text) => {
             text = text ? text : ''
@@ -248,7 +251,7 @@ export default {
         },
         {
           title: '岗位',
-          dataIndex: 'gangwei',
+          dataIndex: 'position',
           width: 150,
           customRender: (text) => {
             text = text ? text : ''
@@ -264,10 +267,11 @@ export default {
         },
         {
           title: '发起人',
-          dataIndex: 'launchUserName',
+          dataIndex: 'createUserJobNumber',
           width: 150,
-          customRender: (text) => {
-            text = text ? text : ''
+          customRender: (text,scoped) => {
+            const {createUserName,createUserJobNumber} = scoped
+            text = createUserName ? (createUserJobNumber ? `${createUserName}/${createUserJobNumber}` : usercreateUserNameName) : createUserJobNumber
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -280,8 +284,8 @@ export default {
         },
         {
           title: '发起时间',
-          dataIndex: 'faqishijian',
-          width: 150,
+          dataIndex: 'createTime',
+          width: 170,
           customRender: (text) => {
             text = text ? text: '--'
             return (
@@ -296,7 +300,7 @@ export default {
         },
         {
           title: '入职日期',
-          dataIndex: 'entryDate',
+          dataIndex: 'employedDate',
           width: 150,
           customRender: (text) => {
             text = text ? text: '--'
@@ -312,10 +316,10 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'zhuangtai',
+          dataIndex: 'status',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationStatus','zhuangtai') : ''
+            text = text ? getDictTarget('s','educationStatus',text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -328,10 +332,10 @@ export default {
         },
         {
           title: '成绩',
-          dataIndex: 'chengji',
+          dataIndex: 'scoreStatus',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationScore','chengji') : ''
+            text = text ? getDictTarget('s','educationScore',text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -344,10 +348,10 @@ export default {
         },
         {
           title: '上岗意见',
-          dataIndex: 'sahngangyijian',
+          dataIndex: 'deptBossOpinion',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','bossOpinion','sahngangyijian') : ''
+            text = text ? getDictTarget('s','bossOpinion', text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -424,22 +428,22 @@ export default {
       }
     },
     getSearchData(){
-      const {entryDate,signatureFinalDate} = this.formInline
-      const entryDateStart = entryDate?.length ? entryDate[0] : undefined
-      const entryDateEnd = entryDate?.length ? entryDate[1] : undefined
-      const signatureFinalDateStart = signatureFinalDate?.length ? signatureFinalDate[0] : undefined
-      const signatureFinalDateEnd = signatureFinalDate?.length ? signatureFinalDate[1] : undefined
+      const {employedDate,signDate} = this.formInline
+      const employedStartDate = employedDate?.length ? employedDate[0] : undefined
+      const employedEndDate = employedDate?.length ? employedDate[1] : undefined
+      const signStartDate = signDate?.length ? signDate[0] : undefined
+      const signEndDate = signDate?.length ? signDate[1] : undefined
       // 级别
       const currentLevel = this.currentLevel == 'all' ? undefined : this.currentLevel
       let apiData = {
         // 查询项
         ...this.formInline,
-        entryDate:undefined,
-        signatureFinalDate:undefined,
-        entryDateStart,
-        entryDateEnd,
-        signatureFinalDateStart,
-        signatureFinalDateEnd,
+        employedDate:undefined,
+        signDate:undefined,
+        employedStartDate,
+        employedEndDate,
+        signStartDate,
+        signEndDate,
         // 页码
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
@@ -518,7 +522,7 @@ export default {
           return
         }
         const condition = (item) => {
-          return item.currentLevel11 != 1 || item.chengji || !item.yijian;
+          return item.currentLevel11 != 1 || item.scoreStatus || !item.yijian;
         };
         const canNotSign = this.choosedArr.some(condition);
         if (canNotSign) {
