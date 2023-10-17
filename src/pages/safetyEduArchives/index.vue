@@ -22,10 +22,10 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="入职日期">
-          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.employedDate" :placeholder="['开始日期','结束日期']"/>
+          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.employedDate" :placeholder="['开始日期','结束日期']" />
         </a-form-model-item>
         <a-form-model-item label="签署日期">
-          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.signDate" :placeholder="['开始日期','结束日期']"/>
+          <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.signDate" :placeholder="['开始日期','结束日期']" />
         </a-form-model-item>
         <a-form-model-item label="成绩">
           <a-select allowClear show-search v-model="formInline.scoreStatus" placeholder="请选择成绩">
@@ -47,17 +47,13 @@
 
     <div class="pe-data-container">
       <a-radio-group v-model="currentLevel" style="margin-bottom: 15px;" button-style="solid">
-
         <a-radio-button value="all">全部</a-radio-button>
 
-        <a-radio-button v-for="item in getDictTarget('s','educationLevel')" :key="item.key" :value="item.key">
-          {{item.value}}
-        </a-radio-button>
-
+        <a-radio-button v-for="item in getDictTarget('s','educationLevel')" :key="item.key" :value="item.key">{{item.value}}</a-radio-button>
       </a-radio-group>
       <div>
         <div @click="changeTab(1)" class="pe-data-item total-pe-num" :class="[curIndex === 1 ? 'active' : '']">
-          <span class="pe-data-body">培训总人数 {{countInfo.total==0? '0':countInfo.total}} 人 </span>
+          <span class="pe-data-body">培训总人数 {{countInfo.total==0? '0':countInfo.total}} 人</span>
           <p class="en-illus">total quantity</p>
           <i></i>
         </div>
@@ -77,7 +73,7 @@
           <i></i>
         </div>
         <div @click="changeTab(5)" class="pe-data-item red-pe-num" :class="[curIndex === 5 ? 'active' : '']">
-          <span class="pe-data-body">未签署 {{countInfo.toBeSigned}} 人 </span>
+          <span class="pe-data-body">未签署 {{countInfo.toBeSigned}} 人</span>
           <p class="en-illus">to be signed</p>
           <i></i>
         </div>
@@ -106,14 +102,24 @@
     </DashBtn>
 
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-      <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
+      <a-table
+        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+        bordered
+        :columns="columns"
+        :scroll="{ x: 800 }"
+        :locale="{emptyText: emptyText}"
+        :data-source="tableDataList"
+        :rowKey="(record, index)=>{return record.id}"
+        :pagination="false"
+      >
         <template slot="numSlots" slot-scope="text,record,index">
-           <a-popover autoAdjustOverflow>
+          <a-popover autoAdjustOverflow>
+            <!-- 1未超期 2已超期 -->
             <div slot="content">
-              <span v-if="index<2" class="red-circle"></span>
+              <span v-if="record.signExpired == '2'" class="red-circle"></span>
               <span>{{ text }}</span>
             </div>
-            <span v-if="index<2" class="red-circle"></span>
+            <span v-if="record.signExpired == '2'" class="red-circle"></span>
             <span>{{ text }}</span>
           </a-popover>
         </template>
@@ -127,11 +133,10 @@
     </CommonTable>
 
     <!-- 签署弹窗 -->
-    <SignModal v-model="signModalShow" :signTargetData="signTargetData" @signOnOk="signOnOk"/>
+    <SignModal v-model="signModalShow" :signTargetData="signTargetData" @signOnOk="signOnOk" />
 
     <!-- 更新上岗意见 -->
-    <UpdateCommentsModel v-model="updateCommentsModelShow" :updateCommentsModelData="updateCommentsModelData" @updateOnOk="updateOnOk"/>
-
+    <UpdateCommentsModel v-model="updateCommentsModelShow" :updateCommentsModelData="updateCommentsModelData" @updateOnOk="updateOnOk" />
   </div>
 </template>
 
@@ -139,26 +144,26 @@
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis"
 import cancelLoading from '@/mixin/cancelLoading'
 import dayJs from "dayjs"
-import {getDictTarget} from '@/utils/dictionary'
+import { getDictTarget } from '@/utils/dictionary'
 import { debounce, cloneDeep } from 'lodash'
-import {getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi,exportSafetyEduListApi} from "@/services/safetyEduArchives"
+import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi, exportSafetyEduListApi } from "@/services/safetyEduArchives"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 import UpdateCommentsModel from './components/updateCommentsModel.vue'
 import SignModal from './components/signModal.vue'
 
 export default {
-  components: { UpdateCommentsModel,SignModal },
+  components: { UpdateCommentsModel, SignModal },
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   data() {
     return {
       getDictTarget,
-      currentLevel:'all',
-      updateCommentsModelShow:false,
-      updateCommentsModelData:[],
+      currentLevel: 'all',
+      updateCommentsModelShow: false,
+      updateCommentsModelData: [],
 
       signModalShow: false,
-      signTargetData:undefined,
+      signTargetData: undefined,
 
       labelColSpec: { span: 6 },
       wrapperColSpec: { span: 18 },
@@ -177,7 +182,7 @@ export default {
         toBeSigned: '', //待签署
       },
       tableSpinning: false,
-      columns:  [
+      columns: [
         {
           title: '编号',
           dataIndex: 'num',
@@ -189,7 +194,7 @@ export default {
           dataIndex: 'type',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','employeeType', text) : ''
+            text = text ? getDictTarget('s', 'employeeType', text) : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -205,7 +210,7 @@ export default {
           dataIndex: 'currentLevel',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationLevel',text) : ''
+            text = text ? getDictTarget('s', 'educationLevel', text) : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -220,8 +225,8 @@ export default {
           title: '姓名',
           dataIndex: 'userName',
           width: 150,
-          customRender: (text,scoped) => {
-            const {userName,userJobNumber} = scoped
+          customRender: (text, scoped) => {
+            const { userName, userJobNumber } = scoped
             text = userName ? (userJobNumber ? `${userName}/${userJobNumber}` : userName) : userJobNumber
             return (
               <a-popover autoAdjustOverflow>
@@ -238,7 +243,7 @@ export default {
           dataIndex: 'deptName',
           width: 150,
           customRender: (text) => {
-            text = text ? text : ''
+            text = text ? text : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -254,7 +259,7 @@ export default {
           dataIndex: 'position',
           width: 150,
           customRender: (text) => {
-            text = text ? text : ''
+            text = text ? text : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -269,8 +274,8 @@ export default {
           title: '发起人',
           dataIndex: 'createUserJobNumber',
           width: 150,
-          customRender: (text,scoped) => {
-            const {createUserName,createUserJobNumber} = scoped
+          customRender: (text, scoped) => {
+            const { createUserName, createUserJobNumber } = scoped
             text = createUserName ? (createUserJobNumber ? `${createUserName}/${createUserJobNumber}` : usercreateUserNameName) : createUserJobNumber
             return (
               <a-popover autoAdjustOverflow>
@@ -287,7 +292,7 @@ export default {
           dataIndex: 'createTime',
           width: 170,
           customRender: (text) => {
-            text = text ? text: '--'
+            text = text ? text : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -303,7 +308,7 @@ export default {
           dataIndex: 'employedDate',
           width: 150,
           customRender: (text) => {
-            text = text ? text: '--'
+            text = text ? text : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -319,7 +324,7 @@ export default {
           dataIndex: 'status',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationStatus',text) : ''
+            text = text ? getDictTarget('s', 'educationStatus', text) : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -335,7 +340,7 @@ export default {
           dataIndex: 'scoreStatus',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationScore',text) : ''
+            text = text ? getDictTarget('s', 'educationScore', text) : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -351,7 +356,7 @@ export default {
           dataIndex: 'deptBossOpinion',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','bossOpinion', text) : ''
+            text = text ? getDictTarget('s', 'bossOpinion', text) : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -364,7 +369,7 @@ export default {
         },
         {
           title: '签署记录',
-          dataIndex:'securitySignRecordList',
+          dataIndex: 'securitySignRecordList',
           customRender: (text) => {
             if (!text) {
               return '--';
@@ -380,8 +385,8 @@ export default {
             return (
               <a-popover autoAdjustOverflow title="签署人">
                 <div slot="content">
-                  目标责任人：<p>{signatoriesNameFirst}/{signatoriesJobNumberFirst}&nbsp;&nbsp;&nbsp;{signatoriesTimeFirst}</p> 
-                  部门负责人：<p>{signatoriesNameSecond}/{signatoriesJobNumberSecond}&nbsp;&nbsp;&nbsp;{signatoriesTimeSecond}</p> 
+                  目标责任人：<p>{signatoriesNameFirst}/{signatoriesJobNumberFirst}&nbsp;&nbsp;&nbsp;{signatoriesTimeFirst}</p>
+                  部门负责人：<p>{signatoriesNameSecond}/{signatoriesJobNumberSecond}&nbsp;&nbsp;&nbsp;{signatoriesTimeSecond}</p>
                 </div>
                 <span>查看记录</span>
               </a-popover>
@@ -406,8 +411,8 @@ export default {
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
     this.userId = zconsole_userInfo.user.userId
   },
-  activated(){
-    if(this.$route.query.activeKey == 3){
+  activated() {
+    if (this.$route.query.activeKey == 3) {
       this.init()
     }
   },
@@ -416,19 +421,19 @@ export default {
       this.getDataList()
       this.getCertCount()
     },
-    // 获取到那三个格子的详情数据
-    async getCertCount(){
+    // 获取五个格子的详情数据
+    async getCertCount() {
       let params1 = {
         ...this.getSearchData(),
-        curIndex:undefined
+        curIndex: undefined
       }
-      const {code, data } = await getSafetyEduPeopleNum(params1)
+      const { code, data } = await getSafetyEduPeopleNum(params1)
       if (+code === 20000) {
         this.countInfo = data
       }
     },
-    getSearchData(){
-      const {employedDate,signDate} = this.formInline
+    getSearchData() {
+      const { employedDate, signDate } = this.formInline
       const employedStartDate = employedDate?.length ? employedDate[0] : undefined
       const employedEndDate = employedDate?.length ? employedDate[1] : undefined
       const signStartDate = signDate?.length ? signDate[0] : undefined
@@ -438,8 +443,8 @@ export default {
       let apiData = {
         // 查询项
         ...this.formInline,
-        employedDate:undefined,
-        signDate:undefined,
+        employedDate: undefined,
+        signDate: undefined,
         employedStartDate,
         employedEndDate,
         signStartDate,
@@ -450,10 +455,10 @@ export default {
         // 级别
         currentLevel,
         // 各个人数按钮过滤
-        curIndex:this.curIndex,
+        curIndex: this.curIndex,
       }
       return apiData
-    },  
+    },
     getDataList() {
       let params = this.getSearchData()
       this.tableSpinning = true
@@ -468,7 +473,7 @@ export default {
             this.getTableList();
           }
         })
-        .catch(err=>{})
+        .catch(err => { })
         .finally(() => {
           this.tableSpinning = false
         })
@@ -513,10 +518,10 @@ export default {
     },
 
     // 上岗意见（班组级、有成绩的结果，未填写意见）
-    openUpdateCommentsModel(targetItem){
-      if(targetItem){
+    openUpdateCommentsModel(targetItem) {
+      if (targetItem) {
         this.updateCommentsModelData = targetItem
-      }else{
+      } else {
         if (!this.choosedArr.length) {
           this.$antMessage.warning('请选择要更新意见的人员！')
           return
@@ -528,13 +533,13 @@ export default {
         if (canNotSign) {
           this.$antMessage.warning('请正确选择要更新意见的人员！')
           return;
-        } 
+        }
         this.updateCommentsModelData = this.choosedArr
       }
       this.updateCommentsModelShow = true
-    },  
+    },
     // 上岗意见-弹窗提交成功
-    updateOnOk(){
+    updateOnOk() {
       this.$antMessage.success(`更新成功`);
       this.selectedRowKeys = []
       this.choosedArr = []
@@ -544,9 +549,9 @@ export default {
 
     // 批量签署-打开弹窗
     async batchSign(targetItem) {
-      if(targetItem){
+      if (targetItem) {
         this.signTargetData = targetItem
-      }else{
+      } else {
         if (!this.choosedArr.length) {
           this.$antMessage.warning('至少选择一条数据！')
           return
@@ -558,20 +563,20 @@ export default {
         if (canNotSign && false) {
           this.$antMessage.warning('请正确选择签署数据！')
           return;
-        } 
+        }
         this.signTargetData = this.choosedArr
       }
-      console.log('this.signTargetData',this.signTargetData);
+      console.log('this.signTargetData', this.signTargetData);
       this.signModalShow = true
     },
     // 批量签署-弹窗提交成功
-    signOnOk(){
+    signOnOk() {
       this.$antMessage.success("签署成功！");
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
       this.getCertCount()
-    },  
+    },
 
     // 批量导出(查询项)
     exportExcel: debounce(function () {
@@ -606,7 +611,7 @@ export default {
     }, 250, { leading: true, trailing: false }),
 
     // 重新发起
-    onceAgainInitiate:debounce(function () {
+    onceAgainInitiate: debounce(function () {
       if (!this.choosedArr.length) {
         this.$antMessage.warning('请选择重新发起人员！')
         return
@@ -623,16 +628,16 @@ export default {
           return item.id
         })
         this.$router.push({
-          path:'',
-          query:{personIds}
+          path: '',
+          query: { personIds }
         })
       }
     }, 250, { leading: true, trailing: false }),
-    
+
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.choosedArr = selectedRows
-      console.log('selectedRowKeys111',selectedRowKeys,'selectedRows222',selectedRows);
+      console.log('selectedRowKeys111', selectedRowKeys, 'selectedRows222', selectedRows);
     },
     // 页码改变
     pageNoChange(page) {
@@ -675,7 +680,7 @@ export default {
       this.getCertCount()
     }, 250, { leading: true, trailing: false }),
     // 预览
-    viewFile(row){
+    viewFile(row) {
       if (!this.canClickBtnMixin("safetyResponsibilityView")) {
         return;
       }
@@ -689,12 +694,12 @@ export default {
       })
     },
     // 删除
-    rmSafetyEduItem(row){
+    rmSafetyEduItem(row) {
       this.$antConfirm({
         title: '确认删除？',
         onOk: async () => {
           let para = {
-           id:row.id
+            id: row.id
           }
           await rmSafetyEduItemApi(para)
           this.$antMessage.success('删除成功')
@@ -716,7 +721,7 @@ export default {
     margin-right: 15px;
   }
 }
-::v-deep .dashed-btn{
+::v-deep .dashed-btn {
   .ant-btn-primary {
     background: #f1f4ff;
     color: #0067cc;
@@ -730,26 +735,26 @@ export default {
   border: 2px dashed grey;
   overflow: hidden;
 }
-.pe-data-item{
+.pe-data-item {
   display: inline-block;
-  width:224px;
+  width: 224px;
   height: 64px;
   cursor: pointer;
   position: relative;
-  background: rgba(250,250,250,0.50);
-  border: 1px solid rgba(244,244,244,1);
+  background: rgba(250, 250, 250, 0.5);
+  border: 1px solid rgba(244, 244, 244, 1);
   border-radius: 4px;
-  padding-left:30px;
+  padding-left: 30px;
   margin-right: 20px;
   margin-bottom: 20px;
-  &:last-child{
+  &:last-child {
     margin-right: 0px;
   }
   // & +.pe-data-item{
   //   margin-right: 20px;
   // }
-  &.active{
-    background:#fff;
+  &.active {
+    background: #fff;
   }
   i {
     position: absolute;
@@ -757,112 +762,116 @@ export default {
     background-color: #333;
     -webkit-mask-image: url(~@/assets/images/data-icon.svg);
     mask-image: url(~@/assets/images/data-icon.svg);
-    width:14px;
+    width: 14px;
     top: 37px;
     right: 20px;
     height: 14px;
   }
 }
-.link-span{
+.link-span {
   cursor: pointer;
-  color:#02A7F0;
+  color: #02a7f0;
 }
-.total-pe-num{
-  &.active{
-    border: 1px solid rgba(0,103,204,1);
-    box-shadow: 0px 0px 10px 0px rgba(0,103,204,0.1);
-    .pe-data-body{
-      color: #0067CC;
+.total-pe-num {
+  &.active {
+    border: 1px solid rgba(0, 103, 204, 1);
+    box-shadow: 0px 0px 10px 0px rgba(0, 103, 204, 0.1);
+    .pe-data-body {
+      color: #0067cc;
     }
-    .en-illus{
-      color: #0067CC;
+    .en-illus {
+      color: #0067cc;
     }
     i {
-      background-color: rgba(0,103,204,1);
+      background-color: rgba(0, 103, 204, 1);
     }
   }
 }
-.cyan-pe-num{
-  &.active{
-    border: 1px solid #56E9C8;
-    box-shadow: 0px 0px 10px 0px rgba(255,157,1,0.1);
-    .pe-data-body,.en-illus{
-      color: #56E9C8;
+.cyan-pe-num {
+  &.active {
+    border: 1px solid #56e9c8;
+    box-shadow: 0px 0px 10px 0px rgba(255, 157, 1, 0.1);
+    .pe-data-body,
+    .en-illus {
+      color: #56e9c8;
     }
     i {
-      background-color:#56E9C8;
+      background-color: #56e9c8;
     }
   }
 }
-.purple-pe-num{
-  &.active{
-    border: 1px solid #CC66B0;
-    box-shadow: 0px 0px 10px 0px rgba(87,234,201,0.1);
-    .pe-data-body,.en-illus{
-      color: #CC66B0;
+.purple-pe-num {
+  &.active {
+    border: 1px solid #cc66b0;
+    box-shadow: 0px 0px 10px 0px rgba(87, 234, 201, 0.1);
+    .pe-data-body,
+    .en-illus {
+      color: #cc66b0;
     }
     i {
-      background-color:#CC66B0;
+      background-color: #cc66b0;
     }
   }
 }
-.yellow-pe-num{
-  &.active{
-    border: 1px solid #FFAF30;
-    box-shadow: 0px 0px 10px 0px rgba(87,234,201,0.1);
-    .pe-data-body,.en-illus{
-      color: #FFAF30;
+.yellow-pe-num {
+  &.active {
+    border: 1px solid #ffaf30;
+    box-shadow: 0px 0px 10px 0px rgba(87, 234, 201, 0.1);
+    .pe-data-body,
+    .en-illus {
+      color: #ffaf30;
     }
     i {
-      background-color:#FFAF30;
+      background-color: #ffaf30;
     }
   }
 }
-.red-pe-num{
-  &.active{
-    border: 1px solid #FF8A8A;
-    box-shadow: 0px 0px 10px 0px rgba(87,234,201,0.1);
-    .pe-data-body,.en-illus{
-      color: #FF8A8A;
+.red-pe-num {
+  &.active {
+    border: 1px solid #ff8a8a;
+    box-shadow: 0px 0px 10px 0px rgba(87, 234, 201, 0.1);
+    .pe-data-body,
+    .en-illus {
+      color: #ff8a8a;
     }
     i {
-      background-color:#FF8A8A;
+      background-color: #ff8a8a;
     }
   }
 }
-.pe-data-container{
-  margin-bottom:0px;
-  .pe-data-body{
+.pe-data-container {
+  margin-bottom: 0px;
+  .pe-data-body {
     display: inline-block;
     font-size: 14px;
     color: #333333;
   }
-  .en-illus{
+  .en-illus {
     opacity: 0.5;
     font-family: PingFangSC-Regular;
     font-size: 12px;
     color: #333333;
     line-height: 12px;
     font-weight: 400;
-    margin-top:10px;
+    margin-top: 10px;
   }
 }
-.pe-green{
-  color: #02DFAD;
+.pe-green {
+  color: #02dfad;
 }
-.pe-red{
-  color:#FF1212;
+.pe-red {
+  color: #ff1212;
 }
-.pe-data-title{
+.pe-data-title {
   margin-bottom: 30px;
-  padding-bottom:20px;
+  padding-bottom: 20px;
   font-size: 16px;
-  color: rgba(0,0,0,0.85);
+  color: rgba(0, 0, 0, 0.85);
   line-height: 24px;
   font-weight: 500;
   border-bottom: 1px solid #f4f4f4;
 }
-.pe-data-body{
+.pe-data-body {
   margin-top: 15px;
 }
 .pre-test {

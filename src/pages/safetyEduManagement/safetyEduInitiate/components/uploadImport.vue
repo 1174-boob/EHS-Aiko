@@ -31,13 +31,7 @@
     </template>
     <template slot="btn">
       <a-button @click="closeModel">取消</a-button>
-      <a-button
-        class="m-l-15"
-        type="primary"
-        :loading="loading"
-        @click="okClick"
-        >确定</a-button
-      >
+      <a-button class="m-l-15" type="primary" :loading="loading" @click="okClick">确定</a-button>
     </template>
   </CommonModal>
 </template>
@@ -47,7 +41,7 @@ import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { educationImportUser } from "@/services/api.js";
 export default {
-  components: { UploadBtnStyle,},
+  components: { UploadBtnStyle, },
   model: {
     prop: 'uploadImportShow',
   },
@@ -65,7 +59,7 @@ export default {
       labelCol: { span: 4 }, // 设置左边label宽度
       wrapperCol: { span: 17 }, // 设置右边表单宽度
       addForm: {
-        fileListExel:[]
+        fileListExel: []
       },
       addFormRules: {
         fileListExel: [
@@ -88,13 +82,18 @@ export default {
       })
         .then((res) => {
           this.$antMessage.success("导入成功");
-          this.closeModel(true);
-          this.loading = false;
+          const userList = res.data || []
+          this.$emit('uploadSuccess', userList)
+          setTimeout(() => {
+            this.closeModel(true);
+          }, 100);
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+        .catch((err) => { })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
+        })
     },
 
     // 批量导入成功文件
@@ -122,7 +121,7 @@ export default {
 
       } else {
         setTimeout(() => {
-          
+
         }, 100);
       }
     }
