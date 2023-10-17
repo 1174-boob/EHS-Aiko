@@ -1490,6 +1490,16 @@ const options = {
                   },
                   component: resolve => require(['@/pages/signManagement/index.vue'], resolve),
                 },
+                {
+                  path: 'securityArchiveReport',
+                  name: '安全档案报表',
+                  meta: {
+                    title: '安全档案报表',
+                    routerCode:'securityArchiveReport',
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/securityArchiveReport/index.vue'], resolve),
+                },
               ]
             },
             {

@@ -779,6 +779,12 @@ export const educationRecognition = params => post(`${serviceNameList.health}/ap
 // 三级安全教育管理-重新分配
 export const educationReallocation = params => post(`${serviceNameList.health}/api/ehs/security/education/reallocation`, params);
 
+// 安全档案报表-证书
+export const securityCertificate = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/certificate`, params);
+// 安全档案报表-职业危害告知书
+export const hazardNotification = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/occupational/hazard/notification`, params);
+// 安全档案报表-安全责任书
+export const responsibilityStatement = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/safety/responsibility/statement`, params);
 
 // 危害岗位信息数据库
 // 危害岗位-分页查询
