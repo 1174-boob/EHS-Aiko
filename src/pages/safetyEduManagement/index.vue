@@ -5,21 +5,21 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="false"></CommonSearchItem>
         <a-form-model-item label="发起人">
-          <a-input v-model="formInline.faqiren" placeholder="请输入发起人姓名或工号"></a-input>
+          <a-input v-model="formInline.createNameOrJobNumber" placeholder="请输入发起人姓名或工号"></a-input>
         </a-form-model-item>
         <a-form-model-item label="类型">
-          <a-select allowClear show-search v-model="formInline.leixing" placeholder="请选择类型">
+          <a-select allowClear show-search v-model="formInline.type" placeholder="请选择类型">
             <a-select-option v-for="item in getDictTarget('s','employeeType')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="当前级别">
-          <a-select allowClear show-search v-model="formInline.dangqianjibie" placeholder="请选择当前级别">
+          <a-select allowClear show-search v-model="formInline.currentLevel" placeholder="请选择当前级别">
             <a-select-option v-for="item in getDictTarget('s','educationLevel')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="状态">
-          <a-select allowClear show-search v-model="formInline.zhaungtai" placeholder="请选择状态">
-            <a-select-option v-for="item in []" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+          <a-select allowClear show-search v-model="formInline.status" placeholder="请选择状态">
+            <a-select-option v-for="item in getDictTarget('s','securityEducationStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="日期">
@@ -41,6 +41,7 @@
 
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
       <a-table bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
+        <div slot="createUserJobNumber" slot-scope="record">{{ record.createUserName }}/{{ record.createUserJobNumber }}</div>
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'add')">成绩纠错</span>
           <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'show')">查看</span>
@@ -49,12 +50,6 @@
         </div>
       </a-table>
     </CommonTable>
-
-    <!-- 签署弹窗 -->
-    <SignModal v-model="signModalShow" :signTargetData="signTargetData" @signOnOk="signOnOk"/>
-
-    <!-- 更新上岗意见 -->
-    <UpdateCommentsModel v-model="updateCommentsModelShow" :updateCommentsModelData="updateCommentsModelData" @updateOnOk="updateOnOk"/>
 
   </div>
 </template>
@@ -65,25 +60,16 @@ import cancelLoading from '@/mixin/cancelLoading'
 import dayJs from "dayjs"
 import {getDictTarget} from '@/utils/dictionary'
 import { debounce, cloneDeep } from 'lodash'
-import {getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi,exportSafetyEduListApi} from "@/services/safetyEduManagement"
+import {getEducationListPage, educationDelete} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
-import UpdateCommentsModel from './components/updateCommentsModel.vue'
-import SignModal from './components/signModal.vue'
 
 export default {
-  components: { UpdateCommentsModel,SignModal },
+  components: {  },
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   data() {
     return {
       getDictTarget,
-      currentLevel:'all',
-      updateCommentsModelShow:false,
-      updateCommentsModelData:[],
-
-      signModalShow: false,
-      signTargetData:undefined,
-
       labelColSpec: { span: 6 },
       wrapperColSpec: { span: 18 },
       formInline: {},
@@ -94,30 +80,27 @@ export default {
         pageSize: 10,
         total: 0
       },
-      curIndex: undefined,
-      countInfo: {
-        total: '', //总数
-        signingComplete: '', //签署成功
-        toBeSigned: '', //待签署
-      },
       tableSpinning: false,
       columns:  [
         {
           title: '编号',
           dataIndex: 'num',
-          customRender: (text,record) => {
-            text = text ? text : '--'
+          customRender: (text) => {
+            text = text ? text : ''
             return (
-              <div >
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
                 <span>{{ text }}</span>
-              </div>
+              </a-popover>
             );
           },
           width: 200
         },
         {
           title: '标题',
-          dataIndex: 'biaoti',
+          dataIndex: 'title',
           width: 150,
           customRender: (text) => {
             text = text ? text : ''
@@ -133,10 +116,10 @@ export default {
         },
         {
           title: '类型',
-          dataIndex: 'leixing',
+          dataIndex: 'type',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','employeeType','leixing') : ''
+            text = text ? this.getType(text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -149,10 +132,10 @@ export default {
         },
         {
           title: '当前级别',
-          dataIndex: 'dangqianjibie',
+          dataIndex: 'currentLevel',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationLevel','dangqianjibie') : ''
+            text = text ? this.getCurrentLevel(text) : ''
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -165,23 +148,12 @@ export default {
         },
         {
           title: '发起人',
-          dataIndex: 'launchUserName',
-          width: 150,
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
+          scopedSlots: { customRender: 'createUserJobNumber' },
+          width: 150
         },
         {
           title: '发起时间',
-          dataIndex: 'faqishijian',
+          dataIndex: 'createTime',
           width: 150,
           customRender: (text) => {
             text = text ? text: '--'
@@ -197,7 +169,7 @@ export default {
         },
         {
           title: '签署截止时间',
-          dataIndex: 'qianshujiezhishijian',
+          dataIndex: 'signDeadline',
           width: 160,
           customRender: (text) => {
             text = text ? text: '--'
@@ -213,10 +185,10 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'zhuangtai',
+          dataIndex: 'status',
           width: 150,
           customRender: (text) => {
-            text = text ? getDictTarget('s','educationStatus','zhuangtai') : '--'
+            text = text ? this.getStatus(text) : '--'
             return (
               <a-popover autoAdjustOverflow>
                 <div slot="content">
@@ -244,58 +216,64 @@ export default {
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
     this.userId = zconsole_userInfo.user.userId
   },
-  activated(){
-    if(this.$route.query.activeKey == 3){
-      this.init()
-    }
-  },
   methods: {
     async init() {
       this.getDataList()
-      this.getCertCount()
     },
-    // 获取到那三个格子的详情数据
-    async getCertCount(){
-      let params1 = {
-        ...this.getSearchData(),
-        curIndex:undefined
-      }
-      const {code, data } = await getSafetyEduPeopleNum(params1)
-      if (+code === 20000) {
-        this.countInfo = data
+    getType(text){
+      if(text==1){
+        return '新员工'
+      } else if (text==2){
+        return '转(复)岗'
+      } else {
+        return '--'
       }
     },
+    getCurrentLevel(text){
+      if(text==1){
+        return '公司级'
+      } else if (text==2){
+        return '车间(部门)级'
+      } else if (text==3){
+        return '班组级'
+      } else {
+        return '--'
+      }
+    },
+    getStatus(text){
+      if(text==1){
+        return '待开始'
+      } else if (text==2){
+        return '进行中'
+      } else if (text==3){
+        return '已完成'
+      } else {
+        return '--'
+      }
+    },
+    
     getSearchData(){
-      const {entryDate,signatureFinalDate} = this.formInline
-      const entryDateStart = entryDate?.length ? entryDate[0] : undefined
-      const entryDateEnd = entryDate?.length ? entryDate[1] : undefined
-      const signatureFinalDateStart = signatureFinalDate?.length ? signatureFinalDate[0] : undefined
-      const signatureFinalDateEnd = signatureFinalDate?.length ? signatureFinalDate[1] : undefined
-      // 级别
-      const currentLevel = this.currentLevel == 'all' ? undefined : this.currentLevel
+      const { entryDate } = this.formInline
+      const createDateStart = entryDate?.length ? entryDate[0] : undefined
+      const createDateEnd = entryDate?.length ? entryDate[1] : undefined
       let apiData = {
         // 查询项
         ...this.formInline,
         entryDate:undefined,
         signatureFinalDate:undefined,
-        entryDateStart,
-        entryDateEnd,
-        signatureFinalDateStart,
-        signatureFinalDateEnd,
+        createDateStart,
+        createDateEnd,
         // 页码
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
         // 级别
-        currentLevel,
-        // 各个人数按钮过滤
-        curIndex:this.curIndex,
       }
       return apiData
     },  
     getDataList() {
       let params = this.getSearchData()
       this.tableSpinning = true
-      return getSafetyEduTableList(params)
+      return getEducationListPage(params)
         .then((res) => {
           let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
           this.tableDataList = tableDataList || [];
@@ -310,44 +288,6 @@ export default {
         .finally(() => {
           this.tableSpinning = false
         })
-    },
-    changeTab(tabIndex) {
-      this.curIndex = this.curIndex === tabIndex ? undefined : tabIndex
-      this.page.pageNo = 1
-      this.selectedRowKeys = []
-      this.choosedArr = []
-      this.getDataList()
-    },
-
-    // 批量推送（状态为进行中的可以推送）
-    async batchPush() {
-      if (!this.choosedArr.length) {
-        this.$antMessage.warning('请选择推送人员！')
-        return
-      }
-      const condition = (item) => {
-        return item.signatureStatus != 0;
-      };
-      const canNotSign = this.choosedArr.some(condition);
-      if (canNotSign) {
-        this.$antMessage.warning('请正确选择推送人员！')
-        return;
-      } else {
-        const personIds = this.choosedArr.map(item => {
-          return item.id
-        })
-        let para = {
-          idList: personIds
-        }
-        const { code } = await pushBatchSafetyEdu(para)
-        if (+code === 20000) {
-          this.$antMessage.success('批量推送成功')
-          this.selectedRowKeys = []
-          this.choosedArr = []
-          this.getDataList()
-          this.getCertCount()
-        }
-      }
     },
 
     // 跳转发起页面
@@ -373,77 +313,6 @@ export default {
         query,
       })
     },  
-    // 上岗意见-弹窗提交成功
-    updateOnOk(){
-      this.$antMessage.success(`更新成功`);
-      this.selectedRowKeys = []
-      this.choosedArr = []
-      this.getDataList()
-      this.getCertCount()
-    },
-
-    // 批量签署-打开弹窗
-    async batchSign(targetItem) {
-      if(targetItem){
-        this.signTargetData = targetItem
-      }else{
-        if (!this.choosedArr.length) {
-          this.$antMessage.warning('至少选择一条数据！')
-          return
-        }
-        const condition = (item) => {
-          return item.signatoriesHandlerUserId != this.userId || item.signatureStatus != 2;
-        };
-        const canNotSign = this.choosedArr.some(condition);
-        if (canNotSign && false) {
-          this.$antMessage.warning('请正确选择签署数据！')
-          return;
-        } 
-        this.signTargetData = this.choosedArr
-      }
-      console.log('this.signTargetData',this.signTargetData);
-      this.signModalShow = true
-    },
-    // 批量签署-弹窗提交成功
-    signOnOk(){
-      this.$antMessage.success("签署成功！");
-      this.selectedRowKeys = []
-      this.choosedArr = []
-      this.getDataList()
-      this.getCertCount()
-    },  
-
-    // 批量导出(查询项)
-    exportExcel: debounce(function () {
-      // if (!this.canClickBtnMixin("earlyWarnInfoGasExport")) {
-      //   return;
-      // }
-      this.handleLoadingThree()
-      let apiData = {
-        ...this.getSearchData(),
-      }
-      exportSafetyEduListApi(apiData)
-        .then(res => {
-          this.spreadSheetExcel(res, '三级安全教育')
-        })
-        .catch(() => { })
-        .finally(() => {
-          this.cancelLoadingThree()
-        })
-    }, 250, { leading: true, trailing: false }),
-
-    // 批量下载
-    batchExport: debounce(function () {
-      if (!this.choosedArr.length) {
-        this.$antMessage.warning('至少选择一条数据！')
-        return
-      }
-      this.choosedArr.forEach(item => {
-        window.open(item.file.filePath);
-      })
-      this.selectedRowKeys = []
-      this.choosedArr = []
-    }, 250, { leading: true, trailing: false }),
 
     // 重新发起
     onceAgainInitiate:debounce(function () {
@@ -497,7 +366,6 @@ export default {
         })
       this.selectedRowKeys = []
       this.choosedArr = []
-      this.getCertCount()
     },
     // 重置
     iRest: debounce(function () {
@@ -508,11 +376,9 @@ export default {
         total: 0,
       }
       this.formInline = {}
-      this.curIndex = undefined
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
-      this.getCertCount()
     }, 250, { leading: true, trailing: false }),
     // 预览
     viewFile(row){
@@ -536,10 +402,9 @@ export default {
           let para = {
            id:row.id
           }
-          await rmSafetyEduItemApi(para)
+          await educationDelete(para)
           this.$antMessage.success('删除成功')
           this.getDataList()
-          this.getCertCount()
         }
       })
     },

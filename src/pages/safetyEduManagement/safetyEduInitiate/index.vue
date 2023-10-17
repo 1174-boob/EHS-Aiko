@@ -3,8 +3,7 @@
   <HasFixedBottomWrapper>
     <a-spin :spinning="spinning" wrapperClassName="a-spin">
       <a-form-model ref="ruleForm" :model="iFrom" :rules="iRules" :label-col="labelCol" :wrapper-col="wrapperCol">
-
-        <!-- <template description="基本信息">
+        <template description="基本信息">
           <div>
             <div class="m-t-20 border-b-e7">
               <PageTitle>基本信息</PageTitle>
@@ -12,28 +11,36 @@
             <div class="m-t-20"></div>
           </div>
 
-          <CommonDept ref="corporationId" :CommonFormInline="iFrom" :rules="iRules" :notTablePage="true"
-            :hasDepartment="true" @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"
-            :labelCol="labelCol" :wrapperCol="wrapperCol"></CommonDept>
+          <CommonDept
+            ref="corporationId"
+            :CommonFormInline="iFrom"
+            :rules="iRules"
+            :notTablePage="true"
+            :hasDepartment="false"
+            @corporationChange="corporationChange"
+            :labelCol="labelCol"
+            :wrapperCol="wrapperCol"
+          ></CommonDept>
 
-          <a-form-model-item ref="biaoti" label="标题" prop="biaoti">
-            <a-input v-model.trim="iFrom.biaoti" :maxLength="200" placeholder="请输入"></a-input>
+          <a-form-model-item ref="title" label="标题" prop="title">
+            <a-input v-model.trim="iFrom.title" :maxLength="200" placeholder="请输入"></a-input>
           </a-form-model-item>
 
-          <a-form-model-item ref="leixing" label="类型" prop="leixing">
-            <a-select show-search v-model="iFrom.leixing" placeholder="请选择" @change="changeEmployeeType">
-              <a-select-option v-for="item in getDictTarget('s', 'employeeType')" :key="item.key" :value="item.key">{{
-                item.value }}</a-select-option>
+          <a-form-model-item ref="type" label="类型" prop="type">
+            <a-select show-search v-model="iFrom.type" placeholder="请选择" @change="changeEmployeeType">
+              <a-select-option v-for="item in getDictTarget('s', 'employeeType')" :key="item.key" :value="item.key">
+                {{
+                item.value }}
+              </a-select-option>
             </a-select>
           </a-form-model-item>
 
-          <a-form-model-item ref="qianshujiezhiriqi" label="签署截止日期" prop="qianshujiezhiriqi">
-            <a-date-picker v-model="iFrom.qianshujiezhiriqi" placeholder="请选择" style="width:100%;"
-              valueFormat="YYYY-MM-DD" :disabled-date="disabledDate" />
+          <a-form-model-item ref="signDeadline" label="签署截止日期" prop="signDeadline">
+            <a-date-picker v-model="iFrom.signDeadline" placeholder="请选择" style="width:100%;" valueFormat="YYYY-MM-DD" :disabled-date="disabledDate" />
           </a-form-model-item>
-        </template> -->
+        </template>
 
-        <!-- <template description="安全教育培训讲师">
+        <template description="安全教育培训讲师">
           <div>
             <div class="m-t-20 border-b-e7">
               <PageTitle>安全教育培训讲师</PageTitle>
@@ -42,30 +49,61 @@
           </div>
 
           <template description="转（复）岗时，讲师不显示公司级" v-if="!isChangePost">
-            <StaffOrDept ref="gongsiji" :labelTitle="'公司级'" :treeRoles="iRules" :propKey="'gongsiji'"
-              :treePlaceholder="'请选择'" :checkedTreeNode="checkedTreeNodeCompany" :deptTreeId="deptTreeId"
+            <StaffOrDept
+              ref="trainerCompanyUserId"
+              :labelTitle="'公司级'"
+              :treeRoles="iRules"
+              :propKey="'trainerCompanyUserId'"
+              :treePlaceholder="'请选择'"
+              :checkedTreeNode="checkedTreeNodeCompany"
+              :deptTreeId="deptTreeId"
               :checkAbel="false"
-              @getTreeData="(value) => getTreeDataCompany(value, 'gongsiji', 'gongsijiname', 'checkedTreeNodeCompany')" />
+              @getTreeData="(value) => getTreeDataCompany(value, { idAttr: 'trainerCompanyUserId', codeAttr: 'trainerCompanyJobNumber', nameAttr: 'trainerCompanyUserName' }, 'checkedTreeNodeCompany')"
+            />
           </template>
 
-          <StaffOrDept ref="chejianbumenji" :labelTitle="'车间（部门）级'" :treeRoles="iRules" :propKey="'chejianbumenji'"
-            :treePlaceholder="'请选择'" :checkedTreeNode="checkedTreeNodeDept" :deptTreeId="deptTreeId" :checkAbel="false"
-            @getTreeData="(value) => handleStaffFormData(value, 'chejianbumenji', 'chejianbumenjiname', 'checkedTreeNodeDept')" />
+          <StaffOrDept
+            ref="trainerDeptUserId"
+            :labelTitle="'车间（部门）级'"
+            :treeRoles="iRules"
+            :propKey="'trainerDeptUserId'"
+            :treePlaceholder="'请选择'"
+            :checkedTreeNode="checkedTreeNodeDept"
+            :deptTreeId="deptTreeId"
+            :checkAbel="false"
+            @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerDeptUserId', codeAttr: 'trainerDeptJobNumber', nameAttr: 'trainerDeptUserName' }, 'checkedTreeNodeDept')"
+          />
 
-          <StaffOrDept ref="banzuji" :labelTitle="'班组级'" :treeRoles="iRules" :propKey="'banzuji'" :treePlaceholder="'请选择'"
-            :checkedTreeNode="checkedTreeNodeGroup" :deptTreeId="deptTreeId" :checkAbel="false"
-            @getTreeData="(value) => handleStaffFormData(value, 'banzuji', 'banzujiname', 'checkedTreeNodeGroup')" />
+          <StaffOrDept
+            ref="trainerGroupUserId"
+            :labelTitle="'班组级'"
+            :treeRoles="iRules"
+            :propKey="'trainerGroupUserId'"
+            :treePlaceholder="'请选择'"
+            :checkedTreeNode="checkedTreeNodeGroup"
+            :deptTreeId="deptTreeId"
+            :checkAbel="false"
+            @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerGroupUserId', codeAttr: 'trainerGroupJobNumber', nameAttr: 'trainerGroupUserName' }, 'checkedTreeNodeGroup')"
+          />
 
-          <StaffOrDept ref="peixunfuzeren" :labelTitle="'环安部培训负责人'" :treeRoles="iRules" :propKey="'peixunfuzeren'"
-            :treePlaceholder="'请选择'" :checkedTreeNode="checkedTreeNodeAssign" :deptTreeId="deptTreeId" :checkAbel="false"
+          <StaffOrDept
+            ref="trainerEsdUserId"
+            :labelTitle="'环安部培训负责人'"
+            :treeRoles="iRules"
+            :propKey="'trainerEsdUserId'"
+            :treePlaceholder="'请选择'"
+            :checkedTreeNode="checkedTreeNodeAssign"
+            :deptTreeId="deptTreeId"
+            :checkAbel="false"
             :onPreview="!isChangePost"
-            @getTreeData="(value) => handleStaffFormData(value, 'peixunfuzeren', 'peixunfuzerenname', 'checkedTreeNodeAssign')" />
-        </template> -->
+            @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerEsdUserId', codeAttr: 'trainerEsdJobNumber', nameAttr: 'trainerEsdUserName' }, 'checkedTreeNodeAssign')"
+          />
+        </template>
 
         <template title="模板">
           <div>
             <div class="ttile border-b-e7">
-              <PageTitle class="ttile-text">模板</PageTitle>
+              <PageTitle class="ttile-text required-star">模板</PageTitle>
               <DashBtn class="ttile-bbtn">
                 <div>
                   <a-button type="dashed" @click="openSelTempDrawer()">
@@ -76,16 +114,26 @@
             </div>
             <div class="m-t-20"></div>
           </div>
-          <a-form-model-item ref="moban" label=" " prop="moban" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            11111
+          <a-form-model-item ref="selTempList" label=" " prop="selTempList" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+            <ul class="sel-tempList" v-if="Array.isArray(iFrom.selTempList) && iFrom.selTempList.length">
+              <li class="selTempItem" v-for="item in iFrom.selTempList" :key="item.templateId">
+                <img class="pic" :src="item.coverFile?.filePath || ''" :alt="item.templateName" />
+                <div class="mask">
+                  <div class="maskBtn">
+                    <a-icon class="eyeBtn" type="eye" @click="openTempPreviewModel(item)" />
+                    <a-icon class="deleteBtn" type="delete" @click="rmSelTempItem(item)" />
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <a-empty description="暂未选择" v-else />
           </a-form-model-item>
         </template>
 
-
-        <!-- <template description="培训人员">
+        <template description="培训人员">
           <div>
             <div class="ttile border-b-e7">
-              <PageTitle class="ttile-text">培训人员</PageTitle>
+              <PageTitle class="ttile-text required-star">培训人员</PageTitle>
               <DashBtn class="ttile-bbtn">
                 <div>
                   <a-button type="dashed" @click="opeUploadImportModel">
@@ -93,20 +141,25 @@
                   </a-button>
                 </div>
               </DashBtn>
+              <span></span>
+              <a-button type="link" @click="changeIsRetract">{{isRetract?'展开':'收起'}}</a-button>
             </div>
             <div class="m-t-20"></div>
           </div>
-          <a-form-model-item ref="dangerGuardian" label=" " prop="dangerGuardian" :label-col="{ span: 0 }"
-            :wrapper-col="{ span: 24 }">
+          <a-form-model-item ref="securityEducationRecordsList" label=" " prop="securityEducationRecordsList" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
             <CommonTable :noPaging="true">
-              <a-table style="width:100%;" :columns="columns" :scroll="{ x: tableScrollX() }"
-                :locale="{ emptyText: emptyText }" :data-source="iFrom.dangerGuardian" :rowKey="(record, index) => index"
-                :pagination="false">
-              </a-table>
+              <a-table
+                style="width:100%;"
+                :columns="columns"
+                :scroll="{ x: tableScrollX() }"
+                :locale="{ emptyText: emptyText }"
+                :data-source="showSecurityEducationRecordsList"
+                :rowKey="(record, index) => index"
+                :pagination="false"
+              ></a-table>
             </CommonTable>
           </a-form-model-item>
-        </template> -->
-
+        </template>
       </a-form-model>
     </a-spin>
 
@@ -114,40 +167,45 @@
       <FixedBottom>
         <div>
           <a-button class="m-r-15" @click="cancleSubmit">取消</a-button>
-          <a-button type="primary" class="m-r-15" :loading="loadingTwo" @click="iSave">发起</a-button>
+          <a-button type="primary" class="m-r-15" :loading="loading" @click="iSave">发起</a-button>
         </div>
       </FixedBottom>
     </div>
 
-    <!-- 添加现场监护人弹窗 -->
-    <SelTempDrawer v-model="selTempDrawerShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian"
-      :deptTreeId="deptTreeId" @changeModuleList="changeModuleList" />
+    <!-- 选择模板抽屉 -->
+    <SelTempDrawer v-model="selTempDrawerShow" :selTempList="iFrom.selTempList" @changeSelTempDrawerList="changeSelTempDrawerList" />
 
-    <UploadImport v-model="uploadImportShow" />
+    <!-- 预览模板弹窗 -->
+    <TempPreviewModel v-model="tempPreviewModelShow" :previewData="previewData" :readOnly="true" />
 
+    <UploadImport v-model="uploadImportShow" @uploadSuccess="uploadSuccess" />
   </HasFixedBottomWrapper>
 </template>
 <script>
 import { getDictTarget } from '@/utils/dictionary'
-
 import { formValidator } from "@/utils/clx-form-validator.js";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import SelTempDrawer from "./components/selTempDrawer.vue";
-import { addDangerWorkStaticApi, getDangerWorkStaticDetailApi, editDangerWorkStaticApi } from '@/services/dangerWorkStatic.js'
+import TempPreviewModel from './components/tempPreviewModel.vue';
+import { educationAdd, educationDetail } from '@/services/api.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
 import { PushTask } from '@/services/api'
 import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
 import UploadImport from '@/pages/safetyEduManagement/safetyEduInitiate/components/uploadImport.vue'
+
 export default {
-  components: { FixedBottom, SelTempDrawer, StaffOrDept, UploadImport },
+  components: { FixedBottom, SelTempDrawer, StaffOrDept, UploadImport, TempPreviewModel },
   mixins: [teableCenterEllipsis, chemicalDict, cancelLoading],
   data() {
     return {
       getDictTarget,
+
+      tempPreviewModelShow: false,
+      previewData: {},
 
       uploadImportShow: false,
       spinning: true,
@@ -155,17 +213,19 @@ export default {
       wrapperCol: { span: 15 },
       iFrom: {},
       iRules: {
-        biaoti: [{ required: true, message: "标题不能为空", trigger: "blur" },],
-        leixing: [{ required: true, message: "类型不能为空", trigger: "change" },],
-        qianshujiezhiriqi: [{ required: true, message: "签署截止日期不能为空", trigger: "change" },],
+        title: [{ required: true, message: "标题不能为空", trigger: "blur" },],
+        type: [{ required: true, message: "类型不能为空", trigger: "change" },],
+        signDeadline: [{ required: true, message: "签署截止日期不能为空", trigger: "change" },],
 
+        selTempList: [{ required: true, message: "模板不能为空", trigger: "change" },],
+        securityEducationRecordsList: [{ required: true, message: "培训人员不能为空", trigger: "change" },],
       },
-      // 主要成分table
+      // 培训人员table
       columns: [
         {
           title: "姓名",
-          dataIndex: "xingming",
-          key: "xingming",
+          dataIndex: "userName",
+          key: "userName",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -181,8 +241,8 @@ export default {
         },
         {
           title: "工号",
-          dataIndex: "gonghao",
-          key: "gonghao",
+          dataIndex: "userJobNumber",
+          key: "userJobNumber",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -198,8 +258,8 @@ export default {
         },
         {
           title: "部门",
-          dataIndex: "bumen",
-          key: "bumen",
+          dataIndex: "deptName",
+          key: "deptName",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -215,8 +275,8 @@ export default {
         },
         {
           title: "岗位",
-          dataIndex: "gangwei",
-          key: "gangwei",
+          dataIndex: "jobName",
+          key: "jobName",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -232,8 +292,8 @@ export default {
         },
         {
           title: "性别",
-          dataIndex: "xingbie",
-          key: "xingbie",
+          dataIndex: "sex",
+          key: "sex",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -249,8 +309,8 @@ export default {
         },
         {
           title: "身份证号",
-          dataIndex: "shenfenzhenghao",
-          key: "shenfenzhenghao",
+          dataIndex: "idNumber",
+          key: "idNumber",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -266,8 +326,8 @@ export default {
         },
         {
           title: "家庭住址",
-          dataIndex: "jiatingzhuzhi",
-          key: "jiatingzhuzhi",
+          dataIndex: "address",
+          key: "address",
           customRender: (text) => {
             text = text ? text : ''
             return (
@@ -288,6 +348,9 @@ export default {
       // 是否是转复岗
       isChangePost: false,
 
+      // 是否收起  /展开
+      isRetract: false,
+
       checkedTreeNodeCompany: [],
       checkedTreeNodeDept: [],
       checkedTreeNodeGroup: [],
@@ -305,26 +368,44 @@ export default {
     isAddPage() {
       return !this.$route.query.operateId
     },
+    // 当前展示的培训人员list
+    showSecurityEducationRecordsList() {
+      const allRecordsList = this.iFrom.securityEducationRecordsList || [];
+      return this.isRetract ? allRecordsList.filter((item, index) => index + 1 >= 10) : allRecordsList
+    },
   },
   mounted() {
     // 页面初始化
     this.initPage()
   },
   methods: {
+    // 打开批量导入弹窗
     opeUploadImportModel() {
       this.uploadImportShow = true
     },
+    // 导入培训人员成功
+    uploadSuccess(eduArr) {
+      this.$set(this.iFrom, 'securityEducationRecordsList', eduArr)
+      formValidator.formItemValidate(this, 'securityEducationRecordsList', "ruleForm")
+    },
+    // 培训人员列表  收起/展开
+    changeIsRetract() {
+      this.isRetract = !this.isRetract
+    },
+
     // 类型change 1新员工 2转(复)岗
     changeEmployeeType(e) {
       console.log('e', e);
       this.isChangePost = e == 2
     },
-
-    moment,
+    // 预览模板弹窗
+    openTempPreviewModel(item) {
+      this.previewData = item
+      this.tempPreviewModelShow = true
+    },
     // 页面初始化
     initPage() {
       if (this.isAddPage) {
-        // this.$set(this.iFrom, 'isMust', '1');
         this.spinning = false
       } else {
         // 获取页面详情
@@ -334,43 +415,41 @@ export default {
           })
       }
     },
+
     // 处理选择人员后的change事件数据
     getTreeData(value) {
       const { treeIdList, treeNameAndCodeList } = value
 
       let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
       let applyUserCode = id
-      let applyUserName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
+      // let applyUserName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
+      let applyUserName = treeName
 
       return { applyUserCode, applyUserName, treeIdList }
     },
-
     // 公司级 人员选择事件
-    getTreeDataCompany(value, keyCode, keyName, checkedTreeNodeName) {
-      this.handleStaffFormData(value, keyCode, keyName, checkedTreeNodeName);
+    getTreeDataCompany(value, iFromObj, checkedTreeNodeName) {
+      this.handleStaffFormData(value, iFromObj, checkedTreeNodeName);
       // 环安部培训负责人自动选择
-      this.handleStaffFormData(value, 'peixunfuzeren', 'peixunfuzerenname', 'checkedTreeNodeAssign');
+      this.handleStaffFormData(value, { idAttr: 'trainerEsdUserId', codeAttr: 'trainerEsdJobNumber', nameAttr: 'trainerEsdUserName' }, 'checkedTreeNodeAssign')
     },
-
     // 选择人员后的change事件
-    handleStaffFormData(value, keyCode, keyName, checkedTreeNodeName) {
+    handleStaffFormData(value, iFromObj, checkedTreeNodeName) {
       const { applyUserCode, applyUserName, treeIdList } = this.getTreeData(value)
 
       // 针对组件取消后数据被清空时做保存数据处理
       this[checkedTreeNodeName] = treeIdList
 
       // 表单赋值
-      this.$set(this.iFrom, keyCode, applyUserCode)
-      this.$set(this.iFrom, keyName, applyUserName)
+      const { idAttr, codeAttr, nameAttr } = iFromObj
+      this.$set(this.iFrom, idAttr, applyUserCode)
+      this.$set(this.iFrom, codeAttr, applyUserCode)
+      this.$set(this.iFrom, nameAttr, applyUserName)
 
       // 表单校验
       setTimeout(() => {
-        formValidator.formItemValidate(this, keyCode, "ruleForm")
+        formValidator.formItemValidate(this, idAttr, "ruleForm")
       }, 100);
-    },
-
-    corporationDeptChange(deptData) {
-
     },
 
     // 时间限制
@@ -379,25 +458,14 @@ export default {
     },
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
-      // console.log('被清除了');
-      this.$set(this.iFrom, 'applyDepartCode', undefined)
-      this.$set(this.iFrom, 'applyDepartName', undefined)
-      this.$set(this.iFrom, 'areaDepartCode', undefined)
-      this.$set(this.iFrom, 'areaDepartName', undefined)
-      // 人员相关
-      this.deptTreeId = corporationDeptId
-      this.$set(this.iFrom, 'applyUserCode', undefined)
-      this.$set(this.iFrom, 'applyUserName', undefined)
-      this.checkedTreeNode = []
-      // 现场监护人
-      this.$set(this.iFrom, 'dangerGuardian', [])
+      // this.$set(this.iFrom, 'applyDepartCode', undefined)
     },
     // 获取页面详情
     getPageDetail() {
       let operateId = this.operateId
       let apiData = { operateId }
       return new Promise((resove, rej) => {
-        getDangerWorkStaticDetailApi(apiData)
+        educationDetail(apiData)
           .then(res => {
 
             resove()
@@ -436,28 +504,7 @@ export default {
           this.scrollView(object);
         }
       });
-      if (!this.iFrom.applyUserCode) {
-        formAll = false
-      }
-
       return formAll
-    },
-    // 提交之前的流程api
-    iSubmit() {
-      if (!this.formValidate() || this.loading || this.spinning) {
-        return
-      }
-      this.handleLoading();
-      let apiData = { ...this.iFrom, isDraft: 2 }
-      const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
-      return apiName(apiData)
-        .then(res => {
-
-        })
-        .catch(err => { })
-        .finally(() => {
-          this.cancelLoading();
-        })
     },
     // 代办推送
     async pushTask(securityUser, operateId) {
@@ -475,24 +522,28 @@ export default {
     },
     // 保存api
     iSave() {
-      console.log(this.iFrom);
-      if (!this.formValidate() || this.loading || this.spinning) {
+      if (!this.formValidate() || this.spinning) {
         return
       }
 
-      // 草稿 1-是，2-否
-      let apiData = { ...this.iFrom, isDraft: 1 }
-      const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
-      this.handleLoadingTwo();
+      let apiData = { ...this.iFrom }
+      // 处理模板数据
+      apiData.templateId = this.iFrom.selTempList[0].templateId
+      apiData.templateName = this.iFrom.selTempList[0].templateName
+      apiData.selTempList = undefined
+      console.log(apiData);
+
+      const apiName = this.isAddPage ? educationAdd : editDangerWorkStaticApi
+      this.handleLoading();
       apiName(apiData)
         .then(res => {
           this.$antMessage.success('保存成功');
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticDraft' })
+          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement' })
         })
         .catch(err => { })
         .finally(() => {
-          this.cancelLoadingTwo();
+          this.cancelLoading();
         })
     },
     // 取消
@@ -504,10 +555,22 @@ export default {
     openSelTempDrawer() {
       this.selTempDrawerShow = true;
     },
-    // 现场监护人-添加、修改一行
-    changeModuleList(moduleDataList) {
-      this.$set(this.iFrom, 'dangerGuardian', moduleDataList)
-      formValidator.formItemValidate(this, 'dangerGuardian', 'ruleForm')
+    // 模板change事件
+    changeSelTempDrawerList(selTempList) {
+      this.$set(this.iFrom, 'selTempList', selTempList)
+      formValidator.formItemValidate(this, 'selTempList', 'ruleForm')
+    },
+    // 删除选择的模板
+    rmSelTempItem(rmItem) {
+      this.$antConfirm({
+        title: '确认删除？',
+        onOk: () => {
+          const newSelTempList = this.iFrom.selTempList.filter(item => item.templateId != rmItem.templateId)
+          this.$set(this.iFrom, 'selTempList', newSelTempList)
+          formValidator.formItemValidate(this, 'selTempList', 'ruleForm')
+          return Promise.resolve()
+        }
+      })
     },
   }
 }
@@ -559,5 +622,70 @@ export default {
 
 ::v-deep .el-input__icon.el-range__icon.el-icon-time {
   display: none;
+}
+
+.sel-tempList {
+  padding-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 18px;
+  grid-row-gap: 18px;
+
+  .selTempItem {
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      .mask {
+        display: flex;
+      }
+    }
+
+    .selRadioBox {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      padding: 4px 8px 4px;
+      z-index: 2;
+
+      ::v-deep .ant-radio-inner {
+        border-color: #0067cc;
+      }
+    }
+
+    .pic {
+      width: 100%;
+    }
+
+    .mask {
+      display: none;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.5);
+      align-items: center;
+      justify-content: center;
+
+      .maskBtn {
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .eyeBtn {
+          font-size: 24px;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+
+        .deleteBtn {
+          font-size: 22px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
 </style>
