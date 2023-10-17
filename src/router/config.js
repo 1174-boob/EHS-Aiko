@@ -1471,9 +1471,9 @@ const options = {
 
                 {
                   path: 'safetyEduArchives',
-                  name: '三级安全教育',
+                  name: '三级安全教育档案',
                   meta: {
-                    title: '三级安全教育',
+                    title: '三级安全教育档案',
                     routerCode:'safetyEduArchives',
                     isKeepalive:true,
                     isPage: true,
