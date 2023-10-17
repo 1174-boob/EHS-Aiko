@@ -776,6 +776,8 @@ export const getEducationUserListPage = params => post(`${serviceNameList.health
 export const educationCorrect = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/correct`, params);
 // 三级安全教育管理-成绩确认
 export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
+// 三级安全教育管理-重新分配
+export const educationReallocation = params => post(`${serviceNameList.health}/api/ehs/security/education/reallocation`, params);
 
 
 // 危害岗位信息数据库

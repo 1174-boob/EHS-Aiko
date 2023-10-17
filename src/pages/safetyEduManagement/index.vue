@@ -45,12 +45,49 @@
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'add')">成绩纠错</span>
           <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'show')">查看</span>
-          <span class="color-0067cc cursor-pointer" @click="viewFile(record)">重新分配</span>
+          <span class="color-0067cc cursor-pointer" @click="reAllocation(record)">重新分配</span>
           <span class="color-ff4d4f cursor-pointer" @click="rmSafetyEduItem(record)">删除</span>
         </div>
       </a-table>
     </CommonTable>
 
+    <!-- 重新分配弹框 -->
+    <CommonModal :title="titleText" :visible="addVisible" :cancelFn="addCancle">
+      <template slot="form">
+        <a-form-model
+          ref="editForm"
+          :model="editForm"
+          :rules="editFormRules"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="当前处理节点" prop="resolve">
+            <a-input disabled :maxLength="50" v-model="editForm.resolve" placeholder="请输入当前处理节点"></a-input>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="原处理人" prop="resolvePeople">
+            <a-input disabled :maxLength="50" v-model="editForm.resolvePeople" placeholder="请输入原处理人"></a-input>
+          </a-form-model-item>
+          <StaffOrDept
+            :treeType="'user'"
+            :propKey="'holdUserId'"
+            :treeRoles="editFormRules"
+            :labelTitle="'重新分配人员'"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol"
+            @getTreeData="personThingOne"
+            :checkedTreeNode="editForm.holdUserId"
+          />
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="addCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="editConfirm"
+          >确定</a-button
+        >
+      </template>
+    </CommonModal>
   </div>
 </template>
 
@@ -60,18 +97,34 @@ import cancelLoading from '@/mixin/cancelLoading'
 import dayJs from "dayjs"
 import {getDictTarget} from '@/utils/dictionary'
 import { debounce, cloneDeep } from 'lodash'
-import {getEducationListPage, educationDelete} from "@/services/api.js"
+import StaffOrDept from "@/components/staffOrDept";
+import { formValidator } from "@/utils/clx-form-validator.js"
+import {getEducationListPage, educationDelete ,educationDetail,educationReallocation} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
 export default {
-  components: {  },
+  components: { StaffOrDept },
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   data() {
     return {
       getDictTarget,
       labelColSpec: { span: 6 },
       wrapperColSpec: { span: 18 },
+      titleText: "重新分配",
+      addVisible: false,
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
+      // 表单验证
+      editFormRules: {
+        holdUserId: [
+          { required: true, message: "重新分配人员不能为空", trigger: "change" },
+        ],
+      },
+      editPoint:'',
+      editId:'',
+      editForm: {},
+      editParams:{},
       formInline: {},
       choosedArr: [],
       selectedRowKeys: [],
@@ -260,7 +313,6 @@ export default {
         // 查询项
         ...this.formInline,
         entryDate:undefined,
-        signatureFinalDate:undefined,
         createDateStart,
         createDateEnd,
         // 页码
@@ -302,7 +354,7 @@ export default {
       })
     },  
 
-    // 上岗意见（班组级、有成绩的结果，未填写意见）
+    // 成绩纠错，查看
     goCorrectionGrades(targetItem,type){
       let query = {
         id:targetItem.id,
@@ -313,36 +365,7 @@ export default {
         query,
       })
     },  
-
-    // 重新发起
-    onceAgainInitiate:debounce(function () {
-      if (!this.choosedArr.length) {
-        this.$antMessage.warning('请选择重新发起人员！')
-        return
-      }
-      const condition = (item) => {
-        return item.signatureStatus != 0;
-      };
-      const canNotSign = this.choosedArr.some(condition);
-      if (canNotSign) {
-        this.$antMessage.warning('请正确选择重新发起人员！')
-        return;
-      } else {
-        const personIds = this.choosedArr.map(item => {
-          return item.id
-        })
-        this.$router.push({
-          path:'',
-          query:{personIds}
-        })
-      }
-    }, 250, { leading: true, trailing: false }),
     
-    onSelectChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.choosedArr = selectedRows
-      console.log('selectedRowKeys111',selectedRowKeys,'selectedRows222',selectedRows);
-    },
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page
@@ -380,19 +403,109 @@ export default {
       this.choosedArr = []
       this.getDataList()
     }, 250, { leading: true, trailing: false }),
-    // 预览
-    viewFile(row){
-      if (!this.canClickBtnMixin("safetyResponsibilityView")) {
+    // 重新分配
+    reAllocation(row){
+      this.editPoint = row.currentLevel
+      this.editId = row.id
+      var _this = this;
+      if(row.currentLevel == '1'){
+        educationDetail({ id: row.id }).then((res) => {
+          _this.editForm.resolve = '公司级培训讲师签署'
+          _this.editForm.resolvePeople = res.data.trainerCompanyUserName +'/'+ res.data.trainerCompanyJobNumber
+        })
+      }else if(row.currentLevel == '2'){
+        educationDetail({ id: row.id }).then((res) => {
+          _this.editForm.resolve = '车间(部门)级培训讲师签署'
+          _this.editForm.resolvePeople = res.data.trainerDeptUserName +'/'+ res.data.trainerDeptJobNumber
+        })
+      }else if(row.currentLevel == '3'){
+        educationDetail({ id: row.id }).then((res) => {
+          _this.editForm.resolve = '班组级培训讲师签署'
+          _this.editForm.resolvePeople = res.data.trainerGroupUserName +'/'+ res.data.trainerGroupJobNumber
+        })
+      }
+      this.$antConfirm({
+        title: '重新分配签署人员会影响原有流程，是否确认进行重新分配？',
+        onOk() {
+          _this.addVisible = true;
+        }
+      })
+    },
+    // 重新分配确认
+    editConfirm(){
+      if (!formValidator.formAll(this, "editForm")) {
         return;
       }
-      let query = {
-        id: row.id,
-        filePreview: true
+      if(this.editForm.holdUserId.length > 1){
+        this.$antMessage.warn('只能选择一名人员！');
+        return
       }
-      this.$router.push({
-        path: '/ehsGerneralManage/securityArchiveManagement/safetyResponsibilityPreview',
-        query,
+      if(this.editPoint == 1) {
+        this.editParams = {
+          id:this.editId,
+          trainerCompanyUserId:this.editForm.holdUserId[0],
+          trainerCompanyJobNumber:this.editForm.holdUserJobNumber[0],
+          trainerCompanyUserName:this.editForm.holdUserName[0]
+        }
+      } else if (this.editPoint == 2){
+        this.editParams = {
+          id:this.editId,
+          trainerDeptUserId:this.editForm.holdUserId[0],
+          trainerDeptJobNumber:this.editForm.holdUserJobNumber[0],
+          trainerDeptUserName:this.editForm.holdUserName[0]
+        }
+      } else if (this.editPoint == 3){
+        this.editParams = {
+          id:this.editId,
+          trainerGroupUserId:this.editForm.holdUserId[0],
+          trainerGroupJobNumber:this.editForm.holdUserJobNumber[0],
+          trainerGroupUserName:this.editForm.holdUserName[0]
+        }
+      }
+      educationReallocation(this.editParams).then((res)=>{
+        if(res.code == 20000){
+          this.$antMessage.success('分配成功')
+          this.addVisible = false
+          this.editParams = {}
+          this.editForm = {}
+        } else {
+          this.$antMessage.warn(res.message)
+          return
+        }
       })
+    },
+    // 点击取消按钮
+    addCancle() {
+      this.addVisible = false;
+      this.editForm = {};
+    },
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
+      }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
+    },
+
+    //重新分配人员
+    personThingOne(data) {
+      this.editForm.holdUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.editForm.holdUserName = this.getName(list);
+      this.editForm.holdUserJobNumber = this.getWorkNum(list);
     },
     // 删除
     rmSafetyEduItem(row){
