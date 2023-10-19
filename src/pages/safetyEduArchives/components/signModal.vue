@@ -10,7 +10,7 @@
         </a-form-model-item>
         <a-form-model-item class="flex" label="验证码" prop="code">
           <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="formModel.code" placeholder="请输入验证码"></a-input>
-          <a-button @click="sendCode">发送短信</a-button>
+          <SendCodeButton/>
         </a-form-model-item>
       </a-form-model>
     </template>
@@ -27,8 +27,9 @@ import cancelLoading from "@/mixin/cancelLoading";
 import SignComp from '@/components/signComp/index.vue'
 import { debounce, cloneDeep } from 'lodash'
 import { responsibilitySendCode } from "@/services/api.js";
+import SendCodeButton from '@/components/sendCodeButton/index.vue'
 export default {
-  components: { SignComp },
+  components: { SignComp,SendCodeButton },
   mixins: [cancelLoading],
   model: {
     prop: 'signModalShow',
@@ -62,7 +63,7 @@ export default {
   },
   methods: {
     // 发送验证码
-    sendCode: debounce(function () {
+    sendCode1: debounce(function () {
       responsibilitySendCode({})
         .then((res) => {
           this.$antMessage.success("发送成功！");
