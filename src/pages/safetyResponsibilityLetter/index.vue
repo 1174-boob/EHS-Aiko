@@ -77,7 +77,7 @@
         </div>
       </a-table>
     </CommonTable>
-    <CommonModal :title="'签署告知书'" :visible="signVisible" :cancelFn="signCancle">
+    <CommonModal :title="'签署责任书'" :visible="signVisible" :cancelFn="signCancle">
       <template slot="form">
         <a-form-model
           ref="editForm"
@@ -495,7 +495,7 @@ export default {
       } else if(num == '1'){
         return '待签署'
       } else if(num == '2'){
-        return '已签署'
+        return '签署中'
       } else if(num == '3'){
         return '签署完成'
       }
