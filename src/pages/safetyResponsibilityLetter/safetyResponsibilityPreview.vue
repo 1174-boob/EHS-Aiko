@@ -72,7 +72,7 @@
         </div>
       </div>
       <!-- <div v-else>地址错误</div> -->
-      <CommonModal :title="'签署告知书'" :visible="signVisible" :cancelFn="signCancle">
+      <CommonModal :title="'签署责任书'" :visible="signVisible" :cancelFn="signCancle">
         <template slot="form">
           <a-form-model
             ref="editForm"
@@ -97,7 +97,7 @@
               <span style="font-Size:24px">{{userPhone}}</span>
             </a-form-model-item>
             <a-form-model-item class="flex" :label-col="labelCol" :wrapper-col="wrapperCol" label="验证码" prop="code">
-              <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input><a-button @click="sendCode">发送短信</a-button>
+              <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input><a-button :loading="iconLoading" @click="sendCode">发送短信</a-button>
             </a-form-model-item>
           </a-form-model>
         </template>
@@ -130,6 +130,7 @@ export default {
   data() {
     this.sendCode = debounce(this.sendCode, 800);
     return {
+      iconLoading:false,
       // 总页数
       pageTotal: 0,
       // 当前页
@@ -320,13 +321,18 @@ export default {
     },
     // 发送短信
     sendCode(){
+      this.iconLoading = true;
       responsibilitySendCode({}).then((res) => {
         if(res.code == 20000){
           this.$antMessage.success("发送成功！");
+          setTimeout(()=>{
+            this.iconLoading = false;
+          },60000)
         }
       }).catch((err) =>{
+        this.iconLoading = false;
         console.log(err);
-     })
+      })
     },
     back() {
       if (this.activeKey == 1){

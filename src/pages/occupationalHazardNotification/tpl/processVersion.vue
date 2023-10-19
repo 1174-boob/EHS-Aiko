@@ -264,7 +264,7 @@ export default {
     this.userId = zconsole_userInfo.user.userId
   },
   activated(){
-    if(this.$route.query.activeKey == 4){
+    if(this.$route.query.activeKey == 2){
       this.init()
     }
   },

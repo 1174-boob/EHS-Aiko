@@ -198,8 +198,8 @@ export default {
       getPushNotifyDetail({})
       .then(res => {
         // console.log('详情返回的数据',res.data);
-        this.iFrom = res.data
-        this.pushId = res.data.pushId
+        this.iFrom = res.data ? res.data : {}
+        this.pushId = res.data.pushId ? res.data.pushId : ''
       })
       .catch(err => {
         console.log(err);
