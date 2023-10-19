@@ -89,7 +89,7 @@ export default {
       // 当前页
       currentPage: 1,
       // 缩放比例
-      pageScale: 0.8,
+      pageScale: 1,
       // 遮罩
       boxLoading: true,
       pageChangeTimer: null,
