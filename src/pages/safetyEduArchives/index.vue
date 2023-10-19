@@ -52,27 +52,27 @@
         <a-radio-button v-for="item in getDictTarget('s','educationLevel')" :key="item.key" :value="item.key">{{item.value}}</a-radio-button>
       </a-radio-group>
       <div>
-        <div @click="changeTab(1)" class="pe-data-item total-pe-num" :class="[curIndex === 1 ? 'active' : '']">
+        <div @click="changeTab(1)" class="pe-data-item total-pe-num" :class="[labelType === 1 ? 'active' : '']">
           <span class="pe-data-body">培训总人数 {{countInfo?.total || '0'}} 人</span>
           <p class="en-illus">total quantity</p>
           <i></i>
         </div>
-        <div @click="changeTab(2)" class="pe-data-item purple-pe-num" :class="[curIndex === 2 ? 'active' : '']">
+        <div @click="changeTab(2)" class="pe-data-item purple-pe-num" :class="[labelType === 2 ? 'active' : '']">
           <span class="pe-data-body">签署完成 {{countInfo?.signingComplete || '0'}} 人</span>
           <p class="en-illus">signed complete</p>
           <i></i>
         </div>
-        <div @click="changeTab(3)" class="pe-data-item cyan-pe-num" :class="[curIndex === 3 ? 'active' : '']">
+        <div @click="changeTab(3)" class="pe-data-item cyan-pe-num" :class="[labelType === 3 ? 'active' : '']">
           <span class="pe-data-body">通过 {{countInfo?.pass || '0'}} 人</span>
           <p class="en-illus">pass</p>
           <i></i>
         </div>
-        <div @click="changeTab(4)" class="pe-data-item yellow-pe-num" :class="[curIndex === 4 ? 'active' : '']">
+        <div @click="changeTab(4)" class="pe-data-item yellow-pe-num" :class="[labelType === 4 ? 'active' : '']">
           <span class="pe-data-body">未通过 {{countInfo?.unPass || '0'}} 人</span>
           <p class="en-illus">failed</p>
           <i></i>
         </div>
-        <div @click="changeTab(5)" class="pe-data-item red-pe-num" :class="[curIndex === 5 ? 'active' : '']">
+        <div @click="changeTab(5)" class="pe-data-item red-pe-num" :class="[labelType === 5 ? 'active' : '']">
           <span class="pe-data-body">未签署 {{countInfo?.toBeSigned || '0'}} 人</span>
           <p class="en-illus">to be signed</p>
           <i></i>
@@ -147,7 +147,7 @@ import cancelLoading from '@/mixin/cancelLoading'
 import dayJs from "dayjs"
 import { getDictTarget } from '@/utils/dictionary'
 import { rmDuplicatesByKey } from '@/utils/util'
-import { debounce, cloneDeep } from 'lodash'
+import { debounce, cloneDeep, setWith } from 'lodash'
 import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi, exportSafetyEduListApi } from "@/services/safetyEduArchives"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
@@ -177,7 +177,7 @@ export default {
         pageSize: 10,
         total: 0
       },
-      curIndex: undefined,
+      labelType: undefined,
       countInfo: {
         total: '', //总数
         signingComplete: '', //签署成功
@@ -414,9 +414,11 @@ export default {
     this.userId = zconsole_userInfo.user.userId
   },
   activated() {
-    if (this.$route.query.activeKey == 3) {
-      this.init()
-    }
+    setTimeout(() => {
+      if(!this.keepalive){
+        this.iRest()
+      }
+    }, 20);
   },
   methods: {
     async init() {
@@ -427,7 +429,7 @@ export default {
     async getCertCount() {
       let apiData = {
         ...this.getSearchData(),
-        curIndex: undefined
+        labelType: undefined
       }
       const { code, data } = await getSafetyEduPeopleNum(apiData)
       if (+code === 20000) {
@@ -457,7 +459,7 @@ export default {
         // 级别
         currentLevel,
         // 各个人数按钮过滤
-        curIndex: this.curIndex,
+        labelType: this.labelType,
       }
       return apiData
     },
@@ -486,13 +488,14 @@ export default {
         })
     },
     changeTab(tabIndex) {
-      this.curIndex = this.curIndex === tabIndex ? undefined : tabIndex
+      this.labelType = this.labelType === tabIndex ? undefined : tabIndex
       this.page.pageNo = 1
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
     },
 
+    // 级别查询变更
     currentLevelChange() {
       this.getDataList()
       this.getCertCount()
@@ -500,6 +503,10 @@ export default {
 
     // 批量推送（状态为进行中的可以推送）
     async batchPush() {
+      if (!this.canClickBtnMixin("safetyEduArchivesBatchPush")) {
+        return;
+      }
+
       if (!this.choosedArr.length) {
         this.$antMessage.warning('请选择推送人员！')
         return
@@ -537,8 +544,15 @@ export default {
     // 上岗意见（班组级、有成绩的结果，未填写意见）
     openUpdateOpinionModel(targetItem) {
       if (targetItem) {
+        if (!this.canClickBtnMixin("safetyEduArchivesSingleUpdateOpinion")) {
+          return;
+        }
         this.updateOpinionModelData = targetItem
       } else {
+        if (!this.canClickBtnMixin("safetyEduArchivesMoreUpdateOpinion")) {
+          return;
+        }
+
         if (!this.choosedArr.length) {
           this.$antMessage.warning('请选择要更新意见的人员！')
           return
@@ -566,6 +580,9 @@ export default {
     // 批量签署-打开弹窗
     async batchSign(targetItem) {
       if (targetItem) {
+        if (!this.canClickBtnMixin("safetyEduArchivesSingleBatchSign")) {
+          return;
+        }
         this.signTargetData = targetItem
       } else {
         if (!this.choosedArr.length) {
@@ -595,9 +612,9 @@ export default {
 
     // 批量导出(查询项)
     exportExcel: debounce(function () {
-      // if (!this.canClickBtnMixin("earlyWarnInfoGasExport")) {
-      //   return;
-      // }
+      if (!this.canClickBtnMixin("safetyEduArchivesExportExcel")) {
+        return;
+      }
       this.handleLoadingThree()
       let apiData = {
         ...this.getSearchData(),
@@ -614,6 +631,9 @@ export default {
 
     // 批量下载
     batchExport: debounce(function () {
+      if (!this.canClickBtnMixin("safetyEduArchivesBatchExport")) {
+        return;
+      }
       if (!this.choosedArr.length) {
         this.$antMessage.warning('至少选择一条数据！')
         return
@@ -627,6 +647,9 @@ export default {
 
     // 重新发起 (成绩不通过、相同级别、相同类型)
     onceAgainInitiate: debounce(function () {
+      if (!this.canClickBtnMixin("safetyEduArchivesOnceAgainInitiate")) {
+        return;
+      }
       if (!this.choosedArr.length) {
         this.$antMessage.warning('请选择重新发起人员！')
         return
@@ -688,7 +711,7 @@ export default {
         total: 0,
       }
       this.formInline = {}
-      this.curIndex = undefined
+      this.labelType = undefined
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
@@ -696,20 +719,22 @@ export default {
     }, 250, { leading: true, trailing: false }),
     // 预览
     viewFile(row) {
-      if (!this.canClickBtnMixin("safetyResponsibilityView")) {
+      if (!this.canClickBtnMixin("safetyEduArchivesViewFile")) {
         return;
       }
       let query = {
-        id: row.id,
-        filePreview: true
+        filePath: row.file.filePath,
       }
       this.$router.push({
-        path: '/ehsGerneralManage/securityArchiveManagement/safetyResponsibilityPreview',
+        path: '/ehsGerneralManage/securityArchiveManagement/safetyEduArchivesPreview',
         query,
       })
     },
     // 删除
     rmSafetyEduItem(row) {
+      if (!this.canClickBtnMixin("safetyEduArchivesRmSafetyEduItem")) {
+        return;
+      }
       this.$antConfirm({
         title: '确认删除？',
         onOk: async () => {

@@ -137,10 +137,4 @@ export default {
     padding: 0 111px 0 102px !important;
   }
 }
-
-#signComp-model {
-  ::v-deep .ant-modal {
-    min-width: 800px !important;
-  }
-}
 </style>

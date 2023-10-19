@@ -119,11 +119,13 @@ export default {
 
 .sign-show-container {
   margin-bottom: 25px;
-  width: 400px;
+  width: 530px;
   padding: 10px;
   border: 2px dashed grey;
+  overflow: hidden;
   .sign-show {
     overflow: hidden;
+    width: 100%;
   }
   .sign-empty{
     height: 165px;

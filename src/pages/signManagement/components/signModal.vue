@@ -84,9 +84,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#signComp-model {
-  ::v-deep .ant-modal {
-    min-width: 800px !important;
-  }
-}
+
 </style>

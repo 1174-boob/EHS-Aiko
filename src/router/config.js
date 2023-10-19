@@ -1481,6 +1481,17 @@ const options = {
                   component: resolve => require(['@/pages/safetyEduArchives/index.vue'], resolve),
                 },
                 {
+                  path: 'safetyEduArchivesPreview',
+                  name: '三级安全教育档案预览',
+                  meta: {
+                    title: '三级安全教育档案预览',
+                    routerCode:'safetyEduArchivesPreview',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduArchives/safetyEduArchivesPreview.vue'], resolve),
+                },
+                {
                   path: 'signManagement',
                   name: '签名管理',
                   meta: {
