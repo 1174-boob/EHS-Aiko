@@ -27,11 +27,8 @@
           </a-form-model-item>
 
           <a-form-model-item ref="type" label="类型" prop="type">
-            <a-select show-search v-model="iFrom.type" placeholder="请选择" @change="changeEmployeeType">
-              <a-select-option v-for="item in getDictTarget('s', 'employeeType')" :key="item.key" :value="item.key">
-                {{
-                item.value }}
-              </a-select-option>
+            <a-select show-search :disabled="isAgainPage" v-model="iFrom.type" placeholder="请选择" @change="changeEmployeeType">
+              <a-select-option v-for="item in getDictTarget('s', 'employeeType')" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-model-item>
 
@@ -49,7 +46,12 @@
           </div>
 
           <template description="转（复）岗时，讲师不显示公司级" v-if="!isChangePost">
+            <a-form-model-item label="公司级" v-if="isAgainPage && againCurrentLevel>1">
+              <div>已培训通过，无需选择</div>
+            </a-form-model-item>
+
             <StaffOrDept
+              v-else
               ref="trainerCompanyUserId"
               :labelTitle="'公司级'"
               :treeRoles="iRules"
@@ -62,17 +64,23 @@
             />
           </template>
 
-          <StaffOrDept
-            ref="trainerDeptUserId"
-            :labelTitle="'车间（部门）级'"
-            :treeRoles="iRules"
-            :propKey="'trainerDeptUserId'"
-            :treePlaceholder="'请选择'"
-            :checkedTreeNode="checkedTreeNodeDept"
-            :deptTreeId="deptTreeId"
-            :checkAbel="false"
-            @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerDeptUserId', codeAttr: 'trainerDeptJobNumber', nameAttr: 'trainerDeptUserName' }, 'checkedTreeNodeDept')"
-          />
+          <template>
+            <a-form-model-item label="公司级" v-if="isAgainPage && againCurrentLevel>2">
+              <div>已培训通过，无需选择</div>
+            </a-form-model-item>
+            <StaffOrDept
+              v-else
+              ref="trainerDeptUserId"
+              :labelTitle="'车间（部门）级'"
+              :treeRoles="iRules"
+              :propKey="'trainerDeptUserId'"
+              :treePlaceholder="'请选择'"
+              :checkedTreeNode="checkedTreeNodeDept"
+              :deptTreeId="deptTreeId"
+              :checkAbel="false"
+              @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerDeptUserId', codeAttr: 'trainerDeptJobNumber', nameAttr: 'trainerDeptUserName' }, 'checkedTreeNodeDept')"
+            />
+          </template>
 
           <StaffOrDept
             ref="trainerGroupUserId"
@@ -95,7 +103,7 @@
             :checkedTreeNode="checkedTreeNodeAssign"
             :deptTreeId="deptTreeId"
             :checkAbel="false"
-            :onPreview="!isChangePost"
+            :onPreview="isTrainerEsdUserIdPreview"
             @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerEsdUserId', codeAttr: 'trainerEsdJobNumber', nameAttr: 'trainerEsdUserName' }, 'checkedTreeNodeAssign')"
           />
         </template>
@@ -134,15 +142,16 @@
           <div>
             <div class="ttile border-b-e7">
               <PageTitle class="ttile-text required-star">培训人员</PageTitle>
-              <DashBtn class="ttile-bbtn">
-                <div>
-                  <a-button type="dashed" @click="opeUploadImportModel">
-                    <a-icon type="plus" />批量导入
-                  </a-button>
-                </div>
-              </DashBtn>
-              <span></span>
-              <a-button type="link" @click="changeIsRetract">{{isRetract?'展开':'收起'}}</a-button>
+              <template v-if="!isAgainPage">
+                <DashBtn class="ttile-bbtn">
+                  <div>
+                    <a-button type="dashed" @click="opeUploadImportModel">
+                      <a-icon type="plus" />批量导入
+                    </a-button>
+                  </div>
+                </DashBtn>
+                <a-button type="link" @click="changeIsRetract">{{isRetract?'展开':'收起'}}</a-button>
+              </template>
             </div>
             <div class="m-t-20"></div>
           </div>
@@ -355,30 +364,61 @@ export default {
       checkedTreeNodeDept: [],
       checkedTreeNodeGroup: [],
       checkedTreeNodeAssign: [],
-      // 主键id
-      operateId: undefined,
       deptTreeId: undefined,
+      // 重新发起选择的数据
+      againData: [],
+      // 重新发起的级别
+      againCurrentLevel: undefined,
     }
   },
   created() {
-    this.operateId = this.$route.query.operateId + '' || undefined
+
+  },
+  mounted() {
+    this.initPage()
   },
   computed: {
     // 当前页面是否为新增
     isAddPage() {
-      return !this.$route.query.operateId
+      return this.$route.query.type == 'add'
+    },
+    // 当前页面是否为重新发起
+    isAgainPage() {
+      return this.$route.query.type == 'again'
     },
     // 当前展示的培训人员list
     showSecurityEducationRecordsList() {
       const allRecordsList = this.iFrom.securityEducationRecordsList || [];
       return this.isRetract ? allRecordsList.filter((item, index) => index + 1 >= 10) : allRecordsList
     },
-  },
-  mounted() {
-    // 页面初始化
-    this.initPage()
+    // 环安部培训负责人是否为展示\禁用
+    isTrainerEsdUserIdPreview() {
+      return this.isAgainPage ? this.againCurrentLevel <= 1 : !this.isChangePost
+    },
   },
   methods: {
+    // 页面初始化
+    initPage() {
+      if (this.isAddPage) {
+        this.spinning = false
+      } else if (this.isAgainPage) {
+        this.againData = JSON.parse(sessionStorage.getItem('ehs_safetyEduArchives') || '[]')
+        if (this.againData.length) {
+          const targetObj = this.againData[0]
+          // 1公司级 2车间部门级 3班组级
+          this.againCurrentLevel = targetObj.currentLevel - 0
+          console.log('this.targetObj', targetObj);
+
+          this.$set(this.iFrom, 'type', targetObj.type)
+          this.$set(this.iFrom, 'securityEducationRecordsList', this.againData)
+
+          setTimeout(() => {
+            this.spinning = false
+          }, 200);
+        }
+      }
+    },
+
     // 打开批量导入弹窗
     opeUploadImportModel() {
       this.uploadImportShow = true
@@ -395,7 +435,6 @@ export default {
 
     // 类型change 1新员工 2转(复)岗
     changeEmployeeType(e) {
-      console.log('e', e);
       this.isChangePost = e == 2
     },
     // 预览模板弹窗
@@ -403,21 +442,11 @@ export default {
       this.previewData = item
       this.tempPreviewModelShow = true
     },
-    // 页面初始化
-    initPage() {
-      if (this.isAddPage) {
-        this.spinning = false
-      } else {
-        // 获取页面详情
-        Promise.all([this.getPageDetail()])
-          .finally(() => {
-            this.spinning = false
-          })
-      }
-    },
+
 
     // 处理选择人员后的change事件数据
     getTreeData(value) {
+      console.log('value', value);
       const { treeIdList, treeNameAndCodeList } = value
 
       let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
@@ -459,21 +488,6 @@ export default {
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
       // this.$set(this.iFrom, 'applyDepartCode', undefined)
-    },
-    // 获取页面详情
-    getPageDetail() {
-      let operateId = this.operateId
-      let apiData = { operateId }
-      return new Promise((resove, rej) => {
-        educationDetail(apiData)
-          .then(res => {
-
-            resove()
-          })
-          .catch(err => {
-            rej()
-          })
-      })
     },
     // 滚动到表单验证报错的地方
     scrollView(object) {

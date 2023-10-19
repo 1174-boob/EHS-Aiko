@@ -12,7 +12,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="数据筛选">
-          <a-select allowClear show-search v-model="formInline.shujushaixuan" placeholder="请选择数据筛选">
+          <a-select allowClear show-search v-model="formInline.dealWithStatus" placeholder="请选择数据筛选">
             <a-select-option v-for="item in getDictTarget('s','bossOperateStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -28,7 +28,7 @@
           <a-range-picker format="YYYY-MM-DD" class="search-range-picker" style="width: 200px" valueFormat="YYYY-MM-DD" v-model="formInline.signDate" :placeholder="['开始日期','结束日期']" />
         </a-form-model-item>
         <a-form-model-item label="成绩">
-          <a-select allowClear show-search v-model="formInline.scoreStatus" placeholder="请选择成绩">
+          <a-select allowClear show-search v-model="formInline.currentScoreStatus" placeholder="请选择成绩">
             <a-select-option v-for="item in getDictTarget('s','educationScore')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -46,34 +46,34 @@
     </SearchTerm>
 
     <div class="pe-data-container">
-      <a-radio-group v-model="currentLevel" style="margin-bottom: 15px;" button-style="solid">
+      <a-radio-group v-model="currentLevel" style="margin-bottom: 15px;" button-style="solid" @change="currentLevelChange">
         <a-radio-button value="all">全部</a-radio-button>
 
         <a-radio-button v-for="item in getDictTarget('s','educationLevel')" :key="item.key" :value="item.key">{{item.value}}</a-radio-button>
       </a-radio-group>
       <div>
         <div @click="changeTab(1)" class="pe-data-item total-pe-num" :class="[curIndex === 1 ? 'active' : '']">
-          <span class="pe-data-body">培训总人数 {{countInfo.total==0? '0':countInfo.total}} 人</span>
+          <span class="pe-data-body">培训总人数 {{countInfo?.total || '0'}} 人</span>
           <p class="en-illus">total quantity</p>
           <i></i>
         </div>
         <div @click="changeTab(2)" class="pe-data-item purple-pe-num" :class="[curIndex === 2 ? 'active' : '']">
-          <span class="pe-data-body">签署完成 {{countInfo.signingComplete}} 人</span>
+          <span class="pe-data-body">签署完成 {{countInfo?.signingComplete || '0'}} 人</span>
           <p class="en-illus">signed complete</p>
           <i></i>
         </div>
         <div @click="changeTab(3)" class="pe-data-item cyan-pe-num" :class="[curIndex === 3 ? 'active' : '']">
-          <span class="pe-data-body">通过 {{countInfo.toBeSigned}} 人</span>
+          <span class="pe-data-body">通过 {{countInfo?.pass || '0'}} 人</span>
           <p class="en-illus">pass</p>
           <i></i>
         </div>
         <div @click="changeTab(4)" class="pe-data-item yellow-pe-num" :class="[curIndex === 4 ? 'active' : '']">
-          <span class="pe-data-body">未通过 {{countInfo.toBeSigned}} 人</span>
+          <span class="pe-data-body">未通过 {{countInfo?.unPass || '0'}} 人</span>
           <p class="en-illus">failed</p>
           <i></i>
         </div>
         <div @click="changeTab(5)" class="pe-data-item red-pe-num" :class="[curIndex === 5 ? 'active' : '']">
-          <span class="pe-data-body">未签署 {{countInfo.toBeSigned}} 人</span>
+          <span class="pe-data-body">未签署 {{countInfo?.toBeSigned || '0'}} 人</span>
           <p class="en-illus">to be signed</p>
           <i></i>
         </div>
@@ -83,9 +83,9 @@
     <DashBtn>
       <div>
         <a-button type="dashed" @click="batchPush">批量推送</a-button>
-        <a-button type="dashed" @click="openUpdateCommentsModel()">批量更新意见</a-button>
+        <a-button type="dashed" @click="openUpdateOpinionModel()">批量更新意见</a-button>
         <!-- 班组级、成绩、上岗意见都存在 -->
-        <a-button type="dashed" @click="batchSign()">批量签署</a-button>
+        <!-- <a-button type="dashed" @click="batchSign()">批量签署</a-button> -->
         <!-- 无限制 -->
         <a-button type="dashed" @click="exportExcel">批量导出</a-button>
         <!-- 无限制 -->
@@ -124,8 +124,9 @@
           </a-popover>
         </template>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="openUpdateCommentsModel(record)">上岗意见</span>
-          <span class="color-0067cc cursor-pointer" @click="batchSign(record)">签署</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.canUpdateOpinion" @click="openUpdateOpinionModel(record)">上岗意见</span>
+          <!-- 签署：非完成状态、存在上岗意见、本人 -->
+          <span class="color-0067cc cursor-pointer" v-if="record.status != 2 && record.deptBossOpinion && record.userId == userId" @click="batchSign(record)">签署</span>
           <span class="color-0067cc cursor-pointer" @click="viewFile(record)">预览</span>
           <span class="color-ff4d4f cursor-pointer" @click="rmSafetyEduItem(record)">删除</span>
         </div>
@@ -136,7 +137,7 @@
     <SignModal v-model="signModalShow" :signTargetData="signTargetData" @signOnOk="signOnOk" />
 
     <!-- 更新上岗意见 -->
-    <UpdateCommentsModel v-model="updateCommentsModelShow" :updateCommentsModelData="updateCommentsModelData" @updateOnOk="updateOnOk" />
+    <UpdateOpinionModel v-model="updateOpinionModelShow" :updateOpinionModelData="updateOpinionModelData" @updateOnOk="updateOnOk" />
   </div>
 </template>
 
@@ -145,22 +146,23 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis"
 import cancelLoading from '@/mixin/cancelLoading'
 import dayJs from "dayjs"
 import { getDictTarget } from '@/utils/dictionary'
+import { rmDuplicatesByKey } from '@/utils/util'
 import { debounce, cloneDeep } from 'lodash'
 import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi, exportSafetyEduListApi } from "@/services/safetyEduArchives"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
-import UpdateCommentsModel from './components/updateCommentsModel.vue'
+import UpdateOpinionModel from './components/updateOpinionModel.vue'
 import SignModal from './components/signModal.vue'
 
 export default {
-  components: { UpdateCommentsModel, SignModal },
+  components: { UpdateOpinionModel, SignModal },
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   data() {
     return {
       getDictTarget,
       currentLevel: 'all',
-      updateCommentsModelShow: false,
-      updateCommentsModelData: [],
+      updateOpinionModelShow: false,
+      updateOpinionModelData: [],
 
       signModalShow: false,
       signTargetData: undefined,
@@ -187,7 +189,7 @@ export default {
           title: '编号',
           dataIndex: 'num',
           scopedSlots: { customRender: 'numSlots' },
-          width: 280
+          width: 250
         },
         {
           title: '类型',
@@ -256,7 +258,7 @@ export default {
         },
         {
           title: '岗位',
-          dataIndex: 'position',
+          dataIndex: 'jobName',
           width: 150,
           customRender: (text) => {
             text = text ? text : '--'
@@ -337,7 +339,7 @@ export default {
         },
         {
           title: '成绩',
-          dataIndex: 'scoreStatus',
+          dataIndex: 'currentScoreStatus',
           width: 150,
           customRender: (text) => {
             text = text ? getDictTarget('s', 'educationScore', text) : '--'
@@ -423,11 +425,11 @@ export default {
     },
     // 获取五个格子的详情数据
     async getCertCount() {
-      let params1 = {
+      let apiData = {
         ...this.getSearchData(),
         curIndex: undefined
       }
-      const { code, data } = await getSafetyEduPeopleNum(params1)
+      const { code, data } = await getSafetyEduPeopleNum(apiData)
       if (+code === 20000) {
         this.countInfo = data
       }
@@ -465,7 +467,12 @@ export default {
       return getSafetyEduTableList(params)
         .then((res) => {
           let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
-          this.tableDataList = tableDataList || [];
+          this.tableDataList = (tableDataList || []).map(item => {
+            return {
+              ...item,
+              canUpdateOpinion: this.getCanUpdateOpinion(item)
+            }
+          })
           this.page.total = total;
           // 处理页码 问题
           if (this.tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
@@ -484,6 +491,11 @@ export default {
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
+    },
+
+    currentLevelChange() {
+      this.getDataList()
+      this.getCertCount()
     },
 
     // 批量推送（状态为进行中的可以推送）
@@ -517,30 +529,34 @@ export default {
       }
     },
 
+    // 获取是否能更新上岗意见（班组级、有成绩的结果，未填写意见）
+    getCanUpdateOpinion(targetItem) {
+      // 班组级 currentLevel 1公司级别  2车间部门级 3班组级
+      return targetItem.currentLevel == 3 && targetItem.currentScoreStatus && !targetItem.deptBossOpinion
+    },
     // 上岗意见（班组级、有成绩的结果，未填写意见）
-    openUpdateCommentsModel(targetItem) {
+    openUpdateOpinionModel(targetItem) {
       if (targetItem) {
-        this.updateCommentsModelData = targetItem
+        this.updateOpinionModelData = targetItem
       } else {
         if (!this.choosedArr.length) {
           this.$antMessage.warning('请选择要更新意见的人员！')
           return
         }
-        const condition = (item) => {
-          return item.currentLevel11 != 1 || item.scoreStatus || !item.yijian;
-        };
-        const canNotSign = this.choosedArr.some(condition);
-        if (canNotSign) {
+
+        // 是否能更新上岗意见
+        let canUpdate = this.choosedArr.every(item => this.getCanUpdateOpinion(item));
+
+        if (!canUpdate) {
           this.$antMessage.warning('请正确选择要更新意见的人员！')
           return;
         }
-        this.updateCommentsModelData = this.choosedArr
+        this.updateOpinionModelData = this.choosedArr
       }
-      this.updateCommentsModelShow = true
+      this.updateOpinionModelShow = true
     },
     // 上岗意见-弹窗提交成功
     updateOnOk() {
-      this.$antMessage.success(`更新成功`);
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
@@ -566,7 +582,6 @@ export default {
         }
         this.signTargetData = this.choosedArr
       }
-      console.log('this.signTargetData', this.signTargetData);
       this.signModalShow = true
     },
     // 批量签署-弹窗提交成功
@@ -610,26 +625,26 @@ export default {
       this.choosedArr = []
     }, 250, { leading: true, trailing: false }),
 
-    // 重新发起
+    // 重新发起 (成绩不通过、相同级别、相同类型)
     onceAgainInitiate: debounce(function () {
       if (!this.choosedArr.length) {
         this.$antMessage.warning('请选择重新发起人员！')
         return
       }
-      const condition = (item) => {
-        return item.signatureStatus != 0;
-      };
-      const canNotSign = this.choosedArr.some(condition);
-      if (canNotSign) {
+      // 判断是否都是成绩不通过 currentScoreStatus 1通过  2不通过
+      let canAgain = this.choosedArr.every(item => item.currentScoreStatus == 2);
+      // 相同级别
+      canAgain = canAgain && rmDuplicatesByKey(this.choosedArr, 'currentLevel').length == 1
+      // 相同类型
+      canAgain = canAgain && rmDuplicatesByKey(this.choosedArr, 'type').length == 1
+      if (!canAgain) {
         this.$antMessage.warning('请正确选择重新发起人员！')
         return;
       } else {
-        const personIds = this.choosedArr.map(item => {
-          return item.id
-        })
+        sessionStorage.setItem('ehs_safetyEduArchives', JSON.stringify(this.choosedArr))
         this.$router.push({
-          path: '',
-          query: { personIds }
+          path: '/ehsGerneralManage/securityArchiveManagement/safetyEduInitiate',
+          query: { type: 'again' }
         })
       }
     }, 250, { leading: true, trailing: false }),

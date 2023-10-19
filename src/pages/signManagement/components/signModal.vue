@@ -1,5 +1,5 @@
 <template>
-  <CommonModal :title="'绘制签名'" :visible="signModalShow" :cancelFn="closeModel">
+  <CommonModal :title="'绘制签名'" :visible="signModalShow" :cancelFn="closeModel" id="signComp-model">
     <template slot="form">
       <a-form-model ref="editForm" :model="editForm" :label-col="labelCol" :wrapper-col="wrapperCol" labelAlign="left">
         <a-form-model-item class="flex" label="绘制区域" prop="sealData">
@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       editForm: {},
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
+      labelCol: { span: 4 },
+      wrapperCol: { span: 20 },
       rules: {
         shanggangyijian: [{ required: true, message: "不能为空", trigger: "change" }],
       },
@@ -83,4 +83,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+#signComp-model {
+  ::v-deep .ant-modal {
+    min-width: 800px !important;
+  }
+}
+</style>

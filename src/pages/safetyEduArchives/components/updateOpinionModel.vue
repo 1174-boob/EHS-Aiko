@@ -1,16 +1,12 @@
 <template>
-  <CommonModal :title="modelTitle" :visible="updateCommentsModelShow" :cancelFn="closeModel">
+  <CommonModal :title="modelTitle" :visible="updateOpinionModelShow" :cancelFn="closeModel">
     <template slot="form">
-      <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-
-        <a-form-model-item label="上岗意见" prop="shanggangyijian">
-          <a-radio-group v-model="formModel.shanggangyijian">
-            <a-radio v-for="item in getDictTarget('s', 'bossOpinion')" :key="item.key" :value="item.key">
-              {{ item.value }}
-            </a-radio>
+      <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }">
+        <a-form-model-item label="上岗意见" prop="bossOpinions">
+          <a-radio-group v-model="formModel.bossOpinions">
+            <a-radio v-for="item in getDictTarget('s', 'bossOpinion')" :key="item.key" :value="item.key">{{ item.value }}</a-radio>
           </a-radio-group>
         </a-form-model-item>
-
       </a-form-model>
     </template>
     <template slot="btn">
@@ -28,16 +24,14 @@ import { getDictTarget } from '@/utils/dictionary'
 export default {
   mixins: [cancelLoading],
   model: {
-    prop: 'updateCommentsModelShow',
+    prop: 'updateOpinionModelShow',
   },
-  props: ['updateCommentsModelShow', 'updateCommentsModelData'],
+  props: ['updateOpinionModelShow', 'updateOpinionModelData'],
   data() {
     return {
       getDictTarget,
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
       rules: {
-        shanggangyijian: [{ required: true, message: "不能为空", trigger: "change" }],
+        bossOpinions: [{ required: true, message: "不能为空", trigger: "change" }],
       },
       // 新增、修改表单
       formModel: {},
@@ -45,7 +39,7 @@ export default {
   },
   computed: {
     modelTitle() {
-      if (Array.isArray(this.updateCommentsModelData)) {
+      if (Array.isArray(this.updateOpinionModelData)) {
         return '批量更新上岗意见'
       } else {
         return '更新上岗意见'
@@ -59,14 +53,19 @@ export default {
         return;
       }
       this.handleLoading()
-      let ids = Array.isArray(this.updateCommentsModelData) ? this.updateCommentsModelData.map(item => item.id) : this.updateCommentsModelData.id
-      let apiData = { ...this.formModel, ids }
+      let idList = Array.isArray(this.updateOpinionModelData) ? this.updateOpinionModelData.map(item => item.id) : [this.updateOpinionModelData.id]
+      let apiData = { ...this.formModel, idList }
       pdateSafetyEduOnboarding(apiData)
         .then(res => {
           this.$emit('updateOnOk')
+          const msg = res.data
+          this.$antMessage.info({
+            content: `${msg}`,
+            duration: 5
+          });
           this.closeModel()
         })
-        .catch(err => {})
+        .catch(err => { })
         .finally(() => {
           setTimeout(() => {
             this.changeLoading()
@@ -79,7 +78,7 @@ export default {
     },
   },
   watch: {
-    updateCommentsModelShow(newVal) {
+    updateOpinionModelShow(newVal) {
       if (newVal) {
 
       } else {

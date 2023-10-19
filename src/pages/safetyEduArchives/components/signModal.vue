@@ -1,9 +1,16 @@
 <template>
-  <CommonModal :title="modelTitle" :visible="signModalShow" :cancelFn="closeModel">
+  <CommonModal :title="modelTitle" :visible="signModalShow" :cancelFn="closeModel" id="signComp-model">
     <template slot="form">
       <a-form-model ref="editForm" :model="editForm" :label-col="labelCol" :wrapper-col="wrapperCol" labelAlign="left">
         <a-form-model-item class="flex" label="签名区域" prop="sealData">
           <SignComp ref="signRef" />
+        </a-form-model-item>
+        <a-form-model-item class="flex" label="发送短信手机号">
+          <span style="font-Size:24px">{{userPhone}}</span>
+        </a-form-model-item>
+        <a-form-model-item class="flex" label="验证码" prop="code">
+          <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="formModel.code" placeholder="请输入验证码"></a-input>
+          <a-button @click="sendCode">发送短信</a-button>
         </a-form-model-item>
       </a-form-model>
     </template>
@@ -15,9 +22,11 @@
 </template>
 
 <script>
-import { signBatchSafetyEduApi,signSingleSafetyEduApi } from "@/services/safetyEduArchives"
+import { signBatchSafetyEduApi, signSingleSafetyEduApi } from "@/services/safetyEduArchives"
 import cancelLoading from "@/mixin/cancelLoading";
 import SignComp from '@/components/signComp/index.vue'
+import { debounce, cloneDeep } from 'lodash'
+import { responsibilitySendCode } from "@/services/api.js";
 export default {
   components: { SignComp },
   mixins: [cancelLoading],
@@ -28,14 +37,19 @@ export default {
   data() {
     return {
       editForm: {},
-      labelCol: { span: 3 },
-      wrapperCol: { span: 21 },
+      labelCol: { span: 4 },
+      wrapperCol: { span: 20 },
       rules: {
         shanggangyijian: [{ required: true, message: "不能为空", trigger: "change" }],
       },
       // 新增、修改表单
       formModel: {},
+      userPhone: undefined,
     };
+  },
+  created() {
+    let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+    this.userPhone = zconsole_userInfo.user.phone
   },
   computed: {
     // 是否批量签署
@@ -47,6 +61,14 @@ export default {
     },
   },
   methods: {
+    // 发送验证码
+    sendCode: debounce(function () {
+      responsibilitySendCode({})
+        .then((res) => {
+          this.$antMessage.success("发送成功！");
+        })
+        .catch((err) => { })
+    }, 250, { leading: true, trailing: false }),
     // 提交
     onSubmit() {
       const { base64UrlWithoutPrefix } = this.$refs.signRef.getSignBase64() || {}
@@ -54,22 +76,26 @@ export default {
         this.$antMessage.warn('请签署姓名!')
         return
       }
+      if (!this.formModel.code) {
+        this.$antMessage.warn('请输入验证码!')
+        return
+      }
       this.handleLoading()
       const apiMethodsName = this.isBatch ? 'signBatchSafetyEdu' : 'signSingleSafetyEdu'
       this[apiMethodsName](base64UrlWithoutPrefix)
-      .then(res=>{
-        this.$emit('signOnOk')
-        this.closeModel()
-      })
-      .catch(err=>{})
-      .finally(()=>{
-        setTimeout(() => {
-          this.changeLoading()
-        }, 300);
-      })
+        .then(res => {
+          this.$emit('signOnOk')
+          this.closeModel()
+        })
+        .catch(err => { })
+        .finally(() => {
+          setTimeout(() => {
+            this.changeLoading()
+          }, 300);
+        })
     },
     // 批量签署api
-    async signBatchSafetyEdu(sealData){
+    async signBatchSafetyEdu(sealData) {
       let params = {
         idList: this.signTargetData,
         sealData,
@@ -77,10 +103,12 @@ export default {
       await signBatchSafetyEduApi(params)
     },
     // 单独签署api
-    async signSingleSafetyEdu(sealData){
+    async signSingleSafetyEdu(sealData) {
       let params = {
-        idList: this.signTargetData,
+        phone: this.userPhone,
+        id: this.signTargetData.id,
         sealData,
+        code: this.formModel.code
       }
       await signSingleSafetyEduApi(params)
     },
@@ -107,6 +135,12 @@ export default {
 ::v-deep .ant-modal-content {
   .model-content-form {
     padding: 0 111px 0 102px !important;
+  }
+}
+
+#signComp-model {
+  ::v-deep .ant-modal {
+    min-width: 800px !important;
   }
 }
 </style>
