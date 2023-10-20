@@ -764,6 +764,9 @@ export const managementListPage = params => post(`${serviceNameList.health}/api/
 export const educationImportUser = params => post(`${serviceNameList.health}/api/ehs/security/education/import/user`, params);
 // 三级安全教育管理-三级安全教育管理发起
 export const educationAdd = params => post(`${serviceNameList.health}/api/ehs/security/education/add`, params);
+// 三级安全教育-重新发起
+export const againAddSafetyEduReSendApi = params => post(`${serviceNameList.health}/api/ehs/security/education/reIssue`, params);
+
 // 三级安全教育管理-三级安全教育管理删除
 export const educationDelete = params => post(`${serviceNameList.health}/api/ehs/security/education/delete`, params);
 // 三级安全教育管理-三级安全教育管理详情

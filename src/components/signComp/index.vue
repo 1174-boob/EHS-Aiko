@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sign-box">
     <div id="testEle" class="testInfo"></div>
     <a-button type="primary" class="m-r-15 m-t-10" @click="signUndo">
       撤销
@@ -59,7 +59,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.sign-box{
+  
+  
+}
 .testInfo {
+  width: 500px !important;
+  height: 200px !important;
+  box-sizing: content-box;
   border: 2px dashed grey;
   overflow: hidden;
 }

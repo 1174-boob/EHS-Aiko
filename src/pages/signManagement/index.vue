@@ -3,10 +3,6 @@
     <a-spin :spinning="pageSpinning" wrapperClassName="a-spin">
       <div class="page-title">
         <h3 class="page-title-content">我的签名</h3>
-        <!-- <div style="margin-right: 40px;"></div>
-        <a-button type="primary" @click="openSignModal">{{ signUrl ? '更换' : '签署' }}</a-button>
-        <div style="margin-right: 15px;"></div>
-        <a-button type="primary" @click="rmSign">删除</a-button> -->
       </div>
 
       <div class="sign-show-container">
@@ -119,8 +115,9 @@ export default {
 
 .sign-show-container {
   margin-bottom: 25px;
-  width: 530px;
-  padding: 10px;
+  width: 500px;
+  height: 200px;
+  box-sizing: content-box;
   border: 2px dashed grey;
   overflow: hidden;
   .sign-show {
@@ -128,7 +125,7 @@ export default {
     width: 100%;
   }
   .sign-empty{
-    height: 165px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

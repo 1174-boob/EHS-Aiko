@@ -18,7 +18,8 @@ export const signSingleSafetyEduApi = params => post(`${serviceNameList.health}/
 export const exportSafetyEduListApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/education/records/exportExcel`, params);
 // 三级安全教育-删除
 export const rmSafetyEduItemApi = params => post(`${serviceNameList.health}/api/ehs/security/education/records/delete`, params);
-
+// 三级安全教育-获取重新发起人员数据
+export const getSafetyEduReSendApi = params => post(`${serviceNameList.health}/api/ehs/security/education/records/check/reIssue`, params);
 // 签名管理-获取签名
 export const getSignManagementDataApi = params => post(`${serviceNameList.health}/api/ehs/security/seal/data/list/page`, params);
 // 签名管理-保存签名

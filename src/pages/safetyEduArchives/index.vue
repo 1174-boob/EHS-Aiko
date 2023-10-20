@@ -147,8 +147,8 @@ import cancelLoading from '@/mixin/cancelLoading'
 import dayJs from "dayjs"
 import { getDictTarget } from '@/utils/dictionary'
 import { rmDuplicatesByKey } from '@/utils/util'
-import { debounce, cloneDeep, setWith } from 'lodash'
-import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi, exportSafetyEduListApi } from "@/services/safetyEduArchives"
+import { debounce } from 'lodash'
+import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi, exportSafetyEduListApi,getSafetyEduReSendApi } from "@/services/safetyEduArchives"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 import UpdateOpinionModel from './components/updateOpinionModel.vue'
@@ -664,13 +664,26 @@ export default {
         this.$antMessage.warning('请正确选择重新发起人员！')
         return;
       } else {
-        sessionStorage.setItem('ehs_safetyEduArchives', JSON.stringify(this.choosedArr))
+        this.getSafetyEduReSend()
+      }
+    }, 500, { leading: true, trailing: false }),
+    // 重新发起前检验
+    getSafetyEduReSend(){
+      const idList = this.choosedArr.map(item=>item.id)
+      let apiData = {
+        idList,
+      }
+      getSafetyEduReSendApi(apiData)
+      .then(res=>{
+        const resData = res.data?.currentLevel ? res.data : []
+        sessionStorage.setItem('ehs_safetyEduArchives', JSON.stringify(resData))
         this.$router.push({
           path: '/ehsGerneralManage/securityArchiveManagement/safetyEduInitiate',
           query: { type: 'again' }
         })
-      }
-    }, 250, { leading: true, trailing: false }),
+      })
+      .catch(err=>{})
+    },
 
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys

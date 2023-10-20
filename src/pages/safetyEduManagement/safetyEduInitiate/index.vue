@@ -198,10 +198,9 @@ import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import SelTempDrawer from "./components/selTempDrawer.vue";
 import TempPreviewModel from './components/tempPreviewModel.vue';
-import { educationAdd, educationDetail } from '@/services/api.js'
+import { educationAdd, againAddSafetyEduReSendApi } from '@/services/api.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
-import { PushTask } from '@/services/api'
 import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
 import UploadImport from '@/pages/safetyEduManagement/safetyEduInitiate/components/uploadImport.vue'
@@ -402,16 +401,13 @@ export default {
       if (this.isAddPage) {
         this.spinning = false
       } else if (this.isAgainPage) {
-        this.againData = JSON.parse(sessionStorage.getItem('ehs_safetyEduArchives') || '[]')
-        if (this.againData.length) {
-          const targetObj = this.againData[0]
-          // 1公司级 2车间部门级 3班组级
-          this.againCurrentLevel = targetObj.currentLevel - 0
-          console.log('this.targetObj', targetObj);
-
-          this.$set(this.iFrom, 'type', targetObj.type)
-          this.$set(this.iFrom, 'securityEducationRecordsList', this.againData)
-
+        
+        this.againData = JSON.parse(sessionStorage.getItem('ehs_safetyEduArchives') || '{}')
+        const {currentLevel,type,securityEducationRecordsList} = this.againData
+        if (currentLevel) {
+          this.againCurrentLevel = currentLevel - 0
+          this.$set(this.iFrom, 'type', type)
+          this.$set(this.iFrom, 'securityEducationRecordsList', securityEducationRecordsList)
           setTimeout(() => {
             this.spinning = false
           }, 200);
@@ -446,7 +442,6 @@ export default {
 
     // 处理选择人员后的change事件数据
     getTreeData(value) {
-      console.log('value', value);
       const { treeIdList, treeNameAndCodeList } = value
 
       let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
@@ -520,45 +515,43 @@ export default {
       });
       return formAll
     },
-    // 代办推送
-    async pushTask(securityUser, operateId) {
-      if (operateId) {
-        const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${operateId}`
-        const pushTask = await PushTask({
-          title: "危险作业前确认",
-          approval: 'dangerWorkStatic',
-          userId: securityUser,
-          url: url,
-          docNumber: this.iFrom?.operateNumber,   //业务id
-          docId: operateId,  //主键id
-        })
-      }
-    },
     // 保存api
     iSave() {
       if (!this.formValidate() || this.spinning) {
         return
       }
 
-      let apiData = { ...this.iFrom }
-      // 处理模板数据
-      apiData.templateId = this.iFrom.selTempList[0].templateId
-      apiData.templateName = this.iFrom.selTempList[0].templateName
-      apiData.selTempList = undefined
-      console.log(apiData);
-
-      const apiName = this.isAddPage ? educationAdd : editDangerWorkStaticApi
+      const fnName = this.isAddPage ? 'addFn' : 'againAddFn'
       this.handleLoading();
-      apiName(apiData)
+      this[fnName]()
         .then(res => {
           this.$antMessage.success('保存成功');
-          // 跳转列表页
           this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement' })
         })
         .catch(err => { })
         .finally(() => {
           this.cancelLoading();
         })
+    },
+    // 发起api
+    addFn(){
+       let apiData = { ...this.iFrom }
+        // 处理模板数据
+        apiData.templateId = this.iFrom.selTempList[0].templateId
+        apiData.templateName = this.iFrom.selTempList[0].templateName
+        apiData.selTempList = undefined
+        return educationAdd(apiData)
+    },
+    // 重新发起api
+    againAddFn(){
+      let apiData = { ...this.iFrom }
+      // 处理模板数据
+      apiData.templateId = this.iFrom.selTempList[0].templateId
+      apiData.templateName = this.iFrom.selTempList[0].templateName
+      apiData.selTempList = undefined
+      // 处理培训人员数据
+      apiData.idList = this.iFrom.securityEducationRecordsList.map(item=>item.recordsId)
+      return againAddSafetyEduReSendApi(apiData)
     },
     // 取消
     cancleSubmit() {
