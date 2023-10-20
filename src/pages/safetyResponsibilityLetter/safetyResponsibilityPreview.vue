@@ -97,7 +97,8 @@
               <span style="font-Size:24px">{{userPhone}}</span>
             </a-form-model-item>
             <a-form-model-item class="flex" :label-col="labelCol" :wrapper-col="wrapperCol" label="验证码" prop="code">
-              <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input><a-button @click="sendCode">发送短信</a-button>
+              <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input>
+              <SendCodeButton/>
             </a-form-model-item>
           </a-form-model>
         </template>
@@ -118,6 +119,7 @@
 
 <script>
 import { formValidator } from "@/utils/clx-form-validator.js"
+import SendCodeButton from '@/components/sendCodeButton/index.vue'
 import FixedBottom from "@/components/commonTpl/fixedBottom";
 import { responsibilityDetail,responsibilitySendCode,responsibilitySign} from "@/services/api.js";
 import '@/utils/dzjm.min.js'
@@ -126,7 +128,7 @@ import pdf from "vue-pdf";
 import CMapReaderFactory from "vue-pdf-signature/src/CMapReaderFactory.js";
 import { debounce } from "lodash";
 export default {
-  components: { FixedBottom, pdf },
+  components: { FixedBottom, pdf,SendCodeButton },
   data() {
     this.sendCode = debounce(this.sendCode, 800);
     return {
