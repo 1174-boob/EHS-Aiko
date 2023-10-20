@@ -785,6 +785,13 @@ export const securityCertificate = params => post(`${serviceNameList.health}/api
 export const hazardNotification = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/occupational/hazard/notification`, params);
 // 安全档案报表-安全责任书
 export const responsibilityStatement = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/safety/responsibility/statement`, params);
+// 安全档案报表-培训数据
+export const educationRecords = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/education`, params);
+// 安全档案报表-三级安全
+export const reportRecords = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/education/records`, params);
+// 安全档案报表-汇总
+export const reportSummary= params => post(`${serviceNameList.health}/api/ehs/safety/file/report/summary`, params);
+
 
 // 危害岗位信息数据库
 // 危害岗位-分页查询
