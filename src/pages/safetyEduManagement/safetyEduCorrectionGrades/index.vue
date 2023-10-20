@@ -26,18 +26,6 @@
               <span>{{ row.deptName ? row.deptName : '--' }}</span>
             </template>
           </vxe-column>
-          <vxe-colgroup title="车间(部门)级别">
-            <vxe-column field="deptScore" title="员工填写">
-              <template #default="{ row }">
-                <span>{{ row.deptScore }}</span>
-              </template>
-            </vxe-column>
-            <vxe-column field="deptCorrectScore" title="讲师纠错">
-              <template #default="{ row }">
-                <a-input :disabled="type == 'show'" @change="handleChange(row)" class="editable-input" v-model="row.deptCorrectScore" :maxLength="30"></a-input>
-              </template>
-            </vxe-column>
-          </vxe-colgroup>
           <vxe-colgroup title="公司级">
             <vxe-column field="companyScore" title="员工填写">
               <template #default="{ row }">
@@ -46,7 +34,19 @@
             </vxe-column>
             <vxe-column field="companyCorrectScore" title="讲师纠错">
               <template #default="{ row }">
-                <a-input :disabled="type == 'show'" @change="handleChange(row)" class="editable-input" v-model="row.companyCorrectScore" :maxLength="30"></a-input>
+                <a-input :disabled="type == 'show' || currentLevel != 1" @change="handleChange(row)" class="editable-input" v-model="row.companyCorrectScore" :maxLength="30"></a-input>
+              </template>
+            </vxe-column>
+          </vxe-colgroup>
+          <vxe-colgroup title="车间(部门)级别">
+            <vxe-column field="deptScore" title="员工填写">
+              <template #default="{ row }">
+                <span>{{ row.deptScore }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="deptCorrectScore" title="讲师纠错">
+              <template #default="{ row }">
+                <a-input :disabled="type == 'show' || currentLevel != 2" @change="handleChange(row)" class="editable-input" v-model="row.deptCorrectScore" :maxLength="30"></a-input>
               </template>
             </vxe-column>
           </vxe-colgroup>
@@ -58,7 +58,7 @@
             </vxe-column>
             <vxe-column field="groupCorrectScore" title="讲师纠错">
               <template #default="{ row }">
-                <a-input :disabled="type == 'show'" @change="handleChange(row)" class="editable-input" v-model="row.groupCorrectScore" :maxLength="30"></a-input>
+                <a-input :disabled="type == 'show' || currentLevel != 3" @change="handleChange(row)" class="editable-input" v-model="row.groupCorrectScore" :maxLength="30"></a-input>
               </template>
             </vxe-column>
           </vxe-colgroup>
@@ -95,6 +95,7 @@ export default {
     return{
       id:'',
       type:'',
+      currentLevel:'',
       safetyEducationForm:{},
       dataSource:[],
       page: {
@@ -153,6 +154,7 @@ export default {
       educationDetail({ id: this.id })
         .then((res) => {
           this.safetyEducationForm = res.data ? res.data : null;
+          this.currentLevel = res.data.currentLevel
         })
         .catch((err) => {
           console.log('err1',err);
