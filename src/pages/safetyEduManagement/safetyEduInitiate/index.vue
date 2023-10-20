@@ -553,7 +553,7 @@ export default {
         .then(res => {
           this.$antMessage.success('保存成功');
           // 跳转列表页
-          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement' })
+          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement',query:{activeKey:1}})
         })
         .catch(err => { })
         .finally(() => {

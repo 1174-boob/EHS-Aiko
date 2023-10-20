@@ -269,6 +269,11 @@ export default {
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
     this.userId = zconsole_userInfo.user.userId
   },
+  activated(){
+    if(this.$route.query.activeKey == 1){
+      this.getDataList()
+    }
+  },
   methods: {
     async init() {
       this.getDataList()
