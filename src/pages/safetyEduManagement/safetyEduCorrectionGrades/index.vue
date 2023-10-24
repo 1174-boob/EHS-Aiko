@@ -18,7 +18,7 @@
         >
           <vxe-column field="userName" title="姓名">
             <template #default="{ row }">
-              <span>{{ row.userName ? row.userName : '--' }}</span>
+              <span>{{ row.userName ? row.userName : '--' }}/{{ row.userJobNumber ? row.userJobNumber : '--' }}</span>
             </template>
           </vxe-column>
           <vxe-column field="deptName" title="部门">
@@ -68,8 +68,6 @@
             </div>
           </template>
         </vxe-table>
-
-
       </CommonTable>
       <DashBtn>
         <div></div>
@@ -164,6 +162,7 @@ export default {
       getEducationUserListPage({ id: this.id ,pageNo: this.page.pageNo,pageSize: this.page.pageSize})
         .then((res) => {
           this.dataSource = res.data.list ? res.data.list : [];
+          console.log('res.data.list',res.data.list);
           this.page.total = res.data.total
         })
         .catch((err) => {

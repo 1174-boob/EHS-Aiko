@@ -8,6 +8,68 @@
           </a-radio-group>
         </a-form-model-item>
       </a-form-model>
+      <CommonTable>
+        <vxe-table
+          class="vxe-scrollbar beauty-scroll-fireBox"
+          border
+          show-overflow
+          align="center"
+          :data="dataSource"
+          show-header-overflow
+        >
+          <vxe-column field="userName" title="姓名">
+            <template #default="{ row }">
+              <span>{{ row.userName ? row.userName : '--' }}/{{ row.userJobNumber ? row.userJobNumber : '--' }}</span>
+            </template>
+          </vxe-column>
+          <vxe-column field="deptName" title="部门">
+            <template #default="{ row }">
+              <span>{{ row.deptName ? row.deptName : '--' }}</span>
+            </template>
+          </vxe-column>
+          <vxe-colgroup title="公司级">
+            <vxe-column field="companyScore" title="员工填写">
+              <template #default="{ row }">
+                <span>{{ row.companyScore }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="companyCorrectScore" title="讲师纠错">
+              <template #default="{ row }">
+                <span>{{ row.companyCorrectScore }}</span>
+              </template>
+            </vxe-column>
+          </vxe-colgroup>
+          <vxe-colgroup title="车间(部门)级别">
+            <vxe-column field="deptScore" title="员工填写">
+              <template #default="{ row }">
+                <span>{{ row.deptScore }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="deptCorrectScore" title="讲师纠错">
+              <template #default="{ row }">
+                <span>{{ row.deptCorrectScore }}</span>
+              </template>
+            </vxe-column>
+          </vxe-colgroup>
+          <vxe-colgroup title="班组级">
+            <vxe-column field="groupScore" title="员工填写">
+              <template #default="{ row }">
+                <span>{{ row.groupScore }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="groupCorrectScore" title="讲师纠错">
+              <template #default="{ row }">
+                <span>{{ row.groupCorrectScore }}</span>
+              </template>
+            </vxe-column>
+          </vxe-colgroup>
+          <template #empty>
+            <div style="padding:16px 0;">
+              <a-empty />
+            </div>
+          </template>
+        </vxe-table>
+      </CommonTable>
     </template>
     <template slot="btn">
       <a-button type="dashed" @click="closeModel">取消</a-button>
@@ -38,6 +100,11 @@ export default {
     };
   },
   computed: {
+    dataSource() {
+      console.log('this.updateOpinionModelData',this.updateOpinionModelData);
+      // return this.updateOpinionModelData? [this.updateOpinionModelData] : []
+      return Array.isArray(this.updateOpinionModelData)? this.updateOpinionModelData : [this.updateOpinionModelData]
+    },
     modelTitle() {
       if (Array.isArray(this.updateOpinionModelData)) {
         return '批量更新上岗意见'
@@ -91,4 +158,12 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+::v-deep .ant-modal-content {
+  width: 917px;
+}
+::v-deep .model-content-form {
+  padding: 0px 30px 0 70px!important;
+}
+
+</style>
