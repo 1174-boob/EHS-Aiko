@@ -367,7 +367,7 @@ export default {
         this.$antMessage.warning('请选择推送人员！')
         return
       }
-      if (this.choosedArr.some(item => item.signatureStatus == 0 || item.signatureStatus == 1)) {
+      if (this.choosedArr.every(item => item.signatureStatus == 0 || item.signatureStatus == 1)) {
         const personIds = this.choosedArr.map(item => {
           return item.id
         })
@@ -394,10 +394,15 @@ export default {
         this.$antMessage.warning('至少选择一条数据！')
         return
       }
-      this.choosedArr.forEach(item => {
-        window.open(item.file.filePath);
-      })
-      this.choosedArr = []
+      if (this.choosedArr.every(item => item.signatureStatus == 2)) {
+          this.choosedArr.forEach(item => {
+          window.open(item.file.filePath);
+        })
+        this.choosedArr = []
+      } else {
+        this.$antMessage.warning('请下载员工已签署的文件！')
+        return;
+      }
     },
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys

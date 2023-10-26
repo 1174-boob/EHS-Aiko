@@ -382,7 +382,7 @@ export default {
         this.$antMessage.warning('请选择推送人员！')
         return
       }
-      if (this.choosedArr.some(item => item.signatureStatus == 0 || item.signatureStatus == 1)) {
+      if (this.choosedArr.every(item => item.signatureStatus == 0 || item.signatureStatus == 1)) {
         const personIds = this.choosedArr.map(item => {
           return item.id
         })
