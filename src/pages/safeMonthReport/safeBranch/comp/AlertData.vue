@@ -348,7 +348,7 @@ export default {
       const { data } = await monthAlarmDetail(para)
       this.alertTableData = data.alarmAnalyseVoList
       // console.log('查看', this.alertTableData);
-      this.realTableData = data.alarmAnalyseTrueVoList
+      this.realTableData = data.alarmAnalyseTrueVoList == null ? [] :data.alarmAnalyseTrueVoList
       console.log('查看data', data);
       console.log('查看data.alarmAnalyseTrueVoList', this.realTableData);
 

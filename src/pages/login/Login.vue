@@ -256,6 +256,7 @@ export default {
       if (result.code == 20000) {
         sessionStorage.setItem('zconsole_userInfo', JSON.stringify(result.data));
         sessionStorage.setItem('userName', result.data.user.name);
+        sessionStorage.setItem('userId', result.data.user.userId);
         this.$router.push("/overview/preview");
       }
     }
