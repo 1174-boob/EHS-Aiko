@@ -16,6 +16,8 @@ export const signBatchSafetyEduApi = params => post(`${serviceNameList.health}/a
 export const signSingleSafetyEduApi = params => post(`${serviceNameList.health}/api/ehs/security/education/records/sign/person`, params);
 // 三级安全教育-批量导出
 export const exportSafetyEduListApi = params => postExcel(`${serviceNameList.health}/api/ehs/security/education/records/exportExcel`, params);
+// 三级安全教育-终止
+export const stopSafetyEduItemApi = params => post(`${serviceNameList.health}/api/ehs/security/education/records/stop`, params);
 // 三级安全教育-删除
 export const rmSafetyEduItemApi = params => post(`${serviceNameList.health}/api/ehs/security/education/records/delete`, params);
 // 三级安全教育-获取重新发起人员数据

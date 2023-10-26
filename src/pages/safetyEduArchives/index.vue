@@ -123,7 +123,22 @@
             <span>{{ text }}</span>
           </a-popover>
         </template>
+
+        <template slot="securitySignRecordList" slot-scope="text,record,index">
+          <span v-if="!text">--</span>
+          <a-popover v-else autoAdjustOverflow title="签署人">
+            <ul slot="content">
+              <li v-for="item in text" :key="item.id">
+                <div>{{item.signatoriesNodeStatus ? getDictTarget('s', 'securityEducationNodeStatus', item.signatoriesNodeStatus) : '--'}}：</div>
+                <p>{{item.signatoriesName}}/{{item.signatoriesJobNumber}}&nbsp;&nbsp;&nbsp;{{dayJs(item.signatoriesTime).format('YYYY-MM-DD') }}</p>
+              </li>
+            </ul>
+            <span>查看记录</span>
+          </a-popover>
+        </template>
+
         <div slot="action" slot-scope="record">
+          <span class="color-0067cc cursor-pointer" v-if="record.status == '1'" @click="stopSafetyEduItem(record)">终止</span>
           <span class="color-0067cc cursor-pointer" v-if="record.canUpdateOpinion" @click="openUpdateOpinionModel(record)">上岗意见</span>
           <!-- 签署：非完成状态、存在上岗意见、本人 -->
           <span class="color-0067cc cursor-pointer" v-if="record.status != 2 && record.deptBossOpinion && record.userId == userId" @click="batchSign(record)">签署</span>
@@ -148,7 +163,7 @@ import dayJs from "dayjs"
 import { getDictTarget } from '@/utils/dictionary'
 import { rmDuplicatesByKey } from '@/utils/util'
 import { debounce } from 'lodash'
-import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, rmSafetyEduItemApi, exportSafetyEduListApi,getSafetyEduReSendApi } from "@/services/safetyEduArchives"
+import { getSafetyEduPeopleNum, getSafetyEduTableList, pushBatchSafetyEdu, stopSafetyEduItemApi,rmSafetyEduItemApi, exportSafetyEduListApi,getSafetyEduReSendApi } from "@/services/safetyEduArchives"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 import UpdateOpinionModel from './components/updateOpinionModel.vue'
@@ -372,35 +387,14 @@ export default {
         {
           title: '签署记录',
           dataIndex: 'securitySignRecordList',
-          customRender: (text) => {
-            if (!text) {
-              return '--';
-            }
-            text[0] = text ? text[0] : '--';
-            const signatoriesJobNumberFirst = text[0] && text[0].signatoriesJobNumber ? text[0].signatoriesJobNumber : '--';
-            const signatoriesNameFirst = text[0] && text[0].signatoriesName ? text[0].signatoriesName : '--';
-            const signatoriesTimeFirst = text[0] && text[0].signatoriesTime ? text[0].signatoriesTime.split(' ')[0] : '--';
-            text[1] = text ? text[1] : '--';
-            const signatoriesJobNumberSecond = text[1] && text[1].signatoriesJobNumber ? text[1].signatoriesJobNumber : '--';
-            const signatoriesNameSecond = text[1] && text[1].signatoriesName ? text[1].signatoriesName : '--';
-            const signatoriesTimeSecond = text[1] && text[1].signatoriesTime ? text[1].signatoriesTime.split(' ')[0] : '--';
-            return (
-              <a-popover autoAdjustOverflow title="签署人">
-                <div slot="content">
-                  目标责任人：<p>{signatoriesNameFirst}/{signatoriesJobNumberFirst}&nbsp;&nbsp;&nbsp;{signatoriesTimeFirst}</p>
-                  部门负责人：<p>{signatoriesNameSecond}/{signatoriesJobNumberSecond}&nbsp;&nbsp;&nbsp;{signatoriesTimeSecond}</p>
-                </div>
-                <span>查看记录</span>
-              </a-popover>
-            );
-          },
+          scopedSlots: { customRender: 'securitySignRecordList' },
           width: 150,
         },
         {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           fixed: 'right', // 固定操作列
-          width: 200 // 宽度根据操作自定义设置
+          width: 240 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
@@ -421,6 +415,7 @@ export default {
     }, 20);
   },
   methods: {
+    dayJs,
     async init() {
       this.getDataList()
       this.getCertCount()
@@ -536,10 +531,10 @@ export default {
       }
     },
 
-    // 获取是否能更新上岗意见（班组级、有成绩的结果，未填写意见）
+    // 获取是否能更新上岗意见（当前人员的部门经理、班组级、有成绩的结果，未填写意见）
     getCanUpdateOpinion(targetItem) {
       // 班组级 currentLevel 1公司级别  2车间部门级 3班组级
-      return targetItem.currentLevel == 3 && targetItem.currentScoreStatus && !targetItem.deptBossOpinion
+      return this.userId == targetItem.bossUserId && targetItem.currentLevel == 3 && targetItem.currentScoreStatus && !targetItem.deptBossOpinion
     },
     // 上岗意见（班组级、有成绩的结果，未填写意见）
     openUpdateOpinionModel(targetItem) {
@@ -741,6 +736,24 @@ export default {
       this.$router.push({
         path: '/ehsGerneralManage/securityArchiveManagement/safetyEduArchivesPreview',
         query,
+      })
+    },
+    // 中止
+    stopSafetyEduItem(row){
+      if (!this.canClickBtnMixin("safetyEduArchivesStopSafetyEduItem")) {
+        return;
+      }
+      this.$antConfirm({
+        title: '确认终止？',
+        onOk: async () => {
+          let para = {
+            recordsId: row.id
+          }
+          await stopSafetyEduItemApi(para)
+          this.$antMessage.success('终止成功')
+          this.getDataList()
+          this.getCertCount()
+        }
       })
     },
     // 删除
