@@ -138,7 +138,7 @@
         </template>
 
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" v-if="record.status == '1'" @click="stopSafetyEduItem(record)">终止</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.status == '1'" @click="stopSafetyEduItem(record)">中止</span>
           <span class="color-0067cc cursor-pointer" v-if="record.canUpdateOpinion" @click="openUpdateOpinionModel(record)">上岗意见</span>
           <!-- 签署：非完成状态、存在上岗意见、本人 -->
           <span class="color-0067cc cursor-pointer" v-if="record.status != 2 && record.deptBossOpinion && record.userId == userId" @click="batchSign(record)">签署</span>
@@ -744,13 +744,13 @@ export default {
         return;
       }
       this.$antConfirm({
-        title: '确认终止？',
+        title: '确认中止？',
         onOk: async () => {
           let para = {
             recordsId: row.id
           }
           await stopSafetyEduItemApi(para)
-          this.$antMessage.success('终止成功')
+          this.$antMessage.success('中止成功')
           this.getDataList()
           this.getCertCount()
         }
