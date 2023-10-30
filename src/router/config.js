@@ -19,6 +19,7 @@ import { networkControl } from './children/networkControl'
 import { improveProposal } from './children/improveProposal'
 import { performanceManagement } from './children/performanceManagement'
 import { performanceManagementBranch, performanceManagementBranchMap } from './children/performanceManagementBranch'
+import { maturityEvaluationRouteData } from './children/maturityEvaluationRouteData'
 import { specialDevice } from './children/specialDevice'
 // import { getDictTree } from '@/services/api'
 import { accidentManagementDA, dangerWorkDA, resourcepoolDA, hiddenPerilsDA, emergencyManagementDA } from './children/dataAnalysis/dataAnalysis.js'
@@ -1877,6 +1878,19 @@ const options = {
               component: NoBreadcrumb,
               children: [
                 ...performanceManagementBranch,
+              ]
+            },
+            {
+              path: 'maturityEvaluation',
+              name: '成熟度评价',
+              meta: {
+                title: '成熟度评价',
+                icon: 'none',
+                isPage: false,
+              },
+              component: NoBreadcrumb,
+              children: [
+                ...maturityEvaluationRouteData,
               ]
             },
           ]
