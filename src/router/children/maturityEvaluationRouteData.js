@@ -49,6 +49,15 @@ export const maturityEvaluationRouteData = [
     },
     component: resolve => require(['@/pages/maturityEvaluation/maturityEvaluationData/dataFilling.vue'], resolve),
   },
+  {
+    path: 'maturityEvaluationSummary',
+    name: '成熟度评价汇总',
+    meta: {
+      title: '成熟度评价汇总',
+      isPage: true,
+    },
+    component: resolve => require(['@/pages/maturityEvaluation/maturityEvaluationSummary/index.vue'], resolve),
+  },
   // {
   //   path: 'performanceCorporation',
   //   name: '管理绩效-现地',

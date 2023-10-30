@@ -229,7 +229,7 @@ export default {
     },
     // 重置
     iRest: debounce(function () {
-      this.$refs.commonDept.reset();
+      this.$refs?.commonDept?.reset();
       this.page = {
         pageNo: 1,
         pageSize: 10,
