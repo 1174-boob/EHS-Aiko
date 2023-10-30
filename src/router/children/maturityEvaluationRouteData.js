@@ -28,7 +28,27 @@ export const maturityEvaluationRouteData = [
     },
     component: resolve => require(['@/pages/maturityEvaluation/maturityEvaluationQuotaReport/addAndEdit.vue'], resolve),
   },
-
+  {
+    path: 'maturityEvaluationData',
+    name: '成熟度评价数据',
+    meta: {
+      title: '成熟度评价数据',
+      isPage: true,
+      routerCode:'',
+      isKeepalive:true,
+    },
+    component: resolve => require(['@/pages/maturityEvaluation/maturityEvaluationData/index.vue'], resolve),
+  },
+  {
+    path: 'maturityEvaluationDataFilling',
+    name: '填报成熟度评价数据',
+    meta: {
+      title: '填报成熟度评价数据',
+      isPage: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/maturityEvaluation/maturityEvaluationData/dataFilling.vue'], resolve),
+  },
   // {
   //   path: 'performanceCorporation',
   //   name: '管理绩效-现地',
