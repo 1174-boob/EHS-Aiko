@@ -307,6 +307,54 @@ const options = {
                       component: resolve => require(['@/pages/accidentManagement/accident/index.vue'], resolve),
                     },
                     {
+                      path: 'accidentQuickReportList',
+                      name: '事故快报台账',
+                      meta: {
+                        title: '事故快报台账',
+                        routerCode:'accidentQuickReportList',
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/index.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportCreate',
+                      name: '新建事故快报',
+                      meta: {
+                        title: '新建事故快报',
+                        routerCode:'accidentQuickReportList',
+                        isPage: true,
+                        invisible: true,
+                        isCreate: true, // 新建
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/accidentQuickReportCreate.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportEdit',
+                      name: '编辑事故快报',
+                      meta: {
+                        title: '编辑事故快报',
+                        routerCode:'accidentQuickReportList',
+                        isPage: true,
+                        invisible: true,
+                        isEdit: true // 编辑
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/accidentQuickReportCreate.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportDetail',
+                      name: '查看事故快报',
+                      meta: {
+                        title: '查看事故快报',
+                        routerCode:'accidentQuickReportList',
+                        isPage: true,
+                        invisible: true,
+                        disabled: true,
+                        isView: true, // 查看
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/accidentQuickReportCreate.vue'], resolve),
+                    },
+                    {
                       path: 'accidentDraft',
                       name: '事故事件草稿箱',
                       meta: {
