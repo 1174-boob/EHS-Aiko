@@ -27,7 +27,8 @@ const serviceNameList = {
   ehsKpi: process.env.VUE_APP_KPI,
   safe: process.env.VUE_APP_SAFE,
   kpi: process.env.VUE_APP_KPI,
-  monitor: process.env.VUE_APP_MONITOR
+  monitor: process.env.VUE_APP_MONITOR,
+  customization: process.env.VUE_APP_CUSTOMIZATION,
 }
 window.serviceName = serviceNameList;
 export default serviceNameList;
