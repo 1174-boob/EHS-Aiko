@@ -1,10 +1,10 @@
 <template>
-  <!-- 邀请列表 -->
+  <!-- 选择指标 -->
   <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <SearchTerm>
       <a-form-model layout="inline" :model="searchFormData" :colon="false">
-        <a-form-model-item label="指标名称">
-          <a-input v-model="searchFormData.indexInfo" placeholder="请输入指标名称"></a-input>
+        <a-form-model-item label="项目">
+          <a-input v-model="searchFormData.project" placeholder="请输入项目"></a-input>
         </a-form-model-item>
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -12,7 +12,7 @@
         </a-form-model-item>
       </a-form-model>
     </SearchTerm>
-    <!-- 列表 -->
+
     <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
       <a-table
         :columns="columns"
@@ -20,17 +20,17 @@
         :data-source="tableDataList"
         :pagination="false"
         :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange,fixed:true }"
-        rowKey="id"
+        :rowKey="tableRowKey"
         bordered
       >
-        <div slot="deductPoints" slot-scope="record">
-          <p v-for="(i,index) in record" :key="index">{{i}}</p>
+        <div slot="calculationDetails" slot-scope="record" class="table-p-box">
+          <p v-for="(i,index) in record" :key="index" :title="i">{{i}}</p>
         </div>
-        <div slot="unit" slot-scope="record">
-          <p v-for="(i,index) in record" :key="index">{{i}}</p>
+        <div slot="indicatorUnit" slot-scope="record" class="table-p-box">
+          <p v-for="(i,index) in record" :key="index" :title="i">{{i}}</p>
         </div>
-        <div slot="deductScore" slot-scope="record">
-          <p v-for="(i,index) in record" :key="index">{{i}}</p>
+        <div slot="pointsDeductions" slot-scope="record" class="table-p-box">
+          <p v-for="(i,index) in record" :key="index" :title="i">{{i}}</p>
         </div>
       </a-table>
     </CommonTable>
@@ -39,26 +39,16 @@
 
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
-import getDictionaryItemObj from "@/utils/dictionary.js";
-import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { cloneDeep, debounce } from "lodash";
-import { getDeviceInfoList } from "@/services/deviceSafety.js";
-import { getKpiIndexList } from "@/services/performanceManagementBranch.js";
-import serviceNameList from "@/config/default/service.config.js";
-import { findCorporationId } from '@/utils/common.js'
+import { getMaturityEvaluaList } from "@/services/maturityEvaluation.js";
 import teableSelected from "@/mixin/teableSelected";
-import dayJs from "dayjs";
 export default {
-  components: { UploadBtnStyle },
   mixins: [cancelLoading, teableSelected],
   props: {
     selectedRowOld: {
       type: Array,
       default: () => []
     },
-    // corporationId: {
-    //     required: true
-    // },
   },
   data() {
     return {
@@ -68,81 +58,98 @@ export default {
         total: 0,
       },
       searchFormData: {},
-      optionList: [
-        {
-          key: '0',
-          value: '在用'
-        }, {
-          key: '1',
-          value: '停用'
-        }, {
-          key: '2',
-          value: '拆除'
-        }
-      ],
       columns: [
         {
-          title: '指标类型',
-          dataIndex: 'zhibiaoleixing',
+          title: '设立目的',
+          dataIndex: 'purposeOfEstablishment',
           width: 200,
         },
         {
-          title: '指标名称',
-          dataIndex: 'indexInfo',
+          title: '项目',
+          dataIndex: 'project',
           width: 200,
         },
         {
-          title: '风险分值',
-          dataIndex: 'riskScore',
+          title: '定义',
+          dataIndex: 'definition',
+          width: 200,
+        },
+        {
+          title: '分值',
+          dataIndex: 'score',
           width: 100,
         },
         {
-          title: '扣分标准',
-          scopedSlots: { customRender: 'deductPoints' },
-          dataIndex: 'deductPoints',
-          width: 200,
+          title: '计算明细',
+          scopedSlots: { customRender: 'calculationDetails' },
+          dataIndex: 'calculationDetails',
+          width: 400,
         },
         {
-          title: '指标单位',
-          scopedSlots: { customRender: 'unit' },
-          dataIndex: 'unit',
+          title: '单位',
+          scopedSlots: { customRender: 'indicatorUnit' },
+          dataIndex: 'indicatorUnit',
           width: 100,
         },
         {
           title: '扣分分值',
-          scopedSlots: { customRender: 'deductScore' },
-          dataIndex: 'deductScore',
+          scopedSlots: { customRender: 'pointsDeductions' },
+          dataIndex: 'pointsDeductions',
           width: 100,
         },
         {
           title: '备注',
-          dataIndex: 'remake',
+          dataIndex: 'remarks',
           width: 200,
         },
-        // {
-        //   title: '修改人',
-        //   dataIndex: 'updateUserName',
-        //   width: 200,
-        // },
       ],
       tableDataList: [],
-      tableRowKey: 'id',
-      selectedRowKeys: [],
-      selectedRow: [],
+      tableRowKey: 'maturityEvaluationIndexId',
     };
   },
-  computed: {},
   created() {
     this.selectedRow = cloneDeep(this.selectedRowOld)
     this.selectedRowKeys = this.selectedRowOld.map(item => item[this.tableRowKey]).filter(item => item || item === 0)
     this.initData();
   },
-  mounted() { },
   methods: {
-    // 页码改变
-    pageNoChange(page) {
-      this.page.pageNo = page;
-      // 获取列表
+    initData() {
+      let params = {
+        ...this.searchFormData,
+        ...this.page
+      }
+      getMaturityEvaluaList(params)
+        .then(res => {
+          let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
+          // 处理页码 问题
+          if (tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
+            this.page.pageNo = 1;
+            this.initData();
+            return
+          }
+
+          this.tableDataList = (tableDataList || []).map(i => {
+            i.calculationDetails = i.itemList.map(item => item.calculationDetails)
+            i.indicatorUnit = i.itemList.map(item => item.indicatorUnit)
+            i.pointsDeductions = i.itemList.map(item => item.pointsDeductions)
+            return i
+          })
+          this.page.total = total;
+        })
+        .catch(err => { })
+        .finally(() => {
+          this.cancelLoading();
+        })
+    },
+    // 查询
+    iSearch() {
+      this.page = {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      };
+      this.clearSelectedTable()
+      this.handleLoading();
       this.initData();
     },
     // 重置
@@ -153,62 +160,37 @@ export default {
           pageSize: 10,
           total: 0,
         };
+        this.clearSelectedTable()
         this.searchFormData = {};
         this.initData();
       },
       250,
       { leading: true, trailing: false }
     ),
-    // 查询
-    iSearch() {
-      this.page = {
-        pageNo: 1,
-        pageSize: 10,
-        total: 0,
-      };
-      this.handleLoading();
+    // 页码改变
+    pageNoChange(page) {
+      this.page.pageNo = page;
       this.initData();
     },
-    // 字典组每页展示条数改变
     showSizeChange(page, pageSize) {
       this.page.pageNo = 1;
       this.page.pageSize = pageSize;
       this.initData();
     },
-    initData() {
-      getKpiIndexList({ ...this.searchFormData, ...this.page }).then(res => {
-        this.tableDataList = res.data.list.map(i => {
-          i.deductPoints = i.indexItems.map(item => item.deductPoints)
-          i.unit = i.indexItems.map(item => item.unit)
-          i.deductScore = i.indexItems.map(item => item.deductScore)
-          return i
-        })
-        this.page.total = res.data.total
-      })
-    },
-    //处理一下数据
-    dispose(data) {
-      let arr = data.map(i => {
-        i.deductPoints = i.indexItems.map(item => item.deductPoints)
-        i.unit = i.indexItems.map(item => item.unit)
-        i.deductScore = i.indexItems.map(item => item.deductScore)
-        return i
-      })
-      return arr
-    },
-    //
-    // onSelectChange (e) {
-    //     console.log(e)
-    //     this.selectedRowKeys = e
-    // }
   },
 };
 </script>
 
 <style lang="less" scoped>
-.shenglvhao {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+.table-p-box {
+  & > p {
+    margin-bottom: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &:nth-last-child(1) {
+      margin-bottom: 0px;
+    }
+  }
 }
 </style>

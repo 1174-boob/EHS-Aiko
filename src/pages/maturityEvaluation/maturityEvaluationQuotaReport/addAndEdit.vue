@@ -3,158 +3,77 @@
     <PageTitle>配置成熟度评价填报表</PageTitle>
     <DashBtn>
       <div>
-        <a-button type="dashed" v-if="showSelectDept" @click="selectCorporation"
-          >选择部门</a-button
-        >
+        <a-button type="dashed" v-if="showSelectDept" @click="selectCorporation">选择部门</a-button>
         <a-button type="dashed" @click="selectIndex">选择指标</a-button>
       </div>
     </DashBtn>
     <PageTitle>
       部门：
-      <template v-if="selectDeptList.length">
-        <span v-for="(i, index) in selectDeptList" :key="index"
-          >{{ i.deptName }},</span
-        >
+      <template v-if="Array.isArray(selectDeptList) && selectDeptList.length">
+        <span>{{selectDeptList.map(item=>item.deptName).join('、')}}</span>
       </template>
-      <template v-else
-        ><span class="font-14 color-999"
-          >请点击上方”选择组织“按钮选择组织</span
-        ></template
-      >
+      <template v-else>
+        <span class="font-14 color-999">请点击上方”选择组织“按钮选择组织</span>
+      </template>
     </PageTitle>
     <!-- 启用分值档位 -->
     <div>
-      <a-checkbox v-model="startStatus" @change="handleScoreChange">
-        启用分值档位
-      </a-checkbox>
+      <a-checkbox v-model="startStatus" @change="handleScoreChange">启用分值档位</a-checkbox>
       <div v-if="startStatus">
-        <a-form-model
-          ref="scoreForm"
-          labelAlign="right"
-          :model="scoreFormData"
-          :rules="scoreFormDataRules"
-          :colon="false"
-        >
+        <a-form-model ref="scoreForm" labelAlign="right" :model="scoreFormData" :rules="scoreFormDataRules" :colon="false">
           <a-row type="flex" justify="space-between">
             <a-col :span="6">
-              <a-form-model-item
-                label="A档分值"
-                :rules="scoreFormDataRules.aScore[0]"
-              >
+              <a-form-model-item label="A档分值" :rules="scoreFormDataRules.aScore[0]">
                 <a-row type="flex" justify="space-between">
                   <a-col :span="11">
-                    <a-form-model-item
-                      label=""
-                      prop="levelAOneScore"
-                      :rules="scoreFormDataRules.aScore[0]"
-                    >
-                      <a-input-number
-                        v-model="scoreFormData.levelAOneScore"
-                        placeholder="请输入分值"
-                        :max="100"
-                        :disabled="true"
-                      ></a-input-number>
+                    <a-form-model-item label prop="levelAOneScore" :rules="scoreFormDataRules.aScore[0]">
+                      <a-input-number v-model="scoreFormData.levelAOneScore" placeholder="请输入分值" :max="100" :disabled="true"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="1">
                     <div style="text-align: center">-</div>
                   </a-col>
                   <a-col :span="11">
-                    <a-form-model-item
-                      label=""
-                      prop="levelATwoScore"
-                      :rules="scoreFormDataRules.aScore[1]"
-                    >
-                      <a-input-number
-                        v-model="scoreFormData.levelATwoScore"
-                        @change="handleValueChangeAtwo"
-                        :max="99"
-                        :min="4"
-                        placeholder="请输入分值"
-                      ></a-input-number>
+                    <a-form-model-item label prop="levelATwoScore" :rules="scoreFormDataRules.aScore[1]">
+                      <a-input-number v-model="scoreFormData.levelATwoScore" @change="handleValueChangeAtwo" :max="99" :min="4" placeholder="请输入分值"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
               </a-form-model-item>
             </a-col>
             <a-col :span="6">
-              <a-form-model-item
-                label="B档分值"
-                :rules="scoreFormDataRules.bScore[0]"
-              >
+              <a-form-model-item label="B档分值" :rules="scoreFormDataRules.bScore[0]">
                 <a-row type="flex" justify="space-between">
                   <a-col :span="11">
-                    <a-form-model-item
-                      label=""
-                      prop="levelBOneScore"
-                      :rules="scoreFormDataRules.bScore[0]"
-                    >
-                      <a-input-number
-                        v-model="scoreFormData.levelBOneScore"
-                        placeholder="请输入分值"
-                        @change="handleValueChangeBone"
-                        :max="levelBOneScoreMax"
-                        :disabled="true"
-                        :min="3"
-                      ></a-input-number>
+                    <a-form-model-item label prop="levelBOneScore" :rules="scoreFormDataRules.bScore[0]">
+                      <a-input-number v-model="scoreFormData.levelBOneScore" placeholder="请输入分值" @change="handleValueChangeBone" :max="levelBOneScoreMax" :disabled="true" :min="3"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="1">
                     <div style="text-align: center">-</div>
                   </a-col>
                   <a-col :span="11">
-                    <a-form-model-item
-                      label=""
-                      prop="levelBTwoScore"
-                      :rules="scoreFormDataRules.bScore[1]"
-                    >
-                      <a-input-number
-                        v-model="scoreFormData.levelBTwoScore"
-                        :max="levelBTwoScoreMax"
-                        :min="2"
-                        @change="handleValueChangeBtwo"
-                        placeholder="请输入分值"
-                      ></a-input-number>
+                    <a-form-model-item label prop="levelBTwoScore" :rules="scoreFormDataRules.bScore[1]">
+                      <a-input-number v-model="scoreFormData.levelBTwoScore" :max="levelBTwoScoreMax" :min="2" @change="handleValueChangeBtwo" placeholder="请输入分值"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
               </a-form-model-item>
             </a-col>
             <a-col :span="6">
-              <a-form-model-item
-                label="C档分值"
-                :rules="scoreFormDataRules.cScore[0]"
-              >
+              <a-form-model-item label="C档分值" :rules="scoreFormDataRules.cScore[0]">
                 <a-row type="flex" justify="space-between">
                   <a-col :span="11">
-                    <a-form-model-item
-                      label=""
-                      prop="levelCOneScore"
-                      :rules="scoreFormDataRules.cScore[0]"
-                    >
-                      <a-input-number
-                        v-model="scoreFormData.levelCOneScore"
-                        :max="levelCOneScoreMax"
-                        :min="2"
-                        :disabled="true"
-                        placeholder="请输入分值"
-                      ></a-input-number>
+                    <a-form-model-item label prop="levelCOneScore" :rules="scoreFormDataRules.cScore[0]">
+                      <a-input-number v-model="scoreFormData.levelCOneScore" :max="levelCOneScoreMax" :min="2" :disabled="true" placeholder="请输入分值"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="1">
                     <div style="text-align: center">-</div>
                   </a-col>
                   <a-col :span="11">
-                    <a-form-model-item
-                      label=""
-                      prop="levelCTwoScore"
-                      :rules="scoreFormDataRules.cScore[1]"
-                    >
-                      <a-input-number
-                        v-model="scoreFormData.levelCTwoScore"
-                        placeholder="请输入分值"
-                        :disabled="true"
-                      ></a-input-number>
+                    <a-form-model-item label prop="levelCTwoScore" :rules="scoreFormDataRules.cScore[1]">
+                      <a-input-number v-model="scoreFormData.levelCTwoScore" placeholder="请输入分值" :disabled="true"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
@@ -168,13 +87,7 @@
     <div>
       <div class="index-item" v-for="(item,index) in bodyIndexData" :key="index">
         <PageTitle>{{ item.projectName }}</PageTitle>
-        <a-table
-          :columns="columns"
-          :scroll="{ x: 800 }"
-          :data-source="item.indexList"
-          :pagination="false"
-          bordered
-        >
+        <a-table :columns="columns" :scroll="{ x: 800 }" :data-source="item.indexList" :pagination="false" bordered>
           <div slot="deductPoints" slot-scope="record">
             <p v-for="(i, index) in record" :key="index">{{ i }}</p>
           </div>
@@ -185,11 +98,7 @@
             <p v-for="(i, index) in record" :key="index">{{ i }}</p>
           </div>
           <div slot="action" slot-scope="record">
-            <span
-              class="color-red cursor-pointer"
-              @click="configIndexDelete(record, item)"
-              >删除</span
-            >
+            <span class="color-red cursor-pointer" @click="configIndexDelete(record, item)">删除</span>
           </div>
         </a-table>
       </div>
@@ -199,19 +108,13 @@
       <FixedBottom>
         <div>
           <a-button @click="pageCancle">取消</a-button>
-          <a-button type="primary" :loading="btnLoading" @click="pageSubmit"
-            >保存</a-button
-          >
+          <a-button type="primary" :loading="btnLoading" @click="pageSubmit">保存</a-button>
         </div>
       </FixedBottom>
     </div>
+
     <!-- 选择指标 -->
-    <CommonModal
-      class="table-modal-large"
-      title="选择指标"
-      :visible="indexVisible"
-      :cancelFn="indexCancle"
-    >
+    <CommonModal class="table-modal-large" title="选择指标" :visible="indexVisible" :cancelFn="indexCancle">
       <template slot="form">
         <a-form-model
           ref="indexForm"
@@ -222,93 +125,48 @@
           :colon="false"
           labelAlign="left"
         >
-          <!-- 固定指标 -->
           <a-form-model-item class="flex" label="所属项目" prop="projectId">
-            <a-select
-              v-model="indexForm.projectId"
-              @change="handleSelectItem"
-              placeholder="请选择所属项目"
-            >
-              <a-select-option
-                v-for="item in projectList"
-                :key="item.key"
-                :value="item.key"
-                >{{ item.value }}</a-select-option
-              >
+            <a-select v-model="indexForm.projectId" @change="handleSelectItem" placeholder="请选择所属项目">
+              <a-select-option v-for="item in projectList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item
-            class="flex"
-            v-if="indexForm.projectId || indexForm.projectId == 0"
-            label=""
-            prop="indexList"
-            :wrapper-col="{ style: { width: '100%' } }"
-          >
-            <selectIndex
-              ref="selectIndex"
-              :selectedRowOld="indexForm.itemCommandList || []"
-            ></selectIndex>
+          <a-form-model-item class="flex" v-if="indexForm.projectId || indexForm.projectId == 0" label prop="indexList" :wrapper-col="{ style: { width: '100%' } }">
+            <SelectIndex ref="selectIndex" :selectedRowOld="indexForm.itemCommandList || []" />
           </a-form-model-item>
         </a-form-model>
       </template>
       <template slot="btn">
         <a-button @click="indexCancle">取消</a-button>
-        <a-button
-          type="primary"
-          class="m-l-15"
-          :loading="indexLoading"
-          @click="indexConfirm"
-          >确定</a-button
-        >
+        <a-button type="primary" class="m-l-15" :loading="indexLoading" @click="indexConfirm">确定</a-button>
       </template>
     </CommonModal>
+
     <!-- 选择部门 -->
-    <CommonModal
-      class="table-modal-large"
-      title="选择部门"
-      :visible="corporationVisible"
-      :cancelFn="corporationCancle"
-    >
+    <CommonModal class="table-modal-large" title="选择部门" :visible="corporationVisible" :cancelFn="corporationCancle">
       <div>
-        <selectDept
-          ref="selectDept"
-          :selectedRowOld="selectDeptList || []"
-        ></selectDept>
+        <SelectDept ref="selectDept" :selectedRowOld="selectDeptList || []" />
       </div>
       <template slot="btn">
         <a-button @click="corporationCancle">取消</a-button>
-        <a-button
-          type="primary"
-          class="m-l-15"
-          :loading="indexLoading"
-          @click="deptConfirm"
-          >确定</a-button
-        >
+        <a-button type="primary" class="m-l-15" :loading="indexLoading" @click="deptConfirm">确定</a-button>
       </template>
     </CommonModal>
   </HasFixedBottomWrapper>
 </template>
+
 <script>
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
-
-import selectIndex from "./selectIndex.vue";
-import selectDept from "./selectDept.vue";
+import SelectIndex from "./selectIndex.vue";
+import SelectDept from "./selectDept.vue";
 import { nanoid } from "nanoid";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { debounce } from "lodash";
-import {
-  addAchDeptConfig,
-  viewAchDeptConfig,
-} from "@/services/performanceManagementBranch.js";
+import { addAchDeptConfig, viewAchDeptConfig } from "@/services/performanceManagementBranch.js";
 export default {
   mixins: [teableCenterEllipsis, cancelLoading],
-  components: {
-    selectIndex,
-    selectDept,
-    FixedBottom,
-  },
+  components: { SelectIndex, SelectDept, FixedBottom, },
   data() {
     return {
       hasSelectId: [], // 所选指标id组合
@@ -372,24 +230,16 @@ export default {
       indexVisible: false,
       projectList: [
         {
-          key: 0,
-          value: "安全",
-        },
-        {
           key: 1,
-          value: "消防",
+          value: "事前",
         },
         {
           key: 2,
-          value: "环境",
+          value: "事中",
         },
         {
           key: 3,
-          value: "职业健康",
-        },
-        {
-          key: 4,
-          value: "其他管理事项",
+          value: "事后",
         },
       ],
       indexForm: {
@@ -455,7 +305,6 @@ export default {
       this.$route.query.deptName
     ) {
       // 已配置 获取详情
-      console.log();
       this.selectDeptList = [
         {
           id: this.$route.query.id,
@@ -474,11 +323,9 @@ export default {
       return this.scoreFormData.levelATwoScore - 1;
     },
     levelBTwoScoreMax() {
-      // this.scoreFormData.levelBTwoScore = this.scoreFormData.levelBOneScore - 1
       return this.scoreFormData.levelBOneScore - 1;
     },
     levelCOneScoreMax() {
-      // this.scoreFormData.levelCOneScore = this.scoreFormData.levelBTwoScore - 1
       return this.scoreFormData.levelBTwoScore - 1;
     },
   },
@@ -490,20 +337,20 @@ export default {
       // record中的id和indexList中的id相匹配时，删掉匹配上的数据（在数组中删除对应值还要删掉下标）
       // 最终打印this.bodyIndexData
       // console.log(dataItem.indexList.id,'dataItemindexList');
-      console.log(record,'record');
-      console.log(dataItem,'dataItem');
+      console.log(record, 'record');
+      console.log(dataItem, 'dataItem');
 
       const seldctId = dataItem.indexList.map(i => i.id)
       this.bodyIndexData.forEach((item) => {
-        if(item.projectName == dataItem.projectName){
-          item.indexList.forEach((record,index) => {
-            if(record.id == seldctId){
+        if (item.projectName == dataItem.projectName) {
+          item.indexList.forEach((record, index) => {
+            if (record.id == seldctId) {
               item.indexList.splice(index, 1);
             }
           })
         }
       })
-      console.log(this.bodyIndexData,'xind');
+      console.log(this.bodyIndexData, 'xind');
     },
     // 获取详情
     getDetail(e) {
@@ -667,15 +514,14 @@ export default {
       if (!formValidator.formAll(this, "indexForm")) {
         return;
       }
-
+      
+      const indexList = this.$refs?.selectIndex?.selectedRow?.length ? this.$refs.selectIndex.selectedRow : [];
+      if(!indexList.length){
+        this.$antMessage.warn('请选择指标')
+        return
+      }
       this.indexLoading = true;
-      this.bodyIndexData[this.indexForm.projectId].indexList = this.$refs
-        .selectIndex.selectedRow.length
-        ? this.$refs.selectIndex.selectedRow
-        : null;
-      this.bodyIndexData[this.indexForm.projectId].indexList = this.dispose(
-        this.bodyIndexData[this.indexForm.projectId].indexList
-      );
+      this.bodyIndexData[this.indexForm.projectId].indexList = this.dispose(indexList);
 
       this.indexCancle();
     },
@@ -713,6 +559,7 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 /deep/ .ant-input-number {
   width: 100%;

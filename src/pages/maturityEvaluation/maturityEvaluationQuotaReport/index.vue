@@ -5,7 +5,6 @@
         <a-form-model-item label="部门名称">
           <a-input v-model="formInline.deptName" placeholder="请输入部门名称"></a-input>
         </a-form-model-item>
-        <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
           <a-button @click="iRest">重置</a-button>
@@ -41,14 +40,14 @@
           labelAlign="right"
         >
           <CommonDept ref="commonDept" :notTablePage="true" :hasDepartment="true" @corporationDeptChange="corporationDeptChange" :CommonFormInline="addForm"></CommonDept>
-          <a-form-model-item class="flex" label="选择部门" prop="draftDepartCode">
-            <dept-tree :placeholder="'部门'" v-model="addForm.draftDepartCode" :deptData="deptData" :multiple="true" allowClear></dept-tree>
+          <a-form-model-item class="flex" label="选择部门" prop="deptIdList">
+            <dept-tree :placeholder="'部门'" v-model="addForm.deptIdList" :deptData="deptData" :multiple="true" allowClear></dept-tree>
           </a-form-model-item>
         </a-form-model>
       </template>
       <template slot="btn">
         <a-button class="m-r-15" @click="addCancle">取消</a-button>
-        <a-button type="primary" :loading="addLoading" @click="addConfirm">确定</a-button>
+        <a-button type="primary" :loading="loadingTwo" @click="addConfirm">确定</a-button>
       </template>
     </CommonModal>
   </div>
@@ -60,7 +59,7 @@ import cancelLoading from '@/mixin/cancelLoading';
 import { debounce } from 'lodash';
 import { formValidator } from "@/utils/clx-form-validator.js";
 import StaffOrDept from "@/components/staffOrDept";
-import { getReportFormsList, addAchDept, deleteAchDept } from "@/services/performanceManagementBranch.js";
+import { getMaturityEvaluationQuotaReportList, addMaturityEvaluationQuotaReportDept,deleteMaturityEvaluationQuotaReportDept } from "@/services/maturityEvaluation.js";
 export default {
   components: { StaffOrDept },
   mixins: [teableCenterEllipsis, cancelLoading],
@@ -114,18 +113,16 @@ export default {
       ],
       tableDataList: [],
       addVisible: false,
-      addLoading: false,
-      addForm: { draftDepartCode: [] },
+      addForm: { deptIdList: [] },
       addFormRules: {
         corporationId: [{ required: true, message: "组织不能为空", trigger: "change" }],
-        draftDepartCode: [{ required: true, message: "部门不能为空", trigger: "change" }],
+        deptIdList: [{ required: true, message: "部门不能为空", trigger: "change" }],
       },
       deptData: null
-
     }
   },
   created() {
-    this.setRouterCode("performanceReport");
+    this.setRouterCode("maturityEvaluationQuotaReport");
     this.columns.splice(0, 0, this.addCommonColumnItem());
     this.getDataList();
   },
@@ -135,25 +132,32 @@ export default {
         ...this.formInline,
         ...this.page
       }
-      return getReportFormsList(params).then((res) => {
-        this.tableDataList = res.data.list;
-        this.page.total = res.data.total;
-      }).catch((err) => {
-        console.log(err);
+      return getMaturityEvaluationQuotaReportList(params)
+      .then((res) => {
+        let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
+        // 处理页码 问题
+        if (tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
+          this.page.pageNo = 1;
+          this.getDataList();
+          return
+        }
+
+        this.tableDataList = tableDataList || [];
+        this.page.total = total;
+      })
+      .catch((err) => {})
+      .finally(() => {
+        this.cancelLoading();
       })
     },
     // 查询
     iSearch() {
-      // 获取列表
+      this.handleLoading()
       this.getDataList()
-        .finally(() => {
-          this.cancelLoading();
-        })
     },
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page;
-      // 获取列表
       this.getDataList();
     },
     onShowSizeChange(current, pageSize) {
@@ -179,25 +183,36 @@ export default {
     //关闭弹窗
     addCancle() {
       this.addVisible = false
-      this.addForm = {}
+      this.addForm = { deptIdList: [] }
     },
     //选择确定
     addConfirm: debounce(
       function () {
         if (!formValidator.formAll(this, "addForm")) {
-          console.log('验证不通过')
           return;
         }
-        this.addForm.deptInfoList = this.addForm.draftDepartCode.map(i => {
-          return {
-            deptId: i,
-            deptName: this.deptCache[i]
-          }
-        })
-        addAchDept(this.addForm).then(res => {
+        // this.addForm.deptInfoList = this.addForm.deptIdList.map(i => {
+        //   return {
+        //     deptId: i,
+        //     deptName: this.deptCache[i]
+        //   }
+        // })
+        let apiData = {
+          ...this.addForm,
+        }
+        console.log('this.addForm',apiData);
+        this.handleLoadingTwo()
+        addMaturityEvaluationQuotaReportDept(apiData)
+        .then(res => {
           this.$antMessage.success("添加成功！");
           this.addCancle()
           this.getDataList()
+        })
+        .catch(err=>{})
+        .finally(()=>{
+          setTimeout(() => {
+            this.cancelLoadingTwo()
+          }, 200);
         })
       },
       2000,
@@ -210,18 +225,16 @@ export default {
     },
     //删除
     handleDelete(e) {
-      let _this = this
       this.$antConfirm({
         title: '确定删除部门吗?',
-        onOk() {
-          deleteAchDept({ id: e.id }).then(res => {
-            _this.$antMessage.success("删除成功！");
-            _this.getDataList()
+        onOk:()=> {
+          return deleteMaturityEvaluationQuotaReportDept({ id: e.id })
+          .then(res => {
+            this.$antMessage.success("删除成功！");
+            this.getDataList()
           })
+          .catch(err=>{})
         },
-        onCancel() {
-
-        }
       });
     },
 

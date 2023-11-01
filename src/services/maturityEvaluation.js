@@ -3,35 +3,35 @@ import {get,post,postExcel} from '@/utils/request.js';
 import serviceNameList from '@/config/default/service.config'
 let customization = serviceNameList['customization']
 
-/*--------成熟度指标------------*/
+/*--------成熟度评价指标------------*/
 // 列表分页
 export const getMaturityEvaluaList = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/index/list/page', params);
 
-//成熟度指标 指标新增
+//成熟度评价指标 指标新增
 export const addMaturityEvalua = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/index/add', params);
 
-//成熟度指标 指标删除
+//成熟度评价指标 指标删除
 export const deleteMaturityEvalua = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/index/delete', params);
 
-//成熟度指标 指标改
+//成熟度评价指标 指标改
 export const editMaturityEvaluaEdit= params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/index/edit', params);
 
-//成熟度指标 指标查详情
+//成熟度评价指标 指标查详情
 export const getMaturityEvaluaItemDetails = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/index/detail', params);
 
 
-/*---------组织绩效报表-----------*/
-//  列表分页
-export const getReportFormsList = params => post( customization + '/api/ehs/kpi/dept/config/page/list', params);
+/*---------成熟度评价报表-----------*/
+// 成熟度评价 列表分页
+export const getMaturityEvaluationQuotaReportList = params => post( customization + '/api/ehs/kpi/dept/config/page/list', params);
 
-//添加部门
-export const addAchDept = params => post( customization + '/api/ehs/kpi/dept/config/addAchDept', params);
+// 成熟度评价 添加部门
+export const addMaturityEvaluationQuotaReportDept = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/add', params);
 
-//移除部门
-export const deleteAchDept = params => post( customization + '/api/ehs/kpi/dept/config/deleteAchDept', params);
+// 成熟度评价 删除部门(列表数据)
+export const deleteMaturityEvaluationQuotaReportDept = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/delete', params);
 
 //选择部门弹出框
-export const selectDeptList= params => post( customization + '/api/ehs/kpi/dept/config/list', params);
+export const selectMaturityEvaluationQuotaReportDeptList= params => post( customization + '/api/ehs/kpi/dept/config/list', params);
 
 //配置指标接口 (列表单个“配置”，“开始配置”)共用接口
 export const addAchDeptConfig = params => post( customization + '/api/ehs/kpi/dept/config/addAchDeptConfig', params);
