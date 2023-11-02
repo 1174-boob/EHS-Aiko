@@ -22,7 +22,7 @@
         <div slot="status" slot-scope="record">{{getMappingValue(configStatusList, "key", record.status).value}}</div>
         <div slot="updateUser" slot-scope="record">{{record.workNum ? record.userName + "/" + record.workNum : record.userName}}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="actionEdit(record)">配置</span>
+          <span class="color-0067cc cursor-pointer" @click="actionEdit(record)">修改</span>
           <span class="color-ff4d4f cursor-pointer" @click="handleDelete(record)">删除</span>
         </div>
       </a-table>
@@ -59,7 +59,7 @@ import cancelLoading from '@/mixin/cancelLoading';
 import { debounce } from 'lodash';
 import { formValidator } from "@/utils/clx-form-validator.js";
 import StaffOrDept from "@/components/staffOrDept";
-import { getMaturityEvaluationQuotaReportList, addMaturityEvaluationQuotaReportDept,deleteMaturityEvaluationQuotaReportDept } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaluationQuotaReportList, addMaturityEvaluationQuotaReportDept, deleteMaturityEvaluationQuotaReportDept } from "@/services/maturityEvaluation.js";
 export default {
   components: { StaffOrDept },
   mixins: [teableCenterEllipsis, cancelLoading],
@@ -92,7 +92,7 @@ export default {
           title: '配置状态',
           dataIndex: 'configurationStatus',
           customRender: (text) => {
-            return text ? '已配置' : '未配置' 
+            return text ? '已配置' : '未配置'
           }
         },
         {
@@ -126,6 +126,13 @@ export default {
     this.columns.splice(0, 0, this.addCommonColumnItem());
     this.getDataList();
   },
+  activated() {
+    setTimeout(() => {
+      if (!this.keepalive) {
+        this.iRest()
+      }
+    }, 20);
+  },
   methods: {
     getDataList() {
       let params = {
@@ -134,22 +141,22 @@ export default {
         pageSize: this.page.pageSize,
       }
       return getMaturityEvaluationQuotaReportList(params)
-      .then((res) => {
-        let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
-        // 处理页码 问题
-        if (tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
-          this.page.pageNo = 1;
-          this.getDataList();
-          return
-        }
+        .then((res) => {
+          let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
+          // 处理页码 问题
+          if (tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
+            this.page.pageNo = 1;
+            this.getDataList();
+            return
+          }
 
-        this.tableDataList = tableDataList || [];
-        this.page.total = total;
-      })
-      .catch((err) => {})
-      .finally(() => {
-        this.cancelLoading();
-      })
+          this.tableDataList = tableDataList || [];
+          this.page.total = total;
+        })
+        .catch((err) => { })
+        .finally(() => {
+          this.cancelLoading();
+        })
     },
     // 查询
     iSearch() {
@@ -201,55 +208,53 @@ export default {
         let apiData = {
           ...this.addForm,
         }
-        console.log('this.addForm',apiData);
+        console.log('this.addForm', apiData);
         this.handleLoadingTwo()
         addMaturityEvaluationQuotaReportDept(apiData)
-        .then(res => {
-          this.$antMessage.success("添加成功！");
-          this.addCancle()
-          this.getDataList()
-        })
-        .catch(err=>{})
-        .finally(()=>{
-          setTimeout(() => {
-            this.cancelLoadingTwo()
-          }, 200);
-        })
+          .then(res => {
+            this.$antMessage.success("添加成功！");
+            this.addCancle()
+            this.getDataList()
+          })
+          .catch(err => { })
+          .finally(() => {
+            setTimeout(() => {
+              this.cancelLoadingTwo()
+            }, 200);
+          })
       },
       2000,
       { leading: true, trailing: false }
     ),
     // 获取组织下所有部门
     corporationDeptChange(value) {
-      console.log(value)
       this.deptData = value;
     },
     //删除
     handleDelete(targetItem) {
       this.$antConfirm({
         title: '确定删除部门吗?',
-        onOk:()=> {
+        onOk: () => {
           let apiData = {
             maturityEvaluationReportId: targetItem.maturityEvaluationReportId
           }
           return deleteMaturityEvaluationQuotaReportDept(apiData)
-          .then(res => {
-            this.$antMessage.success("删除成功！");
-            this.getDataList()
-          })
-          .catch(err=>{})
+            .then(res => {
+              this.$antMessage.success("删除成功！");
+              this.getDataList()
+            })
+            .catch(err => { })
         },
       });
     },
 
-    async actionEdit(record) {
-      let queryObj = { id: null }
+    // 开始配置、编辑
+    actionEdit(record) {
+      let queryObj = { }
       if (record) {
         queryObj = {
-          id: record.id,
-          configurationStatus: record.configurationStatus,
-          deptId: record.deptId,
-          deptName: record.deptName
+          maturityEvaluationReportId: record.maturityEvaluationReportId,
+          deptName : record.deptName
         }
       }
       this.$router.push({
@@ -257,8 +262,6 @@ export default {
         query: queryObj
       })
     },
-
-
   }
 }
 </script>

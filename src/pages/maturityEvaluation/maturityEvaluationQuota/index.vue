@@ -124,6 +124,13 @@ export default {
     this.setRouterCode("maturityEvaluationQuota");
     this.getTableList();
   },
+  activated(){
+    setTimeout(() => {
+      if(!this.keepalive){
+        this.iRest()
+      }
+    }, 20);
+  },
   methods: {
     getTableList() {
       let params = {

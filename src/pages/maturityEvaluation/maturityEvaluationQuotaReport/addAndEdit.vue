@@ -1,5 +1,7 @@
 <template>
   <HasFixedBottomWrapper>
+
+    <a-spin :spinning="spinning" wrapperClassName="a-spin">
     <PageTitle>配置成熟度评价填报表</PageTitle>
     <DashBtn>
       <div>
@@ -18,7 +20,7 @@
     </PageTitle>
     <!-- 启用分值档位 -->
     <div>
-      <a-checkbox v-model="scorePositionStatus" @change="handleScoreChange">启用分值档位</a-checkbox>
+      <a-checkbox v-model="scorePositionStatus">启用分值档位</a-checkbox>
       <div v-if="scorePositionStatus">
         <a-form-model ref="scoreForm" labelAlign="right" :model="scoreFormData" :rules="scoreFormDataRules" :colon="false">
           <a-row type="flex" justify="space-between">
@@ -27,7 +29,7 @@
                 <a-row type="flex" justify="space-between">
                   <a-col :span="11">
                     <a-form-model-item label prop="aOneScore" :rules="scoreFormDataRules.aScore[0]">
-                      <a-input-number v-model="scoreFormData.aOneScore" placeholder="请输入分值" :max="100" :disabled="true"></a-input-number>
+                      <a-input-number v-model="scoreFormData.aOneScore" :precision="2" placeholder="请输入分值" :max="100" :disabled="true"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="1">
@@ -35,7 +37,7 @@
                   </a-col>
                   <a-col :span="11">
                     <a-form-model-item label prop="aTwoScore" :rules="scoreFormDataRules.aScore[1]">
-                      <a-input-number v-model="scoreFormData.aTwoScore" @blur="handleValueChangeAtwo" :max="99" :min="4" placeholder="请输入分值"></a-input-number>
+                      <a-input-number v-model="scoreFormData.aTwoScore" :precision="2" @blur="handleValueChangeAtwo" placeholder="请输入分值"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
@@ -47,7 +49,7 @@
                 <a-row type="flex" justify="space-between">
                   <a-col :span="11">
                     <a-form-model-item label prop="bOneScore" :rules="scoreFormDataRules.bScore[0]">
-                      <a-input-number v-model="scoreFormData.bOneScore" placeholder="请输入分值" :disabled="true" :min="3"></a-input-number>
+                      <a-input-number v-model="scoreFormData.bOneScore" :precision="2" placeholder="请输入分值" :disabled="true"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="1">
@@ -55,7 +57,7 @@
                   </a-col>
                   <a-col :span="11">
                     <a-form-model-item label prop="bTwoScore" :rules="scoreFormDataRules.bScore[1]">
-                      <a-input-number v-model="scoreFormData.bTwoScore" :max="bTwoScoreMax" :min="2" @blur="handleValueChangeBtwo" placeholder="请输入分值"></a-input-number>
+                      <a-input-number v-model="scoreFormData.bTwoScore" :precision="2" :max="bTwoScoreMax" @blur="handleValueChangeBtwo" placeholder="请输入分值"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
@@ -67,7 +69,7 @@
                 <a-row type="flex" justify="space-between">
                   <a-col :span="11">
                     <a-form-model-item label prop="cOneScore" :rules="scoreFormDataRules.cScore[0]">
-                      <a-input-number v-model="scoreFormData.cOneScore" :min="2" :disabled="true" placeholder="请输入分值"></a-input-number>
+                      <a-input-number v-model="scoreFormData.cOneScore" :precision="2" :disabled="true" placeholder="请输入分值"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="1">
@@ -75,7 +77,7 @@
                   </a-col>
                   <a-col :span="11">
                     <a-form-model-item label prop="cTwoScore" :rules="scoreFormDataRules.cScore[1]">
-                      <a-input-number v-model="scoreFormData.cTwoScore" placeholder="请输入分值" :disabled="true"></a-input-number>
+                      <a-input-number v-model="scoreFormData.cTwoScore" :precision="2" placeholder="请输入分值" :disabled="true"></a-input-number>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
@@ -105,6 +107,7 @@
         </a-table>
       </div>
     </div>
+    </a-spin>
     <!-- 按钮 -->
     <div slot="fixedBottom">
       <FixedBottom>
@@ -166,11 +169,13 @@ import { nanoid } from "nanoid";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import { debounce } from "lodash";
 import { addMaturityEvaluationQuotaReportConfig,getMaturityEvaluationQuotaReportConfigDetails } from "@/services/maturityEvaluation.js";
+import { BigNumber } from "bignumber.js";
 export default {
   mixins: [teableCenterEllipsis, cancelLoading],
   components: { SelectIndex, SelectDept, FixedBottom, },
   data() {
     return {
+      spinning:true,
       columns: [
         {
           title: "设立目的",
@@ -231,6 +236,7 @@ export default {
           { required: true, message: "所属项目不可为空", trigger: "change" },
         ],
       },
+      // 指标
       bodyIndexData: [
         {
           key: 'prior',
@@ -284,25 +290,22 @@ export default {
     };
   },
   created() {
-    if (
-      this.$route.query &&
-      this.$route.query.id &&
-      this.$route.query.configStatus &&
-      this.$route.query.deptId &&
-      this.$route.query.deptName
-    ) {
-      // 已配置 获取详情
+    const {maturityEvaluationReportId,deptName} = this.$route.query
+    if(maturityEvaluationReportId){
+      this.showSelectDeptBtn = false;
       this.selectDeptList = [
         {
-          id: this.$route.query.id,
-          deptId: this.$route.query.deptId,
-          deptName: this.$route.query.deptName,
-        },
-      ];
-      if (this.$route.query.configStatus == 2) {
-        this.getDetail(this.$route.query.id);
+          maturityEvaluationReportId,
+          deptName
+        }
+      ]
+      if(deptName){
+        this.getDetail(maturityEvaluationReportId)
+      }else{
+        this.spinning = false
       }
-      this.showSelectDeptBtn = false;
+    }else{
+      this.spinning = false
     }
   },
   computed: {
@@ -312,44 +315,51 @@ export default {
     },
     // B档分值最大分值
     bTwoScoreMax() {
-      return this.scoreFormData.bOneScore ? this.scoreFormData.bOneScore - 1 : undefined
+      return this.scoreFormData.bOneScore ? BigNumber(this.scoreFormData.bOneScore).minus(this.precision).toNumber() : undefined
     },
   },
   methods: {
     // 获取详情
-    getDetail(e) {
-      getMaturityEvaluationQuotaReportConfigDetails({
-        id: e,
-      })
+    getDetail(maturityEvaluationReportId) {
+      let apiData = {
+        maturityEvaluationReportId,
+      }
+      getMaturityEvaluationQuotaReportConfigDetails(apiData)
         .then((res) => {
-          this.scorePositionStatus = res.data.scorePositionStatus == 2 ? true : false;
-          this.bodyIndexData[0].indexList = this.dispose(
-            res.data.safeIndexData
-          );
-          this.bodyIndexData[1].indexList = this.dispose(
-            res.data.fireIndexData
-          );
-          this.bodyIndexData[2].indexList = this.dispose(
-            res.data.environmentIndexData
-          );
-          this.bodyIndexData[3].indexList = this.dispose(
-            res.data.healthIndexData
-          );
-          this.bodyIndexData[4].indexList = this.dispose(
-            res.data.otherIndexData
-          );
+          const resData = res.data || {}
+          // 部门
+          this.selectDeptList = [
+            {
+              maturityEvaluationReportId:resData.maturityEvaluationReportId,
+              deptName:resData.deptName
+            }
+          ]
+
+          // 分值档位
+          this.scorePositionStatus = resData.scorePositionStatus
           this.scoreFormData = {
-            aOneScore: res.data.aOneScore || 100,
-            aTwoScore: res.data.aTwoScore,
-            bOneScore: res.data.bOneScore,
-            bTwoScore: res.data.bTwoScore,
-            cOneScore: res.data.cOneScore,
-            cTwoScore: res.data.cTwoScore || 0,
-          };
+            aOneScore: Number(resData.aOneScore) || 100,
+            aTwoScore: Number(resData.aTwoScore) || null,
+            bOneScore: Number(resData.bOneScore) || null,
+            bTwoScore: Number(resData.bTwoScore) || null,
+            cOneScore: Number(resData.cOneScore) || null,
+            cTwoScore: Number(resData.cTwoScore) || 0,
+          }
+
+          // 指标
+          this.bodyIndexData = this.bodyIndexData.map(item=>{
+            item.indexList = Array.isArray(resData[item.key]) ? this.dispose(resData[item.key])  : []
+            return item
+          })
         })
-        .catch((err) => { });
+        .catch((err) => { })
+        .finally(()=>{
+          setTimeout(() => {
+            this.spinning = false
+          }, 300);
+        })
     },
-    //处理一下数据
+    //处理数据
     dispose(data) {
       let arr = data.map((i) => {
         i.calculationDetails = i.itemList.map(item => item.calculationDetails)
@@ -381,8 +391,9 @@ export default {
 
     // 取消
     pageCancle() {
+      this.setKeepalive(true)
       this.$router.push({
-        path: '/ehsGerneralManage/orgPerformanceManage/performanceBranchReport',
+        path: '/ehsGerneralManage/maturityEvaluation/maturityEvaluationQuotaReport',
       })
     },
     // 保存api
@@ -407,20 +418,6 @@ export default {
         return false;
       }
 
-      // let sum = this.bodyIndexData.reduce((sum, item) => {
-      //   let c = 0;
-      //   item.indexList.forEach((i) => {
-      //     c += Number(i.riskScore);
-      //   });
-      //   return sum + c;
-      // }, 0);
-      // if (sum != 100) {
-      //   this.$antMessage.error(
-      //     "所有指标的风险分值合计为100分，不符合是提示“当前所有指标风险分值合计大于/小于100分，请重新配置!"
-      //   );
-      //   return false;
-      // }
-
       // 部门数据
       const maturityEvaluationReportIdList = this.selectDeptList.map(item=>item.maturityEvaluationReportId)
 
@@ -431,6 +428,7 @@ export default {
       if(this.scorePositionStatus){
         scoreObj = {
           ...scoreObj,
+          ...this.scoreFormData,
         }
       }
 
@@ -450,7 +448,7 @@ export default {
       .then((res) => {
         this.$antMessage.success("配置成功");
         this.$router.push({
-          // path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationQuotaReport",
+          path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationQuotaReport",
         });
       })
       .catch(err=>{})
@@ -505,16 +503,10 @@ export default {
       })
     },
 
-    //选择启用分值
-    handleScoreChange(e) {
-      console.log(`checked = ${e.target.checked}`);
-      this.scorePositionStatus = e.target.checked;
-    },
     // 分值A 2
     handleValueChangeAtwo() {
       const aTwoScore = this.scoreFormData.aTwoScore
-      console.log('分值A 2',aTwoScore);
-      this.scoreFormData.bOneScore = aTwoScore - 1;
+      this.scoreFormData.bOneScore = BigNumber(aTwoScore).minus(this.precision).toNumber();
 
       if(this.scoreFormData.bTwoScore >= this.scoreFormData.bOneScore){
         this.scoreFormData.bTwoScore = null;
@@ -522,9 +514,9 @@ export default {
     },
     // 分值B 2
     handleValueChangeBtwo() {
-      console.log('bTwoScoreMax',this.bTwoScoreMax);
       const bTwoScore = this.scoreFormData.bTwoScore
-      this.scoreFormData.cOneScore = bTwoScore - 1;
+      this.scoreFormData.cOneScore = BigNumber(bTwoScore).minus(this.precision).toNumber();
+      console.log('this.scoreFormData.cOneScore',this.scoreFormData.cOneScore);
     },
   },
 };
@@ -544,5 +536,20 @@ export default {
 }
 /deep/ .ant-input-number {
   width: 100%;
+}
+
+::v-deep .a-spin {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  .ant-spin-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ant-spin-blur {
+    opacity: 0.06 !important;
+  }
 }
 </style>
