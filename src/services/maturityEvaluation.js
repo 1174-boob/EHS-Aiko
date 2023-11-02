@@ -22,7 +22,7 @@ export const getMaturityEvaluaItemDetails = params => post( customization + '/ap
 
 /*---------成熟度评价报表-----------*/
 // 成熟度评价 列表分页
-export const getMaturityEvaluationQuotaReportList = params => post( customization + '/api/ehs/kpi/dept/config/page/list', params);
+export const getMaturityEvaluationQuotaReportList = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/list/page', params);
 
 // 成熟度评价 添加部门
 export const addMaturityEvaluationQuotaReportDept = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/add', params);
@@ -30,14 +30,14 @@ export const addMaturityEvaluationQuotaReportDept = params => post( customizatio
 // 成熟度评价 删除部门(列表数据)
 export const deleteMaturityEvaluationQuotaReportDept = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/delete', params);
 
-//选择部门弹出框
-export const selectMaturityEvaluationQuotaReportDeptList= params => post( customization + '/api/ehs/kpi/dept/config/list', params);
+// 选择部门弹出框
+export const getMaturityEvaluationQuotaReportNoPageList= params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/list', params);
 
 //配置指标接口 (列表单个“配置”，“开始配置”)共用接口
-export const addAchDeptConfig = params => post( customization + '/api/ehs/kpi/dept/config/addAchDeptConfig', params);
+export const addMaturityEvaluationQuotaReportConfig = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/edit', params);
 
 //查看指标配置详情
-export const viewAchDeptConfig = params => post( customization + '/api/ehs/kpi/dept/config/viewAchDeptConfig', params);
+export const getMaturityEvaluationQuotaReportConfigDetails = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/detail', params);
 
 
 /*---------组织绩效数据填报-----------*/

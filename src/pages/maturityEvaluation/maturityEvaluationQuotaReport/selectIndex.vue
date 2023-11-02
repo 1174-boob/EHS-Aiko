@@ -108,11 +108,14 @@ export default {
     };
   },
   created() {
-    this.selectedRow = cloneDeep(this.selectedRowOld)
-    this.selectedRowKeys = this.selectedRowOld.map(item => item[this.tableRowKey]).filter(item => item || item === 0)
+    this.initSelectedRow()
     this.initData();
   },
   methods: {
+    initSelectedRow() {
+      this.selectedRow = cloneDeep(this.selectedRowOld)
+      this.selectedRowKeys = this.selectedRowOld.map(item => item[this.tableRowKey]).filter(item => item || item === 0)
+    },
     initData() {
       let params = {
         ...this.searchFormData,
@@ -178,6 +181,11 @@ export default {
       this.initData();
     },
   },
+  watch: {
+    selectedRowOld(newVal) {
+      // this.initSelectedRow()
+    }
+  }
 };
 </script>
 

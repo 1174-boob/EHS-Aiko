@@ -18,7 +18,7 @@
       </div>
     </DashBtn>
     <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-      <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
+      <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" rowKey="maturityEvaluationReportId" :pagination="false">
         <div slot="status" slot-scope="record">{{getMappingValue(configStatusList, "key", record.status).value}}</div>
         <div slot="updateUser" slot-scope="record">{{record.workNum ? record.userName + "/" + record.workNum : record.userName}}</div>
         <div slot="action" slot-scope="record">
@@ -90,25 +90,25 @@ export default {
         },
         {
           title: '配置状态',
-          dataIndex: 'configStatus',
-          customRender: v => {
-            return v == 1 ? '未配置' : v == 2 ? '已配置' : '--'
+          dataIndex: 'configurationStatus',
+          customRender: (text) => {
+            return text ? '已配置' : '未配置' 
           }
         },
         {
           title: '修改人',
           dataIndex: 'updateUserName',
-
         },
         {
           title: '修改时间',
           dataIndex: 'updateTime',
+          width: 160,
         },
         {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           fixed: 'right', // 固定操作列
-          width: 200 // 宽度根据操作自定义设置
+          width: 120 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
@@ -130,7 +130,8 @@ export default {
     getDataList() {
       let params = {
         ...this.formInline,
-        ...this.page
+        pageNo: this.page.pageNo,
+        pageSize: this.page.pageSize,
       }
       return getMaturityEvaluationQuotaReportList(params)
       .then((res) => {
@@ -224,11 +225,14 @@ export default {
       this.deptData = value;
     },
     //删除
-    handleDelete(e) {
+    handleDelete(targetItem) {
       this.$antConfirm({
         title: '确定删除部门吗?',
         onOk:()=> {
-          return deleteMaturityEvaluationQuotaReportDept({ id: e.id })
+          let apiData = {
+            maturityEvaluationReportId: targetItem.maturityEvaluationReportId
+          }
+          return deleteMaturityEvaluationQuotaReportDept(apiData)
           .then(res => {
             this.$antMessage.success("删除成功！");
             this.getDataList()
@@ -243,7 +247,7 @@ export default {
       if (record) {
         queryObj = {
           id: record.id,
-          configStatus: record.configStatus,
+          configurationStatus: record.configurationStatus,
           deptId: record.deptId,
           deptName: record.deptName
         }
