@@ -37,6 +37,9 @@
         <a-form-model-item label="起草人">
           <a-input v-model="formInline.drafter" placeholder="请输入"></a-input>
         </a-form-model-item>
+        <a-form-model-item label="处理人">
+          <a-input v-model="formInline.hander" placeholder="请输入"></a-input>
+        </a-form-model-item>
         <a-form-model-item label="创建时间">
           <a-range-picker format="YYYY-MM-DD" v-model="formInline.timeArr" :placeholder="['开始日期', '结束日期']" />
         </a-form-model-item>
@@ -95,6 +98,11 @@
               <span v-else-if="item.props == 'responsibilityDeptId'">
                 {{
                 row.responsibilityDeptName + "/" + row.responsibilityPersonName
+                }}
+              </span>
+              <span v-else-if="item.props == 'handerId'">
+                {{
+                (row.handerName == null ? '--': row.handerName)+ "/" + (row.handerJobNumber == null ? '--': row.handerJobNumber)
                 }}
               </span>
               <span v-else-if="item.props == 'processStatus'">
@@ -288,6 +296,12 @@ export default {
           id: 9,
           title: "状态",
           props: "processStatus",
+          isDefault: true,
+        },
+        {
+          id: 17,
+          title: "处理人",
+          props: "handerId",
           isDefault: true,
         },
         {
