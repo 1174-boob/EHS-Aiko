@@ -14,7 +14,7 @@
     <DashBtn>
       <div>
         <a-button type="dashed" @click="addDept">添加部门</a-button>
-        <a-button type="dashed" @click="actionEdit">开始配置</a-button>
+        <a-button type="dashed" @click="actionEdit()">开始配置</a-button>
       </div>
     </DashBtn>
     <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
@@ -22,7 +22,7 @@
         <div slot="status" slot-scope="record">{{getMappingValue(configStatusList, "key", record.status).value}}</div>
         <div slot="updateUser" slot-scope="record">{{record.workNum ? record.userName + "/" + record.workNum : record.userName}}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="actionEdit(record)">修改</span>
+          <span class="color-0067cc cursor-pointer" @click="actionEdit(record)">编辑</span>
           <span class="color-ff4d4f cursor-pointer" @click="handleDelete(record)">删除</span>
         </div>
       </a-table>
@@ -186,6 +186,9 @@ export default {
 
     //添加部门
     addDept() {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaReportAddDept")) {
+        return;
+      }
       this.addVisible = true
     },
     //关闭弹窗
@@ -232,6 +235,9 @@ export default {
     },
     //删除
     handleDelete(targetItem) {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaReportRmBtn")) {
+        return;
+      }
       this.$antConfirm({
         title: '确定删除部门吗?',
         onOk: () => {
@@ -250,11 +256,18 @@ export default {
 
     // 开始配置、编辑
     actionEdit(record) {
-      let queryObj = { }
+      let queryObj = {}
       if (record) {
+        if (!this.canClickBtnMixin("maturityEvaluationQuotaReportEditConfig")) {
+          return;
+        }
         queryObj = {
           maturityEvaluationReportId: record.maturityEvaluationReportId,
-          deptName : record.deptName
+          deptName: record.deptName
+        }
+      } else {
+        if (!this.canClickBtnMixin("maturityEvaluationQuotaReportStartConfig")) {
+          return;
         }
       }
       this.$router.push({
