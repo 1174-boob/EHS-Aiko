@@ -19,7 +19,13 @@
             <a-form-model-item class="flex" label="保管部门" prop="saveDeptCode" :label-col="labelCol" :wrapper-col="wrapperCol">
               <dept-tree :disabled="disabled" :placeholder="'请选择保管部门'" v-model="newlyForm.saveDeptCode" :deptData="deptData" @change="(id,name)=>saveDeptChange(id,name)" allowClear></dept-tree>
             </a-form-model-item>
-            <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="false" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
+            <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="true" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
+            <a-form-model-item label="设备名称" prop="equipmentName" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input :disabled="disabled" v-model.trim="newlyForm.equipmentName" placeholder="最多可输入50字" allowClear :maxLength="50"/>
+            </a-form-model-item>
+            <a-form-model-item label="设备代码" prop="equipmentCode" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input :disabled="disabled" v-model.trim="newlyForm.equipmentCode" placeholder="最多可输入50字" allowClear :maxLength="50"/>
+            </a-form-model-item>
             <a-form-model-item label="设备位置" prop="specialEquipmentDetail.equipmentLocation" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentLocation" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
@@ -160,6 +166,12 @@ export default {
         ],
         useRegistryNum: [
           { required: true, message: '请输入使用登记证编号', trigger: ['blur', 'change'] },
+        ],
+        equipmentName: [
+          { required: true, message: '请输入设备名称', trigger: ['blur', 'change'] },
+        ],
+        equipmentCode: [
+          { required: true, message: '请输入设备代码', trigger: ['blur', 'change'] },
         ],
         equipmentStatus: [
           { required: true, message: '请选择设备状态', trigger: ['blur', 'change'] },

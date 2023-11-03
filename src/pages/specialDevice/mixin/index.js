@@ -71,7 +71,7 @@ const mixin = {
       }
       const { data } = await specialEquipmentDetail(para)
       this.newlyForm = {
-        ...data.specialEquipmentInfo,
+        ...data.specialEquipmentInfoVo,
         specialEquipmentDetail: {
           ...data.specialEquipmentDetailDto,
         },
@@ -98,7 +98,9 @@ const mixin = {
       //起草人
       this.newlyForm.applicant = this.newlyForm.draftName + '/' + this.newlyForm.draftNum
       //保管人
-      this.checkedTreeNode = [this.newlyForm.savePersonId]
+      console.log(this.newlyForm.custodianList);
+      let saveArr = this.newlyForm.custodianList.map(item => item.userId)
+      this.checkedTreeNode = saveArr
       let list = this.getCommonAddOrgnizeList
       let deptId = this.getMappingValue(list, "id", this.newlyForm.corporationId).deptId
 
@@ -151,12 +153,15 @@ const mixin = {
     },
     // 选择测试人员
     getTreeData(value) {
+      let list = value.treeNameAndCodeList || [];
+      let custodian = JSON.parse(JSON.stringify(list).replace(/id/g, 'userId').replace(/treeName/g, 'userName').replace(/treeCode/g, 'userJobNumber'));  
       let savePersonId = (value.treeIdList || [])[0]
       let savePerson = (value.treeNameAndCodeList || [])[0].treeName
       let savePersonNum = (value.treeNameAndCodeList || [])[0].treeCode
       this.$set(this.newlyForm, 'savePersonId', savePersonId)
       this.$set(this.newlyForm, 'savePerson', savePerson)
       this.$set(this.newlyForm, 'savePersonNum', savePersonNum)
+      this.$set(this.newlyForm, 'custodian', custodian)
       if (!formValidator.formItemValidate(this, "savePersonId", "newlyForm")) {
         return
       }

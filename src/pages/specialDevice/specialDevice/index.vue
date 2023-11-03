@@ -148,7 +148,21 @@ export default {
         },
         {
           title: '保管人',
-          dataIndex: 'savePerson',
+          dataIndex: 'custodian',
+          customRender: (text) => {
+            return text != null? (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <div >
+                  {{text}}
+                </div>
+              </a-popover>
+            ) : (
+              <div>--</div>
+            );
+          },
           width: 200
         },
         {
