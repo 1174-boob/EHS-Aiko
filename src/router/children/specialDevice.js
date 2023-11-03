@@ -275,6 +275,17 @@ export const specialDevice = [
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
   },
   {
+    path: 'configurationChecklist',
+    name: '配置点检表',
+    meta: {
+      title: '配置点检表',
+      routerCode: 'configurationChecklist',
+      isPage: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/configurationChecklist.vue'], resolve),
+  },
+  {
     path: 'safeAttachAccount',
     name: '安全附件台帐',
     meta: {

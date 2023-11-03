@@ -99,3 +99,9 @@ export const deviceData = params => post( ehsEquip + '/api/ehs/equip/equipment/a
 
 //设备认证导出
 export const dataStatisticsExport = params => postExcel( ehsEquip + '/api/ehs/equip/equipment/account/dataStatisticsExport', params);
+
+// 特种设备-配置点检表
+export const checkItemList = params => post( ehsEquip + '/api/ehs/equip/spot/check/item/list', params);
+// 特种设备-配置点检表保存
+export const checkItemSave = params => post( ehsEquip + '/api/ehs/equip/spot/check/item/save', params);
+

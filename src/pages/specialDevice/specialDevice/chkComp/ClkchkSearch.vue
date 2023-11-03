@@ -22,6 +22,9 @@
         <a-button type="dashed" @click="dayNew">
           <a-icon type="plus" />新建
         </a-button>
+        <a-button type="dashed" v-if="chkType != 'self'" @click="configurationChecklist">
+          配置点检表
+        </a-button>
       </div>
     </DashBtn>
     <CommonTable>
@@ -165,7 +168,7 @@ export default {
     // 重置
     dayRest: debounce(function () {}, 250, { leading: true, trailing: false }),
     dayNew() {
-      console.log(this.equipmentType)
+      console.log('0 机动车 1 起重机械 2 电梯 3 压力管道 4 压力容器 =>',this.equipmentType)
       if(this.chkType && this.chkType != 'self') {
         let path = ''
         switch (this.chkType) {
@@ -184,6 +187,13 @@ export default {
           query: { pageType: this.chkType }
         })
       }
+    },
+    configurationChecklist() {
+      console.log('配置点检表');
+      this.$router.push({
+        path: "/safeManage/deviceSafeManage/specialeDevice/configurationChecklist",
+        query: { checkType: this.chkType, equipType:this.equipmentType }, // 点检类型 设备类型
+      });
     },
     handleDayPdf() {},
     handleCheckDay() {},
