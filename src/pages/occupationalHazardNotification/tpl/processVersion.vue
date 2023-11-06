@@ -58,6 +58,7 @@
           :btnIcon="false"
           @handleSuccess="handleSuccess"
         ></UploadBtnStyle>
+        <a-button style="margin-left:10px;" type="primary" @click="downloadArchive">下载归档</a-button>
       </div>
     </DashBtn>
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
@@ -406,6 +407,25 @@ export default {
         this.choosedArr = []
       } else {
         this.$antMessage.warning('请下载员工已签署的文件！')
+        return;
+      }
+    },
+    async downloadArchive() {
+      console.log('批量下载',this.choosedArr);
+      if (!this.canClickBtnMixin("downloadArchiveBtn")) {
+        return;
+      }
+      if (!this.choosedArr.length) {
+        this.$antMessage.warning('至少选择一条数据！')
+        return
+      }
+      if (this.choosedArr.every(item => item.signatureStatus == 3)) {
+          this.choosedArr.forEach(item => {
+          window.open(item.file.filePath);
+        })
+        this.choosedArr = []
+      } else {
+        this.$antMessage.warning('请下载员工签署完成的文件！')
         return;
       }
     },
