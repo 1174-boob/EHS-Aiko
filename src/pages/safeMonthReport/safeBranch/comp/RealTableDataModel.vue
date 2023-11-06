@@ -3,7 +3,7 @@
     <template slot="form">
       <a-form-model ref="iFrom" :model="iFrom" :rules="addModleFormRules" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :colon="false" labelAlign="left">
         <a-form-model-item class="flex" label="报警时间" prop="alarmTime">
-          <a-date-picker style="width:100%;" valueFormat="YYYY-MM-DD hh:mm:ss" v-model="iFrom.alarmTime" show-time placeholder="请选择报警时间" />
+          <a-date-picker style="width:100%;" valueFormat="YYYY-MM-DD HH:mm:ss" v-model="iFrom.alarmTime" show-time placeholder="请选择报警时间" />
         </a-form-model-item>
         <a-form-model-item class="flex" label="系统" prop="sysCode">
           <a-input v-model="iFrom.sysCode" :maxLength="500" placeholder="请输入系统" />
