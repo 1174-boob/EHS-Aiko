@@ -40,13 +40,12 @@ export const addMaturityEvaluationQuotaReportConfig = params => post( customizat
 export const getMaturityEvaluationQuotaReportConfigDetails = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/report/detail', params);
 
 
-/*---------组织绩效数据填报-----------*/
-
+/*---------成熟度评价数据填报-----------*/
 //  列表分页
-export const getDataFillList = params => post( customization + '/api/ehs/kpi/dept/data/page/list', params);
+export const getMaturityEvaluationDataList = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/list/page', params);
 
 //根据部门id查询绩效配置
-export const queryAchDeptConfig = params => post( customization + '/api/ehs/kpi/dept/data/queryAchDeptConfig', params);
+export const getMaturityEvaDataConfigDetails = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/detail', params);
 
 //填报组织绩效
 export const fillInAchDeptData = params => post( customization + '/api/ehs/kpi/dept/data/fillInAchDeptData', params);
@@ -64,7 +63,7 @@ export const viewAchDeptData = params => post( customization + '/api/ehs/kpi/dep
 export const batchExport = params => postExcel( customization + '/api/ehs/kpi/dept/data/batchExport', params);
 
 //删除绩效数据
-export const deleteAchDateData = params => post( customization + '/api/ehs/kpi/dept/data/deleteAchDateData', params);
+export const rmMaturityEvaluationDataItem = params => post( customization + '/api/ehs/kpi/dept/data/rmMaturityEvaluationDataItem', params);
 
 /*---------组织绩效汇总-----------*/
 
