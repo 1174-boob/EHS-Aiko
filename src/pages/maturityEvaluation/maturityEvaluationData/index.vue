@@ -28,7 +28,6 @@
     </DashBtn>
     <CommonTable :page="page" :spinning="loadingTwo" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
       <a-table
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange, fixed: true }"
         :columns="columns"
         :scroll="{ x: tableScrollX() }"
         :locale="{emptyText: emptyText}"
@@ -54,7 +53,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from '@/mixin/cancelLoading';
 import dayJs from "dayjs";
 import { debounce, cloneDeep } from 'lodash';
-import { getMaturityEvaluationDataList, rmMaturityEvaluationDataItem } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaluationDataList, rmMaturityEvaDataConfigDataItem } from "@/services/maturityEvaluation.js";
 import teableSelected from "@/mixin/teableSelected";
 import CheckFillModel from './checkFillModel.vue'
 export default {
@@ -89,7 +88,7 @@ export default {
         },
         {
           title: '得分',
-          dataIndex: 'finalSocre',
+          dataIndex: 'finalScore',
           width: 100,
         },
         {
@@ -189,31 +188,30 @@ export default {
       this.checkFillModelShow = true
     },
     // 编辑
-    async actionEdit(record) {
+    actionEdit(record) {
+      sessionStorage.setItem('ehs_aiko_maturityEvaluationDataFilling',JSON.stringify({maturityEvaluationDataId: record.maturityEvaluationDataId}))
       this.$router.push({
-        path: "/ehsGerneralManage/orgPerformanceManage/branchDataFillingEdit",
-        query: { id: record.id }
+        path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationDataFillingEdit",
       })
-
     },
     //查看
     actionDetail(record) {
+      sessionStorage.setItem('ehs_aiko_maturityEvaluationDataFilling',JSON.stringify({maturityEvaluationDataId: record.maturityEvaluationDataId}))
       this.$router.push({
-        path: "/ehsGerneralManage/orgPerformanceManage/branchDataFillingView",
-        query: { id: record.id }
+        path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationDataFillingView",
       })
     },
     // 删除
     actionDelete(record) {
-      if (!this.canClickBtnMixin("performanceData-del")) {
-        return;
-      }
+      // if (!this.canClickBtnMixin("performanceData-del")) {
+      //   return;
+      // }
       this.$antConfirm({
         title: '删除提示',
         content: '本操作不可恢复，确定继续？',
         cancelText: '取消',
         onOk: () => {
-          return rmMaturityEvaluationDataItem({ id: record.id })
+          return rmMaturityEvaDataConfigDataItem({ maturityEvaluationDataId: record.maturityEvaluationDataId })
             .then(() => {
               this.$antMessage.success('删除成功');
               this.getDataList();
@@ -225,7 +223,6 @@ export default {
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page;
-      // 获取列表
       this.getDataList();
     },
     onShowSizeChange(current, pageSize) {

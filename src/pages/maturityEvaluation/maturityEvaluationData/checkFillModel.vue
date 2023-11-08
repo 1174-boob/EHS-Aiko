@@ -77,7 +77,7 @@ export default {
       this.handleLoading()
       getMaturityEvaDataConfigDetails(apiData)
         .then(res => {
-          if(res.data.finalSocre || res.data.finalSocre === 0){
+          if(res.data.finalScore || res.data.finalScore === 0){
             this.$antMessage.warn('当前部门在该月份已填报，请重新选择！')
             return
           }

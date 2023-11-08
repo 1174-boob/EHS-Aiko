@@ -50,7 +50,7 @@
             </vxe-column>
             <vxe-column field="pointsDeductions" title="扣分分值" width="180" :edit-render="{autofocus: '.vxe-input--inner', placeholder: '请点击输入扣分分值'}">
               <template #edit="{ row }">
-                <vxe-input v-model="row.pointsDeductions" placeholder="请点击输入扣分分值" type="float" min="0" digits="1" clearable></vxe-input>
+                <vxe-input v-model="row.pointsDeductions" placeholder="请点击输入扣分分值" type="float" digits="1" clearable></vxe-input>
               </template>
             </vxe-column>
             <vxe-column title="操作" field="action" width="140" align="center" fixed="right">

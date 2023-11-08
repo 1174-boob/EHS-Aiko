@@ -1,5 +1,5 @@
 <template>
-  <div class="me-upload-can-remove-box">
+  <div class="me-upload-can-remove-box" :class="[fileList.length?'padding-top8':'']">
     <a-upload
       name="multipartFile"
       :multiple="multiple"
@@ -71,6 +71,9 @@ export default {
 <style lang="less">
 @width: 40px;
 @height: 40px;
+.padding-top8{
+  padding-top: 8px;
+}
 .me-upload-can-remove-box {
   width: 100%;
   position: relative;
