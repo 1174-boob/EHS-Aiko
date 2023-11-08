@@ -139,7 +139,7 @@ export default {
             questionList: res.data.questionList,
             type: res.data.type,
             dictForm: {
-              sigleNum: res.data.sigleNum, //单选
+              singleNum: res.data.singleNum, //单选
               multipleNum: res.data.multipleNum, //多选
               judgeNum: res.data.judgeNum, //判断
               // subjectId: res.data.subjectId, //科目
