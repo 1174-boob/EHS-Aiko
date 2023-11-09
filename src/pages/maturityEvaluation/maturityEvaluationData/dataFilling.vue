@@ -24,7 +24,6 @@
             align="center"
             ref="xTable"
             show-footer
-            show-overflow
             :span-method="rowspanMethod"
             :footer-method="footerMethod"
             :merge-footer-items="mergeFooterItems"
@@ -77,20 +76,22 @@
             </vxe-column>
             <vxe-column field="dataSource" title="数据来源" min-width="140">
               <template #default="{ row }">
-
-                <template v-if="isView">
-                  {{row.dataSourceStr || '--'}}
-                </template>
+                <template v-if="isView">{{row.dataSourceStr || '--'}}</template>
 
                 <template v-else>
-                   <a-select style="width:100%;" v-model="row.dataSource" placeholder="请选择">
+                  <a-select style="width:100%;" v-model="row.dataSource" placeholder="请选择">
                     <a-select-option v-for="item in dataSourceList" :key="item.sourceKey" :value="item.sourceKey">{{item.sourceLable}}</a-select-option>
                   </a-select>
                 </template>
-               
               </template>
             </vxe-column>
-            <vxe-column field="remarks" title="备注" min-width="200"></vxe-column>
+            <vxe-column field="itemRemarks" title="备注" min-width="230">
+              <template #default="{ row }">
+                <div style="padding: 8px 0;">
+                  <a-textarea v-if="!loadingThree" placeholder="请输入备注" v-model="row.itemRemarks" :maxLength="300" autoSize />
+                </div>
+              </template>
+            </vxe-column>
           </vxe-table>
           <div class="table-remark" v-if="this.baseIfo.scorePositionStatus">备注： A：95分(含以上)； B：85分(含)~95分； C：85分一下</div>
         </div>
@@ -212,7 +213,7 @@ export default {
             return {
               ...item,
               typeAndProject: `${item.maturityEvaluationReportType}_${item.project}`,
-              dataSourceStr: this.dataSourceList.find(dSItem=>dSItem.sourceKey == item.dataSource)?.sourceLable,
+              dataSourceStr: this.dataSourceList.find(dSItem => dSItem.sourceKey == item.dataSource)?.sourceLable,
               _fileListShow: (item.gatherFileList || []).map(fileItem => {
                 return {
                   uid: fileItem.id,
