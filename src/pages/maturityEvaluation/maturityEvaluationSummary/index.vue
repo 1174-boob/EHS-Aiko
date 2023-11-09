@@ -19,23 +19,12 @@
         </a-form-model>
       </SearchTerm>
 
-      <template description="评价结果" v-if="false">
+      <template description="评价结果">
         <div class="secondary-title">
           <div class="secondary-title-left">评价结果</div>
         </div>
 
-        <a-table
-          :columns="columns"
-          :scroll="{ x: tableScrollX() }"
-          bordered
-          :locale="{ emptyText: emptyText }"
-          :data-source="tableDataList"
-          :rowKey="(record, index) => {return record.id;}"
-          :pagination="false"
-        >
-          <div slot="createUser" slot-scope="record">{{record.workNum? record.createUser +"/" + record.workNum: record.createUser}}</div>
-          <div slot="status" slot-scope="record">{{getMappingValue(statusList,"key",record.status).value}}</div>
-        </a-table>
+        <EvaluatResult />
         <div style="height: 40px"></div>
       </template>
 
@@ -61,7 +50,7 @@
         <div style="height: 40px"></div>
       </template>
 
-      <template description="部门得分环比统计">
+      <template description="部门得分环比统计" v-if="false">
         <div class="injury-box">
           <div class="secondary-title">
             <div class="secondary-title-left">部门得分环比统计</div>
@@ -78,7 +67,7 @@
         <div style="height: 40px"></div>
       </template>
 
-      <template description="部门得分月度统计">
+      <template description="部门得分月度统计" v-if="false">
         <div class="injury-box">
           <div class="secondary-title">
             <div class="secondary-title-left">部门得分月度统计</div>
@@ -107,23 +96,13 @@ import { debounce, cloneDeep } from "lodash";
 import Echarts from "@/components/echarts/index.vue";
 import { querySummayDeptData, achDeptSummaryBar, achDeptSummaryLevel, } from "@/services/performanceManagementBranch.js";
 import { downLoadReport } from "@/utils/common.js";
+import EvaluatResult from './evaluatResult.vue'
 export default {
+  components: { Echarts,EvaluatResult },
   mixins: [teableCenterEllipsis, cancelLoading],
-  components: { Echarts },
   data() {
     return {
-      statusList: [],
-      formInline: {
-        fillDimension: 1,
-        fillDate: this.isQuarter(),
-        year: dayJs(new Date()).format("YYYY"),
-      },
-      searchForm: {
-        queryDimension: 1,
-        queryDateType: this.isQuarter(),
-        year: dayJs(new Date()).format("YYYY"),
-      },
-      selectedRowKeys: [],
+      formInline: {},
       columns: [
         {
           title: "维度",
@@ -307,8 +286,6 @@ export default {
         ]
       },
       tableDataList: [],
-      option: [],
-      tOption: [],
       quarterOption: [
         { name: "第一季度", value: 1 },
         { name: "第二季度", value: 2 },
@@ -451,60 +428,8 @@ export default {
   },
   created() {
     this.setRouterCode("performanceBranchSummary");
-    this.statusList = dictionary("approvalStatus");
-    // this.columns.splice(1, 0, this.addCommonColumnItem(200));
-    this.option = this.quarterOption;
-    this.tOption = this.quarterOption;
-    // this.formInline.fillDate = this.isQuarter()
-    // this.formInline.year = dayJs(new Date()).format("YYYY");
-    this.getDataList();
-    this.getChartList();
   },
   methods: {
-    // 查询季度
-    isQuarter() {
-      let Month = Number(new Date().getMonth()) + 1;
-      return Month;
-    },
-    onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys;
-    },
-    // 导出Excel
-    async exportExcel() {
-      let para = {
-        ...this.preFormInline,
-        // draftStatus: 2,//非草稿列表
-        pageSize: this.page.pageSize,
-        pageNo: this.page.pageNo,
-      };
-      try {
-        const res = await accidentEventDownload(para);
-        if (res) {
-          const name = "管理绩效数据导出";
-          const blob = new Blob([res], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
-          const downloadElement =
-            document.createElement("a");
-          const href = URL.createObjectURL(blob); //创建下载链接
-          downloadElement.href = href;
-          downloadElement.download = name + ".xlsx";
-          document.body.appendChild(downloadElement);
-          downloadElement.click();
-          document.body.removeChild(downloadElement); // 下载完成移除元素
-          window.URL.revokeObjectURL(href); // 释放掉blob对象
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    // 填报数据报表
-    toDataFilling() {
-      console.log(this.selectedRowKeys);
-      this.$router.push({
-        path: "/ehsGerneralManage/orgPerformanceManage/branchDataFilling",
-      });
-    },
     getDataList() {
       return querySummayDeptData(this.formInline)
         .then((res) => {
@@ -516,7 +441,7 @@ export default {
         });
     },
     getChartList() {
-      return achDeptSummaryBar(this.searchForm)
+      return achDeptSummaryBar()
         .then((res) => {
           this.addLoading = false;
           if (res.data.length) {
@@ -534,121 +459,20 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      achDeptSummaryLevel(this.searchForm)
-        .then((res) => {
-          this.addLoading = false;
-          if (res.data.length) {
-            this.pieLevel = res.data.map((i) => {
-              return {
-                type: i.level + "档",
-                arr: i.deptNames,
-              };
-            });
-            this.pOption.series[0].data = res.data.map(
-              (i) => {
-                return {
-                  value: Number(i.ratio),
-                  name: i.level + "档",
-                };
-              }
-            );
-            this.setPOption = this.pOption;
-          } else {
-            this.pieLevel = [
-              { type: "A档", arr: null },
-              { type: "B档", arr: null },
-              { type: "C档", arr: null },
-            ];
-            this.setPOption = undefined;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     // 查询
     iSearch() {
-      // 获取列表
-      this.getDataList().finally(() => {
-        this.cancelLoading();
-      });
+      this.getDataList()
     },
     // 重置
     iRest: debounce(
       function () {
-        this.formInline = {
-          fillDimension: 1,
-          fillDate: this.isQuarter(),
-          year: dayJs(new Date()).format("YYYY"),
-        };
-        this.option = this.quarterOption;
+        this.formInline = {};
         this.getDataList();
       },
       250,
       { leading: true, trailing: false }
     ),
-    //筛选维度变化
-    handleWChange(e) {
-      if (e == 1) {
-        this.formInline.fillDate = this.isQuarter();
-        this.option = this.quarterOption;
-      } else {
-        this.formInline.fillDate =
-          Number(new Date().getMonth()) + 1;
-        this.option = this.monthOption;
-      }
-    },
-    // 图表重置
-    siRest: debounce(
-      function () {
-        this.searchForm = {
-          queryDimension: 1,
-          queryDateType: this.isQuarter(),
-          year: dayJs(new Date()).format("YYYY"),
-        };
-        this.tOption = this.quarterOption;
-        this.getChartList();
-      },
-      250,
-      { leading: true, trailing: false }
-    ),
-    // 图表查询
-    siSearch() {
-      // 获取列表
-      this.getChartList().finally(() => {
-        this.cancelLoading();
-      });
-    },
-    //图表筛选维度变化
-    handleTChange(e) {
-      if (e == 1) {
-        this.searchForm.queryDateType = this.isQuarter();
-        this.tOption = this.quarterOption;
-      } else if (e == 3) {
-        this.searchForm.queryDateType = 1;
-        this.tOption = [
-          { name: "上半年", value: 1 },
-          { name: "下半年", value: 2 },
-        ];
-      } else {
-        this.searchForm.queryDateType = null;
-      }
-    },
-    //报表下载
-    downLoadLocaReport() {
-      const elLoading = this.$loading({
-        lock: true,
-        text: "导出中...",
-      });
-      this.showPrintPdfBtn = true;
-      downLoadReport(
-        this.$refs.downloadArea,
-        "组织绩效汇总报表"
-      ).finally(() => {
-        this.showPrintPdfBtn = false;
-        elLoading.close();
-      });
-    },
   },
 };
 </script>
