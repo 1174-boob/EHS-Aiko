@@ -56,23 +56,11 @@ export const fillMaturityEvaDataConfigData = params => post( customization + '/a
 // 导出成熟度评价数据
 export const exportMaturityEvaDataConfigData = params => postExcel( customization + '/api/ehs/customization/ax/maturity/evaluation/data/download', params);
 
-//选择部门下拉框---已配置绩效报表部门
-export const selectDeptK= params => post( customization + '/api/ehs/kpi/dept/data/deptList', params);
-
-//编辑组织绩效数据
-export const editAchDeptData = params => post( customization + '/api/ehs/kpi/dept/data/editAchDeptData', params);
-
-//查看绩效数据
-export const viewAchDeptData = params => post( customization + '/api/ehs/kpi/dept/data/viewAchDeptData', params);
-
-//批量导出
-export const batchExport = params => postExcel( customization + '/api/ehs/kpi/dept/data/batchExport', params);
-
 
 /*---------组织绩效汇总-----------*/
 
-//  列表分页
-export const querySummayDeptData = params => post( customization + '/api/ehs/kpi/dept/data/querySummayDeptData', params);
+//  评价结果
+export const getMaturityEvaDataSumEvaluatResult = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/analysis/evaluation/results', params);
 
 //各部门绩效得分统计图（柱状图）
 export const achDeptSummaryBar = params => post( customization + '/api/ehs/kpi/dept/data/achDeptSummaryBar', params);
@@ -82,17 +70,3 @@ export const achDeptSummaryLevel = params => post( customization + '/api/ehs/kpi
 
 
 
-/*---------组织绩效-部门-----------*/
-
-//  列表分页
-export const queryDeptData = params => post( customization + '/api/ehs/kpi/dept/data/queryDeptData', params);
-
-//部门-绩效得分统计图（柱状图）
-export const queryDeptBar = params => post( customization + '/api/ehs/kpi/dept/data/queryDeptBar', params);
-
-//部门-分档统计图--饼状
-export const queryDeptLevel = params => post( customization + '/api/ehs/kpi/dept/data/queryDeptLevel', params);
-
-
-//环境月报现地 撤回
-// export const downloadFile = params => postExcel( envMonth + '/api/ehs/month/environmentMonth/summary/downloadFile', params);

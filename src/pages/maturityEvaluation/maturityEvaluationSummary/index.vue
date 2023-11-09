@@ -4,10 +4,10 @@
       <SearchTerm>
         <a-form-model layout="inline" :model="formInline" :colon="false">
           <a-form-model-item label="年份">
-            <el-date-picker v-model="formInline.year" type="year" value-format="yyyy" placeholder="选择年" :clearable="false"></el-date-picker>
+            <el-date-picker v-model="formInline.year" type="year" value-format="yyyy" placeholder="请选择" :clearable="false"></el-date-picker>
           </a-form-model-item>
-          <a-form-model-item label="日期">
-            <a-select v-model="formInline.fillDate" placeholder="请选择">
+          <a-form-model-item label="月份">
+            <a-select v-model="formInline.month" placeholder="请选择">
               <a-select-option v-for="(i, index) in monthOption" :key="index" :value="i.value">{{ i.name }}</a-select-option>
             </a-select>
           </a-form-model-item>
@@ -96,13 +96,29 @@ import { debounce, cloneDeep } from "lodash";
 import Echarts from "@/components/echarts/index.vue";
 import { querySummayDeptData, achDeptSummaryBar, achDeptSummaryLevel, } from "@/services/performanceManagementBranch.js";
 import { downLoadReport } from "@/utils/common.js";
+import { getMaturityEvaDataSumEvaluatResult, rmMaturityEvaDataConfigDataItem } from "@/services/maturityEvaluation.js";
 import EvaluatResult from './evaluatResult.vue'
 export default {
-  components: { Echarts,EvaluatResult },
+  components: { Echarts, EvaluatResult },
   mixins: [teableCenterEllipsis, cancelLoading],
   data() {
     return {
-      formInline: {},
+      
+      monthOption: [
+        { name: "1月", value: '1' },
+        { name: "2月", value: '2' },
+        { name: "3月", value: '3' },
+        { name: "4月", value: '4' },
+        { name: "5月", value: '5' },
+        { name: "6月", value: '6' },
+        { name: "7月", value: '7' },
+        { name: "8月", value: '8' },
+        { name: "9月", value: '9' },
+        { name: "10月", value: '10' },
+        { name: "11月", value: '11' },
+        { name: "12月", value: '12' },
+      ],
+
       columns: [
         {
           title: "维度",
@@ -292,20 +308,6 @@ export default {
         { name: "第三季度", value: 3 },
         { name: "第四季度", value: 4 },
       ],
-      monthOption: [
-        { name: "1月", value: 1 },
-        { name: "2月", value: 2 },
-        { name: "3月", value: 3 },
-        { name: "4月", value: 4 },
-        { name: "5月", value: 5 },
-        { name: "6月", value: 6 },
-        { name: "7月", value: 7 },
-        { name: "8月", value: 8 },
-        { name: "9月", value: 9 },
-        { name: "10月", value: 10 },
-        { name: "11月", value: 11 },
-        { name: "12月", value: 12 },
-      ],
       bOption: {
         title: {
           text: "各项目管理绩效得分", //"作业数量",
@@ -428,47 +430,51 @@ export default {
   },
   created() {
     this.setRouterCode("performanceBranchSummary");
+
+    this.initFormInline()
+
+    this.getPageData()
   },
   methods: {
-    getDataList() {
-      return querySummayDeptData(this.formInline)
-        .then((res) => {
-          this.addLoading = false;
-          this.tableDataList = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    initFormInline(){
+     const dayNow = dayJs().subtract(1, 'month')
+     this.formInline = {
+        year:dayNow.format('YYYY'),
+        month:dayNow.format('MM'),
+     }
     },
-    getChartList() {
-      return achDeptSummaryBar()
-        .then((res) => {
-          this.addLoading = false;
-          if (res.data.length) {
-            this.bOption.series[0].data = res.data.map(
-              (i) => i.score
-            );
-            this.bOption.xAxis[0].data = res.data.map(
-              (i) => i.deptName
-            );
-            this.setOption = this.bOption;
-          } else {
-            this.setOption = undefined;
-          }
+    getPageData() {
+      Promise.all([
+        this.getEvaluatResultData()
+      ])
+        .finally(() => {
+
         })
-        .catch((err) => {
-          console.log(err);
-        });
+    },
+    // 获取评价结果api
+    getEvaluatResultData() {
+      let apiData = {
+        ...this.formInline,
+      }
+      return getMaturityEvaDataSumEvaluatResult(apiData)
+        .then(res => {
+
+        })
+        .catch(err => { })
     },
     // 查询
-    iSearch() {
-      this.getDataList()
-    },
+    iSearch: debounce(
+      function () {
+        this.getPageData()
+      },
+      250,
+      { leading: true, trailing: false }
+    ),
     // 重置
     iRest: debounce(
       function () {
-        this.formInline = {};
-        this.getDataList();
+        this.initFormInline();
+        this.getPageData();
       },
       250,
       { leading: true, trailing: false }
