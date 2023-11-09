@@ -12,7 +12,7 @@
       @preview="handlePreview"
       @change="handleChange"
     >
-      <div class="upload-can-remove-box-main" v-if="fileList.length < limit">
+      <div class="upload-can-remove-box-main" v-if="fileList.length < limit && !disabled">
         <a-icon class="ant-upload-icon" :type="loading ? 'loading' : 'plus'" />
       </div>
     </a-upload>

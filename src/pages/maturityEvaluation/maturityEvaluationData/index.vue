@@ -182,13 +182,16 @@ export default {
 
     // 填报数据报表
     toDataFilling() {
-      // if (!this.canClickBtnMixin("maturityEvaluationQuotaReportAddDept")) {
-      //   return;
-      // }
+      if (!this.canClickBtnMixin("maturityEvaluationDataFilling")) {
+        return;
+      }
       this.checkFillModelShow = true
     },
     // 编辑
     actionEdit(record) {
+      if (!this.canClickBtnMixin("maturityEvaluationDataFillingEdit")) {
+        return;
+      }
       sessionStorage.setItem('ehs_aiko_maturityEvaluationDataFilling',JSON.stringify({maturityEvaluationDataId: record.maturityEvaluationDataId}))
       this.$router.push({
         path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationDataFillingEdit",
@@ -196,6 +199,9 @@ export default {
     },
     //查看
     actionDetail(record) {
+      if (!this.canClickBtnMixin("maturityEvaluationDataFillingView")) {
+        return;
+      }
       sessionStorage.setItem('ehs_aiko_maturityEvaluationDataFilling',JSON.stringify({maturityEvaluationDataId: record.maturityEvaluationDataId}))
       this.$router.push({
         path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationDataFillingView",
@@ -203,9 +209,9 @@ export default {
     },
     // 删除
     actionDelete(record) {
-      // if (!this.canClickBtnMixin("performanceData-del")) {
-      //   return;
-      // }
+      if (!this.canClickBtnMixin("maturityEvaluationDataFillingDel")) {
+        return;
+      }
       this.$antConfirm({
         title: '删除提示',
         content: '本操作不可恢复，确定继续？',

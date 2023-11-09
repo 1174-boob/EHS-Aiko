@@ -53,6 +53,9 @@ export const getMaturityEvaDataConfigDetails = params => post( customization + '
 // 填报成熟度评价数据
 export const fillMaturityEvaDataConfigData = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/edit', params);
 
+// 导出成熟度评价数据
+export const exportMaturityEvaDataConfigData = params => postExcel( customization + '/api/ehs/customization/ax/maturity/evaluation/data/download', params);
+
 //选择部门下拉框---已配置绩效报表部门
 export const selectDeptK= params => post( customization + '/api/ehs/kpi/dept/data/deptList', params);
 

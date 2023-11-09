@@ -48,25 +48,46 @@
               <template #default="{ row }">{{row.pointsDeductionFinalScore}}</template>
             </vxe-column>
             <vxe-column field="calculationDetails" title="计算明细" min-width="240" :show-overflow="false"></vxe-column>
-            <vxe-column field="pointsDeductionNumber" title="现场情况" min-width="200">
-              <template #default="{ row }">
-                <div class="points-deduction">
-                  <a-input-number class="points-deduction-input" :value="row.pointsDeductionNumber" :precision="0" :min="0" :controls="false" @change="(e) => {sitesNumChange(e, row)}" />
-                  <span class="points-deduction-unit">{{row.indicatorUnit}}</span>
-                </div>
-              </template>
-            </vxe-column>
+
+            <template v-if="isView">
+              <vxe-column field="pointsDeductionNumber" title="现场情况" min-width="100">
+                <template #default="{ row }">
+                  <span>{{row.pointsDeductionNumber}} {{row.indicatorUnit}}</span>
+                </template>
+              </vxe-column>
+            </template>
+
+            <template v-else>
+              <vxe-column field="pointsDeductionNumber" title="现场情况" min-width="200">
+                <template #default="{ row }">
+                  <div class="points-deduction">
+                    <a-input-number class="points-deduction-input" :value="row.pointsDeductionNumber" :precision="0" :min="0" :controls="false" @change="(e) => {sitesNumChange(e, row)}" />
+                    <span class="points-deduction-unit">{{row.indicatorUnit}}</span>
+                  </div>
+                </template>
+              </vxe-column>
+            </template>
+
             <vxe-column field="pointsDeductions" title="扣分分值" width="100"></vxe-column>
             <vxe-column field="fileIdList" title="问题点图片" min-width="200" :show-overflow="false">
               <template #default="{ row }">
-                <UploadCanRemove ref="fileIdListRef" :maxSize="5" :limit="20" :headImgs="row._fileListShow || []" @handleSuccess="(fileList)=> fileIdListRefSuccess(row,fileList)"></UploadCanRemove>
+                <UploadCanRemove ref="fileIdListRef" :maxSize="5" :limit="20" :disabled="isView" :headImgs="row._fileListShow || []" @handleSuccess="(fileList)=> fileIdListRefSuccess(row,fileList)"></UploadCanRemove>
+                <span v-if="isView && row._fileListShow.length == 0">--</span>
               </template>
             </vxe-column>
             <vxe-column field="dataSource" title="数据来源" min-width="140">
               <template #default="{ row }">
-                <a-select style="width:100px;" v-model="row.dataSource" placeholder="请选择">
-                  <a-select-option v-for="item in dataSourceList" :key="item.sourceKey" :value="item.sourceKey">{{item.sourceLable}}</a-select-option>
-                </a-select>
+
+                <template v-if="isView">
+                  {{row.dataSourceStr || '--'}}
+                </template>
+
+                <template v-else>
+                   <a-select style="width:100%;" v-model="row.dataSource" placeholder="请选择">
+                    <a-select-option v-for="item in dataSourceList" :key="item.sourceKey" :value="item.sourceKey">{{item.sourceLable}}</a-select-option>
+                  </a-select>
+                </template>
+               
               </template>
             </vxe-column>
             <vxe-column field="remarks" title="备注" min-width="200"></vxe-column>
@@ -80,8 +101,8 @@
     <div slot="fixedBottom">
       <FixedBottom>
         <div>
-          <a-button @click="pageCancle">返回</a-button>
-          <a-button type="primary" v-if="!isView" :loading="loading" @click="pageSubmit">保存</a-button>
+          <a-button @click="goBack">返回</a-button>
+          <a-button type="primary" v-if="!isView" :loading="loading" @click="onSubmit">保存</a-button>
         </div>
       </FixedBottom>
     </div>
@@ -90,29 +111,20 @@
 
 <script>
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
-import ReportDataTableVue from "./reportDataTableBranch.vue";
-import { formValidator } from "@/utils/clx-form-validator.js";
 import { rmDuplicatesByKey } from "@/utils/util.js";
-import { nanoid } from 'nanoid'
-import { getQueryVariable } from "@/utils/util.js"
-import dayJs from "dayjs";
-import { getMaturityEvaDataConfigDetails, fillMaturityEvaDataConfigData } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaDataConfigDetails, fillMaturityEvaDataConfigData, exportMaturityEvaDataConfigData } from "@/services/maturityEvaluation.js";
 import { cloneDeep } from "lodash";
-import { getDictTarget } from "@/utils/dictionary";
 import cancelLoading from '@/mixin/cancelLoading';
 import rowspanMethod from "@/utils/rowspanMethod.js";
 import { BigNumber } from "bignumber.js";
 import UploadCanRemove from './uploadCanRemove.vue';
 export default {
-  components: { FixedBottom, ReportDataTableVue, UploadCanRemove },
+  components: { FixedBottom, UploadCanRemove },
   mixins: [cancelLoading],
   data() {
     return {
       // 基本信息
       baseIfo: {},
-
-      startStatus: '1',
-      subFileValue: {},
       // 维度
       dimensionMatch: {
         prior: '事前',
@@ -120,7 +132,6 @@ export default {
         afterTeFact: '事后',
       },
       reportData: [],
-
       dataSourceList: [
         {
           sourceKey: '1',
@@ -201,9 +212,11 @@ export default {
             return {
               ...item,
               typeAndProject: `${item.maturityEvaluationReportType}_${item.project}`,
-              _fileListShow: (item.gatherFileList || []).map(fileItem=>{
+              dataSourceStr: this.dataSourceList.find(dSItem=>dSItem.sourceKey == item.dataSource)?.sourceLable,
+              _fileListShow: (item.gatherFileList || []).map(fileItem => {
                 return {
                   uid: fileItem.id,
+                  id: fileItem.id,
                   name: fileItem.fileName,
                   status: 'done',
                   url: fileItem.filePath,
@@ -213,18 +226,29 @@ export default {
           })
         })
         .catch(err => { })
-        .finally(()=>{
+        .finally(() => {
           this.cancelLoadingThree(300)
         })
     },
 
-    exportTable(){
-      this.$refs.xTable.exportData({ type: 'csv' })
-    },  
+    // 下载-导出excel
+    exportTable() {
+      let apiData = {
+        maturityEvaluationDataId: this.baseIfo.maturityEvaluationDataId,
+      }
+      this.handleLoadingTwo()
+      exportMaturityEvaDataConfigData(apiData)
+        .then(res => {
+          this.spreadSheetExcel(res, "成熟度评价数据");
+        })
+        .catch(err => { })
+        .finally(() => {
+          this.cancelLoadingTwo(300)
+        })
+    },
 
     // 图片上传
     fileIdListRefSuccess(row, fileList) {
-      // console.log('图片上传',row,fileList);
       row.fileIdList = fileList.map(item => item.id)
       row._fileListShow = fileList
     },
@@ -256,26 +280,28 @@ export default {
       }
       return arr
     },
+
     // 更新表尾数据
     updateFooterEvent() {
       this.$nextTick(() => {
         this.$refs.xTable.updateFooter();
       })
     },
+
     // 现场情况改变事件
     sitesNumChange(e, row) {
       const value = e
       row.pointsDeductionNumber = value || 0
-      row.pointsDeductionNumberSocre = BigNumber(row.pointsDeductionNumber).times(row.pointsDeductions).toString()
+      row.pointsDeductionNumberScore = BigNumber(row.pointsDeductionNumber).times(row.pointsDeductions).toNumber()
 
       const { score, maturityEvaluationReportType, project } = row
       const deductionScore = this.reportData
         .filter(item => item.maturityEvaluationReportType == maturityEvaluationReportType && item.project == project)
-        .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionNumberSocre).toString(), 0)
+        .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionNumberScore).toNumber(), 0)
 
       this.reportData.forEach(item => {
         if (item.maturityEvaluationReportType == maturityEvaluationReportType && item.project == project) {
-          const pointsDeductionFinalScore = BigNumber(score).minus(deductionScore).toString()
+          const pointsDeductionFinalScore = BigNumber(score).minus(deductionScore).toNumber()
           item.pointsDeductionFinalScore = pointsDeductionFinalScore < 0 ? 0 : pointsDeductionFinalScore
         }
       })
@@ -284,12 +310,13 @@ export default {
     },
 
     // 返回
-    pageCancle() {
+    goBack() {
       this.setKeepalive(true)
       this.$router.push("/ehsGerneralManage/maturityEvaluation/maturityEvaluationData");
     },
+
     // 提交
-    pageSubmit() {
+    onSubmit() {
       // 检查数据来源
       const hasEmptyDataSource = this.reportData.some(item => !Boolean(item.dataSource))
       if (hasEmptyDataSource) {
@@ -313,81 +340,6 @@ export default {
         .finally(() => {
           this.cancelLoading(300)
         })
-      return
-      let params = {
-        level: this.$refs.reportDataTableVue.level,
-        score: Number(this.$refs.reportDataTableVue.score),
-      }
-      if (!this.isEdit) {
-        if (!formValidator.formAll(this, 'formInline')) {
-          return;
-        }
-        Object.assign(params, this.formInline);
-      } else {
-        params.achDataDetailList = cloneDeep(this.reportData).map(i => {
-          i.scene = i.sitesNum
-          i.projectScore = Number(i.projectScore) < 0 ? 0 : Number(i.projectScore)
-          return i
-
-        })
-        if (this.startStatus == 2) {
-          params.remark = JSON.stringify(this.subFileValue)
-        }
-        //负值不让提交
-        let b = params.achDataDetailList.some(i => {
-          if (i.projectScore < 0) {
-            return true
-          } else {
-            return false
-          }
-
-        })
-        if (b) {
-          this.$antMessage.error("每项指标的扣分分值不得超过风险分值");
-          return false
-        }
-
-        editAchDeptData(params)
-          .then(res => {
-            this.$antMessage.success("修改成功");
-            this.$router.push({
-              path: "/ehsGerneralManage/orgPerformanceManage/performanceBranchData"
-            })
-          })
-          .catch(err => { })
-        return false
-      }
-      // achDataDetailList
-      params.achDataDetailList = cloneDeep(this.reportData).map(i => {
-        i.scene = i.sitesNum
-        delete i.id //= ''
-        delete i.indexItems
-        i.projectScore = Number(i.projectScore) < 0 ? 0 : Number(i.projectScore)
-        // i.sumDeductScore = Number(i.sumDeductScore)
-        return i
-      })
-      if (this.startStatus == 2) {
-        params.remark = JSON.stringify(this.subFileValue)
-      }
-      //负值不让提交
-      let b = params.achDataDetailList.some(i => {
-        if (i.projectScore < 0) {
-          return true
-        } else {
-          return false
-        }
-
-      })
-      if (b) {
-        this.$antMessage.error("每项指标的扣分分值不得超过风险分值");
-        return false
-      }
-      fillMaturityEvaDataConfigData(params).then(res => {
-        this.$antMessage.success("填报成功");
-        this.$router.push({
-          path: "/ehsGerneralManage/orgPerformanceManage/performanceBranchData"
-        })
-      })
     },
   }
 }
