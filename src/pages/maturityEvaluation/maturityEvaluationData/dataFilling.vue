@@ -86,7 +86,7 @@
               </template>
             </vxe-column>
             <vxe-column field="itemRemarks" title="备注" min-width="230">
-              <template #default="{ row }">
+              <template #default="{ row }" v-if="!isView">
                 <div style="padding: 8px 0;">
                   <a-textarea v-if="!loadingThree" placeholder="请输入备注" v-model="row.itemRemarks" :maxLength="300" autoSize />
                 </div>
