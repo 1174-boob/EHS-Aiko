@@ -35,11 +35,15 @@
             <vxe-column field="maturityEvaluationReportType" title="维度" width="100">
               <template #default="{ row }">{{dimensionMatch[row.maturityEvaluationReportType]}}</template>
             </vxe-column>
-            <vxe-column field="purposeOfEstablishment" title="设立目的" min-width="200"></vxe-column>
+            <vxe-column field="typeAndProject" title="设立目的" min-width="200">
+              <template #default="{ row }">{{row.purposeOfEstablishment}}</template>
+            </vxe-column>
             <vxe-column field="typeAndProject" title="项目" min-width="200">
               <template #default="{ row }">{{row.project}}</template>
             </vxe-column>
-            <vxe-column field="definition" title="定义" min-width="200"></vxe-column>
+            <vxe-column field="typeAndProject" title="定义" min-width="200">
+               <template #default="{ row }">{{row.definition}}</template>
+            </vxe-column>
             <vxe-column field="typeAndProject" title="分值" width="100">
               <template #default="{ row }">{{row.score}}</template>
             </vxe-column>
