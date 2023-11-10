@@ -51,7 +51,7 @@
       <!-- 按钮-查看/编辑/新建 -->
       <FixedBottom>
         <div>
-          <a-button class="m-r-15" @click="goBack">返回</a-button>
+          <a-button class="m-r-15" @click="goBack">取消</a-button>
           <a-button :loading="btnLoading" type="primary" class="m-r-15" @click="confirm">确定</a-button>
         </div>
       </FixedBottom>
@@ -91,10 +91,6 @@ export default {
     FixedBottom,
   },
   props: {
-    planId: {
-      type: String,
-      default: ""
-    },
     disabled: {
       type: Boolean,
       default: false
@@ -161,17 +157,7 @@ export default {
     },
     // 报告-编辑/查看
     echoReportEdit() {
-      let checkType = 0
-      if (this.$route.query.checkType == 'day'){
-        checkType = 1
-      } else if (this.$route.query.checkType == 'month') {
-        checkType = 2
-      } else if (this.$route.query.checkType == 'year') {
-        checkType = 3
-      } else {
-        checkType = 4
-      }
-      checkItemList({ checkType: checkType, equipType: this.$route.query.equipType}).then(res => {
+      checkItemList({ checkType: this.$route.query.checkType, equipType: this.$route.query.equipType}).then(res => {
         console.log(res.data,'万千傻逼随它去');
         if (res.data.length != 0 ){
           let resultObj = res.data || {};
@@ -208,18 +194,8 @@ export default {
         const { _X_ROW_KEY, ...rest } = item;
         return rest;
       });
-      let checkType = 0
-      if (this.$route.query.checkType == 'day'){
-        checkType = 1
-      } else if (this.$route.query.checkType == 'month') {
-        checkType = 2
-      } else if (this.$route.query.checkType == 'year') {
-        checkType = 3
-      } else {
-        checkType = 4
-      }
       let params = {
-        checkType: checkType, 
+        checkType: this.$route.query.checkType, 
         equipType: this.$route.query.equipType,
         itemList: filteredTableData,
         enableProjectLevel: this.startStatus == false ? '0' : '1' 

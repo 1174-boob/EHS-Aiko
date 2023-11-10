@@ -1,30 +1,35 @@
 <template>
-  <CommonModal :title="'添加'" :visible="inspectionRecordModelShowFire" :cancelFn="closeModel">
+  <CommonModal :title="fireType" :visible="inspectionRecordModelShowFire" :cancelFn="closeModel">
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item ref="handlingSituation" label="发现问题描述" prop="handlingSituation">
-          <a-textarea v-model.trim="formModel.handlingSituation" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
+        <a-form-model-item ref="description" label="异常问题描述" prop="description">
+          <a-textarea v-model.trim="formModel.description" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
         </a-form-model-item>
-        <a-form-model-item ref="handlingSituation" label="问题处理情况" prop="handlingSituation">
-          <a-textarea v-model.trim="formModel.handlingSituation" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
-        </a-form-model-item>
-        <StaffOrDept
-          :labelTitle="'处理人'"
-          :propKey="'dutyUserIdList'"
-          :checkedTreeNode="checkedTreeNode"
-          @getTreeData="getTreeData"
-        ></StaffOrDept>
-        <a-form-model-item ref="startTime" label="处理时间" prop="startTime">
-          <a-time-picker style="width: 100%;" v-model="formModel.startTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择" />
+        <a-form-model-item ref="dealWith" label="异常问题处理情况" prop="dealWith">
+          <a-textarea v-model.trim="formModel.dealWith" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
         </a-form-model-item>
         <StaffOrDept
+          :treeType="'user'"
+          :propKey="'handleUserId'"
           :labelTitle="'处理人'"
-          :propKey="'dutyUserIdList'"
-          :checkedTreeNode="checkedTreeNode"
-          @getTreeData="getTreeData"
+          @getTreeData="personThingOne"
+          :checkedTreeNode="formModel.handleUserId"
         ></StaffOrDept>
-        <a-form-model-item ref="endTime" label="处理时间" prop="endTime">
-          <a-time-picker style="width: 100%;" v-model="formModel.endTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择" />
+        <a-form-model-item ref="handleDate" label="处理时间" prop="handleDate">
+          <a-date-picker style="width: 100%;" v-model="formModel.handleDate" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" placeholder="请选择"/>
+        </a-form-model-item>
+        <StaffOrDept
+          :treeType="'user'"
+          :labelTitle="'安全管理员'"
+          :propKey="'secureManageUserId'"
+          @getTreeData="personThingTwo"
+          :checkedTreeNode="formModel.secureManageUserId"
+        ></StaffOrDept>
+        <a-form-model-item ref="secureManageHandleDate" label="处理时间" prop="secureManageHandleDate">
+          <a-date-picker style="width: 100%;" v-model="formModel.secureManageHandleDate" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" placeholder="请选择"/>
+        </a-form-model-item>
+        <a-form-model-item ref="remark" label="备注" prop="remark">
+          <a-input style="width: 100%;" v-model="formModel.remark" placeholder="请输入" />
         </a-form-model-item>
       </a-form-model>
     </template>
@@ -65,23 +70,13 @@ export default {
       wrapperCol: { span: 17 },
       // 新增、修改表单
       formModel: {},
-      // 表单验证
-      fireRoomList: [
-        { key: '1', value: '一期' },
-        { key: '2', value: '二期' }
-      ],
       rules: {
-        fireRoom: [{ required: true, message: "不能为空", trigger: "blur" }],
-        normal: [{ required: true, message: "不能为空", trigger: "blur" }],
-        failure: [{ required: true, message: "不能为空", trigger: "blur" }],
-        fireAlarm: [{ required: true, message: "不能为空", trigger: "blur" }],
-        faultAlarm: [{ required: true, message: "不能为空", trigger: "blur" }],
-        supervisionAlarm: [{ required: true, message: "不能为空", trigger: "blur" }],
-        omissionOfReport: [{ required: true, message: "不能为空", trigger: "blur" }],
-        handlingSituation: [{ required: true, message: "不能为空", trigger: "blur" }],
-        startTime: [{ required: true, message: "不能为空", trigger: "change" }],
-        endTime: [{ required: true, message: "不能为空", trigger: "change" }],
-        dutyUserIdList: [{ required: true, message: "不能为空", trigger: "blur" }],
+        description: [{ required: true, message: "不能为空", trigger: "change" }],
+        dealWith: [{ required: true, message: "不能为空", trigger: "change" }],
+        handleUserId: [{ required: true, message: "不能为空", trigger: "change" }],
+        secureManageUserId: [{ required: true, message: "不能为空", trigger: "change" }],
+        handleDate: [{ required: true, message: "不能为空", trigger: "change" }],
+        secureManageHandleDate: [{ required: true, message: "不能为空", trigger: "change" }],
       },
       dicOnly: [],
       checkedTreeNode: []
@@ -91,27 +86,61 @@ export default {
     this.dicOnly = dictionary('only');
   },
   methods: {
-    getTreeData(value) {
-      this.formModel.dutyUserIdList = value.treeIdList;
-      this.formModel.dutyUserNameList = value.treeNameAndCodeList.map((item)=>{
-        return item.treeName
-      });
-      this.checkedTreeNode = value.treeIdList;
-      if (!formValidator.formItemValidate(this, "dutyUserIdList", "ruleForm")) {
-        return;
+    // 处理人
+    personThingOne(data) {
+      this.formModel.handleUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.formModel.handleUserName = this.getName(list);
+      this.formModel.handleUserJobNumber = this.getWorkNum(list);
+    },
+    // 安全管理员
+    personThingTwo(data) {
+      this.formModel.secureManageUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.formModel.secureManageUserName = this.getName(list);
+      this.formModel.secureManageUserJobNumber = this.getWorkNum(list);
+    },
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
       }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
     },
     // 确定
     onSubmit() {
       if (!formValidator.formAll(this, "ruleForm")) {
         return;
       }
+      if(this.formModel.handleUserId.length > 1){
+        this.$antMessage.warn('只能选择一名处理人！');
+        return
+      }
+      if(this.formModel.secureManageUserId.length > 1){
+        this.$antMessage.warn('只能选择一名安全管理员！');
+        return
+      }
       this.handleLoading()
       if(this.fireType == '编辑') {
         this.$emit('changeModuleList', this.formModel)
+        console.log('编辑',this.formModel);
       } else {
         this.formModel.fireTimeStamp = new Date().getTime() + '';
         this.$emit('addModuleList', this.formModel)
+        console.log('新增',this.formModel);
       }
       this.cancelLoading()
       this.closeModel()
@@ -125,7 +154,7 @@ export default {
     inspectionRecordModelShowFire(newVal) {
       if (newVal) {
         this.formModel = isEmpty(this.formModelOldData) ? {} : cloneDeep(this.formModelOldData)
-        this.checkedTreeNode = this.formModel.dutyUserIdList;
+        // this.checkedTreeNode = this.formModel.dutyUserIdList;
       } else {
         setTimeout(() => {
           this.formModel = {}

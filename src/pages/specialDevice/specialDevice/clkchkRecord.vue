@@ -4,27 +4,60 @@
     <div class="clx-flex-1">
       <div class="baseInfo">
         <a-row type="flex" justify="space-around">
-          <a-col :span="4">设备名称：叉车</a-col>
-          <a-col :span="4">设备代码：xxx</a-col>
-          <a-col :span="4">所在位置：xxx</a-col>
-          <a-col :span="4">牌照编号：xxx</a-col>
+          <a-col :span="4">设备名称：{{queryInfo.equipmentName}}</a-col>
+          <a-col :span="4">设备代码：{{queryInfo.equipmentCode}}</a-col>
+          <a-col :span="4">所在位置：{{queryInfo.equipmentLocation}}</a-col>
+          <a-col v-if="queryInfo.forkliftPlateNum!= null" :span="4">牌照编号：{{queryInfo.forkliftPlateNum}}</a-col>
         </a-row>
       </div>
 
-      <a-tabs v-model="activeKey" @change="tabChange">
-        <a-tab-pane key="1" tab="日常点检">
-          <ClkchkSearch :equipmentType="equipmentType" :chkType="'day'" />
-        </a-tab-pane>
-        <a-tab-pane key="2" tab="月度点检">
-          <ClkchkSearch :equipmentType="equipmentType" :chkType="'month'" />
-        </a-tab-pane>
-        <a-tab-pane key="3" tab="年度点检">
-          <ClkchkSearch :equipmentType="equipmentType" :chkType="'year'" />
-        </a-tab-pane>
-        <a-tab-pane key="4" tab="年度自评">
-          <ClkchkSearch :equipmentType="equipmentType" :chkType="'self'" />
-        </a-tab-pane>
-      </a-tabs>
+      <div v-if="equipmentType == '0' || equipmentType == '2'">
+        <a-tabs v-model="activeKey" @change="tabChange">
+          <a-tab-pane key="1" tab="日常点检">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'1'" />
+          </a-tab-pane>
+          <a-tab-pane key="2" tab="月度点检">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'2'" />
+          </a-tab-pane>
+          <a-tab-pane key="3" tab="年度点检">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'3'" />
+          </a-tab-pane>
+          <a-tab-pane key="4" tab="年度自评">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'4'" />
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+      
+      <div v-if="equipmentType == '1' || equipmentType == '4'"> 
+        <a-tabs v-model="activeKey" @change="tabChange">
+          <a-tab-pane key="1" tab="日常点检">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'1'" />
+          </a-tab-pane>
+          <a-tab-pane key="4" tab="年度自评">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'4'" />
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+
+      <div v-if="equipmentType == '3'"> 
+        <a-tabs v-model="activeSpecKey" @change="tabChange">
+          <a-tab-pane key="2" tab="月度点检">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'2'" />
+          </a-tab-pane>
+          <a-tab-pane key="4" tab="年度自评">
+            <ClkchkSearch :equipmentType="equipmentType" :equipmentId="equipmentId" :equipmentName="queryInfo.equipmentName" 
+            :equipmentCode="queryInfo.equipmentCode" :equipmentCategory="queryInfo.equipmentCategory" :equipmentLocation="queryInfo.equipmentLocation" :forkliftPlateNum="queryInfo.forkliftPlateNum" :chkType="'4'" />
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+
     </div>
     <FixedBottom slot="fixedBottom">
       <a-button @click="goBack">返回</a-button>
@@ -43,20 +76,23 @@ export default {
   data() {
     return {
       activeKey: '1',
+      activeSpecKey: '2',
       countInfo: {},
       curIndex: null,
       tableDataList: null,
       //弹框
       loading: false,
+      queryInfo: {},
       equipmentId: null,
       recordInfo: {},
     };
   },
   created() {
     this.activeKey = this.$route.query.activeKey ? this.$route.query.activeKey + '' : '1'
-    this.equipmentId = this.$route.query.Id;
+    this.equipmentId = this.$route.query.id;
     this.equipmentType = this.$route.query.equipmentType;
-    this.initData();
+    this.queryInfo = JSON.parse(sessionStorage.getItem('checkRow'));
+    console.log('this.queryInfo',this.queryInfo);
   },
   methods: {
     tabChange(activeKey) {
@@ -69,49 +105,6 @@ export default {
     goBack() {
       this.setKeepalive(true);
       this.$router.go(-1);
-    },
-    handelDownload() {
-      console.log("下载");
-      recordExport({ equipmentId: this.equipmentId }).then((res) => {
-        const name = "设备履历导出";
-        const blob = new Blob([res], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        const downloadElement = document.createElement("a");
-        const href = URL.createObjectURL(blob); //创建下载链接
-        downloadElement.href = href;
-        downloadElement.download = name + ".xlsx";
-        document.body.appendChild(downloadElement);
-        downloadElement.click();
-        document.body.removeChild(downloadElement); // 下载完成移除元素
-        window.URL.revokeObjectURL(href); // 释放掉blob对象
-        this.$antMessage.success("导出成功");
-      });
-    },
-    initData() {
-      recordList({ equipmentId: this.equipmentId }).then((res) => {
-        this.recordInfo = res.data;
-        this.tableDataList = res.data.certificationVoList;
-      });
-      // let res = { data: {}, total: 1 }
-      // res.data = [{ responsibilityName: '4', bDate: 'test', bjr: 'test', bcTime: 'test', notCause: 'test', report: 'test' }]
-      // this.tableDataList = res.data
-    },
-    handleDownloadPdf(e) {
-      getPortraitUrlt([e]).then((res) => {
-        if (res.data[0]) {
-          console.log(res.data[0].filePath);
-          window.open(res.data[0].filePath);
-        }
-      });
-    },
-    handleCheckInfo(e) {
-      this.$router.push({
-        path: "/safeManage/deviceSafeManage/deviceSafety/recordDteails",
-        query: {
-          Id: e.certificationId,
-        },
-      });
     },
   },
 };
