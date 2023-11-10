@@ -197,6 +197,7 @@ export const specialDevice = [
       title: '点检记录',
       routerCode: 'clkchkRecord',
       isPage: true,
+      isKeepalive:true,
       isView: true,
       invisible: true
     },
@@ -209,6 +210,7 @@ export const specialDevice = [
       title: '日常点检新增',
       routerCode: 'clkchkDayNew',
       isPage: true,
+      isKeepalive:true,
       isView: true,
       invisible: true
     },
@@ -222,6 +224,8 @@ export const specialDevice = [
       routerCode: 'clkchkDayDetail',
       isPage: true,
       isView: true,
+      isKeepalive:true,
+      isShowPage:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
@@ -234,6 +238,7 @@ export const specialDevice = [
       routerCode: 'clkchkMonthNew',
       isPage: true,
       isView: true,
+      isKeepalive:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkNewPage.vue'], resolve),
@@ -246,6 +251,8 @@ export const specialDevice = [
       routerCode: 'clkchkMonthDetail',
       isPage: true,
       isView: true,
+      isShowPage:true,
+      isKeepalive:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
@@ -258,6 +265,7 @@ export const specialDevice = [
       routerCode: 'clkchkYearNew',
       isPage: true,
       isView: true,
+      isKeepalive:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkNewPage.vue'], resolve),
@@ -270,6 +278,8 @@ export const specialDevice = [
       routerCode: 'clkchkYearDetail',
       isPage: true,
       isView: true,
+      isKeepalive:true,
+      isShowPage:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
@@ -281,6 +291,7 @@ export const specialDevice = [
       title: '配置点检表',
       routerCode: 'configurationChecklist',
       isPage: true,
+      isKeepalive:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/configurationChecklist.vue'], resolve),

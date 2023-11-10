@@ -1,31 +1,81 @@
 <template>
-  <HasSpinAndBtnBox :spinning="false">
+  <HasFixedBottomWrapper>
     <div class="clx-flex-1">
       <div class="baseInfo">
         <a-row type="flex" justify="space-around">
-          <a-col :span="4">设备名称：叉车</a-col>
-          <a-col :span="4">牌照编号：xxx</a-col>
+          <a-col :span="4">设备名称：{{queryData.equipmentName}}</a-col>
+          <a-col :span="4" v-if="queryData.forkliftPlateNum!= null" >牌照编号：{{queryData.forkliftPlateNum}}</a-col>
+          <a-col :span="4">设备代码：{{queryData.equipmentCode}}</a-col>
+          <a-col :span="4">所在位置：{{queryData.equipmentLocation}}</a-col>
         </a-row>
-        <a-row type="flex" justify="space-around" class="bottom">
-          <a-col :span="4">设备代码：xxx</a-col>
-          <a-col :span="4">所在位置：xxx</a-col>
-        </a-row>
-        <a-row type="flex" justify="space-around" class="bottom">
-          <a-col :span="4">检查者：xxx</a-col>
-          <a-col :span="4">安全管理人员：xxx</a-col>
-          <a-col :span="4">检查时间：xxx</a-col>
-        </a-row>
+        <a-form-model ref="editForm" :model="editForm" :rules="editFormRules" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-row type="flex" justify="space-around" class="bottom">
+            <a-col v-if="queryData.checkType!= '3'" :span="12">
+              <StaffOrDept
+                :treeType="'user'"
+                :propKey="'checkUserId'"
+                :treeRoles="editFormRules"
+                :labelTitle="'检查者'"
+                :label-col="labelCol"
+                :wrapper-col="wrapperCol"
+                @getTreeData="personThingOne"
+                :checkedTreeNode="editForm.checkUserId"
+              />
+            </a-col>
+            <a-col v-if="queryData.checkType== '3'" :span="9">安全管理人员：{{queryData.row.checkUserName}}/{{queryData.row.checkUserJobNumber}}</a-col>
+            <a-col :span="12">
+              <a-form-model-item ref="checkDate" label="检查时间" prop="checkDate">
+                <a-date-picker :disabled-date="disabledDate" style="width: 100%;" v-model="editForm.checkDate" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" placeholder="请选择检查时间" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row v-if="queryData.equipType == '4'">
+            <a-col :span="12">
+              <a-form-model-item label="班次" prop="checkClasses" :label-col="labelCol" :wrapper-col="wrapperCol">
+                <a-select :placeholder="'请选择班次'" v-model="editForm.checkClasses"  show-search>
+                  <a-select-option v-for="item in checkClasses" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+        </a-form-model>
       </div>
     </div>
 
-
-
-    <a-table :columns="columns" :data-source="data" :pagination="false" bordered>
-      <template slot="name" slot-scope="text">
-        <a>{{ text }}</a>
-      </template>
-    </a-table>
-
+    <vxe-table 
+      border 
+      align="center"
+      ref="xTable" 
+      :span-method="rowspanMethod"
+      :seq-config="{startIndex: 0}" 
+      show-overflow :column-config="{resizable: true}"
+      :row-config="{height: 60, isHover: true}" 
+      :data="tableData"
+      >
+      <vxe-column field="seq" type="seq" title="序号" width="60"></vxe-column>
+      <vxe-column v-if="startStatus" field="checkName" title="检查项目" width="300">
+        <template #default="{ row }">
+          <a-input disabled v-model="row.checkName" placeholder="请输入检查项目"></a-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="checkContent" title="检查内容">
+        <template #default="{ row }">
+          <a-input disabled v-model="row.checkContent" placeholder="请输入检查内容" allowClear></a-input>
+        </template>
+      </vxe-column>
+      <vxe-column title="检查情况" width="140" align="center">
+        <template #default="{ row }">
+          <a-radio-group v-model="row.checkResult">
+            <a-radio :value="'1'">
+              √
+            </a-radio>
+            <a-radio :value="'0'">
+              ×
+            </a-radio>
+          </a-radio-group>
+        </template>
+      </vxe-column>
+    </vxe-table>
     <div class="clx-flex-1">
       <div class="baseInfo">
         <a-row type="flex" justify="space-around">
@@ -56,35 +106,47 @@
             :show-header-overflow="!isShowPage"
             :show-overflow="!isShowPage"
             align="center"
+            :seq-config="{startIndex: 0}" 
             :row-config="{isHover: true}"
             :data="iFrom.fireAlarmList"
           >
-            <vxe-column field="fireRoom" title="序号">
+            <vxe-column field="seq" type="seq" title="序号" width="60"></vxe-column>
+            <vxe-column field="description" title="异常问题描述">
               <template #default="{ row }">
-                <span>{{ row.fireRoom ? (row.fireRoom == '1' ? '一期' : '二期') : '--' }}</span>
+                <span>{{ row.description }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="normal" title="异常问题描述">
+            <vxe-column field="dealWith" title="异常问题处理情况">
               <template #default="{ row }">
-                <span>{{ row.normal == '1' ? '是' : '否' }}</span>
+                <span>{{ row.dealWith }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="failure" title="问题处理情况">
+            <vxe-column field="handleUserId" title="处理人">
               <template #default="{ row }">
-                <span>{{ row.failure == '1' ? '是' : '否' }}</span>
+                <span>{{ row.handleUserName[0]}}/{{ row.handleUserJobNumber[0]}}</span>
               </template>
             </vxe-column>
-            <vxe-column field="failure" title="处理人 / 日期">
+            <vxe-column field="handleDate" title="处理日期">
               <template #default="{ row }">
-                <span>{{ row.failure == '1' ? '是' : '否' }}</span>
+                <span>{{ row.handleDate}}</span>
               </template>
             </vxe-column>
-            <vxe-column field="faultAlarm" title="备注">
+            <vxe-column field="secureManageUserId" title="安全管理员">
               <template #default="{ row }">
-                <span>{{ row.faultAlarm == '1' ? '是' : '否' }}</span>
+                <span>{{ row.secureManageUserName[0]}}/{{ row.secureManageUserJobNumber[0]}}</span>
               </template>
             </vxe-column>
-            <vxe-column field="action" fixed="right" title="操作" width="100" v-if="!isShowPage">
+            <vxe-column field="secureManageHandleDate" title="处理日期">
+              <template #default="{ row }">
+                <span>{{ row.secureManageHandleDate}}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="remark" title="备注">
+              <template #default="{ row }">
+                <span>{{ row.remark == null ? '--' : row.remark }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="action" fixed="right" title="操作" width="120" v-if="!isShowPage">
               <template #default="{ row }">
                 <div class="table-btn-box">
                   <span class="color-0067cc cursor-pointer m-r-15" @click="openFireModel(row)">编辑</span>
@@ -112,22 +174,54 @@
       @changeModuleList="editInspectionRecordItemFire"
     />
 
-    <FixedBottom slot="fixedBottom">
-      <a-button @click="goBack">返回</a-button>
-    </FixedBottom>
-  </HasSpinAndBtnBox>
+    <div slot="fixedBottom">
+      <!-- 按钮-查看/编辑/新建 -->
+      <FixedBottom>
+        <div>
+          <a-button class="m-r-15" @click="goBack">取消</a-button>
+          <a-button :loading="btnLoading" type="primary" class="m-r-15" @click="confirm">确定</a-button>
+        </div>
+      </FixedBottom>
+    </div>
+  </HasFixedBottomWrapper>
 </template>
 
 <script>
+// import { VxeTablePropTypes } from 'vxe-table'
+// 通用行合并函数（将相同多列数据合并为一行）
+const rowspanMethod = ({ row, _rowIndex, column, visibleData }) => {
+  const fields = ['checkName']
+  const cellValue = row[column.field]
+  if (cellValue && fields.includes(column.field)) {
+    const prevRow = visibleData[_rowIndex - 1]
+    let nextRow = visibleData[_rowIndex + 1]
+    if (prevRow && prevRow[column.field] === cellValue) {
+      return { rowspan: 0, colspan: 0 }
+    } else {
+      let countRowspan = 1
+      while (nextRow && nextRow[column.field] === cellValue) {
+        nextRow = visibleData[++countRowspan + _rowIndex]
+      }
+      if (countRowspan > 1) {
+        return { rowspan: countRowspan, colspan: 1 }
+      }
+    }
+  }
+}
 import { debounce } from "lodash";
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import NewDataModel from './NewDataModel.vue'
 import reLogin from "@/utils/reLogin";
+import moment from 'moment'
+import { formValidator } from "@/utils/clx-form-validator.js"
+import dictionary from "@/utils/dictionary";
+import StaffOrDept from "@/components/staffOrDept";
 import { getMenuAuthList, updateDataAuth } from "@/services/api.js";
+import { checkInsertTask, checkExecute, checkItemList} from "@/services/deviceSafety.js"
 export default {
   name: "ClkchkSearch",
   components: {
-    FixedBottom, NewDataModel
+    FixedBottom, NewDataModel,StaffOrDept
   },
   props: {
     chkType: {
@@ -135,243 +229,39 @@ export default {
       default: "day",
     },
   },
+  created(){
+    console.log(this.$route.query,'888');
+    this.queryData = this.$route.query
+    this.checkClasses = dictionary("check_classes");
+    this.initData()
+  },
   data() {
     return {
-      dayFormInline: {
-        checkDate: [],
-        nextCheckDate: [],
-      },
-      dayColumns: [
-        {
-          title: "序号",
-          dataIndex: "responsibilityName",
-          key: "responsibilityName",
-          align: "center",
-        },
-        {
-          title: "检查日期",
-          dataIndex: "thisCertificationDate",
-          key: "thisCertificationDate",
-          align: "center",
-        },
-        {
-          title: "检查者12",
-          dataIndex: "thisCertificationValid12",
-          key: "thisCertificationValid12",
-          align: "center",
-          customRender: (v) => {
-            return v ? v + "年" : "--";
-          },
-        },
-        {
-          title: "安全管理人员3",
-          dataIndex: "thisCertificationValid3",
-          key: "thisCertificationValid3",
-          align: "center",
-          customRender: (v) => {
-            return v ? v + "年" : "--";
-          },
-        },
-        {
-          title: "状态123",
-          dataIndex: "thisCertificationConclusion123",
-          key: "thisCertificationConclusion123",
-          align: "center",
-        },
-        {
-          title: "自检报告4",
-          dataIndex: "thisCertificationConclusion4",
-          key: "thisCertificationConclusion4",
-          align: "center",
-        },
-        {
-          title: "点检表123",
-          scopedSlots: { customRender: "report" },
-          key: "report123",
-          align: "center123",
-          width: 200, // 宽度根据操作自定义设置
-        },
-        {
-          title: "创建时间",
-          dataIndex: "unqualifiedReason",
-          key: "unqualifiedReason",
-          align: "center",
-        },
-        {
-          title: "操作",
-          scopedSlots: { customRender: "action" },
-          key: "action",
-          align: "center",
-          fixed: "right", // 固定操作列
-          width: 150, // 宽度根据操作自定义设置
-        },
+      rowspanMethod: rowspanMethod,
+      tableData: [
+        { checkName: ""},
       ],
+      dictionary,
       dayTableDataList: [],
-      loading: false,
-
-
-      data: [
-        {
-          parentTitle: '使用资料检查',
-          title: '（1）上一周期的定期检验报告，使用登记证',
-          key: 1,
-          dataResult: true
-        },
-        {
-          parentTitle: '使用资料检查',
-          title: '（2）最近一次的自行检查记录或者报告',
-          key: 2,
-          dataResult: false
-        },
-        {
-          parentTitle: '使用资料检查',
-          title: '（3）场车使用记录、维护保养记录、运行故障和事故记录',
-          key: 3,
-          dataResult: true
-        },
-        {
-          parentTitle: '使用资料检查',
-          title: '（4）本周期内修理的自检报告、相关技术资料、修理单位的生产许可证（如涉及）',
-          key: 4,
-          dataResult: false
-        },
-        {
-          parentTitle: '结构形式检查',
-          title: '检查车辆的主参数、主要结构型式与相关技术资料的描述是否一致',
-          key: 5,
-          dataResult: true
-        },
-        {
-          parentTitle: '整车外观检查',
-          title: '（1）车架易见部位应当有清晰的永久编号，且与有关资料一致',
-          key: 6,
-          dataResult: true
-        },
-        {
-          parentTitle: '整车外观检查',
-          title: '（2）防爆功能的叉车应当在明显部位设置和车辆体积相适合的永久性“Ex”标志和使用说明牌。',
-          key: 7,
-          dataResult: true
-        },
-        {
-          parentTitle: '整车外观检查',
-          title: '（3）仪表或者指示器应当指（显）示清晰醒目、灵敏有效',
-          key: 8,
-          dataResult: true
-        },
-        {
-          parentTitle: '整车外观检查',
-          title: '（4）车身应当周正，各部件齐全、完整，连接紧固，无缺损',
-          key: 9,
-          dataResult: true
-        },
-        {
-          parentTitle: '整车外观检查',
-          title: '（5）应当将车牌固定在车辆明显部位，车牌编号与使用登记信息一致',
-          key: 10,
-          dataResult: true
-        },
-        {
-          parentTitle: '主要受力结构件检查',
-          title: '（1）主要受力结构件（车架、门架、货叉架、货叉）的焊缝外部宏观检查，不得有可见的漏焊、裂纹、烧穿、严重咬边等缺陷。',
-          key: 11,
-          dataResult: true
-        },
-        {
-          parentTitle: '主要受力结构件检查',
-          title: '（2）主要受力结构件应当无明显变形、裂纹和锈蚀，螺栓等连接件不应当缺少和松动。货叉无严重磨损，货叉水平段和垂直段的磨损厚度不应超原值的10%',
-          key: 12,
-          dataResult: true
-        },
-        {
-          parentTitle: '铭牌和安全警示标志检查',
-          title: '（1）铭牌、载荷曲线、安全标志应当符合要求',
-          key: 13,
-          dataResult: true
-        },
-        {
-          parentTitle: '铭牌和安全警示标志检查',
-          title: '（2）铭牌、载荷曲线、安全标志应当置于叉车的显著位置，并且保持清晰',
-          key: 14,
-          dataResult: true
-        },
-        {
-          parentTitle: '动力系统检查',
-          title: '（1）动力源为蓄电池的叉车，蓄电池金属盖或者非金属盖的金属部件与蓄电池带电部分之间应当有30mm以上的间隙；若盖板和带电部分被有效绝缘，则其间隙至少有10mm',
-          key: 15,
-          dataResult: true
-        },
-        {
-          parentTitle: '动力系统检查',
-          title: '（2）由于意外的关闭会造成伤害的，应当在罩壳处（如牵引蓄电池或者发动机罩）设置防止意外关闭的装置，并且永久地固定在车辆上或者安装在车辆的安全处',
-          key: 16,
-          dataResult: true
-        },
-        {
-          parentTitle: '动力系统检查',
-          title: '（3）发动机（行走电机）应当运转平稳，无异响，能正常启动、熄火（关闭）',
-          key: 17,
-          dataResult: true
-        },
-        {
-          parentTitle: '动力系统检查',
-          title: '（4）动力系统线路应当无漏电现象，管路应当无漏水、漏油现象',
-          key: 18,
-          dataResult: true
-        },
-        {
-          parentTitle: '动力系统检查',
-          title: '（5）发动机（行走电机）的安装应当牢固可靠，连接部分无松动、脱落、损坏',
-          key: 19,
-          dataResult: true
-        },
-        {
-          parentTitle: '动力系统检查',
-          title: '（6）车辆配置车用气瓶时，气瓶应当在检验有效期内',
-          key: 20,
-          dataResult: true
-        }
-      ],
-      columns: [
-        {
-          title: '序号',
-          dataIndex: 'key',
-        },
-        {
-          title: '检查项目',
-          dataIndex: 'parentTitle',
-          customRender: (value, row, index) => {
-            const obj = {
-              children: value,
-              attrs: {},
-            };
-            if (index === 0) {
-              obj.attrs.rowSpan = 4;
-            } else if (index === 4) {
-              obj.attrs.rowSpan = 1;
-            } else if (index === 5) {
-              obj.attrs.rowSpan = 5;
-            } else if (index === 10) {
-              obj.attrs.rowSpan = 2;
-            } else if (index === 12) {
-              obj.attrs.rowSpan = 2;
-            } else if (index === 14) {
-              obj.attrs.rowSpan = 6;
-            } else {
-              obj.attrs.rowSpan = 0;
-            }
-            return obj;
-          },
-        },
-        {
-          title: '检查内容及要求',
-          dataIndex: 'title',
-        },
-        {
-          title: '检查结果',
-          dataIndex: '检查结果',
-        },
-      ],
+      startStatus: false,
+      btnLoading: false,
+      queryData:{},
+      editForm: {},
+      checkClasses:[],
+      // 表单验证
+      editFormRules: {
+        checkUserId: [
+          { required: true, message: "检查人不能为空", trigger: "change" },
+        ],
+        checkClasses: [
+          { required: true, message: '请选择班次', trigger: ['blur', 'change'] },
+        ],
+        checkDate: [
+          { required: true, message: "检查时间不能为空", trigger: "change" },
+        ],
+      },
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
       iFrom: {
         dutyId: '',
         fireAlarmList: [],
@@ -391,40 +281,116 @@ export default {
     },
   },
   methods: {
-    // 查询
-    daySearch() {},
-    // 重置
-    dayRest: debounce(function () {}, 250, { leading: true, trailing: false }),
-    dayNew() {},
-    handleDayPdf() {},
-    handleCheckDay() {},
-    goBack() {
-      this.$router.go(-1);
-    },
-
-
-    onChange(e, path) {
-      let _this = this;
-      updateDataAuth({
-        resourceCode: path,
-        authType: e.target.value
-      }).then(res => {
-        this.$antMessage.success("修改成功");
-        this.$antConfirm({
-          title: '重新登录后生效，是否重新登录?',
-          onOk() {
-            reLogin(() => {
-              _this.$router.push("/login");
-            });
-          }
-        });
-      }).catch(err => {
-        for (let i = 0; i < this.menuList.length; i++) {
-          if (this.menuList[i].path == path) {
-            this.menuList[i].checkedValues = this.menuList[i].checkedValues == 0 ? 1 : 0;
-          }
+    confirm(){
+      if (!formValidator.formAll(this, "editForm")) {
+        return;
+      }
+      if(this.editForm.checkUserId.length > 1){
+        console.log('this.editForm.checkUserId.length',this.editForm.checkUserId.length);
+        this.$antMessage.warn('只能选择一名检查人！');
+        return
+      }
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (!this.tableData[i].checkResult) {
+          this.$antMessage.warn("检查情况必须填写");
+          return;
         }
-      }) 
+      }
+      const filteredTableData = this.tableData.map(item => {
+        const { _X_ROW_KEY, ...rest } = item;
+        return rest;
+      });
+      const newArray = this.iFrom.fireAlarmList.map(obj => {
+        return { ...obj, handleUserId: obj.handleUserId[0] ,handleUserName: obj.handleUserName[0],handleUserJobNumber: obj.handleUserJobNumber[0],
+          secureManageUserId: obj.secureManageUserId [0],secureManageUserName: obj.secureManageUserName[0],secureManageUserJobNumber: obj.secureManageUserJobNumber[0],
+        };
+      });
+      let params = {
+        equipId:this.queryData.equipId,
+        checkType:this.queryData.checkType,
+        checkId:this.queryData.row.checkId== undefined? null:this.queryData.row.checkId,
+        checkUserId:this.editForm.checkUserId[0],
+        checkUserName:this.editForm.checkUserName[0],
+        checkUserJobNumber:this.editForm.checkUserJobNumber[0],
+        checkDate:this.editForm.checkDate,
+        checkClasses:this.editForm.checkClasses?this.editForm.checkClasses:null,
+        checkResult: filteredTableData,
+        checkException: newArray
+      }
+      this.btnLoading = true;
+      let promiseFn = this.queryData.row.checkId != undefined ?checkExecute:checkInsertTask
+      promiseFn(params).then ((res)=>{
+        console.log(res,'resss');
+        this.$antMessage.success("操作成功");
+        this.setKeepalive(true)
+        this.$router.go(-1)
+      }).catch(err => {
+        console.log(err);
+      }).finally(() => {
+        this.btnLoading = false;
+      })
+    },
+    // 初始化数据
+    initData() {
+      if (this.$route.query.checkType && this.$route.query.equipType) {
+        this.echoReportEdit();
+      } else {
+        this.$antMessage.warn("缺少参数~");
+        return
+      }
+    },
+    // 报告-编辑/查看
+    echoReportEdit() {
+      checkItemList({ checkType: this.$route.query.checkType, equipType: this.$route.query.equipType}).then(res => {
+        console.log(res.data,'万千傻逼随它去');
+        if (res.data.length != 0 ){
+          let resultObj = res.data || {};
+          // 表格回显
+          this.tableData = resultObj
+          this.startStatus = resultObj[0].enableProjectLevel == '1'? true : false// 是否启用
+        } else {
+          this.tableData = [{ checkName: ""}]
+        }
+      }).catch(err => {
+        console.log(err,'error')
+      }).finally(() => {
+
+      })
+    },
+    // 禁用日期
+    disabledDate(current) {
+      return current && current > moment().endOf('day');
+    },
+    //检查人
+    personThingOne(data) {
+      this.editForm.checkUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.editForm.checkUserName = this.getName(list);
+      this.editForm.checkUserJobNumber = this.getWorkNum(list);
+    },
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
+      }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
+    },
+    goBack() {
+      this.setKeepalive(true)
+      this.$router.go(-1);
     },
     openFireModel(row) {
       console.log(row, '?')

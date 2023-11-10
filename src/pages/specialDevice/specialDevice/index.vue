@@ -290,9 +290,10 @@ export default {
       return moment(val).format('YYYY-MM-DD')
     },
     clkchkRecord(row) {
+      sessionStorage.setItem('checkRow', JSON.stringify(row));
       this.$router.push({
         path: '/safeManage/deviceSafeManage/specialeDevice/clkchkRecord',
-        query: { id: row.specialEquipmentId, equipmentType: row.equipmentType }
+        query: { id: row.specialEquipmentId, equipmentType: row.equipmentType, row: row }
       })
     },
     deleteItem(row) {
