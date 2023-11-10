@@ -13,7 +13,7 @@
           </a-form-model-item>
 
           <a-form-model-item class="float-right">
-            <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
+            <a-button type="primary" @click="iSearch">查询</a-button>
             <a-button @click="iRest">重置</a-button>
           </a-form-model-item>
         </a-form-model>
@@ -24,33 +24,29 @@
           <div class="secondary-title-left">评价结果</div>
         </div>
 
-        <EvaluatResult />
+        <a-spin :spinning="loading" wrapperClassName="a-spin">
+          <div class="table-container">
+            <EvaluatResult :evaluatResultData="evaluatResultData"/>
+          </div>
+        </a-spin>
+        
         <div style="height: 40px"></div>
       </template>
 
-      <template description="主要扣分明细" v-if="false">
+      <template description="主要扣分明细">
         <div class="secondary-title">
           <div class="secondary-title-left">主要扣分明细</div>
         </div>
 
-        <a-table
-          :columns="columnsDetails"
-          :scroll="{ x: tableScrollX() }"
-          bordered
-          :locale="{ emptyText: emptyText }"
-          :data-source="tableDataList"
-          :rowKey="(record, index) => {return record.id;}"
-          :pagination="false"
-        >
-          <div slot="orderNum" slot-scope="record,index">{{index+1}}</div>
-          <div slot="deductionDescribe" slot-scope="record" class="table-p-box">
-            <p v-for="(i,index) in record" :key="index">{{i}}</p>
+         <a-spin :spinning="loading" wrapperClassName="a-spin">
+          <div class="table-container">
+            <DeductPoints :deductPointsData="deductPointsData"/>
           </div>
-        </a-table>
+        </a-spin>
         <div style="height: 40px"></div>
       </template>
 
-      <template description="部门得分环比统计" v-if="false">
+      <template description="部门得分环比统计">
         <div class="injury-box">
           <div class="secondary-title">
             <div class="secondary-title-left">部门得分环比统计</div>
@@ -67,7 +63,7 @@
         <div style="height: 40px"></div>
       </template>
 
-      <template description="部门得分月度统计" v-if="false">
+      <template description="部门得分月度统计">
         <div class="injury-box">
           <div class="secondary-title">
             <div class="secondary-title-left">部门得分月度统计</div>
@@ -90,20 +86,24 @@
 <script>
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
-import dictionary from "@/utils/dictionary";
 import dayJs from "dayjs";
-import { debounce, cloneDeep } from "lodash";
+import { debounce } from "lodash";
 import Echarts from "@/components/echarts/index.vue";
-import { querySummayDeptData, achDeptSummaryBar, achDeptSummaryLevel, } from "@/services/performanceManagementBranch.js";
-import { downLoadReport } from "@/utils/common.js";
-import { getMaturityEvaDataSumEvaluatResult, rmMaturityEvaDataConfigDataItem } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaDataSumEvaluatResult, getMaturityEvaDataSumDeductPoints } from "@/services/maturityEvaluation.js";
 import EvaluatResult from './evaluatResult.vue'
+import DeductPoints from './deductPoints.vue'
 export default {
-  components: { Echarts, EvaluatResult },
+  components: { Echarts, EvaluatResult,DeductPoints },
   mixins: [teableCenterEllipsis, cancelLoading],
   data() {
     return {
-      
+      evaluatResultData:{},
+      formInline:{
+        year: null,
+        month: null,
+      },
+      deductPointsData:[],
+
       monthOption: [
         { name: "1月", value: '1' },
         { name: "2月", value: '2' },
@@ -119,43 +119,6 @@ export default {
         { name: "12月", value: '12' },
       ],
 
-      columns: [
-        {
-          title: "维度",
-          dataIndex: "weidu",
-          minWidth: 120,
-        },
-        {
-          title: "项目",
-          dataIndex: "xiangmu",
-          minWidth: 200,
-        },
-        {
-          title: "分值",
-          dataIndex: "fenzhi",
-          minWidth: 100,
-        },
-        {
-          title: "得分明细",
-          children: [
-            {
-              title: '部门1',
-              dataIndex: 'bumen1',
-              align: 'center',
-            },
-            {
-              title: '部门2',
-              dataIndex: 'bumen2',
-              align: 'center',
-            },
-            {
-              title: '单项均分',
-              dataIndex: 'danxiangjunfen',
-              align: 'center',
-            },
-          ],
-        },
-      ],
       columnsDetails: [
         {
           title: "序号",
@@ -302,130 +265,6 @@ export default {
         ]
       },
       tableDataList: [],
-      quarterOption: [
-        { name: "第一季度", value: 1 },
-        { name: "第二季度", value: 2 },
-        { name: "第三季度", value: 3 },
-        { name: "第四季度", value: 4 },
-      ],
-      bOption: {
-        title: {
-          text: "各项目管理绩效得分", //"作业数量",
-          x: "left",
-          y: "top",
-          z: 1,
-          textStyle: {
-            fontSize: 16,
-            fontWeight: "normal",
-            label: {
-              formatter: "{title|{b}}",
-            },
-            rich: {
-              test: {
-                color: "#333333",
-                height: 48,
-                padding: [0, 0, 0, 20],
-                width: 2000,
-              },
-            },
-          },
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        grid: {
-          top: "20%",
-          left: "1%",
-          right: "2%",
-          bottom: "12%",
-          containLabel: true,
-        },
-        legend: {
-          // left:'45%',
-          // x: "right",
-          // y: "top",
-          z: 2,
-          top: 5,
-          right: 20,
-          data: [],
-        },
-        color: ["#0067CC", "#00CECA", "#9958FF"],
-        xAxis: [
-          {
-            type: "category",
-            axisLabel: {
-              rotate: 40,
-              width: 20,
-              interval: 0,
-            },
-            data: [],
-            axisPointer: {
-              type: "shadow",
-            },
-          },
-        ],
-        yAxis: [
-          {
-            name: "绩效得分",
-          },
-        ],
-        series: [
-          {
-            name: "绩效得分",
-            type: "bar",
-            stack: "Ad",
-            emphasis: {
-              focus: "series",
-            },
-            barMaxWidth: 50,
-            data: [],
-          },
-        ],
-      },
-      setOption: undefined,
-      pOption: {
-        tooltip: {
-          trigger: "item",
-        },
-        legend: {
-          top: "5%",
-          left: "center",
-        },
-        series: [
-          {
-            name: "",
-            type: "pie",
-            radius: ["40%", "70%"],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: "#fff",
-              borderWidth: 2,
-            },
-            label: {
-              show: false,
-              position: "center",
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: "20",
-                fontWeight: "bold",
-              },
-            },
-            labelLine: {
-              show: false,
-            },
-            data: [
-              { value: 1048, name: "A档" },
-              { value: 735, name: "B档" },
-              { value: 580, name: "C档" },
-            ],
-          },
-        ],
-      },
-      setPOption: undefined,
-      pieLevel: null,
     };
   },
   created() {
@@ -436,19 +275,21 @@ export default {
     this.getPageData()
   },
   methods: {
-    initFormInline(){
-     const dayNow = dayJs().subtract(1, 'month')
-     this.formInline = {
-        year:dayNow.format('YYYY'),
-        month:dayNow.format('MM'),
-     }
+    initFormInline() {
+      const dayNow = dayJs().subtract(1, 'month')
+      this.formInline = {
+        year: dayNow.format('YYYY'),
+        month: dayNow.format('MM'),
+      }
     },
     getPageData() {
+      this.handleLoading()
       Promise.all([
-        this.getEvaluatResultData()
+        this.getEvaluatResultData(),
+        // this.getDeductPoints(),
       ])
         .finally(() => {
-
+          this.cancelLoading(200)
         })
     },
     // 获取评价结果api
@@ -458,7 +299,23 @@ export default {
       }
       return getMaturityEvaDataSumEvaluatResult(apiData)
         .then(res => {
-
+          this.evaluatResultData = res.data || {
+            deptIdList: [],
+            deptMap: {},
+            list: [],
+            scoreMap: { totalScore: 0 },
+          }
+        })
+        .catch(err => { })
+    },
+    // 获取主要扣分明细api
+    getDeductPoints() {
+      let apiData = {
+        ...this.formInline,
+      }
+      return getMaturityEvaDataSumDeductPoints(apiData)
+        .then(res => {
+          this.deductPointsData = res.data || []
         })
         .catch(err => { })
     },
@@ -514,9 +371,9 @@ export default {
     height: 30px;
   }
 }
-.head-portrait {
-  width: 50px;
-  height: 50px;
+.table-container{
+  width: 100%;
+  min-height: 250px;
 }
 
 .injury-box {
@@ -551,6 +408,20 @@ export default {
   .injury-Echarts {
     width: 100%;
     height: 350px;
+  }
+}
+::v-deep .a-spin {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  .ant-spin-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ant-spin-blur {
+    opacity: 0.06 !important;
   }
 }
 </style>
