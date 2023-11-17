@@ -549,10 +549,10 @@ export default {
         let path = ''
         switch (this.chkType) {
           case '1':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkDayNew'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkDayNew'
             break
           case '2':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkMonthNew'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkMonthNew'
             break
         }
         this.setKeepalive(true)
@@ -578,13 +578,13 @@ export default {
         let path = ''
         switch (this.chkType) {
           case '1':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkDayDetail'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkDayDetail'
             break
           case '2':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkMonthDetail'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkMonthDetail'
             break
           case '3':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkYearDetail'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkYearDetail'
             break
         }
         this.setKeepalive(true)
@@ -607,7 +607,7 @@ export default {
       console.log('年度点检');
       this.setKeepalive(true)
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/clkchkYearNew',
+        path: '/safeManage/deviceSafeManage/specialDevice/clkchkYearNew',
         query: { 
           row: row ? row : null,
           checkType: this.chkType,
@@ -681,7 +681,7 @@ export default {
         this.$antMessage.warn('只能选择一名安全管理员！');
         return
       }
-      if(this.editForm.certFileIdList.length > 1){
+      if(this.editForm.certFileIdList && this.editForm.certFileIdList.length > 1){
         this.$antMessage.warn('只能上传一份自检报告！');
         return
       }
@@ -694,7 +694,7 @@ export default {
       params.checkUserId = this.editForm.checkUserId.toString();
       params.checkUserJobNumber = this.editForm.checkUserJobNumber.toString();
       params.checkUserName = this.editForm.checkUserName.toString();
-      params.fileId = this.editForm.certFileIdList[0] ? this.editForm.certFileIdList[0]: null
+      params.fileId = this.editForm.certFileIdList ? this.editForm.certFileIdList[0]: null
       
       let promiseFn = this.uploadFileObj.checkId != null? checkUpdate:checkInsertTask
       promiseFn(params)
@@ -875,7 +875,7 @@ export default {
       this.setKeepalive(true)
       console.log('配置点检表');
       this.$router.push({
-        path: "/safeManage/deviceSafeManage/specialeDevice/configurationChecklist",
+        path: "/safeManage/deviceSafeManage/specialDevice/configurationChecklist",
         query: { checkType: this.chkType, equipType:this.equipmentType }, // 点检类型 设备类型
       });
     },
