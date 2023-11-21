@@ -781,6 +781,8 @@ export const educationCorrect = params => post(`${serviceNameList.health}/api/eh
 export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
 // 三级安全教育管理-重新分配
 export const educationReallocation = params => post(`${serviceNameList.health}/api/ehs/security/education/reallocation`, params);
+// 三级安全教育管理-分配讲师
+export const assignInstructor = params => post(`${serviceNameList.health}/api/ehs/security/education/assign/instructor`, params);
 
 // 安全档案报表-证书
 export const securityCertificate = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/certificate`, params);

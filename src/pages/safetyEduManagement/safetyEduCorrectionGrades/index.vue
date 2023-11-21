@@ -4,7 +4,7 @@
     
     <div class="clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
       <!-- 上面的详情数据 -->
-      <InfoDetailList :safetyEducationForm="safetyEducationForm" />
+      <InfoDetailList :safetyEducationForm="safetyEducationForm" :trainerCompanyUserName="trainerCompanyUserName" :trainerDeptUserName="trainerDeptUserName" :trainerGroupUserName="trainerGroupUserName" />
       <!-- 下面的详情数据 -->
       <PageTitle>培训人员</PageTitle>
       <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
@@ -95,6 +95,9 @@ export default {
       type:'',
       currentLevel:'',
       safetyEducationForm:{},
+      trainerCompanyUserName:'',
+      trainerDeptUserName:'',
+      trainerGroupUserName:'',
       dataSource:[],
       page: {
         pageNo: 1,
@@ -152,6 +155,9 @@ export default {
       educationDetail({ id: this.id })
         .then((res) => {
           this.safetyEducationForm = res.data ? res.data : null;
+          this.trainerCompanyUserName = this.safetyEducationForm.company.map(obj => `${obj.userName}/${obj.jobNumber}`).join('，');
+          this.trainerDeptUserName = this.safetyEducationForm.dept.map(obj => `${obj.userName}/${obj.jobNumber}`).join('，');
+          this.trainerGroupUserName = this.safetyEducationForm.group.map(obj => `${obj.userName}/${obj.jobNumber}`).join('，');
           this.currentLevel = res.data.currentLevel
         })
         .catch((err) => {
