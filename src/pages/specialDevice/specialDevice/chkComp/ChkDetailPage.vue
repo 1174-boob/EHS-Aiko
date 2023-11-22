@@ -46,7 +46,7 @@
           <span>{{row.classes == '1' ? '白': row.classes == '2'? "中":row.classes == '3'? '晚':row.classes}}</span>
         </template>
       </vxe-column>
-      <vxe-column v-for="(day, index) in titleListData" :key="index" width="100" :field="day" :title="isNaN(Number(day.split('-')[2])+'')? Number(day)+'':Number(day.split('-')[2])+''" align="center">
+      <vxe-column v-for="(day, index) in titleListData" :key="index" width="75" :field="day" :title="isNaN(Number(day.split('-')[2])+'')? Number(day)+'':Number(day.split('-')[2])+''" align="center">
         <template #default="{ row }">
           <span >{{row[day] == '1' ? '√':row[day] == '0'?'x':row[day]}}</span>
         </template>

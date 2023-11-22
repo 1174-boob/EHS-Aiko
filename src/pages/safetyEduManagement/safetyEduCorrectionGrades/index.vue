@@ -6,7 +6,7 @@
       <!-- 上面的详情数据 -->
       <InfoDetailList :safetyEducationForm="safetyEducationForm" :trainerCompanyUserName="trainerCompanyUserName" :trainerDeptUserName="trainerDeptUserName" :trainerGroupUserName="trainerGroupUserName" />
       <!-- 下面的详情数据 -->
-      <PageTitle>培训人员</PageTitle>
+      <PageTitle>培训人员&nbsp;&nbsp;&nbsp;&nbsp; <span style="fontSize:14px;color:#9999a6">说明:同批次三级安全教育同一讲师若有多个培训级别均处于成绩纠错节点，请将多个级别均纠错完成后提交。</span></PageTitle> 
       <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
         <vxe-table
           class="vxe-scrollbar beauty-scroll-fireBox"
