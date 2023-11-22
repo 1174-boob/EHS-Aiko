@@ -584,7 +584,7 @@ export default {
           console.log('分配讲师统一部门');
           this.popVisible = true;
           this.popForm = {}
-
+          this.editForm = {}
         }
       } else if (this.assignTitle == '重新分配') {
         if(!this.checkDeptIdAndTeacherConsistency(this.choosedArr)){
@@ -648,6 +648,7 @@ export default {
           return acc;
         }, {});
         const finalArray = Object.values(result);
+        console.log('finalArray77',finalArray);
         let params = {
           id: this.popId,
           securityEducationRecordsList:finalArray
@@ -657,8 +658,14 @@ export default {
           const {code,...rest} = res 
           if (code === 20000) {
             this.$antMessage.success('操作成功')
+            this.needChooseArr = []
           }
           this.assignVisible = false
+          if (this.assignTitle == '分配讲师') {
+            this.columnsPop.splice(4,0,this.cutData)
+          } else {
+            this.editForm = {}
+          }
           this.getDataList()
         })
         .catch((err) => {
@@ -669,12 +676,12 @@ export default {
     // 关闭分配讲师弹框
     assignCancle() {
       this.assignVisible = false;
+      this.needChooseArr = []
       this.choosedArr = []
+      this.editForm = {}
       this.selectedRowKeys = []
       if (this.assignTitle == '分配讲师') {
         this.columnsPop.splice(4,0,this.cutData)
-      } else if (this.assignTitle == '重新分配'){
-        console.log('重新分配');
       }
     },
     getDetailDown(){
