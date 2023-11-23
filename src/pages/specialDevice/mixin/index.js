@@ -76,6 +76,9 @@ const mixin = {
           ...data.specialEquipmentDetailDto,
         },
       }
+      console.log('data.safeAnnexList',data.safeAnnexList);
+      this.iFrom.fireAlarmList = data.safeAnnexList.length == 0 ? [] : data.safeAnnexList
+      console.log('this.iFrom.fireAlarmList2',this.iFrom.fireAlarmList);
       const specialVehicleImagesList = data.specialEquipmentDetailDto.specialVehicleImagesFileList; 
       if( specialVehicleImagesList && specialVehicleImagesList.length > 0) {
         const fileLists = [];
@@ -183,15 +186,20 @@ const mixin = {
     cancel() {
       this.setKeepalive(true)
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/specalDeviceAccount'
+        path: '/safeManage/deviceSafeManage/specialDevice/specialDeviceAccount'
       })
     },
     // 特种设备保存
     save: debounce(function () {
+      // console.log('this.iFrom.fireAlarmList ',this.iFrom == undefined );
+      // return
       this.$refs.newlyForm.validate(async valid => {
         if (valid) {
           const para = {
             ...this.newlyForm,
+          }
+          if (this.iFrom != undefined) {
+            para.safeAnnexList = this.iFrom.fireAlarmList ? this.iFrom.fireAlarmList :null
           }
           if (this.isEdit) {
             para.specialEquipmentId = this.$route.query.id
@@ -212,7 +220,7 @@ const mixin = {
           await api(para)
           this.$antMessage.success('保存成功')
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/specalDeviceAccount'
+            path: '/safeManage/deviceSafeManage/specialDevice/specialDeviceAccount'
           })
         }
       })

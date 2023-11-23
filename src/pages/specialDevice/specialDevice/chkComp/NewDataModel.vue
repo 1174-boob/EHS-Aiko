@@ -3,10 +3,10 @@
     <template slot="form">
       <a-form-model ref="ruleForm" :model="formModel" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-model-item ref="description" label="异常问题描述" prop="description">
-          <a-textarea v-model.trim="formModel.description" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
+          <a-textarea v-model.trim="formModel.description" :maxLength="254" placeholder="请输入" allowClear></a-textarea>
         </a-form-model-item>
         <a-form-model-item ref="dealWith" label="异常问题处理情况" prop="dealWith">
-          <a-textarea v-model.trim="formModel.dealWith" :maxLength="300" placeholder="请输入" allowClear></a-textarea>
+          <a-textarea v-model.trim="formModel.dealWith" :maxLength="254" placeholder="请输入" allowClear></a-textarea>
         </a-form-model-item>
         <StaffOrDept
           :treeType="'user'"
@@ -62,7 +62,6 @@ export default {
       default: () => {}
     },
     fireType: {},
-    dutyId: {},
   },
   data() {
     return {

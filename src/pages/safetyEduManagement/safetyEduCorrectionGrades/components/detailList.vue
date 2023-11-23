@@ -39,18 +39,18 @@
           </a-col>
           <a-col :span="12">
             <a-form-model-item label="公司级培训讲师">
-              <div>{{ safetyEducationForm.trainerCompanyUserName || "--" }}/{{ safetyEducationForm.trainerCompanyJobNumber}}</div>
+              <div>{{ trainerCompanyUserName || "--" }}</div>
             </a-form-model-item>
           </a-col>
 
           <a-col :span="12">
             <a-form-model-item label="车间(部门)级培训讲师">
-              <div>{{ safetyEducationForm.trainerDeptUserName || "--" }}/{{ safetyEducationForm.trainerDeptJobNumber}}</div>
+              <div>{{ trainerDeptUserName || "--" }}</div>
             </a-form-model-item>
           </a-col>
           <a-col :span="12">
             <a-form-model-item label="班组级培训讲师">
-              <div>{{ safetyEducationForm.trainerGroupUserName || "--" }}/{{ safetyEducationForm.trainerGroupJobNumber}}</div>
+              <div>{{ trainerGroupUserName || "--" }}</div>
             </a-form-model-item>
           </a-col>
 
@@ -96,6 +96,18 @@ export default {
           checkType: undefined,
         };
       },
+    },
+    trainerCompanyUserName: {
+      type: String,
+      default: ''
+    },
+    trainerDeptUserName: {
+      type: String,
+      default: ''
+    },
+    trainerGroupUserName: {
+      type: String,
+      default: ''
     },
   },
   data() {

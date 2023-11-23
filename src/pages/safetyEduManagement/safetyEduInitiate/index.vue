@@ -68,7 +68,7 @@
             <a-form-model-item label="公司级" v-if="isAgainPage && againCurrentLevel>2">
               <div>已培训通过，无需选择</div>
             </a-form-model-item>
-            <StaffOrDept
+            <!-- <StaffOrDept
               v-else
               ref="trainerDeptUserId"
               :labelTitle="'车间（部门）级'"
@@ -79,10 +79,10 @@
               :deptTreeId="deptTreeId"
               :checkAbel="false"
               @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerDeptUserId', codeAttr: 'trainerDeptJobNumber', nameAttr: 'trainerDeptUserName' }, 'checkedTreeNodeDept')"
-            />
+            /> -->
           </template>
 
-          <StaffOrDept
+          <!-- <StaffOrDept
             ref="trainerGroupUserId"
             :labelTitle="'班组级'"
             :treeRoles="iRules"
@@ -92,7 +92,7 @@
             :deptTreeId="deptTreeId"
             :checkAbel="false"
             @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerGroupUserId', codeAttr: 'trainerGroupJobNumber', nameAttr: 'trainerGroupUserName' }, 'checkedTreeNodeGroup')"
-          />
+          /> -->
 
           <StaffOrDept
             ref="trainerEsdUserId"
@@ -526,7 +526,7 @@ export default {
       this[fnName]()
         .then(res => {
           this.$antMessage.success('保存成功');
-          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement' })
+          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement',query:{activeKey:1} })
         })
         .catch(err => { })
         .finally(() => {

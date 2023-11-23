@@ -97,7 +97,7 @@
               </template>
             </vxe-column>
           </vxe-table>
-          <div class="table-remark" v-if="this.baseIfo.scorePositionStatus">备注： A：95分(含以上)； B：85分(含)~95分； C：85分一下</div>
+          <div class="table-remark" v-if="this.baseIfo.scorePositionStatus">备注： A：95分(含以上)； B：85分(含)~95分； C：85分以下</div>
         </div>
         <div class="color-666 font-16 text-center" v-else>该组织还没配置报表</div>
       </div>

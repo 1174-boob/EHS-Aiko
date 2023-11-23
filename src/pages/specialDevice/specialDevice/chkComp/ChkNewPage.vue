@@ -41,7 +41,9 @@
         </a-form-model>
       </div>
     </div>
-
+    <PageTitle v-if="queryData.checkType== '1'"><span style="color:red;">*</span>日常检查及维护保养</PageTitle>
+    <PageTitle v-if="queryData.checkType== '2'"><span style="color:red;">*</span>月度检查内容及要求</PageTitle>
+    <PageTitle v-if="queryData.checkType== '3'"><span style="color:red;">*</span>年度检查内容及要求</PageTitle>
     <vxe-table 
       border 
       align="center"
@@ -76,7 +78,7 @@
         </template>
       </vxe-column>
     </vxe-table>
-    <div class="clx-flex-1">
+    <div v-if="queryData.checkType== '1'" class="clx-flex-1">
       <div class="baseInfo">
         <a-row type="flex" justify="space-around">
           <a-col :span="24">注：每天操作前进行检查并将检查情况填入单元格内（√表示正常；×表示异常）。发现异常马上报告负责人并经负责人确认后及时处理，处理后在下表中做好记录。</a-col>
@@ -168,7 +170,6 @@
     <NewDataModel
       v-model="inspectionRecordModelShowFire"
       :formModelOldData="formModelFireData"
-      :dutyId="dutyId"
       :fireType="fireType"
       @addModuleList="openInspectionRecordModelFire"
       @changeModuleList="editInspectionRecordItemFire"
@@ -263,12 +264,8 @@ export default {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
       iFrom: {
-        dutyId: '',
         fireAlarmList: [],
-        roomFireFightingList: [],
-        fireEngineCheckList: [],
       },
-      dutyId: undefined,
       formModelFireData: {},
       fireType: '',
       inspectionRecordModelShowFire: false,
@@ -285,11 +282,14 @@ export default {
       if (!formValidator.formAll(this, "editForm")) {
         return;
       }
-      if(this.editForm.checkUserId.length > 1){
-        console.log('this.editForm.checkUserId.length',this.editForm.checkUserId.length);
-        this.$antMessage.warn('只能选择一名检查人！');
-        return
+      if (this.queryData.checkType=='1' || this.queryData.checkType=='2'){
+        if(this.editForm.checkUserId.length > 1){
+          // console.log('this.editForm.checkUserId.length',this.editForm.checkUserId.length);
+          this.$antMessage.warn('只能选择一名检查人！');
+          return
+        }
       }
+      
       for (let i = 0; i < this.tableData.length; i++) {
         if (!this.tableData[i].checkResult) {
           this.$antMessage.warn("检查情况必须填写");
@@ -309,9 +309,9 @@ export default {
         equipId:this.queryData.equipId,
         checkType:this.queryData.checkType,
         checkId:this.queryData.row.checkId== undefined? null:this.queryData.row.checkId,
-        checkUserId:this.editForm.checkUserId[0],
-        checkUserName:this.editForm.checkUserName[0],
-        checkUserJobNumber:this.editForm.checkUserJobNumber[0],
+        checkUserId:this.editForm.checkUserId ? this.editForm.checkUserId[0] : this.queryData.row.checkUserId? this.queryData.row.checkUserId: null,
+        checkUserName:this.editForm.checkUserName ? this.editForm.checkUserName[0] : this.queryData.row.checkUserName? this.queryData.row.checkUserName: null,
+        checkUserJobNumber:this.editForm.checkUserJobNumber? this.editForm.checkUserJobNumber[0] : this.queryData.row.checkUserJobNumber? this.queryData.row.checkUserJobNumber: null,
         checkDate:this.editForm.checkDate,
         checkClasses:this.editForm.checkClasses?this.editForm.checkClasses:null,
         checkResult: filteredTableData,
@@ -407,6 +407,18 @@ export default {
         row.fireTimeStamp == item.fireTimeStamp && (currentIndex = index);
       })
       Object.assign(this.iFrom.fireAlarmList[currentIndex], row)
+    },
+    rmFireRecordItem(row) {
+      let currentIndex;
+      this.iFrom.fireAlarmList.forEach((item, index)=>{
+        row.fireTimeStamp == item.fireTimeStamp && (currentIndex = index);
+      })
+      this.$antConfirm({
+        title: "确定删除吗?",
+        onOk: () => {
+          this.iFrom.fireAlarmList.splice(currentIndex, 1)
+        },
+      });
     },
     submitConfirm() {
       console.log(this.menuList);
