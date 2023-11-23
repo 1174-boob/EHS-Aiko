@@ -472,9 +472,9 @@ export default {
         operateAfterPictureList = this.dealImgEcho(operateAfterPictureList, "fileName", "filePath")
         console.log('作业后照片', operateAfterPictureList);
       }
-      // 危险作业环境检测信息 dangerDetectInfo
+      // 一般作业环境检测信息 dangerDetectInfo
       dangerDetectInfo = this.addGuid(dangerDetectInfo)
-      // 危险作业环境检查内容 dangerEnvironmentVos
+      // 一般作业环境检查内容 dangerEnvironmentVos
 
       // 整合数据
       this.iFrom = { operateBeforePicture, beforeUser, beforeTime, operateBeforePictureList, operateAfterPicture, operateAfterPictureList, dangerDetectInfo, dangerEnvironmentVos, afterUserAndTime }
@@ -627,9 +627,9 @@ export default {
           // 代办推送
           let title = ''
           if (this.step == 1) {
-            title = '危险作业前二次确认'
+            title = '一般作业前二次确认'
           } else if (this.step == 2) {
-            title = '危险作业中处理'
+            title = '一般作业中处理'
           }
           this.pushTask(securityUser, title);
           this.$antMessage.success('提交成功');

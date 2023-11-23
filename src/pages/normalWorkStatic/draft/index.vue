@@ -1,20 +1,20 @@
 <template>
   <div class="searchtable-wrapper mod-config clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
-    <PageTitle>危险作业草稿箱</PageTitle>
+    <PageTitle>一般作业草稿箱</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <a-form-model-item label="作业类别">
+        <a-form-model-item label="申请事项">
           <a-select v-model="formInline.operateType" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin" @change="operateTypeChange">
             <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="作业级别">
+        <a-form-model-item label="制造/施工内容">
           <a-select v-model="formInline.operateLevel" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin">
             <a-select-option v-for="item in hazardLevelList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="作业区域">
-          <a-input v-model="formInline.areaLocation" :maxLength="30" placeholder="请输入作业区域" allowClear></a-input>
+        <a-form-model-item label="施工位置">
+          <a-input v-model="formInline.areaLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -68,6 +68,7 @@ export default {
       },
       tableSpinning:false,
       formInline: {},
+      // 作业编号 所属组织 所属厂区 申请部门 施工位置 设备/工程名称 监督人 施工日期 施工日类型 申请日期
       columnsAll: [
         {
           id: 1,
@@ -78,46 +79,60 @@ export default {
         },
         {
           id: 3,
-          title: "作业区域",
+          title: "所属组织",
           disabled: true,
           isDefault: true,
           props: 'areaLocation',
         },
         {
           id: 4,
-          title: "作业内容简述",
+          title: "所属厂区",
           isDefault: true,
           props: 'operateBrief',
         },
         {
           id: 5,
-          title: "作业类别",
+          title: "申请部门",
           disabled: true,
           isDefault: true,
           props: 'operateTypeText',
         },
         {
           id: 6,
-          title: "作业级别",
+          title: "施工位置",
           disabled: true,
           isDefault: true,
           props: 'operateLevelText',
         },
         {
           id: 7,
-          title: "申请部门",
+          title: "设备/工程名称",
           isDefault: true,
           props: 'applyDepartName',
         },
         {
           id: 8,
-          title: "责任担当",
+          title: "监督人",
           isDefault: true,
           props: 'applyUserName',
         },
         {
+          id: 9,
+          title: "施工日期",
+          isDefault: true,
+          props: 'createTime',
+          minWidth: 160,
+        },
+        {
+          id: 10,
+          title: "施工日类型",
+          isDefault: true,
+          props: 'createTime',
+          minWidth: 160,
+        },
+        {
           id: 11,
-          title: "创建时间",
+          title: "申请日期",
           isDefault: true,
           props: 'createTime',
           minWidth: 160,

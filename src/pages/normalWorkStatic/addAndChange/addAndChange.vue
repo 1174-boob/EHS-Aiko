@@ -24,8 +24,8 @@
               ></CommonDept>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="applyDepartCode" label="起草人部门" prop="applyDepartCode">
-                <DeptTree :placeholder="iFrom.corporationId ? '请选择':'请先选择所属组织'" v-model="iFrom.applyDepartCode" :deptData="deptData" @change="(val,lab)=> departOrPerpleChange(lab,'applyDepartName')"></DeptTree>
+              <a-form-model-item ref="applyDepartCode" label="所属厂区" prop="applyDepartCode">
+                <DeptTree :placeholder="iFrom.corporationId ? '请选择':'请先选择所属厂区'" v-model="iFrom.applyDepartCode" :deptData="deptData" @change="(val,lab)=> departOrPerpleChange(lab,'applyDepartName')"></DeptTree>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -33,10 +33,10 @@
             <a-col :span="12">
               <StaffOrDept
                 ref="applyUserCode"
-                :labelTitle="'责任担当'"
+                :labelTitle="'申请部门'"
                 :treeRoles="iRules"
                 :propKey="'applyUserCode'"
-                :treePlaceholder="deptTreeId?'请选择' : '请先选择所属组织'"
+                :treePlaceholder="deptTreeId?'请选择' : '请先选择申请部门'"
                 :checkedTreeNode="checkedTreeNode"
                 :deptTreeId="deptTreeId"
                 :checkAbel="false"
@@ -44,65 +44,86 @@
               />
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="applyContact" label="担当联系方式" prop="applyContact">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入担当联系方式"></a-input>
+              <a-form-model-item ref="applyContact" label="监督人" prop="applyContact">
+                StaffOrDept组件
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="areaDepartCode" label="作业区域部门" prop="areaDepartCode">
-                <DeptTree :placeholder="iFrom.corporationId ? '请选择':'请先选择所属组织'" v-model="iFrom.areaDepartCode" :deptData="deptData" @change="(val,lab)=> departOrPerpleChange(lab,'areaDepartName')"></DeptTree>
+              <a-form-model-item ref="areaDepartCode" label="监督人联系方式" prop="areaDepartCode">
+                <!-- <DeptTree :placeholder="iFrom.corporationId ? '请选择':'请先选择监督人联系方式'" v-model="iFrom.areaDepartCode" :deptData="deptData" @change="(val,lab)=> departOrPerpleChange(lab,'areaDepartName')"></DeptTree> -->
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入监督人联系方式"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="areaLocation" label="作业区域具体位置" prop="areaLocation">
-                <a-input v-model.trim="iFrom.areaLocation" :maxLength="50" placeholder="请输入作业区域具体位置"></a-input>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="作业内容简述" prop="operateBrief">
-                <a-input v-model.trim="iFrom.operateBrief" :maxLength="200" placeholder="请输入作业内容简述"></a-input>
+              <a-form-model-item ref="operateBrief" label="施工所在区域部门负责人" prop="operateBrief">
+                <!-- <a-input v-model.trim="iFrom.operateBrief" :maxLength="200" placeholder="请输入施工所在区域部门负责人"></a-input> -->
+                StaffOrDept组件
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" label="作业类别" prop="operateType">
-                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
-                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
-                </a-select>
+              <a-form-model-item ref="areaLocation" label="施工位置" prop="areaLocation">
+                <a-input v-model.trim="iFrom.areaLocation" :maxLength="50" placeholder="请输入施工位置"></a-input>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+
+
+          
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="areaDepartCode" label="设备/工程名称" prop="areaDepartCode">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入设备/工程名称"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateLevel" label="作业级别" prop="operateLevel">
-                <a-select v-model="iFrom.operateLevel" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in getChemicalDictList('hazard_level')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
-                </a-select>
+              <a-form-model-item ref="operateBrief" label="制造/施工单位" prop="operateBrief">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入设制造/施工单位"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="sgrlx" label="作业日类型" prop="sgrlx">
-                <a-select v-model="iFrom.sgrlx" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in getChemicalDictList('sgrlx')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
-                </a-select>
+              <a-form-model-item ref="areaDepartCode" label="施工单位负责人" prop="areaDepartCode">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入施工单位负责人"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="ssfwyjsgfty" label="是否夜间施工" prop="ssfwyjsgfty">
-                <a-select v-model="iFrom.ssfwyjsgfty" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in getChemicalDictList('ssfwyjsgfty')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
-                </a-select>
+              <a-form-model-item ref="operateBrief" label="负责人联系方式" prop="operateBrief">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入负责人联系方式"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="dayDate" label="作业日期" prop="dayDate">
+              <a-form-model-item ref="areaDepartCode" label="施工单位监护人" prop="areaDepartCode">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入施工单位监护人"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item ref="operateBrief" label="监护人联系方式" prop="operateBrief">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入监护人联系方式"></a-input>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="areaDepartCode" label="施工主管部门" prop="areaDepartCode">
+                DeptTree组件
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item ref="operateBrief" label="项目负责人" prop="operateBrief">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入监督人联系方式"></a-input>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="dayDate" label="预计施工日期" prop="dayDate">
                 <a-range-picker
                   :allowClear="false"
                   valueFormat="YYYY-MM-DD"
@@ -115,132 +136,65 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="dayTime" label="每日作业时间" prop="dayTime">
-                <el-time-picker
-                  is-range
-                  :clearable="false"
-                  v-model="iFrom.dayTime"
-                  style="width:100%"
-                  range-separator="~"
-                  start-placeholder="开始时间"
-                  format="HH:mm"
-                  valueFormat="HH:mm"
-                  end-placeholder="结束时间"
-                  placeholder="选择时间范围"
-                ></el-time-picker>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </template>
-
-        <template title="现场监护人">
-          <div>
-            <div class="ttile border-b-e7">
-              <PageTitle class="ttile-text">现场监护人</PageTitle>
-              <DashBtn class="ttile-bbtn">
-                <div>
-                  <a-button type="dashed" @click="openAddCasNoModel()">
-                    <a-icon type="plus" />添加一行
-                  </a-button>
-                </div>
-              </DashBtn>
-            </div>
-            <div class="m-t-20"></div>
-          </div>
-          <a-form-model-item ref="dangerGuardian" label=" " prop="dangerGuardian" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-            <CommonTable :noPaging="true">
-              <a-table style="width:100%;" :columns="columns" :scroll="{ x: tableScrollX() }" :locale="{emptyText: emptyText}" :data-source="iFrom.dangerGuardian" :rowKey="'guid'" :pagination="false">
-                <div slot="action" slot-scope="record">
-                  <span class="color-0067cc cursor-pointer m-r-15" @click="openAddCasNoModel(record)">编辑</span>
-                  <span class="color-0067cc cursor-pointer" @click="tableRowRm(record)">删除</span>
-                </div>
-              </a-table>
-            </CommonTable>
-          </a-form-model-item>
-        </template>
-
-        <!-- <a-row>
-          <a-col :span="12">
-            <a-form-model-item ref="isMust" label="作业形式" prop="isMust">
-              <a-select v-model="iFrom.isMust" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin">
-                <a-select-option v-for="item in dictionary('hazardForm')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-              </a-select>
-            </a-form-model-item>
-          </a-col>
-        </a-row> -->
-
-        <template title="外协厂商信息">
-          <div>
-            <div class="m-t-20 border-b-e7">
-              <PageTitle>外协厂商信息</PageTitle>
-            </div>
-            <div class="m-t-20"></div>
-          </div>
-          <a-row>
-            <a-col :span="12">
-              <a-form-model-item ref="outCompany" label="外协厂商名称" prop="outCompany">
-                <a-input v-model.trim="iFrom.outCompany" :maxLength="50" placeholder="请输入单位名称"></a-input>
+              <a-form-model-item ref="operateBrief" label="项目负责人联系方式" prop="operateBrief">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入项目负责人联系方式"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="outPrincipal" label="负责人" prop="outPrincipal">
-                <a-input v-model.trim="iFrom.outPrincipal" :maxLength="20" placeholder="请输入负责人"></a-input>
+              <a-form-model-item ref="operateType" label="施工日类型" prop="operateType">
+                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
+                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="outPrincipalContact" label="负责人联系方式" prop="outPrincipalContact">
-                <a-input v-model.trim="iFrom.outPrincipalContact" :maxLength="20" placeholder="请输入负责人联系方式"></a-input>
+              <a-form-model-item ref="operateBrief" label="施工作业人数" prop="operateBrief">
+                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入施工作业人数"></a-input>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+
+
+
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="operateType" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="安装施工内容" prop="operateType">
+                <a-textarea v-model="iFrom.addressDetail" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="outSafety" label="安全员" prop="outSafety">
-                <a-input v-model.trim="iFrom.outSafety" :maxLength="20" placeholder="请输入安全员"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item ref="outSafetyContact" label="安全员联系方式" prop="outSafetyContact">
-                <a-input v-model.trim="iFrom.outSafetyContact" :maxLength="20" placeholder="请输入安全员联系方式"></a-input>
+              <a-form-model-item ref="operateType" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="预想危险事项/危险/环境因素" prop="operateType">
+                <a-textarea v-model="iFrom.addressDetail" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
           </a-row>
-          <template title="特种作业员">
-            <div>
-              <div class="ttile border-b-e7">
-                <PageTitle class="ttile-text">特种作业员</PageTitle>
-                <DashBtn class="ttile-bbtn">
-                  <div>
-                    <a-button type="dashed" @click="openAddSpecialModelModel()">
-                      <a-icon type="plus" />添加一行
-                    </a-button>
-                  </div>
-                </DashBtn>
-              </div>
-              <div class="m-t-20"></div>
-            </div>
-
-            <a-form-model-item ref="dangerSpecialPerson" label=" " prop="dangerSpecialPerson" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-              <CommonTable :noPaging="true">
-                <a-table
-                  style="width:100%;"
-                  :columns="columnsSpecial"
-                  :scroll="{ x: tableScrollX() }"
-                  :locale="{emptyText: emptyText}"
-                  :data-source="iFrom.dangerSpecialPerson"
-                  :rowKey="'guid'"
-                  :pagination="false"
-                >
-                  <div slot="action" slot-scope="record">
-                    <span class="color-0067cc cursor-pointer m-r-15" @click="openAddSpecialModelModel(record)">编辑</span>
-                    <span class="color-0067cc cursor-pointer" @click="specialtableRowRm(record)">删除</span>
-                  </div>
-                </a-table>
-              </CommonTable>
-            </a-form-model-item>
-          </template>
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="operateType" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="树立安全对策及防灾计划" prop="operateType">
+                <a-textarea v-model="iFrom.addressDetail" placeholder="请输入" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="operateType" label="安全防护用具" prop="operateType">
+                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
+                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item ref="operateType" label="防爆区域" prop="operateType">
+                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
+                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
         </template>
       </a-form-model>
     </a-spin>
@@ -287,17 +241,17 @@ export default {
       wrapperCol: { span: 17 },
       iFrom: {},
       iRules: {
-        applyDepartCode: [{ required: true, message: "起草人部门不能为空", trigger: "change" },],
-        applyUserCode: [{ required: true, message: "责任担当不能为空", trigger: "change" },],
-        applyContact: [{ required: true, message: "担当联系方式不能为空", trigger: "blur" },],
-        areaDepartCode: [{ required: true, message: "作业区域部门不能为空", trigger: "change" },],
-        areaLocation: [{ required: true, message: "作业区域具体位置不能为空", trigger: "blur" },],
-        operateBrief: [{ required: true, message: "作业内容简述不能为空", trigger: "blur" },],
-        operateType: [{ required: true, message: "作业类别不能为空", trigger: "change" },],
+        applyDepartCode: [{ required: true, message: "所属厂区不能为空", trigger: "change" },],
+        applyUserCode: [{ required: true, message: "申请部门不能为空", trigger: "change" },],
+        applyContact: [{ required: true, message: "监督人不能为空", trigger: "blur" },],
+        areaDepartCode: [{ required: true, message: "监督人联系方式不能为空", trigger: "change" },],
+        areaLocation: [{ required: true, message: "施工位置不能为空", trigger: "blur" },],
+        operateBrief: [{ required: true, message: "施工所在区域部门负责人不能为空", trigger: "blur" },],
+        operateType: [{ required: true, message: "施工日类型不能为空", trigger: "change" },],
         operateLevel: [{ required: true, message: "作业级别不能为空", trigger: "change" },],
         sgrlx: [{ required: true, message: "作业日类型不能为空", trigger: "change" },],
         ssfwyjsgfty: [{ required: true, message: "是否夜间施工不能为空", trigger: "change" },],
-        dayDate: [{ required: true, message: "作业日期不能为空", trigger: "change" },],
+        dayDate: [{ required: true, message: "预计施工日期不能为空", trigger: "change" },],
         dayTime: [{ required: true, message: "每日作业时间不能为空", trigger: "change" },],
         dangerGuardian: [{ required: true, message: "现场监护人不能为空", trigger: "change" },],
         // isMust: [{ required: true, message: "作业形式不能为空", trigger: "change" },],
@@ -505,7 +459,7 @@ export default {
     departOrPerpleChange(lab, attrName) {
       this.$set(this.iFrom, attrName, lab[0])
     },
-    // 作业类别改变
+    // 施工日类型改变
     operateTypeChange(val, rm = true) {
       // if (val == 'fire_work') {
       //   this.hazardLevelList = dictionary('dangerhazardHLevel')
@@ -639,7 +593,7 @@ export default {
       if (operateId) {
         const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/workManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${operateId}`
         const pushTask = await PushTask({
-          title: "危险作业前确认",
+          title: "一般作业前确认",
           approval: 'dangerWorkStatic',
           userId: securityUser,
           url: url,

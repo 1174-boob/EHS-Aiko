@@ -1,35 +1,38 @@
 <template>
   <div class="searchtable-wrapper mod-config clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
-    <PageTitle>危险作业台账</PageTitle>
+    <PageTitle>一般作业台账</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonDept ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="true" @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
-        <a-form-model-item label="起草人部门">
+        <a-form-model-item label="申请部门">
           <DeptTree :placeholder="formInline.corporationId ? '请选择':'请先选择所属组织'" v-model="formInline.applyDepartCode" :deptData="deptData"></DeptTree>
         </a-form-model-item>
-        <a-form-model-item label="作业区域部门">
+        <!-- <a-form-model-item label="施工位置部门">
           <DeptTree :placeholder="formInline.corporationId ? '请选择':'请先选择所属组织'" v-model="formInline.areaDepartCode" :deptData="deptData"></DeptTree>
-        </a-form-model-item>
-        <a-form-model-item label="作业类别">
+        </a-form-model-item> -->
+        <a-form-model-item label="申请事项">
           <a-select v-model="formInline.operateType" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin" @change="operateTypeChange">
             <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="作业级别">
+        <a-form-model-item label="制造/施工内容">
           <a-select v-model="formInline.operateLevel" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin">
             <a-select-option v-for="item in hazardLevelList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="作业区域">
-          <a-input v-model="formInline.areaLocation" :maxLength="30" placeholder="请输入作业区域" allowClear></a-input>
+        <a-form-model-item label="施工位置">
+          <a-input v-model="formInline.areaLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="监督人">
+          <a-input v-model="formInline.applyUserCode" :maxLength="30" placeholder="请输入监督人" allowClear></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="作业编号">
+          <a-input v-model="formInline.operateNumber" :maxLength="30" placeholder="请输入作业编号" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="状态">
           <a-select v-model="formInline.infoStatus" placeholder="请选择" show-search :filter-option="filterOptionMixin">
             <a-select-option v-for="item in dictionary('dangerstatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
-        </a-form-model-item>
-        <a-form-model-item label="责任担当">
-          <a-input v-model="formInline.applyUserCode" :maxLength="30" placeholder="请输入责任担当" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="数据筛选">
           <a-select v-model="formInline.screen" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin">
@@ -38,9 +41,6 @@
         </a-form-model-item>
         <a-form-model-item label="作业日期">
           <a-range-picker v-model="formInline.dateTime" valueFormat="YYYY-MM-DD" class="search-range-picker" format="YYYY-MM-DD" style="width: 200px" :placeholder="['开始日期','结束日期']" />
-        </a-form-model-item>
-        <a-form-model-item label="作业编号">
-          <a-input v-model="formInline.operateNumber" :maxLength="30" placeholder="请输入作业编号" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -54,7 +54,7 @@
         <a-button type="dashed" @click="jumpAddOrDetail('add')">
           <a-icon type="plus" />新建
         </a-button>
-        <a-button type="dashed" @click="openSelTable">自定义列</a-button>
+        <!-- <a-button type="dashed" @click="openSelTable">自定义列</a-button> -->
         <template v-if="allButtonCodeList.includes('dangerWorkStaticAddAndChange')">
           <UploadBtnStyle
             :action="action"
@@ -169,49 +169,50 @@ export default {
         },
         {
           id: 2,
-          title: "组织",
+          title: "所属组织",
           disabled: true,
           isDefault: true,
           props: 'corporationName',
         },
         {
           id: 3,
-          title: "作业区域",
+          title: "所属厂区",
+          disabled: true,
+          isDefault: true,
+          props: 'corporationName',
+        },
+        {
+          id: 4,
+          title: "申请部门",
+          disabled: true,
+          isDefault: true,
+          props: 'corporationName',
+        },
+        {
+          id: 5,
+          title: "施工位置",
           disabled: true,
           isDefault: true,
           props: 'areaLocation',
         },
         {
-          id: 4,
-          title: "作业内容简述",
-          isDefault: true,
-          props: 'operateBrief',
-        },
-        {
-          id: 5,
-          title: "作业类别",
-          disabled: true,
-          isDefault: true,
-          props: 'operateTypeText',
-        },
-        {
           id: 6,
-          title: "作业级别",
+          title: "设备/工程名称",
           disabled: true,
           isDefault: true,
-          props: 'operateLevelText',
+          props: 'areaLocation',
         },
         {
           id: 7,
-          title: "申请部门",
+          title: "监督人",
           isDefault: true,
-          props: 'applyDepartName',
+          props: 'applyUserName',
         },
         {
           id: 8,
-          title: "责任担当",
+          title: "施工日期",
           isDefault: true,
-          props: 'applyUserName',
+          props: 'infoStatusText',
         },
         {
           id: 9,
@@ -219,43 +220,18 @@ export default {
           isDefault: true,
           props: 'infoStatusText',
         },
-        // {
-        //   id: 10,
-        //   title: "类型",
-        //   isDefault: true,
-        //   props: 'isCommonText',
-        // },
+        {
+          id: 10,
+          title: "施工日类型",
+          isDefault: true,
+          props: 'infoStatusText',
+        },
         {
           id: 11,
-          title: "创建时间",
+          title: "申请日期",
           isDefault: true,
           props: 'createTime',
           minWidth: 160,
-        },
-        {
-          id: 12,
-          title: "作业区域部门",
-          props: 'areaDepartName',
-        },
-        {
-          id: 13,
-          title: "作业日期",
-          props: 'beginDate',
-        },
-        {
-          id: 14,
-          title: "作业时间",
-          props: 'dayTime',
-        },
-        // {
-        //   id: 15,
-        //   title: "作业形式",
-        //   props: 'isMustText',
-        // },
-        {
-          id: 16,
-          title: "外协厂商名称",
-          props: 'outCompany',
         },
       ],
       tableList: [],
@@ -265,7 +241,7 @@ export default {
       columnsIng: [],
       tableList: [],
       outOrganizeTreeList: [],
-      // 作业级别下拉
+      // 制造/施工内容下拉
       hazardLevelList: [],
       userId: undefined,
     };
@@ -332,7 +308,7 @@ export default {
       }
       this.selectModel = true
     },
-    // 作业类别改变
+    // 申请事项改变
     operateTypeChange(val) {
       if (val == 'fire_work') {
         this.hazardLevelList = dictionary('dangerhazardHLevel')
@@ -369,9 +345,9 @@ export default {
           tableList = tableList || [];
           // 处理数据
           tableList.forEach(item => {
-            // 作业类别
+            // 申请事项
             item.operateTypeText = this.getChemicalDictText('hazard_category', item.operateType)
-            // 作业级别
+            // 制造/施工内容
             // if (item.operateType == 'fire_work') {
             //   item.operateLevelText = dictionary('dangerhazardHLevel', item.operateLevel)
             // } else if (item.operateType == 'high_work') {
@@ -402,7 +378,7 @@ export default {
     //跳转新增、编辑页面
     jumpAddOrDetail(type, row) {
       let query = row ? { operateId: row.operateId } : {};
-      let path = type == 'add' ? "/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAddAndChange" : "/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAddAndChange"
+      let path = type == 'add' ? "/safeManage/workManage/normalWorkStatic/normalWorkStaticAddAndChange" : "/safeManage/workManage/normalWorkStatic/normalWorkStaticAddAndChange"
       this.$router.push({
         path,
         query,
@@ -411,7 +387,7 @@ export default {
     // 跳转查看页面
     goShowAndHandlePage(type, row) {
       let query = { operateId: row.operateId };
-      let path = type == 'show' ? '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticShow' : '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticHandle'
+      let path = type == 'show' ? '/safeManage/workManage/normalWorkStatic/normalWorkStaticShow' : '/safeManage/workManage/normalWorkStatic/normalWorkStaticHandle'
       this.$router.push({
         path,
         query,
@@ -463,7 +439,7 @@ export default {
     // 查询
     iSearch() {
       if (this.formInline.applyUserCode && this.formInline.applyUserCode.length < 2) {
-        this.$antMessage.warn('责任担当最少输入2位');
+        this.$antMessage.warn('监督人最少输入2位');
         return
       }
       this.handleLoading();
@@ -487,7 +463,7 @@ export default {
       }
       exportDangerWorkStaticApi(apiData)
         .then(res => {
-          this.spreadSheetExcel(res, '危险作业台账导出')
+          this.spreadSheetExcel(res, '一般作业台账导出')
         })
         .catch(() => { })
         .finally(() => {
