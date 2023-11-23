@@ -68,6 +68,9 @@
                 <a-select-option v-for="item in equipmentStatusOptions" :value="item.key" :key="item.key">{{item.value}}</a-select-option>
               </a-select>
             </a-form-model-item>
+            <a-form-model-item label="设备位置" prop="specialEquipmentDetail.equipmentLocation" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentLocation" placeholder="最多可输入50字" allowClear :maxLength="50"/>
+            </a-form-model-item>
             <a-form-model-item label="检验日期" prop="checkDate" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-date-picker :disabled="disabled" format="YYYY-MM-DD" v-model.trim="newlyForm.checkDate" placeholder="请选择检验日期" allowClear :maxLength="50"/>
             </a-form-model-item>
@@ -165,6 +168,9 @@ export default {
         ],
         'specialEquipmentDetail.forkliftPlateNum': [
           { required: true, message: '请输入牌照编号', trigger: ['blur', 'change'] },
+        ],
+        'specialEquipmentDetail.equipmentLocation': [
+          { required: true, message: '请选择设备位置', trigger: ['blur', 'change'] },
         ],
         useRegistryNum: [
           { required: true, message: '请输入登记证编号', trigger: ['blur', 'change'] },
