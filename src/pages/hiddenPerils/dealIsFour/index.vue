@@ -611,6 +611,7 @@ export default {
         // console.log(this.typePerson, this.isPersonLevel, obj2, obj1);
         // return;
         this.loading = true;
+        this.setKeepalive(true)
         DelayhiddenPerilsList(this.isPersonLevel ? obj2 : obj1)
           .then(() => {
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealIsFour");
@@ -629,6 +630,7 @@ export default {
       } else if (type == "pass" || type == "close") {
         //通过、关闭
         this.loading = true;
+        this.setKeepalive(true)
         DelayhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
           .then(() => {
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealIsFour");
@@ -822,6 +824,7 @@ export default {
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`驳回成功`);
+            this.setKeepalive(true)
             this.$router.push("/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList");
           })
           .catch((err) => {

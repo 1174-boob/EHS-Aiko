@@ -267,6 +267,7 @@ export default {
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`驳回成功`);
+            this.setKeepalive(true)
             this.$router.push("/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList");
           })
           .catch((err) => {
@@ -305,8 +306,10 @@ export default {
             : undefined,
         };
         this.loading = true;
+        this.setKeepalive(true)
         DelayhiddenPerilsList(obj)
           .then(() => {
+            // this.setKeepalive(true)
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealNoFour");
             this.loading = false;
             this.$antMessage.success(`提交成功`);
@@ -323,6 +326,7 @@ export default {
       } else if (type == "pass" || type == "close") {
         //通过、关闭
         this.loading = true;
+        this.setKeepalive(true)
         DelayhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
           .then(() => {
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealNoFour");

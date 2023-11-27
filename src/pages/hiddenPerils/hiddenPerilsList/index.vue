@@ -334,6 +334,12 @@ export default {
         this.iRest()
       }
     }, 20);
+    setTimeout(() => {
+      if(this.keepalive){
+        this.initConfigPage()
+        this.iSearch()
+      }
+    }, 20);
   },
   methods: {
     initConfigPage(){

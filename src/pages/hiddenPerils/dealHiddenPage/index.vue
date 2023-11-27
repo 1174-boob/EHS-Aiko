@@ -191,6 +191,7 @@ export default {
                 path: "/safeManage/dualControlManage/hiddenPerils/dealIsFour",
                 query: { hideDangerId: this.routeObj.hideDangerId },
               });
+              this.setKeepalive(true)
             } else {
               //非四不放过
               this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealNoFour");
@@ -198,6 +199,7 @@ export default {
                 path: "/safeManage/dualControlManage/hiddenPerils/dealNoFour",
                 query: { hideDangerId: this.routeObj.hideDangerId },
               });
+              this.setKeepalive(true)
             }
           })
           .catch((err) => {
@@ -220,9 +222,11 @@ export default {
             if (this.hideDangerForm.fourPass) {
               //四不放过
               this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealIsFour");
+              this.setKeepalive(true)
             } else {
               //非四不放过
               this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealNoFour");
+              this.setKeepalive(true)
             }
             this.loading = false;
             this.$antMessage.success(`通过成功`);
@@ -237,12 +241,13 @@ export default {
         this.delayFlag = true;
         this.typeModel = false;
       } else if (type == "cancel") {
-        this.setKeepalive(true)
+        // this.setKeepalive(true)
         this.$router.push("/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList");
       } else {
         //打开退回起草人弹窗
         this.backFlag = true;
       }
+      this.setKeepalive(true)
     },
 
     //禁用延期时间
@@ -310,12 +315,14 @@ export default {
         .then((res) => {
           if (this.typeModel) {
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealHiddenPage");
+            this.setKeepalive(true)
           }
           this.loading = false;
           this.$antMessage.success(
             `${this.typeModel ? "延期成功" : "驳回成功"}`
           );
           this.$router.push("/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList");
+          this.setKeepalive(true)
         })
         .catch((err) => {
           this.loading = false;
@@ -372,15 +379,18 @@ export default {
                 if (this.hideDangerForm.fourPass) {
                   //四不放过
                   this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealIsFour", data.treeNameAndCodeList[0].id);
+                  this.setKeepalive(true)
                 } else {
                   //非四不放过
                   this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealNoFour", data.treeNameAndCodeList[0].id);
+                  this.setKeepalive(true)
                 }
                 this.loading = false;
                 this.$antMessage.success(`分配担当成功`);
                 this.$router.push({
                   path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList",
                 });
+                this.setKeepalive(true)
               })
           })
           .catch(err => {
