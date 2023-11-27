@@ -26,6 +26,9 @@
             <a-form-model-item label="设备代码" prop="equipmentCode" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.equipmentCode" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
+            <a-form-model-item label="设备位置" prop="specialEquipmentDetail.equipmentLocation" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentLocation" placeholder="最多可输入50字" allowClear :maxLength="50"/>
+            </a-form-model-item>
             <a-form-model-item label="型号规格" prop="specialEquipmentDetail.equipmentSpecifications" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input :disabled="disabled" v-model.trim="newlyForm.specialEquipmentDetail.equipmentSpecifications" placeholder="最多可输入50字" allowClear :maxLength="50"/>
             </a-form-model-item>
@@ -245,6 +248,9 @@ export default {
         ],
         'specialEquipmentDetail.equipmentDesignTemperature': [
           { required: true, message: '请输入设计温度', trigger: ['blur', 'change'] },
+        ],
+        'specialEquipmentDetail.equipmentLocation': [
+          { required: true, message: '请选择设备位置', trigger: ['blur', 'change'] },
         ],
         useRegistryNum: [
           { required: true, message: '请输入使用登记证编号', trigger: ['blur', 'change'] },

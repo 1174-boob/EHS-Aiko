@@ -298,57 +298,6 @@ export default {
           },
           minWidth: 120,
         },
-        {
-          title: "性别",
-          dataIndex: "sex",
-          key: "sex",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
-        },
-        {
-          title: "身份证号",
-          dataIndex: "idNumber",
-          key: "idNumber",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 160,
-        },
-        {
-          title: "家庭住址",
-          dataIndex: "address",
-          key: "address",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 160,
-        },
       ],
       // 添加一行弹窗-显示隐藏
       selTempDrawerShow: false,
