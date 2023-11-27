@@ -32,7 +32,8 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="责任部门">
-          <a-input v-model="formInline.responsibilityDept" placeholder="请输入"></a-input>
+          <DeptTree v-model="formInline.responsibilityDept" :deptData="deptData"></DeptTree>
+          <!-- <a-input v-model="formInline.responsibilityDept" placeholder="请输入"></a-input> -->
         </a-form-model-item>
         <a-form-model-item label="起草人">
           <a-input v-model="formInline.drafter" placeholder="请输入"></a-input>
@@ -238,6 +239,7 @@ export default {
         { key: "moreNoHandle", value: "超期未处理" },
       ], //数据筛选
       dictionary,
+      deptData:[],
       actions: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.risk}/api/ehs/risk/detail/specific/importUser`,
       formInline: {
         timeArr: [],
