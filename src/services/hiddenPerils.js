@@ -30,3 +30,5 @@ export const HiddenLogList = params => post(front + '/api/ehs/safe/hide/danger/g
 export const ImportHidden = params => post(front + '/api/ehs/safe/hide/danger/upload', params);
 //获取主部门id和name
 export const GetParentResponsibilityDept = params => post(customer + '/api/enterprise/dept/getAdminDeptId', params);
+//授权
+export const reassignHandlerUser = params => post(front + '/api/ehs/safe/hide/danger/reassign/handler/user', params);
