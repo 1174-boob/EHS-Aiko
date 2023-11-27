@@ -24,49 +24,50 @@
               ></CommonDept>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="applyDepartCode" label="所属厂区" prop="applyDepartCode">
-                <DeptTree :placeholder="iFrom.corporationId ? '请选择':'请先选择所属厂区'" v-model="iFrom.applyDepartCode" :deptData="deptData" @change="(val,lab)=> departOrPerpleChange(lab,'applyDepartName')"></DeptTree>
+              <a-form-model-item ref="plantAreaId" label="所属厂区" prop="plantAreaId">
+                <a-select v-model="iFrom.plantAreaId" show-search placeholder="请选择所属厂区" option-filter-prop="children" :filter-option="filterOptionMixin" @change="plantAreaIdChange">
+                  <a-select-option v-for="item in getChemicalDictList('plant_area')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
               <StaffOrDept
-                ref="applyUserCode"
+                ref="applicationDepartmentId"
                 :labelTitle="'申请部门'"
                 :treeRoles="iRules"
-                :propKey="'applyUserCode'"
+                :propKey="'applicationDepartmentId'"
+                :treeType="'dept'" 
                 :treePlaceholder="deptTreeId?'请选择' : '请先选择申请部门'"
-                :checkedTreeNode="checkedTreeNode"
+                :checkedTreeNode="AcheckedTreeNode"
                 :deptTreeId="deptTreeId"
                 :checkAbel="false"
-                @getTreeData="getTreeData"
+                @getTreeData="applicationDepartmentIdTreeData"
               />
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="applyContact" label="监督人" prop="applyContact">
-                StaffOrDept组件
+              <a-form-model-item ref="supervisionPersonId" label="监督人" prop="supervisionPersonId">
+                <StaffOrDept :treeRoles="iRules" :propKey="'supervisionPersonId'" :checkedTreeNode="ScheckedTreeNode" :checkAbel="false" @getTreeData="supervisionPersonIdTreeData" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="areaDepartCode" label="监督人联系方式" prop="areaDepartCode">
-                <!-- <DeptTree :placeholder="iFrom.corporationId ? '请选择':'请先选择监督人联系方式'" v-model="iFrom.areaDepartCode" :deptData="deptData" @change="(val,lab)=> departOrPerpleChange(lab,'areaDepartName')"></DeptTree> -->
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入监督人联系方式"></a-input>
+              <a-form-model-item ref="supervisionPersonContactInformation" label="监督人联系方式" prop="supervisionPersonContactInformation">
+                <a-input v-model.trim="iFrom.supervisionPersonContactInformation" :maxLength="50" placeholder="请输入监督人联系方式"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="施工所在区域部门负责人" prop="operateBrief">
-                <!-- <a-input v-model.trim="iFrom.operateBrief" :maxLength="200" placeholder="请输入施工所在区域部门负责人"></a-input> -->
-                StaffOrDept组件
+              <a-form-model-item ref="personInChargeOfTheDepartmentInTheConstructionAreaId" label="施工所在区域部门负责人" prop="personInChargeOfTheDepartmentInTheConstructionAreaId">
+                <StaffOrDept :treeRoles="iRules" :propKey="'personInChargeOfTheDepartmentInTheConstructionAreaId'" :checkedTreeNode="PcheckedTreeNode" :checkAbel="false" @getTreeData="personInChargeTreeData" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="areaLocation" label="施工位置" prop="areaLocation">
-                <a-input v-model.trim="iFrom.areaLocation" :maxLength="50" placeholder="请输入施工位置"></a-input>
+              <a-form-model-item ref="constructionLocation" label="施工位置" prop="constructionLocation">
+                <a-input v-model.trim="iFrom.constructionLocation" :maxLength="50" placeholder="请输入施工位置"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -75,59 +76,69 @@
           
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="areaDepartCode" label="设备/工程名称" prop="areaDepartCode">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入设备/工程名称"></a-input>
+              <a-form-model-item ref="nameOfEquipmentOrWorks" label="设备/工程名称" prop="nameOfEquipmentOrWorks">
+                <a-input v-model.trim="iFrom.nameOfEquipmentOrWorks" :maxLength="50" placeholder="请输入设备/工程名称"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="制造/施工单位" prop="operateBrief">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入设制造/施工单位"></a-input>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :span="12">
-              <a-form-model-item ref="areaDepartCode" label="施工单位负责人" prop="areaDepartCode">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入施工单位负责人"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="负责人联系方式" prop="operateBrief">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入负责人联系方式"></a-input>
+              <a-form-model-item ref="manufacturingOrConstructionUnit" label="制造/施工单位" prop="manufacturingOrConstructionUnit">
+                <a-input v-model.trim="iFrom.manufacturingOrConstructionUnit" :maxLength="50" placeholder="请输入设制造/施工单位"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="areaDepartCode" label="施工单位监护人" prop="areaDepartCode">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入施工单位监护人"></a-input>
+              <a-form-model-item ref="personInChargeOfConstructionUnitName" label="施工单位负责人" prop="personInChargeOfConstructionUnitName">
+                <a-input v-model.trim="iFrom.personInChargeOfConstructionUnitName" :maxLength="50" placeholder="请输入施工单位负责人"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="监护人联系方式" prop="operateBrief">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入监护人联系方式"></a-input>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row>
-            <a-col :span="12">
-              <a-form-model-item ref="areaDepartCode" label="施工主管部门" prop="areaDepartCode">
-                DeptTree组件
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="项目负责人" prop="operateBrief">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入监督人联系方式"></a-input>
+              <a-form-model-item ref="personInChargeOfConstructionUnitContactInformation" label="负责人联系方式" prop="personInChargeOfConstructionUnitContactInformation">
+                <a-input v-model.trim="iFrom.personInChargeOfConstructionUnitContactInformation" :maxLength="50" placeholder="请输入负责人联系方式"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="dayDate" label="预计施工日期" prop="dayDate">
+              <a-form-model-item ref="guardianOfConstructionUnitName" label="施工单位监护人" prop="guardianOfConstructionUnitName">
+                <a-input v-model.trim="iFrom.guardianOfConstructionUnitName" :maxLength="50" placeholder="请输入施工单位监护人"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item ref="guardianOfConstructionUnitContactInformation" label="监护人联系方式" prop="guardianOfConstructionUnitContactInformation">
+                <a-input v-model.trim="iFrom.guardianOfConstructionUnitContactInformation" :maxLength="50" placeholder="请输入监护人联系方式"></a-input>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="constructionCompetentDepartmentId" label="施工主管部门" prop="constructionCompetentDepartmentId">
+                <StaffOrDept
+                  ref="constructionCompetentDepartmentId"
+                  :treeRoles="iRules"
+                  :propKey="'constructionCompetentDepartmentId'"
+                  :treeType="'dept'" 
+                  :treePlaceholder="deptTreeId?'请选择' : '请选择施工主管部门'"
+                  :checkedTreeNode="CcheckedTreeNode"
+                  :deptTreeId="deptTreeId"
+                  :checkAbel="false"
+                  @getTreeData="constructionCompetentDepartmentIdTreeData"
+                />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item ref="projectLeaderName" label="项目负责人" prop="projectLeaderName">
+                <a-input v-model.trim="iFrom.projectLeaderName" :maxLength="50" placeholder="请输入监督人联系方式"></a-input>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="12">
+              <a-form-model-item ref="estimatedConstructionDate" label="预计施工日期" prop="estimatedConstructionDate">
                 <a-range-picker
                   :allowClear="false"
                   valueFormat="YYYY-MM-DD"
-                  v-model="iFrom.dayDate"
+                  v-model="iFrom.estimatedConstructionDate"
                   :disabled-date="disabledDate"
                   style="width:100%"
                   format="YYYY-MM-DD"
@@ -136,22 +147,22 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="项目负责人联系方式" prop="operateBrief">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入项目负责人联系方式"></a-input>
+              <a-form-model-item ref="projectLeaderContactInformation" label="项目负责人联系方式" prop="projectLeaderContactInformation">
+                <a-input v-model.trim="iFrom.projectLeaderContactInformation" :maxLength="50" placeholder="请输入项目负责人联系方式"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" label="施工日类型" prop="operateType">
-                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
-                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+              <a-form-model-item ref="typeOfConstructionDayId" label="施工日类型" prop="typeOfConstructionDayId">
+                <a-select v-model="iFrom.typeOfConstructionDayId" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="typeOfConstructionDayIdChange">
+                  <a-select-option v-for="item in getChemicalDictList('type_of_construction_day')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateBrief" label="施工作业人数" prop="operateBrief">
-                <a-input v-model.trim="iFrom.applyContact" :maxLength="50" placeholder="请输入施工作业人数"></a-input>
+              <a-form-model-item ref="personNumberOfConstructionOperations" label="施工作业人数" prop="personNumberOfConstructionOperations">
+                <a-input v-model.trim="iFrom.personNumberOfConstructionOperations" :maxLength="50" placeholder="请输入施工作业人数"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -160,37 +171,37 @@
 
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="安装施工内容" prop="operateType">
-                <a-textarea v-model="iFrom.addressDetail" placeholder="请输入" />
+              <a-form-model-item ref="contentsOfInstallationAndConstruction" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="安装施工内容" prop="contentsOfInstallationAndConstruction">
+                <a-textarea v-model="iFrom.contentsOfInstallationAndConstruction" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="预想危险事项/危险/环境因素" prop="operateType">
-                <a-textarea v-model="iFrom.addressDetail" placeholder="请输入" />
+              <a-form-model-item ref="endangermentHazardsAndEnvironmentalFactors" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="预想危险事项/危险/环境因素" prop="endangermentHazardsAndEnvironmentalFactors">
+                <a-textarea v-model="iFrom.endangermentHazardsAndEnvironmentalFactors" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="树立安全对策及防灾计划" prop="operateType">
-                <a-textarea v-model="iFrom.addressDetail" placeholder="请输入" />
+              <a-form-model-item ref="establishSafetyCountermeasuresAndDisasterPreventionPlans" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" label="树立安全对策及防灾计划" prop="establishSafetyCountermeasuresAndDisasterPreventionPlans">
+                <a-textarea v-model="iFrom.establishSafetyCountermeasuresAndDisasterPreventionPlans" placeholder="请输入" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" label="安全防护用具" prop="operateType">
-                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
-                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+              <a-form-model-item ref="safetyProtectionEquipmentIdList" label="安全防护用具" prop="safetyProtectionEquipmentIdList">
+                <a-select v-model="iFrom.safetyProtectionEquipmentIdList" mode="multiple" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="safetyProtectionChange">
+                  <a-select-option v-for="item in getChemicalDictList('safety_protection_equipment')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item ref="operateType" label="防爆区域" prop="operateType">
-                <a-select v-model="iFrom.operateType" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="operateTypeChange">
-                  <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+              <a-form-model-item ref="explosionProofAreaIdList" label="防爆区域" prop="explosionProofAreaIdList">
+                <a-select v-model="iFrom.explosionProofAreaIdList" mode="multiple" show-search placeholder="请选择" option-filter-prop="children" :filter-option="filterOptionMixin" @change="explosionProofChange">
+                  <a-select-option v-for="item in getChemicalDictList('explosion_proof_area')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
@@ -222,7 +233,7 @@ import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
 import AddCasNoModel from "./components/addCasNoModel.vue";
 import AddSpecialModel from "./components/addSpecialModel.vue";
-import { addDangerWorkStaticApi, getDangerWorkStaticDetailApi, editDangerWorkStaticApi } from '@/services/dangerWorkStatic.js'
+import { addDangerWorkStaticApi, getDangerWorkStaticDetailApi, editDangerWorkStaticApi, operateInfoSave, operateInfoEdit, operateInfoDetail } from '@/services/dangerWorkStatic.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
 import dictionary from "@/utils/dictionary";
@@ -230,6 +241,7 @@ import { PushTask } from '@/services/api'
 import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
 import deptAndUser from '../mixin/deptAndUser.js'
+import dayJs from "dayjs";
 export default {
   components: { FixedBottom, AddCasNoModel, AddSpecialModel, StaffOrDept },
   mixins: [teableCenterEllipsis, chemicalDict, cancelLoading, deptAndUser],
@@ -254,7 +266,6 @@ export default {
         dayDate: [{ required: true, message: "预计施工日期不能为空", trigger: "change" },],
         dayTime: [{ required: true, message: "每日作业时间不能为空", trigger: "change" },],
         dangerGuardian: [{ required: true, message: "现场监护人不能为空", trigger: "change" },],
-        // isMust: [{ required: true, message: "作业形式不能为空", trigger: "change" },],
         outCompany: [{ required: true, message: "外协厂商名称不能为空", trigger: "blur" },],
         outPrincipal: [{ required: true, message: "负责人不能为空", trigger: "blur" },],
         outPrincipalContact: [{ required: true, message: "负责人联系方式不能为空", trigger: "blur" },],
@@ -262,6 +273,8 @@ export default {
         outSafetyContact: [{ required: true, message: "安全员联系方式不能为空", trigger: "blur" },],
         dangerSpecialPerson: [{ required: false, message: "特种作业员不能为空", trigger: "change" },],
       },
+      safetyProtectionEquipmentIdList: [],
+      explosionProofAreaIdList: [],
       // 主要成分table
       columns: [
         {
@@ -407,6 +420,10 @@ export default {
       // 作业级别
       hazardLevelList: [],
       checkedTreeNode: [],
+      AcheckedTreeNode: [],
+      CcheckedTreeNode: [],
+      ScheckedTreeNode: [],
+      PcheckedTreeNode: [],
       // 主键id
       operateId: undefined,
       deptTreeId: undefined,
@@ -429,8 +446,11 @@ export default {
     moment,
     // 页面初始化
     initPage() {
+      // if (this.iFrom.estimatedConstructionDate) {
+      //   this.iFrom.estimatedConstructionDateStart = this.iFrom.estimatedConstructionDate[0] ? dayJs(this.iFrom.estimatedConstructionDate[0]).format("YYYY-MM-DD") : "";
+      //   this.iFrom.estimatedConstructionDateEnd = this.iFrom.estimatedConstructionDate[1] ? dayJs(this.iFrom.estimatedConstructionDate[1]).format("YYYY-MM-DD") : "";
+      // }
       if (this.isAddPage) {
-        // this.$set(this.iFrom, 'isMust', '1');
         this.spinning = false
       } else {
         // 获取页面详情
@@ -440,38 +460,106 @@ export default {
           })
       }
     },
-    // 选择人员后的change事件
-    getTreeData(value) {
-      // console.log("ppppp----", value);
-      let { treeIdList, treeNameAndCodeList } = value
-
-      // 针对组件取消后数据被清空时做保存数据处理
-      this.checkedTreeNode = treeIdList
-
-      let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
-      let applyUserCode = id
-      let applyUserName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
-      this.$set(this.iFrom, 'applyUserCode', applyUserCode)
-      this.departOrPerpleChange([applyUserName], 'applyUserName')
-      formValidator.formItemValidate(this, "applyUserCode", "ruleForm")
+    plantAreaIdChange(val, option) {
+      this.iFrom.plantAreaId = val;
+      this.iFrom.plantAreaName = this.getChemicalDictList('plant_area').find(item => {
+        return item.dictValue == val
+      }).dictLabel;
     },
+    typeOfConstructionDayIdChange(val, option) {
+      this.iFrom.typeOfConstructionDayId = val;
+      this.iFrom.typeOfConstructionDayName = this.getChemicalDictList('type_of_construction_day').find(item => {
+        return item.dictValue == val
+      }).dictLabel;
+    },
+    safetyProtectionChange(val, option) {
+      this.iFrom.safetyProtectionEquipmentIdList = val;
+      let safetyProtectionEquipmentNameList = [];
+      val.forEach(item => {
+        safetyProtectionEquipmentNameList.push(this.getChemicalDictList('safety_protection_equipment').find(_item => {
+          return item == _item.dictValue
+        }).dictLabel);
+      })
+      this.iFrom.safetyProtectionEquipmentNameList = safetyProtectionEquipmentNameList
+    },
+    explosionProofChange(val, option) {
+      this.iFrom.explosionProofAreaIdList = val;
+      let explosionProofAreaNameList = [];
+      val.forEach(item => {
+        explosionProofAreaNameList.push(this.getChemicalDictList('explosion_proof_area').find(_item => {
+          return item == _item.dictValue
+        }).dictLabel);
+      })
+      this.iFrom.explosionProofAreaNameList = explosionProofAreaNameList
+    },
+    applicationDepartmentIdTreeData(value) {
+      let { treeIdList, treeNameAndCodeList } = value
+      // 针对组件取消后数据被清空时做保存数据处理
+      this.AcheckedTreeNode = treeIdList
+      let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
+      let applicationDepartmentId = id
+      let applicationDepartmentName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
+      this.$set(this.iFrom, 'applicationDepartmentId', applicationDepartmentId)
+      this.departOrPerpleChange([applicationDepartmentName], 'applicationDepartmentName')
+      formValidator.formItemValidate(this, "applicationDepartmentId", "ruleForm")
+    },
+    constructionCompetentDepartmentIdTreeData(value) {
+      let { treeIdList, treeNameAndCodeList } = value
+      // 针对组件取消后数据被清空时做保存数据处理
+      this.CcheckedTreeNode = treeIdList
+      let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
+      let constructionCompetentDepartmentId = id
+      let constructionCompetentDepartmentName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
+      this.$set(this.iFrom, 'constructionCompetentDepartmentId', constructionCompetentDepartmentId)
+      this.departOrPerpleChange([constructionCompetentDepartmentName], 'constructionCompetentDepartmentName')
+      formValidator.formItemValidate(this, "constructionCompetentDepartmentId", "ruleForm")
+    },
+    supervisionPersonIdTreeData(value) {
+      console.log(value, '>>???')
+      let { treeIdList, treeNameAndCodeList } = value
+      // 针对组件取消后数据被清空时做保存数据处理
+      this.ScheckedTreeNode = treeIdList
+      let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
+      let supervisionPersonId = id
+      let supervisionPersonName = (treeName || '')
+      let supervisionPersonJobNumber = (treeCode || '')
+      this.$set(this.iFrom, 'supervisionPersonId', supervisionPersonId)
+      this.departOrPerpleChange([supervisionPersonName], 'supervisionPersonName')
+      this.departOrPerpleChange([supervisionPersonJobNumber], 'supervisionPersonJobNumber')
+      formValidator.formItemValidate(this, "supervisionPersonId", "ruleForm")
+    },
+    personInChargeTreeData(value) {
+      let { treeIdList, treeNameAndCodeList } = value
+      // 针对组件取消后数据被清空时做保存数据处理
+      this.PcheckedTreeNode = treeIdList
+      let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
+      let personInChargeOfTheDepartmentInTheConstructionAreaId = id
+      let personInChargeOfTheDepartmentInTheConstructionAreaName = (treeName || '')
+      let personInChargeOfTheDepartmentInTheConstructionAreaJobNumber = (treeCode || '')
+      this.$set(this.iFrom, 'personInChargeOfTheDepartmentInTheConstructionAreaId', personInChargeOfTheDepartmentInTheConstructionAreaId)
+      this.departOrPerpleChange([personInChargeOfTheDepartmentInTheConstructionAreaName], 'personInChargeOfTheDepartmentInTheConstructionAreaName')
+      this.departOrPerpleChange([personInChargeOfTheDepartmentInTheConstructionAreaJobNumber], 'personInChargeOfTheDepartmentInTheConstructionAreaJobNumber')
+      formValidator.formItemValidate(this, "personInChargeOfTheDepartmentInTheConstructionAreaId", "ruleForm")
+    },
+    // 选择人员后的change事件
+    // getTreeData(value) {
+    //   let { treeIdList, treeNameAndCodeList } = value
+    //   // 针对组件取消后数据被清空时做保存数据处理
+    //   this.checkedTreeNode = treeIdList
+    //   let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
+    //   let applicationDepartmentId = id
+    //   let applicationDepartmentName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
+    //   this.$set(this.iFrom, 'applicationDepartmentId', applicationDepartmentId)
+    //   this.departOrPerpleChange([applicationDepartmentName], 'applicationDepartmentName')
+    //   formValidator.formItemValidate(this, "applicationDepartmentId", "ruleForm")
+    // },
     // 各部门改变
     departOrPerpleChange(lab, attrName) {
       this.$set(this.iFrom, attrName, lab[0])
     },
     // 施工日类型改变
     operateTypeChange(val, rm = true) {
-      // if (val == 'fire_work') {
-      //   this.hazardLevelList = dictionary('dangerhazardHLevel')
-      //   this.iRules.operateLevel[0].required = true
-      // } else if (val == 'high_work') {
-      //   this.hazardLevelList = dictionary('dangerhazardGLevel')
-      //   this.iRules.operateLevel[0].required = true
-      // } else {
-      //   this.hazardLevelList = []
-      //   this.iRules.operateLevel[0].required = false
-      // }
-      // rm && this.$set(this.iFrom, 'operateLevel', undefined)
+      
     },
     // 时间限制
     disabledDate(current) {
@@ -479,26 +567,18 @@ export default {
     },
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
-      // console.log('被清除了');
-      this.$set(this.iFrom, 'applyDepartCode', undefined)
-      this.$set(this.iFrom, 'applyDepartName', undefined)
-      this.$set(this.iFrom, 'areaDepartCode', undefined)
-      this.$set(this.iFrom, 'areaDepartName', undefined)
       // 人员相关
       this.deptTreeId = corporationDeptId
-      this.$set(this.iFrom, 'applyUserCode', undefined)
-      this.$set(this.iFrom, 'applyUserName', undefined)
       this.checkedTreeNode = []
-      // 现场监护人
-      this.$set(this.iFrom, 'dangerGuardian', [])
     },
     // 获取页面详情
     getPageDetail() {
       let operateId = this.operateId
       let apiData = { operateId }
       return new Promise((resove, rej) => {
-        getDangerWorkStaticDetailApi(apiData)
+        operateInfoDetail(apiData)
           .then(res => {
+            console.log(res, 'operateInfoDetail')
             let iFrom = res.data
             iFrom.dangerGuardian = this.addGuid(iFrom.dangerGuardian)
             iFrom.dangerSpecialPerson = this.addGuid(iFrom.dangerSpecialPerson == null? [] : iFrom.dangerSpecialPerson)
@@ -560,20 +640,22 @@ export default {
     },
     // 提交之前的流程api
     iSubmit() {
-      if (!this.formValidate() || this.loading || this.spinning) {
-        return
+      if (this.iFrom.estimatedConstructionDate) {
+        this.iFrom.estimatedConstructionDateStart = this.iFrom.estimatedConstructionDate[0] ? dayJs(this.iFrom.estimatedConstructionDate[0]).format("YYYY-MM-DD") : "";
+        this.iFrom.estimatedConstructionDateEnd = this.iFrom.estimatedConstructionDate[1] ? dayJs(this.iFrom.estimatedConstructionDate[1]).format("YYYY-MM-DD") : "";
       }
-      this.handleLoading();
-      // 删除外协厂商信息
-      // if (this.iFrom.isMust == '1') {
-      //   this.rmAttrFn()
+      console.log(this.iFrom, '诶嘿')
+      // isDraft提交2，保存1
+      // if (!this.formValidate() || this.loading || this.spinning) {
+      //   return
       // }
-      // 草稿 1-是，2-否
+      this.handleLoading();
       let apiData = { ...this.iFrom, isDraft: 2 }
-      const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
+      const apiName = this.isAddPage ? operateInfoSave : operateInfoEdit
       return apiName(apiData)
         .then(res => {
           // 代办推送
+          console.log(res, '....')
           let securityUser = this.iFrom.dangerGuardian.map(item => item.guardianCode)
           securityUser = securityUser.join()
           let operateId = this.isAddPage ? (res.data ? res.data.id : undefined) : this.operateId
@@ -581,7 +663,7 @@ export default {
 
           this.$antMessage.success('提交成功');
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
+          this.$router.push({ path: '/safeManage/workManage/normalWorkStatic/normalWorkStaticAccount' })
         })
         .catch(err => { })
         .finally(() => {
@@ -617,11 +699,6 @@ export default {
       if (!this.formValidate() || this.loading || this.spinning) {
         return
       }
-      // 删除外协厂商信息
-      // if (this.iFrom.isMust == '1') {
-      //   this.rmAttrFn()
-      // }
-      // 草稿 1-是，2-否
       let apiData = { ...this.iFrom, isDraft: 1 }
       const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
       this.handleLoadingTwo();

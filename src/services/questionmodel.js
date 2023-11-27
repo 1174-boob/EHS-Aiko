@@ -51,3 +51,5 @@ export const TestUpdate = params => post(course + '/api/exam/update', params);
 export const TestPublish = params => get(course + '/api/exam/publish', params);
 // 考试推送
 export const ExamPush = params => post(course + '/api/push/exam/push', params);
+// 下载二维码
+export const GetQrCode = params => get(course + '/api/exam/getQrCode', params);

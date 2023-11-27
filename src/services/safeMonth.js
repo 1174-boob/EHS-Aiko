@@ -144,3 +144,8 @@ export const analysisMonthDangerCookie = (params, headers) => post(serviceNameLi
 export const statisticsOverviewMonthbar = (params, headers) => post(serviceNameList.danger + '/api/ehs/danger/data/analysis/drill/statistics/overview/monthbar', params, headers)
 // 应急演练级别（计划演练，实际演练 安全月报）
 export const statisticsTypeMonthcookie = (params, headers) => post(serviceNameList.danger + '/api/ehs/danger/data/analysis/drill/statistics/type/monthcookie', params, headers)
+
+// 查询职业禁忌人员
+export const contrainHealthStaffDetail = (params, headers) => post(serviceNameList.month + '/api/ehs/month/security/head/contrainHealthStaffDetail', params, headers)
+// 查询禁忌调岗
+export const tabooHealthStaffDetail = (params, headers) => post(serviceNameList.month + '/api/ehs/month/security/head/tabooHealthStaffDetail', params, headers)

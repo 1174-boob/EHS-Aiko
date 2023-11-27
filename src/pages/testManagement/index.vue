@@ -45,10 +45,21 @@
           <a-button type="link" v-if="record.status !='2'" class="color-0067cc cursor-pointer" @click="pushStaff(record)">推送</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="jumpAddOrDetail('change', record)" :disabled="record.status !='2'">编辑</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="jumpLook(record)">预览</a-button>
+          <a-button type="link" class="color-0067cc cursor-pointer" @click="downloadCode(record)">下载二维码</a-button>
           <a-button type="link" class="color-ff4d4f cursor-pointer" @click="deleteDict(record)">删除</a-button>
         </div>
       </a-table>
     </CommonTable>
+    <CommonModal :title="'二维码'" :visible="QRcodeModelShow" :cancelFn="closeModel" class="principal-dialog">
+      <div class="model-main" >
+        <div class="qrcode" ref="imageWrapper">
+          <img :src="coverImg" alt />
+        </div>
+      </div>
+      <template slot="btn">
+        <a-button class="m-l-15" type="primary" :loading="loading" @click="downloadBtn">下载</a-button>
+      </template>
+    </CommonModal>
     <CommonModal class="table-modal" title="推送" :visible="pushVisible" :cancelFn="pushCancle">
       <PushComponent ref="pushModal" :dataMsg="currentPushMsg"></PushComponent>
       <template slot="btn1">
@@ -70,6 +81,7 @@ import {
   TestDelete,
   ExamPush,
   TestPublish,
+  GetQrCode
 } from "@/services/questionmodel.js";
 import PushComponent from "@/pages/courseManagement/pushStaff.vue";
 export default {
@@ -77,6 +89,8 @@ export default {
   components: { PushComponent },
   data() {
     return {
+      coverImg: '',
+      QRcodeModelShow: false,
       tableSpinning:false,
       // permission: false,
       dictTitle: "批量导入题目",
@@ -314,7 +328,31 @@ export default {
         this.tableSpinning = false
       })
     },
-
+    downloadCode(record) {
+      GetQrCode({ examId: record.testId }).then((res) => {
+        this.QRcodeModelShow = true;
+        this.coverImg = res.data;
+      }).catch((err) => {
+        console.log(err);
+      }).finally(()=>{
+        
+      })
+    },
+    closeModel() {
+      this.QRcodeModelShow = false;
+    },
+    downloadBtn() {
+      return
+      html2canvas(this.$refs.imageWrapper).then((canvas) => {
+				let dataURL = canvas.toDataURL('image/png')
+				this.imgUrl = dataURL
+				var a = document.createElement('a') // 生成一个a元素
+				var event = new MouseEvent('click') // 创建一个单击事件
+				a.download = name || 'qrcode' // 设置图片名称
+				a.href = dataURL // 将生成的URL设置为a.href属性
+				a.dispatchEvent(event) // 触发a的单击事件
+			})
+    },
     // 删除
     deleteDict(record) {
       console.log("rr", record);
@@ -405,6 +443,42 @@ export default {
       width: 100%;
       background: #fff;
       padding-top: 20px;
+    }
+  }
+}
+.principal-dialog {
+  ::v-deep .ant-modal {
+    width: 600px !important;
+    padding-bottom: 0px !important;
+  }
+}
+
+.text-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.model-main {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  .qrcode {
+    width: 240px;
+    padding: 20px;
+    background: #fff;
+    #qrcode {
+      margin:0 auto;
+      width:200px;
+      height: 200px;
+    }
+  }
+  
+}
+@media screen and (max-width: 1367px) {
+  .model-main {
+    min-height: 320px;
+    .model-main-qr-img {
+      width: 70%;
     }
   }
 }

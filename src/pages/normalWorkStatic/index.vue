@@ -5,29 +5,21 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonDept ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="true" @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
         <a-form-model-item label="申请部门">
-          <DeptTree :placeholder="formInline.corporationId ? '请选择':'请先选择所属组织'" v-model="formInline.applyDepartCode" :deptData="deptData"></DeptTree>
+          <DeptTree :placeholder="formInline.corporationId ? '请选择':'请先选择所属组织'" v-model="formInline.applicationDepartmentId" :deptData="deptData"></DeptTree>
         </a-form-model-item>
-        <!-- <a-form-model-item label="施工位置部门">
-          <DeptTree :placeholder="formInline.corporationId ? '请选择':'请先选择所属组织'" v-model="formInline.areaDepartCode" :deptData="deptData"></DeptTree>
-        </a-form-model-item> -->
-        <a-form-model-item label="申请事项">
-          <a-select v-model="formInline.operateType" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin" @change="operateTypeChange">
-            <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item label="制造/施工内容">
-          <a-select v-model="formInline.operateLevel" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin">
-            <a-select-option v-for="item in hazardLevelList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+        <a-form-model-item label="防爆区域">
+          <a-select v-model="formInline.explosionProofAreaId" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin" @change="operateTypeChange">
+            <a-select-option v-for="item in getChemicalDictList('explosion_proof_area')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="施工位置">
-          <a-input v-model="formInline.areaLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
+          <a-input v-model="formInline.constructionLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="监督人">
-          <a-input v-model="formInline.applyUserCode" :maxLength="30" placeholder="请输入监督人" allowClear></a-input>
+          <a-input v-model="formInline.supervisionPersonJobNumberOrName" :maxLength="30" placeholder="请输入监督人" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="作业编号">
-          <a-input v-model="formInline.operateNumber" :maxLength="30" placeholder="请输入作业编号" allowClear></a-input>
+          <a-input v-model="formInline.generalOperateNumber" :maxLength="30" placeholder="请输入作业编号" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="状态">
           <a-select v-model="formInline.infoStatus" placeholder="请选择" show-search :filter-option="filterOptionMixin">
@@ -50,11 +42,9 @@
     </SearchTerm>
     <DashBtn>
       <div>
-        <!-- <a-button type="dashed" @click="goDraft">草稿箱</a-button> -->
         <a-button type="dashed" @click="jumpAddOrDetail('add')">
           <a-icon type="plus" />新建
         </a-button>
-        <!-- <a-button type="dashed" @click="openSelTable">自定义列</a-button> -->
         <template v-if="allButtonCodeList.includes('dangerWorkStaticAddAndChange')">
           <UploadBtnStyle
             :action="action"
@@ -117,23 +107,13 @@
         </template>
       </vxe-table>
     </CommonTable>
-
-    <!-- 自定义列 -->
-    <SelTable
-      v-model="selectModel"
-      :tableColumnAll="columnsAll"
-      :tableColumnIng="columnsIng"
-      :setColumLocalStorageName="setColumLocalStorageName"
-      :columnsDefault="columnsDefault"
-      @setTableColumn="setTableColumn"
-    />
   </div>
 </template>
 
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
-import { getDangerWorkStaticListApi, rmDangerWorkStaticItemApi, exportDangerWorkStaticApi } from "@/services/dangerWorkStatic.js";
+import { exportDangerWorkStaticApi, operateInfoListPag, operateInfoDelete } from "@/services/dangerWorkStatic.js";
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import QRcodeModel from "@/components/qrCodeModel/qrCodeModel.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
@@ -165,7 +145,7 @@ export default {
           title: "作业编号",
           disabled: true,
           isDefault: true,
-          props: 'operateNumber',
+          props: 'generalOperateNumber',
         },
         {
           id: 2,
@@ -179,52 +159,55 @@ export default {
           title: "所属厂区",
           disabled: true,
           isDefault: true,
-          props: 'corporationName',
+          props: 'plantAreaName',
         },
         {
           id: 4,
           title: "申请部门",
           disabled: true,
           isDefault: true,
-          props: 'corporationName',
+          props: 'applicationDepartmentName',
         },
         {
           id: 5,
           title: "施工位置",
           disabled: true,
           isDefault: true,
-          props: 'areaLocation',
+          props: 'constructionLocation',
         },
         {
           id: 6,
           title: "设备/工程名称",
           disabled: true,
           isDefault: true,
-          props: 'areaLocation',
+          props: 'nameOfEquipmentOrWorks',
         },
         {
           id: 7,
           title: "监督人",
           isDefault: true,
-          props: 'applyUserName',
+          props: 'supervisionPersonName',
         },
         {
           id: 8,
           title: "施工日期",
           isDefault: true,
-          props: 'infoStatusText',
+          props: 'estimatedConstructionDateStart',
         },
         {
           id: 9,
           title: "状态",
           isDefault: true,
-          props: 'infoStatusText',
+          props: 'processStatus',
+          customRender: (text, record, index) => {
+            return this.processStatusDict[text] ? this.processStatusDict[text] : '--';
+          },
         },
         {
           id: 10,
           title: "施工日类型",
           isDefault: true,
-          props: 'infoStatusText',
+          props: 'typeOfConstructionDayName',
         },
         {
           id: 11,
@@ -244,10 +227,28 @@ export default {
       // 制造/施工内容下拉
       hazardLevelList: [],
       userId: undefined,
+      plantArea: [],
+      typeOfConstructionDay: [],
+      explosionProofArea: [],
+      safetyProtectionEquipment: [],
+      processStatusDict: {}, //状态字典
+      processStatus: []
     };
   },
   created() {
+    // 厂区信息
+    this.plantArea = this.getMappingValue(this.dictTypeData, "dictType", "plant_area").dictItem;
+    // 施工日类型
+    this.typeOfConstructionDay = this.getMappingValue(this.dictTypeData, "dictType", "type_of_construction_day").dictItem;
+    // 防爆区域
+    this.explosionProofArea = this.getMappingValue(this.dictTypeData, "dictType", "explosion_proof_area").dictItem;
+    // 安全防护用具
+    this.safetyProtectionEquipment = this.getMappingValue(this.dictTypeData, "dictType", "safety_protection_equipment").dictItem;
     this.setRouterCode('dangerWorkStaticAccount')
+    this.processStatus = dictionary("dangerstatus"); //状态字典
+    this.processStatus.forEach((ele) => {
+      this.$set(this.processStatusDict, ele.key, ele.value);
+    });
     this.initConfigPage()
     this.getTableList()
   },
@@ -331,15 +332,18 @@ export default {
     },
     // 获取列表
     getTableList() {
+      if (this.formInline.dateTime) {
+        this.formInline.estimatedConstructionDateStart = this.formInline.dateTime[0] ? dayJs(this.formInline.dateTime[0]).format("YYYY-MM-DD") : "";
+        this.formInline.estimatedConstructionDateEnd = this.formInline.dateTime[1] ? dayJs(this.formInline.dateTime[1]).format("YYYY-MM-DD") : "";
+      }
       const params = {
-        // 草稿列表1是2否
         isDraft: 2,
         ...this.formInline,
         pageNo: this.page.pageNo,
         pageSize: this.page.pageSize,
       };
       this.tableSpinning = true
-      getDangerWorkStaticListApi(params)
+      operateInfoListPag(params)
         .then((res) => {
           let { list: tableList, total } = res.data ? res.data : { list: [], total: 0 };
           tableList = tableList || [];
@@ -396,7 +400,7 @@ export default {
     // 控制处理按钮是否显示
     isResolveVisible(row) {
       let showBtn = false
-      if (row.infoStatus !== '' && row.infoStatus != 'Closed') {
+      if (row.processStatus !== '' && row.processStatus != 'Closed') {
         showBtn = row.handlerId && row.handlerId.indexOf(this.userId) != -1
       } else {
         showBtn = false
@@ -415,7 +419,7 @@ export default {
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          return rmDangerWorkStaticItemApi({ operateId: row.operateId })
+          return operateInfoDelete({ generalOperateId: row.generalOperateId })
             .then((res) => {
               this.$antMessage.success('删除成功');
               this.getTableList();
