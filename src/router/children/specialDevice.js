@@ -1,10 +1,10 @@
 export const specialDevice = [
   {
-    path: 'specalDeviceAccount',
+    path: 'specialDeviceAccount',
     name: '特种设备台帐',
     meta: {
       title: '特种设备台帐',
-      routerCode: 'specalDeviceAccount',
+      routerCode: 'specialDeviceAccount',
       isKeepalive:true,
       isPage: true,
     },
@@ -15,7 +15,6 @@ export const specialDevice = [
     name: '特种设备台帐场(厂)内专用机动车辆新建',
     meta: {
       title: '特种设备台帐场(厂)内专用机动车辆新建',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
       invisible: true
@@ -27,7 +26,6 @@ export const specialDevice = [
     name: '特种设备台帐场(厂)内专用机动车辆查看',
     meta: {
       title: '特种设备台帐场(厂)内专用机动车辆查看',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,
       invisible: true
@@ -39,7 +37,6 @@ export const specialDevice = [
     name: '特种设备台帐场(厂)内专用机动车辆编辑',
     meta: {
       title: '特种设备台帐场(厂)内专用机动车辆编辑',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
       invisible: true
@@ -51,7 +48,6 @@ export const specialDevice = [
     name: '特种设备台帐起重机械新建',
     meta: {
       title: '特种设备台帐起重机械新建',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
       invisible: true
@@ -63,7 +59,6 @@ export const specialDevice = [
     name: '特种设备台帐起重机械编辑',
     meta: {
       title: '特种设备台帐起重机械编辑',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
       invisible: true
@@ -75,7 +70,6 @@ export const specialDevice = [
     name: '特种设备台帐起重机械查看',
     meta: {
       title: '特种设备台帐起重机械查看',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,
       invisible: true
@@ -87,7 +81,6 @@ export const specialDevice = [
     name: '特种设备台帐电梯新建',
     meta: {
       title: '特种设备台帐电梯新建',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
       invisible: true
@@ -99,7 +92,6 @@ export const specialDevice = [
     name: '特种设备台帐电梯编辑',
     meta: {
       title: '特种设备台帐电梯编辑',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
       invisible: true
@@ -111,7 +103,6 @@ export const specialDevice = [
     name: '特种设备台帐电梯查看',
     meta: {
       title: '特种设备台帐电梯查看',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,
       invisible: true
@@ -123,7 +114,6 @@ export const specialDevice = [
     name: '特种设备台帐压力管道新建',
     meta: {
       title: '特种设备台帐压力管道新建',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
       invisible: true
@@ -135,7 +125,6 @@ export const specialDevice = [
     name: '特种设备台帐压力管道编辑',
     meta: {
       title: '特种设备台帐压力管道编辑',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
       invisible: true
@@ -147,7 +136,6 @@ export const specialDevice = [
     name: '特种设备台帐压力管道查看',
     meta: {
       title: '特种设备台帐压力管道查看',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,
       invisible: true
@@ -159,7 +147,6 @@ export const specialDevice = [
     name: '特种设备台帐压力容器新建',
     meta: {
       title: '特种设备台帐压力容器新建',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isCreate: true,
       invisible: true
@@ -171,7 +158,6 @@ export const specialDevice = [
     name: '特种设备台帐压力容器编辑',
     meta: {
       title: '特种设备台帐压力容器编辑',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isEdit: true,
       invisible: true
@@ -183,7 +169,6 @@ export const specialDevice = [
     name: '特种设备台帐压力容器查看',
     meta: {
       title: '特种设备台帐压力容器查看',
-      routerCode: 'specalDeviceAccount',
       isPage: true,
       isView: true,
       invisible: true

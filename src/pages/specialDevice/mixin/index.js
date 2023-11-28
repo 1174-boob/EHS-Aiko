@@ -71,7 +71,7 @@ const mixin = {
       }
       const { data } = await specialEquipmentDetail(para)
       this.newlyForm = {
-        ...data.specialEquipmentInfo,
+        ...data.specialEquipmentInfoVo,
         specialEquipmentDetail: {
           ...data.specialEquipmentDetailDto,
         },
@@ -178,7 +178,7 @@ const mixin = {
     cancel() {
       this.setKeepalive(true)
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/specalDeviceAccount'
+        path: '/safeManage/deviceSafeManage/specialDevice/specialDeviceAccount'
       })
     },
     // 特种设备保存
@@ -207,7 +207,7 @@ const mixin = {
           await api(para)
           this.$antMessage.success('保存成功')
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/specalDeviceAccount'
+            path: '/safeManage/deviceSafeManage/specialDevice/specialDeviceAccount'
           })
         }
       })

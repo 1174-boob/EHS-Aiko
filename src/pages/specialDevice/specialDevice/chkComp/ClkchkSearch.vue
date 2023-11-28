@@ -170,13 +170,13 @@ export default {
         let path = ''
         switch (this.chkType) {
           case 'day':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkDayNew'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkDayNew'
             break
           case 'month':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkMonthNew'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkMonthNew'
             break
           case 'year':
-            path = '/safeManage/deviceSafeManage/specialeDevice/clkchkYearNew'
+            path = '/safeManage/deviceSafeManage/specialDevice/clkchkYearNew'
             break
         }
         this.$router.push({

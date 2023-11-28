@@ -526,7 +526,7 @@ const options = {
                   ]
                 },
                 {
-                  path: 'specialeDevice',
+                  path: 'specialDevice',
                   name: '特种设备管理',
                   meta: {
                     title: '特种设备管理',

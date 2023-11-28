@@ -281,7 +281,7 @@ export default {
     },
     viewDetail(row) {
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/safeAttachView',
+        path: '/safeManage/deviceSafeManage/specialDevice/safeAttachView',
         query: {
           id: row.safeAnnexId,
         }
@@ -292,13 +292,13 @@ export default {
         return
       }
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/safeAttachEdit',
+        path: '/safeManage/deviceSafeManage/specialDevice/safeAttachEdit',
         query: { id: row.safeAnnexId }
       })
     },
     toAddPage() {
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/safeAttachCreate'
+        path: '/safeManage/deviceSafeManage/specialDevice/safeAttachCreate'
       })
     },
 

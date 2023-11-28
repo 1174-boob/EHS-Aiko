@@ -162,7 +162,7 @@ export default {
     safeAttachCancel() {
       this.setKeepalive(true)
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/safeAttachAccount'
+        path: '/safeManage/deviceSafeManage/specialDevice/safeAttachAccount'
       })
     },
     async fetchDetail() {
@@ -224,7 +224,7 @@ export default {
           await api(para)
           this.$antMessage.success('保存成功')
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/safeAttachAccount'
+            path: '/safeManage/deviceSafeManage/specialDevice/safeAttachAccount'
           })
         }
       })

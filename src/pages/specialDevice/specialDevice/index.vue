@@ -78,7 +78,7 @@
           <span class="color-0067cc cursor-pointer" @click="viewDetail(record)">查看</span>
           <span :class="[!canUpdate(record) ? 'grey-text' : '']" class="color-0067cc cursor-pointer" @click="toEditPage(record, true)">更新</span>
           <span class="color-0067cc cursor-pointer" @click="toEditPage(record)">编辑</span>
-          <span class="color-0067cc cursor-pointer" @click="clkchkRecord(record)">点检记录</span>
+          <!-- <span class="color-0067cc cursor-pointer" @click="clkchkRecord(record)">点检记录</span> -->
           <span class="color-ff4d4f cursor-pointer" @click="deleteItem(record)">删除</span>
         </div>
       </a-table>
@@ -194,7 +194,7 @@ export default {
     }
   },
   created() {
-    this.setRouterCode("specalDeviceAccount")
+    this.setRouterCode("specialDeviceAccount")
     this.getDataList()
   },
   activated() {
@@ -277,7 +277,7 @@ export default {
     },
     clkchkRecord(row) {
       this.$router.push({
-        path: '/safeManage/deviceSafeManage/specialeDevice/clkchkRecord',
+        path: '/safeManage/deviceSafeManage/specialDevice/clkchkRecord',
         query: { id: row.specialEquipmentId, equipmentType: row.equipmentType }
       })
     },
@@ -312,19 +312,19 @@ export default {
       let path = ''
       switch (+row.equipmentType) {
         case 0:
-          path = '/safeManage/deviceSafeManage/specialeDevice/forkliftView'
+          path = '/safeManage/deviceSafeManage/specialDevice/forkliftView'
           break
         case 1:
-          path = '/safeManage/deviceSafeManage/specialeDevice/skyCarView'
+          path = '/safeManage/deviceSafeManage/specialDevice/skyCarView'
           break
         case 2:
-          path = '/safeManage/deviceSafeManage/specialeDevice/liftView'
+          path = '/safeManage/deviceSafeManage/specialDevice/liftView'
           break
         case 3:
-          path = '/safeManage/deviceSafeManage/specialeDevice/pipeView'
+          path = '/safeManage/deviceSafeManage/specialDevice/pipeView'
           break
         case 4:
-          path = '/safeManage/deviceSafeManage/specialeDevice/vesselView'
+          path = '/safeManage/deviceSafeManage/specialDevice/vesselView'
           break
       }
       this.$router.push({
@@ -348,19 +348,19 @@ export default {
       let path = ''
       switch (+row.equipmentType) {
         case 0:
-          path = '/safeManage/deviceSafeManage/specialeDevice/forkliftEdit'
+          path = '/safeManage/deviceSafeManage/specialDevice/forkliftEdit'
           break
         case 1:
-          path = '/safeManage/deviceSafeManage/specialeDevice/skyCarEdit'
+          path = '/safeManage/deviceSafeManage/specialDevice/skyCarEdit'
           break
         case 2:
-          path = '/safeManage/deviceSafeManage/specialeDevice/liftEdit'
+          path = '/safeManage/deviceSafeManage/specialDevice/liftEdit'
           break
         case 3:
-          path = '/safeManage/deviceSafeManage/specialeDevice/pipeEdit'
+          path = '/safeManage/deviceSafeManage/specialDevice/pipeEdit'
           break
         case 4:
-          path = '/safeManage/deviceSafeManage/specialeDevice/vesselEdit'
+          path = '/safeManage/deviceSafeManage/specialDevice/vesselEdit'
           break
       }
       this.$router.push({
@@ -381,27 +381,27 @@ export default {
       switch (+type) {
         case 0:
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/forkliftCreate'
+            path: '/safeManage/deviceSafeManage/specialDevice/forkliftCreate'
           })
           break
         case 1:
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/skyCarCreate'
+            path: '/safeManage/deviceSafeManage/specialDevice/skyCarCreate'
           })
           break
         case 2:
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/liftCreate'
+            path: '/safeManage/deviceSafeManage/specialDevice/liftCreate'
           })
           break
         case 3:
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/pipeCreate'
+            path: '/safeManage/deviceSafeManage/specialDevice/pipeCreate'
           })
           break
         case 4:
           this.$router.push({
-            path: '/safeManage/deviceSafeManage/specialeDevice/vesselCreate'
+            path: '/safeManage/deviceSafeManage/specialDevice/vesselCreate'
           })
           break
       }
