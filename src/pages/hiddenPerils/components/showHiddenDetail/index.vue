@@ -131,6 +131,11 @@
               <div>{{ hideDangerForm.rectificationTime || "--" }}</div>
             </a-form-model-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="整改建议" :label-col="labelColO" :wrapper-col="wrapperColO">
+              <div>{{ hideDangerForm.rectificationSuggestions || "--" }}</div>
+            </a-form-model-item>
+          </a-col>
         </a-row>
         <a-row v-show="hideDangerForm.delayStatus">
           <a-col :span="12">
