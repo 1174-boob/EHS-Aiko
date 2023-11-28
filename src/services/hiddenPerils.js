@@ -32,3 +32,7 @@ export const ImportHidden = params => post(front + '/api/ehs/safe/hide/danger/up
 export const GetParentResponsibilityDept = params => post(customer + '/api/enterprise/dept/getAdminDeptId', params);
 //授权
 export const reassignHandlerUser = params => post(front + '/api/ehs/safe/hide/danger/reassign/handler/user', params);
+//直接关闭
+export const directClose = params => post(front + '/api/ehs/safe/hide/danger/direct/close', params);
+//起草人撤回到草稿箱
+export const withdrawCreateUser = params => post(front + '/api/ehs/safe/hide/danger/withdraw/create/user', params);
