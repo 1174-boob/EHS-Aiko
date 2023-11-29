@@ -342,7 +342,7 @@
         <!-- hdclose：待关闭 -->
         <a-button class="m-r-10" @click="submit('close')" v-show="hideDangerForm.processStatus == 'hdclose'">关闭</a-button>
         <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button>
-        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1 || hideDangerForm.handerId && hideDangerForm.handerId.indexOf(currentUserId) > -1)">直接关闭</a-button>
+        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) && closeBtn">直接关闭</a-button>
         <!-- close：已关闭 -->
         <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'close'">返回</a-button>
       </FixedBottom>
@@ -413,6 +413,7 @@ export default {
       withdrawOrDownArea: '撤回原因',
       withdrawOrDownVisible: false,
       showStatus:false,
+      closeBtn:false,
       closeStatus:true,
       currentUserId: sessionStorage.getItem('zconsole_userInfo') ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.jobNumber : '',
       addFormRules: {
@@ -478,6 +479,11 @@ export default {
       this.routeObj.hideDangerId || getQueryVariable("hideDangerId");
     this.getDetail(); //获取详情
     this.getLogList();
+    if (!this.canClickBtnMixin("closeTheHiddenDangerDirectly")) {
+      this.closeBtn = false;
+    } else {
+      this.closeBtn = true;
+    }
   },
   methods: {
     // 消息推送

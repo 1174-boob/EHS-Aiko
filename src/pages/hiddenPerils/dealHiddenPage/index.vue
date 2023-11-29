@@ -41,7 +41,7 @@
     <div slot="fixedBottom">
       <FixedBottom>
         <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button>
-        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1 || hideDangerForm.handerId && hideDangerForm.handerId.indexOf(currentUserId) > -1)">直接关闭</a-button>
+        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) && closeBtn">直接关闭</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-if="hideDangerForm.processStatus == 'close'">返回</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-if="hideDangerForm.processStatus != 'close' && hideDangerForm.handerId.indexOf(currentUserId) == -1">返回</a-button>
         <div v-if="hideDangerForm.processStatus == 'confirmation' && hideDangerForm.handerId.indexOf(currentUserId) > -1">
@@ -123,6 +123,7 @@ export default {
       loadingSpin: true,
       loading: false,
       delayShow: false, //是否显示延期内容
+      closeBtn:false,
       routeObj: {
         hideDangerId: "",
       }, //接受参数
@@ -168,6 +169,11 @@ export default {
       this.routeObj.hideDangerId || getQueryVariable("hideDangerId");
     this.getDetail(); //获取详情
     this.getLogList();
+    if (!this.canClickBtnMixin("closeTheHiddenDangerDirectly")) {
+      this.closeBtn = false;
+    } else {
+      this.closeBtn = true;
+    }
   },
   methods: {
     // 消息推送
