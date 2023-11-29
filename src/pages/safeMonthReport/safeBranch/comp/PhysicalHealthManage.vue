@@ -182,8 +182,7 @@ export default {
       this.tabooHealthStaffDetail(para);
     },
     async contrainHealthStaffDetail(para) {
-      const { data } = await contrainHealthStaffDetail({pageNo: this.Cpage.pageNo, pageSize: this.Cpage.pageSize, ...para});
-      console.log(data, '??1')
+      const { data } = await contrainHealthStaffDetail({pageNo: this.Cpage.pageNo, pageSize: this.Cpage.pageSize, ...para, dataType: '1'});
       if(data) {
         this.contrainList = data.staffList || [];
       } else {
@@ -191,8 +190,7 @@ export default {
       }
     },
     async tabooHealthStaffDetail(para) {
-      const { data } = await tabooHealthStaffDetail({pageNo: this.Tpage.pageNo, pageSize: this.Tpage.pageSize, ...para});
-      console.log(data, '??2')
+      const { data } = await tabooHealthStaffDetail({pageNo: this.Tpage.pageNo, pageSize: this.Tpage.pageSize, ...para, dataType: '1'});
       if(data) {
         this.tabooList = data.staffList || [];
       } else {

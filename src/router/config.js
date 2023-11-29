@@ -1404,6 +1404,16 @@ const options = {
                   component: resolve => require(['@/pages/testManagement/testManagementOne/index.vue'], resolve),
                 },
                 {
+                  path: 'detailTest',
+                  name: '查看考试',
+                  meta: {
+                    title: '查看考试',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/testManagement/testManagementOne/detailTest.vue'], resolve),
+                },
+                {
                   path: 'addcourse',
                   name: '新建课程',
                   meta: {

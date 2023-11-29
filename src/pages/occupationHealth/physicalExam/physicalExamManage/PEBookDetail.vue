@@ -35,6 +35,11 @@
         </div>
         <h3 class="top-title">历史体检信息</h3>
         <a-spin :spinning="spinning" wrapperClassName="a-spin">
+          <DashBtn>
+            <div>
+              <a-button type="dashed" @click="addCourse">添加人员历史体检记录</a-button>
+            </div>
+          </DashBtn>
           <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
             <a-table bordered :columns="columns" :scroll="{ x: 1080 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
               <div slot="isSick" slot-scope="record">{{isSickLabel(record.isSick)}}</div>
@@ -84,11 +89,44 @@
           <a-button type="primary" @click="confirmEdit">保存</a-button>
         </template>
       </CommonModal>
-  <div slot="fixedBottom">
-    <FixedBottom class="fixed-button-container">
-      <a-button @click="reback">返回</a-button>
-    </FixedBottom>
-  </div>
+      <CommonModal title="添加人员历史体检记录" :visible="peVisible" :cancelFn="peCancelFn">
+        <div>
+          <a-form-model ref="peInnerForm" :model="peInnerForm" :rules="peInnerRules" :colon="false">
+            <a-row>
+              <a-col :span="18">
+                <a-form-model-item label="体检类型" prop="checkType" :label-col="innerLabelCol" :wrapper-col="innerWrapperCol">
+                  <a-select :disabled="disabled" allowClear show-search v-model="peInnerForm.checkType" placeholder="请选择体检类型">
+                    <a-select-option v-for="item in checkTypeOptions" :value="item.key" :key="item.key">{{item.value}}</a-select-option>
+                  </a-select>
+                </a-form-model-item>
+                <a-form-model-item label="接触危害" prop="checkItem" :label-col="innerLabelCol" :wrapper-col="innerWrapperCol">
+                  <a-select :disabled="disabled" allowClear show-search v-model="peInnerForm.checkItem" placeholder="请选择接触危害">
+                    <a-select-option v-for="item in inspectionItems" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
+                  </a-select>
+                </a-form-model-item>
+                <a-form-model-item label="体检机构" prop="checkAgency" :label-col="innerLabelCol" :wrapper-col="innerWrapperCol">
+                  <a-select :disabled="disabled" allowClear show-search v-model="peInnerForm.checkAgency" placeholder="请选择体检机构">
+                    <a-select-option v-for="item in healthyInstitution" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
+                  </a-select>
+                </a-form-model-item>
+                <a-form-model-item label="体检日期" prop="checkDate" :label-col="innerLabelCol" :wrapper-col="innerWrapperCol">
+                  <!-- <el-date-picker v-model="peInnerForm.checkDate" valueFormat="YYYY-MM-DD" format="YYYY-MM-DD"></el-date-picker> -->
+                  <a-date-picker v-model="peInnerForm.checkDate" format="YYYY-MM-DD" />
+                </a-form-model-item>
+              </a-col>
+            </a-row>
+          </a-form-model>
+        </div>
+        <template slot="btn">
+          <a-button class="m-l-15" @click="peCancelFn">取消</a-button>
+          <a-button type="primary" @click="confirmPe">保存</a-button>
+        </template>
+      </CommonModal>
+      <div slot="fixedBottom">
+        <FixedBottom class="fixed-button-container">
+          <a-button @click="reback">返回</a-button>
+        </FixedBottom>
+      </div>
   </HasFixedBottomWrapper>
 </template>
 
@@ -97,15 +135,17 @@ import UploadEhs from "@/components/upload/uploadBtnStyle.vue"
 import { formValidator } from "@/utils/clx-form-validator.js"
 import oldDictionary from '@/utils/dictionary'
 import dictionary from '@/utils/newDictionary'
-import { selectDetailByPersonId, healthManageDetail, updateCheckResult, uploadCheckFile } from "@/services/api.js"
+import { selectDetailByPersonId, healthManageDetail, updateCheckResult, uploadCheckFile, addHistoryHealthyCheck } from "@/services/api.js"
 import FixedBottom from "@/components/commonTpl/fixedBottom"
 import { debounce } from 'lodash'
+import dayJs from "dayjs";
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 export default {
   mixins: [optionsMixin],
   components: { FixedBottom, UploadEhs },
   data() {
     return {
+      oldDictionary,
       labelCol: { span: 4 }, // 设置左边label宽度
       wrapperCol: { span: 18 }, // 设置右边表单宽度
       innerLabelCol: { span: 9 },
@@ -116,6 +156,7 @@ export default {
       rebackVisable: false,
       rebackMsg: '',
       moduleVisible: false,
+      peVisible: false,
       tableDataList: [],
       staffArr: [],
       plainOptions: [],
@@ -135,6 +176,10 @@ export default {
         isSick: undefined,
         checkResult: undefined
       },
+      peInnerForm: {
+        isSick: undefined,
+        checkResult: undefined
+      },
       innerRules: {
         isSick: [
           { required: true, message: '请选择否构成职业病', trigger: 'change' }
@@ -142,6 +187,9 @@ export default {
         checkResult: [
           { required: true, message: '请选择体检结论', trigger: 'change' }
         ]
+      },
+      peInnerRules: {
+
       },
       page: {
         pageNo: 1,
@@ -210,6 +258,8 @@ export default {
       infoStatus: null,
       consoleOrganizeTreeList:[],
       DEPLOYIDOption: dictionary('approvalType') || [],
+      inspectionItems: dictionary('inspection_items') || [],
+      healthyInstitution: dictionary('healthy_institution') || [],
       createUserId: '',
       rules: {
         
@@ -254,6 +304,9 @@ export default {
     }
   },
   methods: {
+    async addCourse() {
+      this.peVisible = true
+    },
     async init() {
       // this.getCityOptions()
       this.getUserInfo()
@@ -366,6 +419,40 @@ export default {
       }
       this.moduleVisible = true
     },
+    // changeFindTime(val, v) {
+    //   const start = _.cloneDeep(val).add(7, "days");
+    //   this.hideDangerForm.rectificationTime = start; //改变整改日期值 为发现日期的后三天
+    //   this.disabledDate(val);
+    // },
+    async confirmPe() {
+      
+      // const res = await addHistoryHealthyCheck({
+      //   personIds: [
+      //   "1001011"
+      //   ],
+      //   checkType: "jobing",
+      //   checkItem: "血常规,接害",
+      //   checkAgency: "2",
+      //   checkDate: "2023-10-30"
+      // })
+      let checkDate = this.peInnerForm.checkDate ? dayJs(this.peInnerForm.checkDate).format("YYYY-MM-DD") : undefined;
+      let para = {
+        personIds: [this.$route.query.personId],
+        checkType: this.peInnerForm.checkType,
+        checkItem: this.peInnerForm.checkItem,
+        checkAgency: this.peInnerForm.checkAgency,
+        checkDate: checkDate,
+        // chechHistoryId: this.curRow.chechHistoryId,
+        // isSick: this.innerForm.isSick,
+        // checkResult: this.innerForm.checkResult
+      }
+      const { code, data } = await addHistoryHealthyCheck(para)
+      if (+code === 20000) {
+        this.$antMessage.success('更新成功')
+        this.peCancelFn()
+        this.getDetail()
+      }
+    },
     confirmEdit() {
       this.$refs.innerForm.validate( async valid => {
         if (valid) {
@@ -390,6 +477,10 @@ export default {
     cancelFn() {
       this.moduleVisible = false
       this.$refs.innerForm.resetFields()
+    },
+    peCancelFn() {
+      this.peVisible = false
+      this.$refs.peInnerForm.resetFields()
     }
   },
 };

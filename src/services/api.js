@@ -675,6 +675,8 @@ export const updateCheckResult = params => post(`${serviceNameList.health}/api/e
 export const findHealthUserByDeptId = params => get(`${serviceNameList.health}/api/ehs/health/user/findUser`, params);
 //上传|更新体检报告
 export const uploadCheckFile = params => post(`${serviceNameList.health}/api/ehs/health/check/upload/checkFile`, params);
+//上传|更新体检报告
+export const addHistoryHealthyCheck = params => post(`${serviceNameList.health}/api/ehs/health/check/addHistoryHealthyCheck`, params);
 //草稿箱体检预约删除
 export const healthCheckDelete = params => get(`${serviceNameList.health}/api/ehs/health/check/delete`, params);
 //体检审批通过

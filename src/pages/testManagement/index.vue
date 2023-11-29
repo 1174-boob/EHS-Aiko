@@ -43,6 +43,7 @@
         <div slot="action" slot-scope="record" class="action">
           <a-button type="link" v-if="record.status =='2'" class="color-0067cc cursor-pointer" @click="publishAction(record)">发布</a-button>
           <a-button type="link" v-if="record.status !='2'" class="color-0067cc cursor-pointer" @click="pushStaff(record)">推送</a-button>
+          <a-button type="link" class="color-0067cc cursor-pointer" @click="actionLook(record)">查看</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="jumpAddOrDetail('change', record)" :disabled="record.status !='2'">编辑</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="jumpLook(record)">预览</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="downloadCode(record)">下载二维码</a-button>
@@ -282,6 +283,9 @@ export default {
       // console.log("推送。。。",record);
       this.pushVisible = true;
       this.currentPushMsg = record;
+    },
+    actionLook(record) {
+      this.$router.push({ name: "查看考试", params: { dataMsg: record } });
     },
     pushCancle() {
       this.pushVisible = false;

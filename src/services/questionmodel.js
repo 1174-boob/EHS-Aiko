@@ -1,4 +1,4 @@
-import {get,post} from '@/utils/request.js'; 
+import {get,post, postExcel} from '@/utils/request.js'; 
 import serviceNameList from '@/config/default/service.config'
 let course = serviceNameList['course']
 
@@ -51,5 +51,11 @@ export const TestUpdate = params => post(course + '/api/exam/update', params);
 export const TestPublish = params => get(course + '/api/exam/publish', params);
 // 考试推送
 export const ExamPush = params => post(course + '/api/push/exam/push', params);
+// 考试详情下载
+export const ExamDetail = params => postExcel(course + '/api/exam/getResultOfToday', params);
+// 获取考试推送列表
+export const ExamPushInfo = params => post(course + '/api/push/exam/pushInfo', params);
+// 获取推送详情列表
+export const ExamPushCodeInfo = params => postExcel(course + '/api/push/exam/pushCodeInfo', params);
 // 下载二维码
 export const GetQrCode = params => get(course + '/api/exam/getQrCode', params);
