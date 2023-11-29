@@ -169,7 +169,7 @@ export default {
       this.routeObj.hideDangerId || getQueryVariable("hideDangerId");
     this.getDetail(); //获取详情
     this.getLogList();
-    if (!this.canClickBtnMixin("closeTheHiddenDangerDirectly")) {
+    if (!this.canShowModalMixin("closeTheHiddenDangerDirectly")) {
       this.closeBtn = false;
     } else {
       this.closeBtn = true;
