@@ -300,6 +300,34 @@
         </div>
       </div>
     </a-spin>
+    <!-- 撤回，直接关闭弹框 -->
+    <CommonModal :title="withdrawOrDownTitle" :visible="withdrawOrDownVisible" :cancelFn="cancleWithdrawOrDown">
+      <template slot="form">
+        <a-form-model
+          ref="withdForm"
+          :model="withdForm"
+          :label-col="{ style: { width: '130px' } }"
+          :wrapper-col="{ style: { width: 'calc(100% - 130px)' } }"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" :label="withdrawOrDownArea" prop="withdrawInfo">
+            <a-textarea
+              placeholder="最多可输入100字"
+              v-model="withdForm.withdrawInfo"
+              allowClear
+              :maxLength="100"
+            />
+          </a-form-model-item>
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="cancleWithdrawOrDown">取消</a-button>
+        <a-button class="m-l-15" type="primary" @click="submitWithdrawOrDown"
+          >确定</a-button
+        >
+      </template>
+    </CommonModal>
     <div slot="fixedBottom">
       <FixedBottom>
         <!-- rectification：待整改 -->
@@ -313,6 +341,8 @@
           ">驳回</a-button>
         <!-- hdclose：待关闭 -->
         <a-button class="m-r-10" @click="submit('close')" v-show="hideDangerForm.processStatus == 'hdclose'">关闭</a-button>
+        <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button>
+        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) && closeBtn">直接关闭</a-button>
         <!-- close：已关闭 -->
         <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'close'">返回</a-button>
       </FixedBottom>
@@ -335,7 +365,9 @@ import {
   DelayhiddenPerilsList,
   BackhiddenPerilsList,
   HiddenLogList,
-  GetHiddenNextPeople
+  GetHiddenNextPeople,
+  directClose,
+  withdrawCreateUser
 } from "@/services/hiddenPerils.js";
 import { getQueryVariable } from "@/utils/util.js";
 import { PushTask } from "@/services/api";
@@ -376,6 +408,14 @@ export default {
         dangerRectificationMeasuresT: undefined,
         theLinesT: undefined,
       },
+      withdForm:{},
+      withdrawOrDownTitle: '撤回',
+      withdrawOrDownArea: '撤回原因',
+      withdrawOrDownVisible: false,
+      showStatus:false,
+      closeBtn:false,
+      closeStatus:true,
+      currentUserId: sessionStorage.getItem('zconsole_userInfo') ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.jobNumber : '',
       addFormRules: {
         dangerCauseAnalysis: [
           {
@@ -439,6 +479,11 @@ export default {
       this.routeObj.hideDangerId || getQueryVariable("hideDangerId");
     this.getDetail(); //获取详情
     this.getLogList();
+    if (!this.canShowModalMixin("closeTheHiddenDangerDirectly")) {
+      this.closeBtn = false;
+    } else {
+      this.closeBtn = true;
+    }
   },
   methods: {
     // 消息推送
@@ -472,7 +517,50 @@ export default {
           console.log(err);
         });
     },
-
+    //撤回
+    withdraw(){
+      console.log('撤回withdraw',);
+      this.withdrawOrDownTitle = '撤回'
+      this.withdrawOrDownArea = '撤回原因'
+      this.withdrawOrDownVisible = true
+    },
+    // 直接关闭
+    shutDown(){
+      console.log('直接关闭shutDown',);
+      this.withdrawOrDownTitle = '直接关闭'
+      this.withdrawOrDownArea = '关闭原因'
+      this.withdrawOrDownVisible = true
+    },
+    // 关闭撤回弹框
+    cancleWithdrawOrDown(){
+      this.withdrawOrDownVisible = false
+      this.withdForm = {}
+    },
+    submitWithdrawOrDown(){
+      let params = {
+        hideDangerId: this.routeObj.hideDangerId,
+        withdrawInfo: this.withdForm.withdrawInfo,
+      }
+      if(this.withdrawOrDownTitle == '撤回'){
+        withdrawCreateUser(params).then(()=>{
+          this.$antMessage.success('撤回成功')
+          this.withdrawOrDownVisible = false
+          this.withdForm = {}
+          this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList" });
+        }).catch((err)=>{
+          console.log(err);
+        })
+      }else if(this.withdrawOrDownTitle == '直接关闭'){
+        directClose(params).then(()=>{
+          this.$antMessage.success('关闭成功')
+          this.withdrawOrDownVisible = false
+          this.withdForm = {}
+          this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList" });
+        }).catch((err)=>{
+          console.log(err);
+        })
+      }
+    },
     //按钮点击事件
     submit(type) {
       // console.log(this.typePerson, "...this.typePerson1");
@@ -611,6 +699,7 @@ export default {
         // console.log(this.typePerson, this.isPersonLevel, obj2, obj1);
         // return;
         this.loading = true;
+        this.setKeepalive(true)
         DelayhiddenPerilsList(this.isPersonLevel ? obj2 : obj1)
           .then(() => {
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealIsFour");
@@ -629,6 +718,7 @@ export default {
       } else if (type == "pass" || type == "close") {
         //通过、关闭
         this.loading = true;
+        this.setKeepalive(true)
         DelayhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
           .then(() => {
             this.infoPush("/safeManage/dualControlManage/hiddenPerils/dealIsFour");
@@ -784,7 +874,12 @@ export default {
 
           this.setPerSon(res.data); //判断分身：员工 科长 部长
           this.backDetail(res.data); //回显数据
-
+          if(res.data.processStatus == 'verification'){
+            this.showStatus = true
+          }
+          if(res.data.processStatus == 'close'){
+            this.closeStatus = false
+          }
           this.hideDangerForm.deptId = res.data.draftDeptId; //回显部门人员
         })
         .catch((err) => {
@@ -822,6 +917,7 @@ export default {
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`驳回成功`);
+            this.setKeepalive(true)
             this.$router.push("/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList");
           })
           .catch((err) => {

@@ -140,6 +140,13 @@
           </a-row>
           <a-row>
             <a-col :span="12">
+              <a-form-model-item label="整改建议" prop="rectificationSuggestions">
+                <a-textarea placeholder="请输入" v-model="hideDangerForm.rectificationSuggestions" allowClear :maxLength="500" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="12">
               <a-form-model-item label="隐患照片" prop="dangerPhotoList" ref="dangerPhotoList">
                 <div>
                   <upload-can-remove :limit="20" :maxSize="5" :handleSuccessName="'addFormUploadSuccess'" @addFormUploadSuccess="addFormUploadSuccess" :headImgs="hideDangerForm.dangerPhotoList"></upload-can-remove>

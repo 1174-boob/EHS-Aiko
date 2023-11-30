@@ -32,7 +32,8 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="责任部门">
-          <a-input v-model="formInline.responsibilityDept" placeholder="请输入"></a-input>
+          <DeptTree v-model="formInline.responsibilityDept" :deptData="deptData"></DeptTree>
+          <!-- <a-input v-model="formInline.responsibilityDept" placeholder="请输入"></a-input> -->
         </a-form-model-item>
         <a-form-model-item label="起草人">
           <a-input v-model="formInline.drafter" placeholder="请输入"></a-input>
@@ -114,7 +115,7 @@
             </template>
           </vxe-column>
         </template>
-        <vxe-column field="action" fixed="right" title="操作" width="150">
+        <vxe-column field="action" fixed="right" title="操作" width="180">
           <template #default="{ row }">
             <div class="table-btn-box">
               <span
@@ -139,6 +140,7 @@
                 @click="actionEdit(row, 'deal')"
                 >6处理</span
               >-->
+              <span v-if="row.processStatus != 'close'" class="color-0067cc m-r-15" @click="authorization(row)">授权</span>
               <span class="color-ff4d4f cursor-pointer" @click="actionDelete(row)">删除</span>
             </div>
           </template>
@@ -160,6 +162,45 @@
       :columnsDefault="columnsDefault"
       @setTableColumn="setTableColumn"
     />
+    <!-- 更新授权弹框 -->
+    <CommonModal :title="'更新授权'" :visible="reAuthorVisible" :cancelFn="addCancle">
+      <template slot="form">
+        <a-form-model
+          ref="editForm"
+          :model="editForm"
+          :rules="editFormRules"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="当前处理节点" prop="nodeStatesText">
+            {{editForm.nodeStatesText}}
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="原处理人" prop="handerId">
+            {{editForm.handerName+'/'+editForm.handerJobNumber}}
+          </a-form-model-item>
+          <StaffOrDept
+            :treeType="'user'"
+            :propKey="'holdUserId'"
+            :checkAbel="false"
+            :treeRoles="editFormRules"
+            :labelTitle="'更新授权人员'"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol"
+            @getTreeData="personThingOne"
+            :checkedTreeNode="editForm.holdUserId"
+          />
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="addCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="editConfirm"
+          >确定</a-button
+        >
+      </template>
+    </CommonModal>
+
     <!-- 上传 -->
     <Upload :addVisible="addVisible" @closeAddVisible="closeAddVisible" />
   </div>
@@ -173,13 +214,16 @@ import {
   GethiddenPerilsList,
   DelhiddenPerilsList,
   ExportHiddenList,
+  reassignHandlerUser
 } from "@/services/hiddenPerils.js";
 import dayJs from "dayjs";
+import { formValidator } from "@/utils/clx-form-validator.js"
+import StaffOrDept from "@/components/staffOrDept";
 import { cloneDeep, debounce } from "lodash";
 import SelTable from "@/pages/dangerWorkStatic/components/selTable.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
 export default {
-  components: { Upload, SelTable },
+  components: { Upload, SelTable, StaffOrDept },
   mixins: [cancelLoading, chemicalDict],
   data() {
     return {
@@ -195,10 +239,23 @@ export default {
         { key: "moreNoHandle", value: "超期未处理" },
       ], //数据筛选
       dictionary,
+      deptData:[],
       actions: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.risk}/api/ehs/risk/detail/specific/importUser`,
       formInline: {
         timeArr: [],
       },
+      reAuthorVisible: false,
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
+      // 表单验证
+      editFormRules: {
+        holdUserId: [
+          { required: true, message: "更新授权人员不能为空", trigger: "change" },
+        ],
+      },
+      editForm: {},
+      editParams:{},
+      hideDangerId:'',
       selectModel: false,
       // 表头本地的名称
       setColumLocalStorageName: "ehs_hiddenPerilsList_tableColumn",
@@ -332,6 +389,12 @@ export default {
       if(!this.keepalive){
         this.initConfigPage()
         this.iRest()
+      }
+    }, 20);
+    setTimeout(() => {
+      if(this.keepalive){
+        this.initConfigPage()
+        this.iSearch()
       }
     }, 20);
   },
@@ -555,7 +618,101 @@ export default {
     earlyWarningTest() {
       this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/addHiddenPerils" });
     },
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
+      }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
+    },
 
+    //更新授权人员
+    personThingOne(data) {
+      this.editForm.holdUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.editForm.holdUserName = this.getName(list);
+      this.editForm.holdUserJobNumber = this.getWorkNum(list);
+    },
+    // 授权
+    authorization(e){
+      console.log('rowwww',e);
+      if (!this.canClickBtnMixin("authorizationAssignment")) {
+        return;
+      }
+      this.hideDangerId = e.hideDangerId
+      let _this = this
+      this.$antConfirm({
+        title: '更新授权流程节点人员会影响原有流程，是否确认进行更新授权？',
+        onOk () {
+          _this.reAuthorVisible = true
+          switch (e.processStatus) {
+            case "rectification":
+              _this.editForm.nodeStatesText = '待整改';
+              break;
+            case "confirmation":
+              _this.editForm.nodeStatesText = '待确认';
+              break;
+            case "hdreview":
+              _this.editForm.nodeStatesText = '待复核';
+              break;
+            case "hdclose":
+              _this.editForm.nodeStatesText = '待关闭';
+              break;
+            case "verification":
+              _this.editForm.nodeStatesText = '待核实';
+              break;
+          }
+          _this.editForm.handerName = e.handerName;
+          _this.editForm.handerJobNumber = e.handerJobNumber;
+        },
+        onCancel () {
+
+        }
+      });
+    },
+    // 更新授权确认
+    editConfirm(){
+      if (!formValidator.formAll(this, "editForm")) {
+        return;
+      }
+      this.editParams = {
+        hideDangerId:this.hideDangerId,
+        handlerUserId:this.editForm.holdUserId[0],
+        handlerUserJobNumber:this.editForm.holdUserJobNumber[0],
+        handlerUserName:this.editForm.holdUserName[0]
+      }
+      reassignHandlerUser(this.editParams).then((res)=>{
+        if(res.code == 20000){
+          this.$antMessage.success('授权成功')
+          // 获取列表
+          this.getDataList();
+          this.reAuthorVisible = false
+          this.editParams = {}
+          this.editForm = {}
+        } else {
+          this.$antMessage.warn(res.message)
+          return
+        }
+      })
+    },
+    // 点击取消按钮
+    addCancle() {
+      this.reAuthorVisible = false;
+      this.editForm = {};
+    },
     // 编辑
     actionEdit(record, type) {
       //type为detail跳查看  否则为处理
