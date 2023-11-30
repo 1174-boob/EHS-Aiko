@@ -4,7 +4,7 @@
     <SearchTerm>
       <a-form-model layout="inline" :model="searchFormData" :colon="false">
         <a-form-model-item class="flex" label="配置状态">
-          <a-select v-model="searchFormData.configStatus" placeholder="请选择配置状态">
+          <a-select v-model="searchFormData.configurationStatus" placeholder="请选择配置状态">
             <a-select-option v-for="item in configStatusList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -27,7 +27,7 @@
         :data-source="tableDataList"
         :pagination="false"
         :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange,fixed:true }"
-        rowKey="id"
+        :rowKey="tableRowKey"
         bordered
       ></a-table>
     </CommonTable>
@@ -38,7 +38,7 @@
 import cancelLoading from "@/mixin/cancelLoading";
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { cloneDeep, debounce } from "lodash";
-import { selectMaturityEvaluationQuotaReportDeptList } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaluationQuotaReportNoPageList } from "@/services/maturityEvaluation.js";
 import teableSelected from "@/mixin/teableSelected";
 export default {
   components: { UploadBtnStyle },
@@ -75,16 +75,14 @@ export default {
         },
         {
           title: '配置状态',
-          dataIndex: 'configStatus',
-          customRender: v => {
-            return v == 1 ? '未配置' : v == 2 ? '已配置' : '--'
+          dataIndex: 'configurationStatus',
+          customRender: (text) => {
+            return text ? '已配置' : '未配置' 
           }
         },
       ],
       tableDataList: [],
-      tableRowKey: 'id',
-      selectedRowKeys: [],
-      selectedRow: [],
+      tableRowKey: 'maturityEvaluationReportId',
     };
   },
   created() {
@@ -93,14 +91,31 @@ export default {
     this.initData();
   },
   methods: {
-    pageNoChange(page) {
-      this.page.pageNo = page;
-      this.initData();
+    initData() {
+      // 1未配置 2已配置
+      let {deptName,configurationStatus} = this.searchFormData
+      if(configurationStatus){
+        configurationStatus = configurationStatus == 2
+      }
+      let apiData = {
+        deptName,
+        configurationStatus,
+      }
+      getMaturityEvaluationQuotaReportNoPageList(apiData)
+        .then(res => {
+          this.tableDataList = res.data || []
+        })
+        .catch(err => { })
     },
-    onShowSizeChange(current, pageSize) {
-      this.page.pageNo = 1;
-      this.page.pageSize = pageSize;
-      this.getDataList();
+    // 查询
+    iSearch() {
+      this.page = {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      };
+      this.clearSelectedTable()
+      this.initData();
     },
     // 重置
     iRest: debounce(
@@ -110,33 +125,21 @@ export default {
           pageSize: 10,
           total: 0,
         };
+        this.clearSelectedTable()
         this.searchFormData = {};
         this.initData();
       },
       250,
       { leading: true, trailing: false }
     ),
-    // 查询
-    iSearch() {
-      this.page = {
-        pageNo: 1,
-        pageSize: 10,
-        total: 0,
-      };
+    pageNoChange(page) {
+      this.page.pageNo = page;
       this.initData();
     },
-    // 字典组每页展示条数改变
-    showSizeChange(page, pageSize) {
+    onShowSizeChange(current, pageSize) {
       this.page.pageNo = 1;
       this.page.pageSize = pageSize;
-      this.initData();
-    },
-    initData() {
-      selectMaturityEvaluationQuotaReportDeptList({ ...this.searchFormData })
-        .then(res => {
-          this.tableDataList = res.data || []
-        })
-        .catch(err => { })
+      this.getDataList();
     },
   },
 };

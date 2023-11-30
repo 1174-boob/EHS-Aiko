@@ -5,7 +5,7 @@ export const specialDevice = [
     meta: {
       title: '特种设备台帐',
       routerCode: 'specialDeviceAccount',
-      isKeepalive:true,
+      // isKeepalive:true,
       isPage: true,
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/index.vue'], resolve),
@@ -180,10 +180,9 @@ export const specialDevice = [
     name: '点检记录',
     meta: {
       title: '点检记录',
-      routerCode: 'clkchkRecord',
       isPage: true,
-      isView: true,
-      invisible: true
+      invisible: true,
+      isResolve: true,
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/clkchkRecord.vue'], resolve),
   },
@@ -192,7 +191,6 @@ export const specialDevice = [
     name: '日常点检新增',
     meta: {
       title: '日常点检新增',
-      routerCode: 'clkchkDayNew',
       isPage: true,
       isView: true,
       invisible: true
@@ -204,9 +202,9 @@ export const specialDevice = [
     name: '日常点检查看',
     meta: {
       title: '日常点检查看',
-      routerCode: 'clkchkDayDetail',
       isPage: true,
       isView: true,
+      isShowPage:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
@@ -216,7 +214,6 @@ export const specialDevice = [
     name: '月度点检新增',
     meta: {
       title: '月度点检新增',
-      routerCode: 'clkchkMonthNew',
       isPage: true,
       isView: true,
       invisible: true
@@ -228,9 +225,9 @@ export const specialDevice = [
     name: '月度点检查看',
     meta: {
       title: '月度点检查看',
-      routerCode: 'clkchkMonthDetail',
       isPage: true,
       isView: true,
+      isShowPage:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
@@ -240,7 +237,6 @@ export const specialDevice = [
     name: '年度点检新增',
     meta: {
       title: '年度点检新增',
-      routerCode: 'clkchkYearNew',
       isPage: true,
       isView: true,
       invisible: true
@@ -252,19 +248,28 @@ export const specialDevice = [
     name: '年度点检查看',
     meta: {
       title: '年度点检查看',
-      routerCode: 'clkchkYearDetail',
       isPage: true,
       isView: true,
+      isShowPage:true,
       invisible: true
     },
     component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/ChkDetailPage.vue'], resolve),
+  },
+  {
+    path: 'configurationChecklist',
+    name: '配置点检表',
+    meta: {
+      title: '配置点检表',
+      isPage: true,
+      invisible: true
+    },
+    component: resolve => require(['@/pages/specialDevice/specialDevice/chkComp/configurationChecklist.vue'], resolve),
   },
   {
     path: 'safeAttachAccount',
     name: '安全附件台帐',
     meta: {
       title: '安全附件台帐',
-      routerCode: 'safeAttachAccount',
       isKeepalive:true,
       isPage: true,
     },
@@ -275,7 +280,6 @@ export const specialDevice = [
     name: '安全附件新建',
     meta: {
       title: '安全附件新建',
-      routerCode: 'safeAttachAccount',
       isPage: true,
       isCreate: true,
       invisible: true
@@ -287,7 +291,6 @@ export const specialDevice = [
     name: '安全附件编辑',
     meta: {
       title: '安全附件编辑',
-      routerCode: 'safeAttachAccount',
       isPage: true,
       isEdit: true,
       invisible: true
@@ -299,7 +302,6 @@ export const specialDevice = [
     name: '安全附件查看',
     meta: {
       title: '安全附件查看',
-      routerCode: 'safeAttachAccount',
       isPage: true,
       isView: true,
       invisible: true

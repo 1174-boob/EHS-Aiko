@@ -1,503 +1,416 @@
 <template>
   <HasFixedBottomWrapper>
-    <SearchTerm v-if="!(isView || isEdit)">
-      <a-form-model layout="inline" ref="formInline" :model="formInline" :rules="rules" :colon="false">
-        <a-form-model-item label="所属组织" prop="corporationId">
-          <a-select v-model="formInline.corporationId" placeholder="请选择所属组织" @change="corporationChange">
-            <a-select-option v-for="item in getCommonAddOrgnizeListAll" :key="item.orgId" :value="item.orgId">{{item.orgName}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item label="部门" prop="deptId">
-          <a-select v-model="formInline.deptId" :disabled="!formInline.corporationId" placeholder="请选择" @change="handleDeptChange">
-            <a-select-option v-for="(i,index) in deptOption" :key="index" :value="i.deptId">{{i.deptName}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
+    <a-spin :spinning="loadingThree" wrapperClassName="a-spin">
+      <template description="基本信息">
+        <div class="base-info">
+          <div class="base-info-left">
+            <span>组织：{{baseIfo.corporationName}}</span>
+            <span>部门：{{baseIfo.deptName}}</span>
+            <span>年份：{{baseIfo.year}}</span>
+            <span>月份：{{baseIfo.month}}月</span>
+          </div>
+          <div class="base-info-reight">
+            <div class="base-info-reight-subGear" v-if="this.baseIfo.scorePositionStatus">分档：{{subGear}}档</div>
+            <a-button type="primary" :loading="loadingTwo" @click="exportTable">下载</a-button>
+          </div>
+        </div>
+      </template>
 
-        <a-form-model-item label="年份" prop="year">
-          <el-date-picker v-model="formInline.year" type="year" value-format="yyyy" placeholder="选择年" :clearable="false"></el-date-picker>
-        </a-form-model-item>
-        <!-- <a-form-model-item label="填报维度" prop="fillDimension">
-          <a-select v-model="formInline.fillDimension" placeholder="请选择" @change="handleWChange">
-            <a-select-option :value="1">季度</a-select-option>
-            <a-select-option :value="2">月度</a-select-option>
-          </a-select>
-        </a-form-model-item> -->
-        <a-form-model-item label="月度" prop="fillDate">
-          <a-select v-model="formInline.fillDate" placeholder="请选择">
-            <a-select-option v-for="(i,index) in option" :key="index" :value="i.value">{{i.name}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item class="float-right"></a-form-model-item>
-      </a-form-model>
-    </SearchTerm>
-    <div class="color-666 font-16 text-center" v-if="(!formInline.deptId) && !(isView || isEdit)">请先选择部门，再进行填报{{formInline.deptId}}{{isView}}{{isEdit}}</div>
-    <div v-else>
-      <div class="color-666 font-16" v-if="reportData && reportData.length">
-        <!-- 查看 -->
-        <ReportDataTableVue
-          v-if="isView"
-          ref="reportDataTableVue"
-          :reportData="reportData"
-          :startStatus="startStatus"
-          :subFileValue="subFileValue"
-          :corporationMsg="corporationMsg.deptId ? corporationMsg : undefined"
-          type="view"
-        ></ReportDataTableVue>
-        <!-- 编辑 -->
-        <ReportDataTableVue
-          v-else-if="isEdit"
-          ref="reportDataTableVue"
-          :reportData="reportData"
-          :startStatus="startStatus"
-          :subFileValue="subFileValue"
-          :corporationMsg="corporationMsg.deptId ? corporationMsg : undefined"
-          type="edit"
-          :hideDownLoad="true"
-        ></ReportDataTableVue>
+      <div>
+        <div class="color-666 font-16" v-if="reportData && reportData.length">
+          <vxe-table
+            class="me-data-filling vxe-scrollbar beauty-scroll-fireBox editable-footer"
+            border
+            align="center"
+            ref="xTable"
+            show-footer
+            :span-method="rowspanMethod"
+            :footer-method="footerMethod"
+            :merge-footer-items="mergeFooterItems"
+            :edit-config="{trigger: 'click', mode: 'cell'}"
+            :column-config="{resizable: true}"
+            :row-config="{height: 60, isHover: true}"
+            :data="reportData"
+          >
+            <vxe-column field="maturityEvaluationReportType" title="维度" width="100">
+              <template #default="{ row }">{{dimensionMatch[row.maturityEvaluationReportType]}}</template>
+            </vxe-column>
+            <vxe-column field="typeAndProject" title="设立目的" min-width="200">
+              <template #default="{ row }">{{row.purposeOfEstablishment}}</template>
+            </vxe-column>
+            <vxe-column field="typeAndProject" title="项目" min-width="200">
+              <template #default="{ row }">{{row.project}}</template>
+            </vxe-column>
+            <vxe-column field="typeAndProject" title="定义" min-width="200">
+               <template #default="{ row }">{{row.definition}}</template>
+            </vxe-column>
+            <vxe-column field="typeAndProject" title="分值" width="100">
+              <template #default="{ row }">{{row.score}}</template>
+            </vxe-column>
+            <vxe-column field="typeAndProject" title="得分" width="100">
+              <template #default="{ row }">{{row.pointsDeductionFinalScore}}</template>
+            </vxe-column>
+            <vxe-column field="calculationDetails" title="计算明细" min-width="240" :show-overflow="false"></vxe-column>
 
-        <!--  新增-填报绩效报表 -->
-        <ReportDataTableVue v-else ref="reportDataTableVue" :startStatus="startStatus" :subFileValue="subFileValue" :reportData="reportData"></ReportDataTableVue>
+            <template v-if="isView">
+              <vxe-column field="pointsDeductionNumber" title="现场情况" min-width="100">
+                <template #default="{ row }">
+                  <span>{{row.pointsDeductionNumber}} {{row.indicatorUnit}}</span>
+                </template>
+              </vxe-column>
+            </template>
+
+            <template v-else>
+              <vxe-column field="pointsDeductionNumber" title="现场情况" min-width="200">
+                <template #default="{ row }">
+                  <div class="points-deduction">
+                    <a-input-number class="points-deduction-input" :value="row.pointsDeductionNumber" :precision="0" :min="0" :controls="false" @change="(e) => {sitesNumChange(e, row)}" />
+                    <span class="points-deduction-unit">{{row.indicatorUnit}}</span>
+                  </div>
+                </template>
+              </vxe-column>
+            </template>
+
+            <vxe-column field="pointsDeductions" title="扣分分值" width="100"></vxe-column>
+            <vxe-column field="fileIdList" title="问题点图片" min-width="200" :show-overflow="false">
+              <template #default="{ row }">
+                <UploadCanRemove ref="fileIdListRef" :maxSize="5" :limit="20" :disabled="isView" :headImgs="row._fileListShow || []" @handleSuccess="(fileList)=> fileIdListRefSuccess(row,fileList)"></UploadCanRemove>
+                <span v-if="isView && row._fileListShow.length == 0">--</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="dataSource" title="数据来源" min-width="140">
+              <template #default="{ row }">
+                <template v-if="isView">{{row.dataSourceStr || '--'}}</template>
+
+                <template v-else>
+                  <a-select style="width:100%;" v-model="row.dataSource" placeholder="请选择">
+                    <a-select-option v-for="item in dataSourceList" :key="item.sourceKey" :value="item.sourceKey">{{item.sourceLable}}</a-select-option>
+                  </a-select>
+                </template>
+              </template>
+            </vxe-column>
+            <vxe-column field="itemRemarks" title="备注" min-width="230">
+              <template #default="{ row }" v-if="!isView">
+                <div style="padding: 8px 0;">
+                  <a-textarea v-if="!loadingThree" placeholder="请输入备注" v-model="row.itemRemarks" :maxLength="300" autoSize />
+                </div>
+              </template>
+            </vxe-column>
+          </vxe-table>
+          <div class="table-remark" v-if="this.baseIfo.scorePositionStatus">备注： A：95分(含以上)； B：85分(含)~95分； C：85分以下</div>
+        </div>
+        <div class="color-666 font-16 text-center" v-else>该组织还没配置报表</div>
       </div>
-      <div class="color-666 font-16 text-center" v-else>该组织还没配置报表</div>
-    </div>
+    </a-spin>
+
     <div slot="fixedBottom">
       <FixedBottom>
         <div>
-          <a-button @click="pageCancle">返回</a-button>
-          <a-button type="primary" v-if="!isView" :loading="btnLoading" @click="pageSubmit">保存</a-button>
+          <a-button @click="goBack">返回</a-button>
+          <a-button type="primary" v-if="!isView" :loading="loading" @click="onSubmit">保存</a-button>
         </div>
       </FixedBottom>
     </div>
   </HasFixedBottomWrapper>
 </template>
+
 <script>
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
-import ReportDataTableVue from "../tpl/reportDataTableBranch.vue";
-import { formValidator } from "@/utils/clx-form-validator.js";
-import { nanoid } from 'nanoid'
-import { getQueryVariable } from "@/utils/util.js"
-import dayJs from "dayjs";
-import { organizationSelectDetail, orgDataSelectDetailBySummary, orgDataSave, orgDataselectDetail, orgDataUpdate } from "@/services/performanceManagement.js";
-import { selectDeptK, queryAchDeptConfig, fillInAchDeptData, viewAchDeptData, editAchDeptData } from "@/services/performanceManagementBranch.js";
+import { rmDuplicatesByKey } from "@/utils/util.js";
+import { getMaturityEvaDataConfigDetails, fillMaturityEvaDataConfigData, exportMaturityEvaDataConfigData } from "@/services/maturityEvaluation.js";
 import { cloneDeep } from "lodash";
-
+import cancelLoading from '@/mixin/cancelLoading';
+import rowspanMethod from "@/utils/rowspanMethod.js";
+import { BigNumber } from "bignumber.js";
+import UploadCanRemove from './uploadCanRemove.vue';
 export default {
-  components: {
-    FixedBottom,
-    ReportDataTableVue
-  },
+  components: { FixedBottom, UploadCanRemove },
+  mixins: [cancelLoading],
   data() {
     return {
-      formInline: {
-        fillDimension: 2,
-        fillDate: this.isQuarter(),
-        year: dayJs(new Date()).format("YYYY"),
-        deptId: undefined,
-        corporationId: undefined,
-        deptName: undefined
+      // 基本信息
+      baseIfo: {},
+      // 维度
+      dimensionMatch: {
+        prior: '事前',
+        inTheMatter: '事中',
+        afterTeFact: '事后',
       },
-      rules: {
-        corporationId: [
-          { required: true, message: "所属组织不能为空", trigger: "change" },
-        ],
-        year: [
-          { required: true, message: "年份不能为空", trigger: "change" },
-        ],
-        fillDimension: [
-          { required: true, message: "不能为空", trigger: "change" },
-        ],
-        fillDate: [
-          { required: true, message: "不能为空", trigger: "change" },
-        ],
-      },
-      deptOption: [],
-      btnLoading: false,
-      projectList: [
-        {
-          key: "1",
-          value: "否决性指标"
-        },
-        {
-          key: "2",
-          value: "安全"
-        },
-        {
-          key: "3",
-          value: "消防"
-        },
-        {
-          key: "4",
-          value: "环境"
-        },
-        {
-          key: "5",
-          value: "职业健康"
-        },
-        {
-          key: "6",
-          value: "其他管理事项"
-        },
-      ],
-      quarterList: [
-        {
-          key: "1",
-          value: "第一季度"
-        },
-        {
-          key: "2",
-          value: "第二季度"
-        },
-        {
-          key: "3",
-          value: "第三季度"
-        },
-        {
-          key: "4",
-          value: "第四季度"
-        },
-      ],
-      bodyIndexData: {
-        "1": {
-          projectName: "否决性指标",
-          indexList: [],
-        },
-        "2": {
-          projectName: "安全",
-          indexList: [],
-        },
-        "3": {
-          projectName: "消防",
-          indexList: [],
-        },
-        "4": {
-          projectName: "环境",
-          indexList: [],
-        },
-        "5": {
-          projectName: "职业健康",
-          indexList: [],
-        },
-        "6": {
-          projectName: "其他管理事项",
-          indexList: [],
-        }
-      },
-      iForm: {},
-
       reportData: [],
-      corporationMsg: {},
-      option: [],
-      quarterOption: [
-        { name: '第一季度', value: 1 },
-        { name: '第二季度', value: 2 },
-        { name: '第三季度', value: 3 },
-        { name: '第四季度', value: 4 },
-      ],
-      monthOption: [
-        { name: '1月', value: 1 },
-        { name: '2月', value: 2 },
-        { name: '3月', value: 3 },
-        { name: '4月', value: 4 },
-        { name: '5月', value: 5 },
-        { name: '6月', value: 6 },
-        { name: '7月', value: 7 },
-        { name: '8月', value: 8 },
-        { name: '9月', value: 9 },
-        { name: '10月', value: 10 },
-        { name: '11月', value: 11 },
-        { name: '12月', value: 12 },
-      ],
-      startStatus: '1',
-      subFileValue: {},
+      dataSourceList: [
+        {
+          sourceKey: '1',
+          sourceLable: '现场',
+        },
+        {
+          sourceKey: '2',
+          sourceLable: '环安',
+        },
+        {
+          sourceKey: '3',
+          sourceLable: '现场+环安',
+        },
+      ]
     }
   },
+  created() {
+    this.baseIfo = JSON.parse(sessionStorage.getItem('ehs_aiko_maturityEvaluationDataFilling') || '{}')
+    this.handleLoadingThree()
+    this.getDetals()
+  },
   computed: {
+    isAdd() {
+      return this.$route.meta && this.$route.meta.isAdd
+    },
     isView() {
       return this.$route.meta && this.$route.meta.isView
     },
     isEdit() {
       return this.$route.meta && this.$route.meta.isEdit
     },
-  },
-  created() {
-    this.handleWChange(this.formInline?.fillDimension)
-    if (this.isView || this.isEdit) {
-      this.orgDataselectDetail(this.$route.query.id);
+    mergeFooterItems() {
+      let mergeFooterItemsArr = [
+        { row: 0, col: 0, rowspan: 1, colspan: 5 },
+        { row: 0, col: 5, rowspan: 1, colspan: 6 },
+      ]
+      if (this.baseIfo.scorePositionStatus) {
+        mergeFooterItemsArr = [
+          ...mergeFooterItemsArr,
+          { row: 1, col: 0, rowspan: 1, colspan: 5 },
+          { row: 1, col: 5, rowspan: 1, colspan: 6 },
+        ]
+      }
+      return mergeFooterItemsArr
+    },
+    // 最终得分
+    finalScore() {
+      return rmDuplicatesByKey(this.reportData, 'typeAndProject')
+        .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionFinalScore).toString(), 0)
+    },
+    // 分档
+    subGear() {
+      if (this.baseIfo.scorePositionStatus) {
+        const { aTwoScore, bTwoScore } = this.baseIfo
+        if (Number(this.finalScore) >= Number(aTwoScore)) {
+          return 'A'
+        } else if (Number(this.finalScore) >= Number(bTwoScore)) {
+          return 'B'
+        } else {
+          return 'C'
+        }
+      }
+      return '--'
     }
   },
   methods: {
-    // 组织改变时
-    corporationChange(corId) {
-      console.log(corId)
-      selectDeptK({ corporationId: corId }).then(res => {
-        console.log(res)
-        // this.$set(this.formInline, 'deptId', undefined)
-        this.formInline.deptId = undefined
-        this.deptOption = res.data
-      })
-    },
-    //部门选择
-    handleDeptChange(e) {
-      console.log(e)
-      this.formInline.deptName = this.deptOption.filter(i => i.deptId == e)[0].deptName
-      this.reportData = []
-      queryAchDeptConfig({ deptId: e }).then(res => {
-        let result = res.data || {};
-        let arr = result.achievementRelationDTOS || [];
-        let dispose = item => {
-          let obj = []
-          item.indexItems.forEach(i => {
-            //（安全：safe 消防：fire_control 环境：environment 职业健康：occupational_health 其他管理事项：other_management）
-            let info = {}
-            if (projectId == 1) {
-              info.moduleKey = 'safe'
-              info.module = '安全'
-            } else if (projectId == 2) {
-              info.moduleKey = 'fire_control'
-              info.module = '消防'
-            } else if (projectId == 3) {
-              info.moduleKey = 'environment'
-              info.module = '环境'
-            } else if (projectId == 4) {
-              info.moduleKey = 'occupational_health'
-              info.module = '职业健康'
-            } else {
-              info.moduleKey = 'other_management'
-              info.module = '其他管理事项'
+    rowspanMethod: rowspanMethod(['maturityEvaluationReportType', 'typeAndProject']),
+    // 获取详情
+    getDetals() {
+      const apiData = {
+        ...this.baseIfo
+      }
+      getMaturityEvaDataConfigDetails(apiData)
+        .then(res => {
+          const resData = cloneDeep(res.data)
+          this.baseIfo = resData
+          this.reportData = (resData.itemList || []).map(item => {
+            return {
+              ...item,
+              typeAndProject: `${item.maturityEvaluationReportType}_${item.project}`,
+              dataSourceStr: this.dataSourceList.find(dSItem => dSItem.sourceKey == item.dataSource)?.sourceLable,
+              _fileListShow: (item.gatherFileList || []).map(fileItem => {
+                return {
+                  uid: fileItem.id,
+                  id: fileItem.id,
+                  name: fileItem.fileName,
+                  status: 'done',
+                  url: fileItem.filePath,
+                }
+              }),
             }
-            obj.push({ ...item, ...i, projectId: projectId, sitesNum: 0, ...info, sort: sort, projectScore: item.riskScore })
           })
-          sort++
-          return obj
-        }
-        let sort = 1;
-        let projectId = 1;
-        let safeIndexData = result.safeIndexData.map(dispose).flat(1)
-        projectId = 2;
-        let fireIndexData = result.fireIndexData.map(dispose).flat(1)
-        projectId = 3
-        let environmentIndexData = result.environmentIndexData.map(dispose).flat(1)
-        projectId = 4
-        let healthIndexData = result.healthIndexData.map(dispose).flat(1)
-        projectId = 5
-        let otherIndexData = result.otherIndexData.map(dispose).flat(1)
-        let brr = [...safeIndexData, ...fireIndexData, ...environmentIndexData, ...healthIndexData, ...otherIndexData];
-        // console.log(safeIndexData.flat(2))
-        this.startStatus = result.startStatus.toString()
-        if (result.startStatus == '2') {
-          this.subFileValue = {
-            A: [result.levelAOneScore, result.levelATwoScore],
-            B: [result.levelBOneScore, result.levelBTwoScore],
-            C: [result.levelCOneScore, result.levelCTwoScore]
+        })
+        .catch(err => { })
+        .finally(() => {
+          this.cancelLoadingThree(300)
+        })
+    },
+
+    // 下载-导出excel
+    exportTable() {
+      let apiData = {
+        maturityEvaluationDataId: this.baseIfo.maturityEvaluationDataId,
+      }
+      this.handleLoadingTwo()
+      exportMaturityEvaDataConfigData(apiData)
+        .then(res => {
+          this.spreadSheetExcel(res, "成熟度评价数据");
+        })
+        .catch(err => { })
+        .finally(() => {
+          this.cancelLoadingTwo(300)
+        })
+    },
+
+    // 图片上传
+    fileIdListRefSuccess(row, fileList) {
+      row.fileIdList = fileList.map(item => item.id)
+      row._fileListShow = fileList
+    },
+
+    footerMethod({ columns, data }) {
+      let arr = [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '最终得分'
           }
-        }
-        this.reportData = brr;
-        // console.log(JSON.stringify(this.reportData[0]))
-        if (this.reportData.length) {
-          this.$nextTick(() => {
-            this.$refs.reportDataTableVue.updateFooterEvent();
+          if (['typeAndProject'].includes(column.property)) {
+            return this.finalScore
+          }
+          return null
+        })
+      ]
+      if (this.baseIfo.scorePositionStatus) {
+        arr.push(
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return '分档'
+            }
+            if (['typeAndProject'].includes(column.property)) {
+              return this.subGear
+            }
+            return null
           })
-        }
+        )
+      }
+      return arr
+    },
 
-        // let a = ''
-
+    // 更新表尾数据
+    updateFooterEvent() {
+      this.$nextTick(() => {
+        this.$refs.xTable.updateFooter();
       })
     },
-    // 查看|编辑 填报数据详情
-    orgDataselectDetail(id) {
-      // orgDataselectDetail({
-      // id: this.$route.query.id
-      viewAchDeptData({ id: id }).then(res => {
-        let result = res.data || {};
-        this.formInline.deptId = res.data.deptId
-        this.corporationMsg = {
-          id: res.data.id,
-          deptId: res.data.deptId,
-          deptName: res.data.deptName,
-          year: res.data.year,
-          fillDimension: res.data.fillDimension,
-          fillDate: res.data.fillDate,
-        }
-        console.log(...result.safeAchData)
-        this.reportData = [...result.safeAchData, ...result.fireAchData, ...result.environmentAchData, ...result.healthAchData, ...result.otherAchData].map(i => {
-          i.sitesNum = Number(i.scene)
-          if (i.moduleKey == 'safe') {
-            i.projectId = 1
-          } else if (i.moduleKey == 'fire_control') {
-            i.projectId = 2
-          } else if (i.moduleKey == 'environment') {
-            i.projectId = 3
-          } else if (i.moduleKey == 'occupational_health') {
-            i.projectId = 4
-          } else {
-            i.projectId = 5
-          }
-          return i
-        })
-        if (result.remark) {
-          this.startStatus = '2'
-          this.subFileValue = JSON.parse(result.remark)
-        }
-        console.log(JSON.stringify(this.reportData[0]))
-        let t = {
-          "id": "1599614759569473536",//---
-          "dataId": "1599614758767120385",
-          "moduleKey": "safe",//---
-          "module": "安全",//---
-          "indexInfo": "测试指标00005",//---
-          "riskScore": "10",//---
-          "deductPoints": "小螃蟹",//---
-          "scene": "1",
-          "unit": "只",//---
-          "deductScore": "1",//---
-          "projectScore": "9",//++++
-          "remake": "鱼类",//---
-          "sort": 1,//---
-          "sitesNum": 1,//---
-          "projectId": 1//---
-        }
 
-        let t2 = {
-          "dataId": "1599614758767120385",
+    // 现场情况改变事件
+    sitesNumChange(e, row) {
+      const value = e
+      row.pointsDeductionNumber = value || 0
+      row.pointsDeductionNumberScore = BigNumber(row.pointsDeductionNumber).times(row.pointsDeductions).toNumber()
 
-          "scene": "1",
-          "projectScore": "9",//++++     
-        }
-        let t3 = [{
-          "indexId": "1598996837698879490",
-        }]
-        // this.reportData = [{
-        //     // "id": "1598996837711462402",//---
-        //     // "indexType": "2",
-        //     "indexInfo": "测试指标00005",//---
-        //     "riskScore": "10",//---
-        //     "remake": "鱼类",//---
-        //     // "indexId": "1598996837698879490",
-        //     "deductPoints": "小螃蟹",//---
-        //     "unit": "只",//---
-        //     "deductScore": "1",//---
-        //     "projectId": 1,//---
-        //     "sitesNum": 2,//---
-        //     "moduleKey": "safe",//---
-        //     "module": "安全",//---
-        //     "sort": 1,//---
-        // }]
+      const { score, maturityEvaluationReportType, project } = row
+      const deductionScore = this.reportData
+        .filter(item => item.maturityEvaluationReportType == maturityEvaluationReportType && item.project == project)
+        .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionNumberScore).toNumber(), 0)
 
-        if (this.reportData.length) {
-          this.$nextTick(() => {
-            this.$refs.reportDataTableVue.updateFooterEvent(true);
-          })
+      this.reportData.forEach(item => {
+        if (item.maturityEvaluationReportType == maturityEvaluationReportType && item.project == project) {
+          const pointsDeductionFinalScore = BigNumber(score).minus(deductionScore).toNumber()
+          item.pointsDeductionFinalScore = pointsDeductionFinalScore < 0 ? 0 : pointsDeductionFinalScore
         }
-      }).catch(err => console.log(err))
+      })
+
+      this.updateFooterEvent();
     },
-    pageCancle() {
+
+    // 返回
+    goBack() {
       this.setKeepalive(true)
       this.$router.push("/ehsGerneralManage/maturityEvaluation/maturityEvaluationData");
     },
-    pageSubmit() {
-      let params = {
-        level: this.$refs.reportDataTableVue.level,
-        score: Number(this.$refs.reportDataTableVue.score),
+
+    // 提交
+    onSubmit() {
+      // 检查数据来源
+      const hasEmptyDataSource = this.reportData.some(item => !Boolean(item.dataSource))
+      if (hasEmptyDataSource) {
+        this.$antMessage.warn("您有数据来源未进行选择！");
+        return
       }
-      if (!this.isEdit) {
-        if (!formValidator.formAll(this, 'formInline')) {
-          return;
-        }
-        Object.assign(params, this.formInline);
-      } else {
-        Object.assign(params, this.corporationMsg);
-        params.achDataDetailList = cloneDeep(this.reportData).map(i => {
-          i.scene = i.sitesNum
-          i.projectScore = Number(i.projectScore) < 0 ? 0 : Number(i.projectScore)
-          return i
-
-        })
-        if (this.startStatus == 2) {
-          params.remark = JSON.stringify(this.subFileValue)
-        }
-        //负值不让提交
-        let b = params.achDataDetailList.some(i => {
-          if (i.projectScore < 0) {
-            return true
-          } else {
-            return false
-          }
-
-        })
-        if (b) {
-          this.$antMessage.error("每项指标的扣分分值不得超过风险分值");
-          return false
-        }
-
-        editAchDeptData(params).then(res => {
-          this.$antMessage.success("修改成功");
+      let apiData = {
+        ...this.baseIfo,
+        finalScore: this.finalScore,
+        itemList: this.reportData,
+      }
+      this.handleLoading()
+      fillMaturityEvaDataConfigData(apiData)
+        .then(res => {
+          this.$antMessage.success("保存成功");
           this.$router.push({
-            path: "/ehsGerneralManage/orgPerformanceManage/performanceBranchData"
+            path: "/ehsGerneralManage/maturityEvaluation/maturityEvaluationData"
           })
         })
-        return false
-      }
-      // achDataDetailList
-      params.achDataDetailList = cloneDeep(this.reportData).map(i => {
-        i.scene = i.sitesNum
-        delete i.id //= ''
-        delete i.indexItems
-        i.projectScore = Number(i.projectScore) < 0 ? 0 : Number(i.projectScore)
-        // i.sumDeductScore = Number(i.sumDeductScore)
-        return i
-      })
-      if (this.startStatus == 2) {
-        params.remark = JSON.stringify(this.subFileValue)
-      }
-      //负值不让提交
-      let b = params.achDataDetailList.some(i => {
-        if (i.projectScore < 0) {
-          return true
-        } else {
-          return false
-        }
-
-      })
-      if (b) {
-        this.$antMessage.error("每项指标的扣分分值不得超过风险分值");
-        return false
-      }
-      fillInAchDeptData(params).then(res => {
-        this.$antMessage.success("填报成功");
-        this.$router.push({
-          path: "/ehsGerneralManage/orgPerformanceManage/performanceBranchData"
+        .catch(err => { })
+        .finally(() => {
+          this.cancelLoading(300)
         })
-      })
-    },
-    //筛选维度变化
-    handleWChange(e) {
-      if (e == 1) {
-        this.formInline.fillDate = this.isQuarter()
-        this.option = this.quarterOption
-      } else {
-        this.formInline.fillDate = Number(new Date().getMonth()) + 1
-        this.option = this.monthOption
-      }
-    },
-    // 查询季度
-    isQuarter() {
-      let Month = Number(new Date().getMonth()) + 1
-      if (Month > 9) {
-        return 4
-      } else if (Month > 6) {
-        return 3
-      } else if (Month > 3) {
-        return 2
-      } else {
-        return 1
-      }
-
     },
   }
 }
 </script>
+
 <style lang='less' scoped>
-/deep/ .ant-calendar-picker {
-  width: 100%;
+.me-data-filling {
+  ::v-deep .vxe-input--inner {
+    cursor: auto;
+  }
+}
+.table-remark {
+  padding: 15px 0 20px;
+}
+
+.base-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0px 30px;
+  line-height: 1;
+  .base-info-left {
+    & > span {
+      margin-right: 20px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+  }
+  .base-info-reight {
+    .base-info-reight-subGear {
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+.points-deduction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .points-deduction-input {
+    flex: 1;
+    margin-right: 10px;
+  }
+  .points-deduction-unit {
+    flex: none;
+    width: 2.5em;
+    text-align: left;
+  }
+}
+
+::v-deep .a-spin {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  .ant-spin-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ant-spin-blur {
+    opacity: 0.06 !important;
+  }
 }
 </style>

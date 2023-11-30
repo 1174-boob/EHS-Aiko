@@ -163,14 +163,15 @@ export default {
                         yAxis: [
                               {
                                     name: "设备总数",
-                                    min: 0,
-                                    max: 10,
-                                    alignTicks: true,
-                                    axisLabel: {
-                                          formatter: (v) => {
-                                                return parseInt(v);
-                                          },
-                                    },
+                                    type: "value",
+                                    // min: 0,
+                                    // max: 100,
+                                    // alignTicks: true,
+                                    // axisLabel: {
+                                    //       formatter: (v) => {
+                                    //             return parseInt(v);
+                                    //       },
+                                    // },
                               },
                               {
                                     type: "value",

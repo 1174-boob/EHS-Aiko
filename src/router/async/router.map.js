@@ -676,7 +676,7 @@ const routerMap = {
   //   component: resolve => require(['@/pages/sceneManagement/hiddenDanger/detail.vue'], resolve),
   // },
   // // {
-  // //   path: 'specialeDevice',
+  // //   path: 'specialDevice',
   // //   name: '特种设备管理-new',
   // //   meta: {
   // //     title: '特种设备管理-new',
@@ -689,7 +689,7 @@ const routerMap = {
   // //     ...specialDevice
   // //   ]
   // // },
-  // specialeDevice: {
+  // specialDevice: {
   //   name: '特种设备管理-新',
   //   meta: {
   //     title: '特种设备管理-新',

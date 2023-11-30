@@ -15,7 +15,7 @@
     </SearchTerm>
     <DashBtn>
       <div>
-        <a-button type="dashed" @click="openAddOrEditModal({})">
+        <a-button type="dashed" @click="openAddModal({})">
           <a-icon type="plus" />新增指标
         </a-button>
       </div>
@@ -33,7 +33,7 @@
         </div>
 
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer m-r-15" @click="openAddOrEditModal(record)">编辑</span>
+          <span class="color-0067cc cursor-pointer m-r-15" @click="openEditModal(record)">编辑</span>
           <span class="color-red cursor-pointer" @click="handleDelete(record)">删除</span>
         </div>
       </a-table>
@@ -124,6 +124,13 @@ export default {
     this.setRouterCode("maturityEvaluationQuota");
     this.getTableList();
   },
+  activated(){
+    setTimeout(() => {
+      if(!this.keepalive){
+        this.iRest()
+      }
+    }, 20);
+  },
   methods: {
     getTableList() {
       let params = {
@@ -171,14 +178,28 @@ export default {
       this.getTableList()
     }, 250, { leading: true, trailing: false }),
 
-    // 新增、编辑-打开弹框
-    openAddOrEditModal(targetItem) {
+    // 新增-打开弹框
+    openAddModal(targetItem) {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaAddBtn")) {
+        return;
+      }
+      this.addChangeModelOldData = cloneDeep(targetItem)
+      this.addChangeModelShow = true
+    },
+    // 编辑-打开弹框
+    openEditModal(targetItem) {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaEditBtn")) {
+        return;
+      }
       this.addChangeModelOldData = cloneDeep(targetItem)
       this.addChangeModelShow = true
     },
 
     // 删除
     handleDelete(targetItem) {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaRmBtn")) {
+        return;
+      }
       this.$antConfirm({
         title: '确定删除该指标吗?',
         onOk: () => {

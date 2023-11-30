@@ -99,3 +99,21 @@ export const deviceData = params => post( ehsEquip + '/api/ehs/equip/equipment/a
 
 //设备认证导出
 export const dataStatisticsExport = params => postExcel( ehsEquip + '/api/ehs/equip/equipment/account/dataStatisticsExport', params);
+
+// 特种设备-配置点检表
+export const checkItemList = params => post( ehsEquip + '/api/ehs/equip/spot/check/item/list', params);
+// 特种设备-配置点检表保存
+export const checkItemSave = params => post( ehsEquip + '/api/ehs/equip/spot/check/item/save', params);
+
+// 特种设备-点检任务列表
+export const checkPageList = params => post( ehsEquip + '/api/ehs/equip/spot/check/page/list', params);
+// 特种设备-新增点检任务
+export const checkInsertTask = params => post( ehsEquip + '/api/ehs/equip/spot/check/insert/task', params);
+// 特种设备-执行点检任务
+export const checkExecute = params => post( ehsEquip + '/api/ehs/equip/spot/check/execute', params);
+// 特种设备-点检任务详情
+export const checkDetail = params => post( ehsEquip + '/api/ehs/equip/spot/check/detail', params);
+// 特种设备-上传(更新)点检表/自检报告
+export const checkUpdate = params => post( ehsEquip + '/api/ehs/equip/spot/check/update', params);
+// 特种设备-点检任务详情
+export const checkDelete = params => post( ehsEquip + '/api/ehs/equip/spot/check/delete', params);

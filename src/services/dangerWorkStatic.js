@@ -28,3 +28,13 @@ export const rejectDangerWorkStaticApi = params => post(`${serviceNameList.safe}
 export const passDangerWorkStaticApi = params => post(`${serviceNameList.safe}/api/ehs/safe/danger/handerInfo`, params);
 // 危险作业台账-处理-暂存
 export const stagingDangerWorkStaticApi = params => post(`${serviceNameList.safe}/api/ehs/safe/danger/handerInfo`, params);
+// 一般作业台账-查询
+export const operateInfoListPag = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/list/page`, params);
+// 一般作业台账-新增
+export const operateInfoSave = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/save`, params);
+// 一般作业台账-编辑
+export const operateInfoEdit = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/edit`, params);
+// 一般作业台账-查看
+export const operateInfoDetail = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/detail`, params);
+// 一般作业台账-删除
+export const operateInfoDelete = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/delete`, params);

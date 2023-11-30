@@ -19,7 +19,7 @@
             <a-form-model-item class="flex" label="保管部门" prop="saveDeptCode" :label-col="labelCol" :wrapper-col="wrapperCol">
               <dept-tree :disabled="disabled" :placeholder="'请选择保管部门'" v-model="newlyForm.saveDeptCode" :deptData="deptData" @change="(id,name)=>saveDeptChange(id,name,'deptName')" allowClear></dept-tree>
             </a-form-model-item>
-            <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="false" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
+            <staffOrDept :onPreview="disabled" :labelTitle="'保管人'" :checkAbel="true" :checkedTreeNode="checkedTreeNode" :deptTreeId="deptTreeId" :treeRoles="newlyRules" :propKey="'testPerson'" @getTreeData="getTreeData" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
             <a-form-model-item label="附件类型" prop="annexType" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select :disabled="disabled" v-model="newlyForm.annexType" placeholder="请选择附件类型" show-search :filter-option="filterOption">
                 <a-select-option v-for="item in annexTypeOptions" :value="item.key" :key="item.key">{{item.value}}</a-select-option>
@@ -176,7 +176,9 @@ export default {
       //起草人
       this.newlyForm.applicant = this.newlyForm.draftName + '/' + this.newlyForm.draftNum
       //保管人
-      this.checkedTreeNode = [this.newlyForm.savePersonId]
+      // this.checkedTreeNode = [this.newlyForm.savePersonId]
+      let saveArr = this.newlyForm.custodianList.map(item => item.userId)
+      this.checkedTreeNode = saveArr
       let list = this.getCommonAddOrgnizeList
       let deptId = this.getMappingValue(list, "id", this.newlyForm.corporationId).deptId
 
@@ -211,6 +213,7 @@ export default {
           const para = {
             ...this.newlyForm,
           }
+          para.custodianList = this.newlyForm.custodian // 修改添加安全附件的话使用custodianList
           if (this.isEdit) {
             para.safeAnnexId = this.$route.query.id
           }

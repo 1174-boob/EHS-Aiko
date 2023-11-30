@@ -24,6 +24,19 @@ export const dangerWorkDA = [
     component: resolve => require(['@/pages/dangerWorkStatic/dataAnalysis/index.vue'], resolve),
   },
 ]
+// 一般作业管理-数据统计分析
+export const normalWorkDA = [
+  {
+    path: 'normalWorkDA',
+    name: '数据统计分析',
+    meta: {
+      title: '数据统计分析',
+      routerCode:'normalWorkDA',
+      isPage: true,
+    },
+    component: resolve => require(['@/pages/normalWorkStatic/dataAnalysis/index.vue'], resolve),
+  },
+]
 // 教育培训管理-数据统计分析
 export const resourcepoolDA = [
   {
@@ -67,6 +80,7 @@ export const emergencyManagementDA = [
 const dataAnalysis = [
   ...accidentManagementDA,
   ...dangerWorkDA,
+  ...normalWorkDA,
   ...resourcepoolDA,
   ...hiddenPerilsDA,
   ...emergencyManagementDA,

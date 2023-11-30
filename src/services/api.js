@@ -675,6 +675,8 @@ export const updateCheckResult = params => post(`${serviceNameList.health}/api/e
 export const findHealthUserByDeptId = params => get(`${serviceNameList.health}/api/ehs/health/user/findUser`, params);
 //上传|更新体检报告
 export const uploadCheckFile = params => post(`${serviceNameList.health}/api/ehs/health/check/upload/checkFile`, params);
+//上传|更新体检报告
+export const addHistoryHealthyCheck = params => post(`${serviceNameList.health}/api/ehs/health/check/addHistoryHealthyCheck`, params);
 //草稿箱体检预约删除
 export const healthCheckDelete = params => get(`${serviceNameList.health}/api/ehs/health/check/delete`, params);
 //体检审批通过
@@ -781,6 +783,8 @@ export const educationCorrect = params => post(`${serviceNameList.health}/api/eh
 export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
 // 三级安全教育管理-重新分配
 export const educationReallocation = params => post(`${serviceNameList.health}/api/ehs/security/education/reallocation`, params);
+// 三级安全教育管理-分配讲师
+export const assignInstructor = params => post(`${serviceNameList.health}/api/ehs/security/education/assign/instructor`, params);
 
 // 安全档案报表-证书
 export const securityCertificate = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/certificate`, params);

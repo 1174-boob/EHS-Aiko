@@ -76,6 +76,9 @@ const mixin = {
           ...data.specialEquipmentDetailDto,
         },
       }
+      console.log('data.safeAnnexList',data.safeAnnexList);
+      this.iFrom.fireAlarmList = data.safeAnnexList.length == 0 ? [] : data.safeAnnexList
+      console.log('this.iFrom.fireAlarmList2',this.iFrom.fireAlarmList);
       const specialVehicleImagesList = data.specialEquipmentDetailDto.specialVehicleImagesFileList; 
       if( specialVehicleImagesList && specialVehicleImagesList.length > 0) {
         const fileLists = [];
@@ -98,7 +101,9 @@ const mixin = {
       //起草人
       this.newlyForm.applicant = this.newlyForm.draftName + '/' + this.newlyForm.draftNum
       //保管人
-      this.checkedTreeNode = [this.newlyForm.savePersonId]
+      console.log(this.newlyForm.custodianList);
+      let saveArr = this.newlyForm.custodianList.map(item => item.userId)
+      this.checkedTreeNode = saveArr
       let list = this.getCommonAddOrgnizeList
       let deptId = this.getMappingValue(list, "id", this.newlyForm.corporationId).deptId
 
@@ -151,12 +156,15 @@ const mixin = {
     },
     // 选择测试人员
     getTreeData(value) {
+      let list = value.treeNameAndCodeList || [];
+      let custodian = JSON.parse(JSON.stringify(list).replace(/id/g, 'userId').replace(/treeName/g, 'userName').replace(/treeCode/g, 'userJobNumber'));  
       let savePersonId = (value.treeIdList || [])[0]
       let savePerson = (value.treeNameAndCodeList || [])[0].treeName
       let savePersonNum = (value.treeNameAndCodeList || [])[0].treeCode
       this.$set(this.newlyForm, 'savePersonId', savePersonId)
       this.$set(this.newlyForm, 'savePerson', savePerson)
       this.$set(this.newlyForm, 'savePersonNum', savePersonNum)
+      this.$set(this.newlyForm, 'custodian', custodian)
       if (!formValidator.formItemValidate(this, "savePersonId", "newlyForm")) {
         return
       }
@@ -183,10 +191,15 @@ const mixin = {
     },
     // 特种设备保存
     save: debounce(function () {
+      // console.log('this.iFrom.fireAlarmList ',this.iFrom == undefined );
+      // return
       this.$refs.newlyForm.validate(async valid => {
         if (valid) {
           const para = {
             ...this.newlyForm,
+          }
+          if (this.iFrom != undefined) {
+            para.safeAnnexList = this.iFrom.fireAlarmList ? this.iFrom.fireAlarmList :null
           }
           if (this.isEdit) {
             para.specialEquipmentId = this.$route.query.id

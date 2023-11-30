@@ -188,7 +188,7 @@ export default {
     //跳转新增、编辑页面
     jumpAddOrDetail(type, row) {
       let query = row ? { operateId: row.operateId } : {};
-      let path = type == 'add' ? "/safeManage/dangerWorkStatic/dangerWorkStaticAddAndChange" : "/safeManage/dangerWorkStatic/dangerWorkStaticAddAndChange"
+      let path = type == 'add' ? "/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAddAndChange" : "/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAddAndChange"
       this.$router.push({
         path,
         query,

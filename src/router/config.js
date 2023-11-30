@@ -10,6 +10,7 @@ import { chemicalsMsds } from './children/chemicalsMsds'
 import { occupationHealth } from './children/occupationHealth'
 import { dangerSource } from './children/dangerSource'
 import { dangerWork } from './children/dangerWorkStatic'
+import { normalWork } from './children/normalWorkStatic'
 import { hiddenPerils } from './children/hiddenPerils'
 import { safeCorp } from './children/safeMonthReport'
 import { emergency } from './children/emergency';
@@ -22,7 +23,7 @@ import { performanceManagementBranch, performanceManagementBranchMap } from './c
 import { maturityEvaluationRouteData } from './children/maturityEvaluationRouteData'
 import { specialDevice } from './children/specialDevice'
 // import { getDictTree } from '@/services/api'
-import { accidentManagementDA, dangerWorkDA, resourcepoolDA, hiddenPerilsDA, emergencyManagementDA } from './children/dataAnalysis/dataAnalysis.js'
+import { accidentManagementDA, dangerWorkDA, normalWorkDA, resourcepoolDA, hiddenPerilsDA, emergencyManagementDA } from './children/dataAnalysis/dataAnalysis.js'
 const view = {
   tabs: () => import('@/layouts/tabs'),
   blank: () => import('@/layouts/BlankView'),
@@ -248,19 +249,46 @@ const options = {
               ]
             },
             {
-              path: 'dangerWorkStatic',
-              name: '危险作业管理',
+              path: 'workManage',
+              name: '作业管理',
               meta: {
-                title: '危险作业管理',
+                title: '作业管理',
                 icon: 'none',
-                isPage: false,
               },
+              isPage: false,
               component: NoBreadcrumb,
               children: [
-                ...dangerWork,
-                ...dangerWorkDA,
+                {
+                  path: 'dangerWorkStatic',
+                  name: '危险作业管理',
+                  meta: {
+                    title: '危险作业管理',
+                    icon: 'none',
+                    isPage: false,
+                  },
+                  component: NoBreadcrumb,
+                  children: [
+                    ...dangerWork,
+                    ...dangerWorkDA,
+                  ]
+                },
+                {
+                  path: 'normalWorkStatic',
+                  name: '一般作业管理',
+                  meta: {
+                    title: '一般作业管理',
+                    icon: 'none',
+                    isPage: false,
+                  },
+                  component: NoBreadcrumb,
+                  children: [
+                    ...normalWork,
+                    ...normalWorkDA,
+                  ]
+                },
               ]
             },
+            
             {
               path: 'emergencyManagement',
               name: '应急管理',
@@ -1374,6 +1402,16 @@ const options = {
                     invisible: true,
                   },
                   component: resolve => require(['@/pages/testManagement/testManagementOne/index.vue'], resolve),
+                },
+                {
+                  path: 'detailTest',
+                  name: '查看考试',
+                  meta: {
+                    title: '查看考试',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/testManagement/testManagementOne/detailTest.vue'], resolve),
                 },
                 {
                   path: 'addcourse',

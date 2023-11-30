@@ -43,13 +43,60 @@
       <a-table bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
         <div slot="createUserJobNumber" slot-scope="record">{{ record.createUserName }}/{{ record.createUserJobNumber }}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'add')">成绩纠错</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.status == '0' && record.eduUserIdList.indexOf(userId) != -1" @click="assignLecturers(record)">分配讲师</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.status == '2'" @click="goCorrectionGrades(record,'add')">成绩纠错</span>
           <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'show')">查看</span>
-          <span class="color-0067cc cursor-pointer" @click="reAllocation(record)">重新分配</span>
+          <span class="color-0067cc cursor-pointer" v-if="!((record.status == '3') || (record.status == '0'))" @click="reAllocation(record)">重新分配</span>
           <span class="color-ff4d4f cursor-pointer" @click="rmSafetyEduItem(record)">删除</span>
         </div>
       </a-table>
     </CommonTable>
+
+    <!-- 分配人员弹框 -->
+    <CommonModal title="分配" :visible="popVisible" :cancelFn="popCancle">
+      <template slot="form">
+        <a-form-model
+          ref="popForm"
+          :model="popForm"
+          :rules="popFormRules"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          :colon="false"
+          labelAlign="left"
+        >
+          <StaffOrDept
+            :treeType="'user'"
+            :propKey="'deptTrainerUserId'"
+            :treeRoles="popFormRules"
+            :labelTitle="'车间(部门)级'"
+            :label-col="labelCol"
+            :checkAbel="false"
+            :wrapper-col="wrapperCol"
+            @getTreeData="personThingTwo"
+            :checkedTreeNode="popForm.deptTrainerUserId"
+          />
+          <StaffOrDept
+            :treeType="'user'"
+            :propKey="'groupTrainerUserId'"
+            :treeRoles="popFormRules"
+            :labelTitle="'班组级'"
+            :label-col="labelCol"
+            :checkAbel="false"
+            :wrapper-col="wrapperCol"
+            @getTreeData="personThingThree"
+            :checkedTreeNode="popForm.groupTrainerUserId"
+          />
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="popCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="popConfirm"
+          >确定</a-button
+        >
+      </template>
+    </CommonModal>
+
+
 
     <!-- 重新分配弹框 -->
     <CommonModal :title="titleText" :visible="addVisible" :cancelFn="addCancle">
@@ -64,10 +111,10 @@
           labelAlign="left"
         >
           <a-form-model-item class="flex" label="当前处理节点" prop="resolve">
-            <a-input disabled :maxLength="50" v-model="editForm.resolve" placeholder="请输入当前处理节点"></a-input>
+            <span>{{editForm.resolve}}</span>
           </a-form-model-item>
           <a-form-model-item class="flex" label="原处理人" prop="resolvePeople">
-            <a-input disabled :maxLength="50" v-model="editForm.resolvePeople" placeholder="请输入原处理人"></a-input>
+            <span>{{editForm.resolvePeople}}</span>
           </a-form-model-item>
           <StaffOrDept
             :treeType="'user'"
@@ -75,6 +122,7 @@
             :treeRoles="editFormRules"
             :labelTitle="'重新分配人员'"
             :label-col="labelCol"
+            :checkAbel="false"
             :wrapper-col="wrapperCol"
             @getTreeData="personThingOne"
             :checkedTreeNode="editForm.holdUserId"
@@ -84,6 +132,49 @@
       <template slot="btn">
         <a-button @click="addCancle">取消</a-button>
         <a-button type="primary" class="m-l-15" @click="editConfirm"
+          >确定</a-button
+        >
+      </template>
+    </CommonModal>
+
+    <!--  分配讲师弹框  -->
+    <CommonModal :title="assignTitle" :visible="assignVisible" :cancelFn="assignCancle">
+      <template slot="form">
+        <SearchTerm>
+          <a-form-model layout="inline" :model="popInline" :colon="false">
+            <CommonSearchItem ref="commonSearchItem" :CommonFormInline="popInline" :hasDepartment="true" deptLabel="所属部门"></CommonSearchItem>
+            <a-form-model-item label="姓名或工号">
+              <a-input allowClear v-model="popInline.userNameOrJobNumber" placeholder="请输入姓名或工号"></a-input>
+            </a-form-model-item>
+            <a-form-model-item label="岗位">
+              <a-input allowClear v-model="popInline.jobName" placeholder="请输入岗位"></a-input>
+            </a-form-model-item>
+            <a-form-model-item class="float-right">
+              <a-button type="primary" :loading="loading" @click="popSearch">查询</a-button>
+              <a-button @click="popRest">重置</a-button>
+            </a-form-model-item>
+          </a-form-model>
+        </SearchTerm>
+        <DashBtn>
+          <div>
+            <a-button type="dashed" @click="goAssign">{{assignTeacher}}</a-button>
+          </div>
+        </DashBtn>
+        <CommonTable :page="pagePop" :pageNoChange="pageNoChangePop" :showSizeChange="onShowSizeChangePop">
+          <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, selectedRows: choosedArr, onChange: onSelectChange, onSelectAll: onSelectAllSelect }" bordered :columns="columnsPop" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="dataSource" :rowKey="(record, index)=>{return record.id}" :pagination="false">
+            <div slot="userName" slot-scope="record">{{ record.userName }}</div>
+            <div slot="deptName" slot-scope="record">{{ record.deptName }}</div>
+            <div slot="userJobNumber" slot-scope="record">{{ record.userJobNumber }}</div>
+            <div slot="jobName" slot-scope="record">{{ record.jobName }}</div>
+            <div slot="companyTrainerUserId" slot-scope="record">{{ record.companyTrainerUserName }}/{{ record.companyTrainerJobNumber }}</div>
+            <div slot="deptTrainerUserId" slot-scope="record">{{ record.deptTrainerUserName }}/{{ record.deptTrainerJobNumber }}</div>
+            <div slot="groupTrainerUserId" slot-scope="record">{{ record.groupTrainerUserName }}/{{ record.groupTrainerJobNumber }}</div>
+          </a-table>
+        </CommonTable>
+      </template>
+      <template slot="btn">
+        <a-button @click="assignCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="assignConfirm"
           >确定</a-button
         >
       </template>
@@ -99,9 +190,10 @@ import {getDictTarget} from '@/utils/dictionary'
 import { debounce, cloneDeep } from 'lodash'
 import StaffOrDept from "@/components/staffOrDept";
 import { formValidator } from "@/utils/clx-form-validator.js"
-import {getEducationListPage, educationDelete ,educationDetail,educationReallocation} from "@/services/api.js"
+import {getEducationListPage, educationDelete ,educationDetail,educationReallocation,getEducationUserListPage,assignInstructor} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
+import centerOrganizeVue from '../ngform/components/centerOrganize/centerOrganize.vue'
 
 export default {
   components: { StaffOrDept },
@@ -111,8 +203,12 @@ export default {
       getDictTarget,
       labelColSpec: { span: 6 },
       wrapperColSpec: { span: 18 },
-      titleText: "重新分配",
+      titleText: "修改讲师",
       addVisible: false,
+      popVisible: false,
+      assignVisible: false,
+      assignTitle: '分配讲师',
+      assignTeacher:'分配讲师',
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
       // 表单验证
@@ -121,12 +217,76 @@ export default {
           { required: true, message: "重新分配人员不能为空", trigger: "change" },
         ],
       },
+      popFormRules: {
+        deptTrainerUserId: [
+          { required: true, message: "车间(部门)级人员不能为空", trigger: "change" },
+        ],
+        groupTrainerUserId: [
+          { required: true, message: "班组级人员不能为空", trigger: "change" },
+        ],
+      },
       editPoint:'',
       editId:'',
       editForm: {},
+      popForm: {},
       editParams:{},
       formInline: {},
+      popInline: {},
+      popId:'',
+      pagePop: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0
+      },
+      dataSource:[],
+      columnsPop: [
+        {
+          title: '姓名',
+          scopedSlots: { customRender: 'userName' },
+          width: 80,
+          align: "center",
+        },
+        {
+          title: '部门',
+          scopedSlots: { customRender: 'deptName' },
+          width: 150,
+          align: "center",
+        },
+        {
+          title: '工号',
+          scopedSlots: { customRender: 'userJobNumber' },
+          width: 100,
+          align: "center",
+        },
+        {
+          title: '岗位',
+          scopedSlots: { customRender: 'jobName' },
+          width: 100,
+          align: "center",
+        },
+        {
+          title: '公司级讲师',
+          scopedSlots: { customRender: 'companyTrainerUserId' },
+          width: 180,
+          align: "center",
+        },
+        {
+          title: '车间(部门)级别讲师',
+          scopedSlots: { customRender: 'deptTrainerUserId' },
+          width: 180,
+          align: "center",
+        },
+        {
+          title: '班组级讲师',
+          scopedSlots: { customRender: 'groupTrainerUserId' },
+          width: 180,
+          align: "center",
+        },
+        
+      ],
+      cutData:'',
       choosedArr: [],
+      needChooseArr:[],
       selectedRowKeys: [],
       page: {
         pageNo: 1,
@@ -305,6 +465,8 @@ export default {
         return '进行中'
       } else if (text==3){
         return '已完成'
+      } else if (text==0){
+        return '待分配'
       } else {
         return '--'
       }
@@ -374,8 +536,6 @@ export default {
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page
-      this.choosedArr = []
-      this.selectedRowKeys = []
       // 获取列表
       this.getDataList()
     },
@@ -383,6 +543,202 @@ export default {
       this.page.pageNo = 1
       this.page.pageSize = pageSize
       this.getDataList()
+    },
+    popSearch() {
+      let params = {
+        id: this.popId ,
+        pageNo: this.pagePop.pageNo,
+        pageSize: this.pagePop.pageSize,
+        ...this.popInline
+      }
+      getEducationUserListPage(params)
+        .then((res) => {
+          this.dataSource = res.data.list ? res.data.list : [];
+          this.pagePop.total = res.data.total
+        })
+        .catch((err) => {
+          console.log('err2',err);
+        });
+    },
+    popRest() {
+      this.popInline = {}
+      this.getDetailDown()
+    },
+    // 分配讲师
+    assignLecturers(row){
+      console.log('row',row);
+      this.assignTitle = '分配讲师'
+      this.assignTeacher = '分配讲师'
+      this.cutData = this.columnsPop.splice(4,1)[0]
+      this.popId = row.id
+      this.assignVisible = true
+      this.getDetailDown()
+    },
+    // 分配讲师按钮 || 修改讲述按钮
+    goAssign(){
+      if (this.assignTitle == '分配讲师'){
+        if(!this.checkDeptIdConsistency(this.choosedArr)){
+          this.$antMessage.warn('请选择同一部门下的人员')
+          return
+        } else {
+          console.log('分配讲师统一部门');
+          this.popVisible = true;
+          this.popForm = {}
+          this.editForm = {}
+        }
+      } else if (this.assignTitle == '重新分配') {
+        if(!this.checkDeptIdAndTeacherConsistency(this.choosedArr)){
+          this.$antMessage.warn('请选择同一部门下且同一级别的人员')
+          return
+        } else {
+          this.addVisible = true;
+          console.log('this.choosedArr',this.choosedArr);
+          if(this.choosedArr[0].currentLevel == '1'){
+            this.editForm.resolve = '公司级培训讲师签署'
+            this.editForm.resolvePeople = this.choosedArr[0].companyTrainerUserName +'/'+ this.choosedArr[0].companyTrainerJobNumber
+          }else if(this.choosedArr[0].currentLevel == '2'){
+            this.editForm.resolve = '车间(部门)级培训讲师签署'
+            this.editForm.resolvePeople = this.choosedArr[0].deptTrainerUserName +'/'+ this.choosedArr[0].deptTrainerJobNumber
+          }else if(this.choosedArr[0].currentLevel == '3'){
+            this.editForm.resolve = '班组级培训讲师签署'
+            this.editForm.resolvePeople = this.choosedArr[0].groupTrainerUserName +'/'+ this.choosedArr[0].groupTrainerJobNumber
+          }
+        }
+      }
+      
+    },
+    // 分配人员弹框确认按钮
+    popConfirm() {
+      if (!formValidator.formAll(this, "popForm")) {
+        return;
+      }
+      this.$nextTick(()=>{
+        this.choosedArr.forEach(item => {
+          this.dataSource.forEach( _item => {
+            if(item.id === _item.id) {
+              _item.deptTrainerUserId = this.popForm.deptTrainerUserId[0]
+              _item.deptTrainerUserName = this.popForm.deptTrainerUserName[0] 
+              _item.deptTrainerJobNumber = this.popForm.deptTrainerJobNumber[0]
+              _item.groupTrainerUserId = this.popForm.groupTrainerUserId[0] 
+              _item.groupTrainerUserName = this.popForm.groupTrainerUserName[0] 
+              _item.groupTrainerJobNumber = this.popForm.groupTrainerJobNumber[0]
+              item.deptTrainerUserId = this.popForm.deptTrainerUserId[0]
+              item.deptTrainerUserName = this.popForm.deptTrainerUserName[0] 
+              item.deptTrainerJobNumber = this.popForm.deptTrainerJobNumber[0]
+              item.groupTrainerUserId = this.popForm.groupTrainerUserId[0] 
+              item.groupTrainerUserName = this.popForm.groupTrainerUserName[0] 
+              item.groupTrainerJobNumber = this.popForm.groupTrainerJobNumber[0]
+            }
+          })
+        })
+      })
+      this.needChooseArr.push(this.choosedArr)
+      this.selectedRowKeys = []
+      this.popVisible = false;
+      console.log('this.choosedArr989',this.choosedArr);
+    },
+    // 分配讲师弹框确定按钮 
+    assignConfirm(){
+        let promiseFn = this.assignTitle == '分配讲师'? assignInstructor :educationReallocation
+        console.log('分配讲师111接口',this.needChooseArr);
+        const result = this.needChooseArr.reduce((acc, curr) => {
+          curr.forEach(obj => {
+            acc[obj.id] = obj;
+          });
+          return acc;
+        }, {});
+        const finalArray = Object.values(result);
+        console.log('finalArray77',finalArray);
+        let params = {
+          id: this.popId,
+          securityEducationRecordsList:finalArray
+        }
+        promiseFn(params).then((res) => {
+          console.log(res,'ressss');
+          const {code,...rest} = res 
+          if (code === 20000) {
+            this.$antMessage.success('操作成功')
+            this.needChooseArr = []
+          }
+          this.assignVisible = false
+          if (this.assignTitle == '分配讲师') {
+            this.columnsPop.splice(4,0,this.cutData)
+          } else {
+            this.editForm = {}
+          }
+          this.getDataList()
+        })
+        .catch((err) => {
+          console.log('err3',err);
+        });
+
+    },
+    // 关闭分配讲师弹框
+    assignCancle() {
+      this.assignVisible = false;
+      this.needChooseArr = []
+      this.choosedArr = []
+      this.editForm = {}
+      this.selectedRowKeys = []
+      if (this.assignTitle == '分配讲师') {
+        this.columnsPop.splice(4,0,this.cutData)
+      }
+    },
+    getDetailDown(){
+      getEducationUserListPage({ id: this.popId ,pageNo: this.pagePop.pageNo,pageSize: this.pagePop.pageSize})
+        .then((res) => {
+          this.dataSource = res.data.list ? res.data.list : [];
+          // console.log('res.data.list',res.data.list);
+          this.pagePop.total = res.data.total
+        })
+        .catch((err) => {
+          console.log('err4',err);
+        });
+    },
+    onSelectChange(selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = JSON.parse(JSON.stringify(selectedRowKeys))
+      this.choosedArr = JSON.parse(JSON.stringify(selectedRows))
+      console.log('selectedRowKeys111',selectedRowKeys,'selectedRows222',selectedRows);
+    },
+    onSelectAllSelect(selected, selectedRows, changeRows) {
+      this.selectedRowKeys = selectedRows.map((item,index) => {
+        return item.id
+      }) || []
+      this.choosedArr = selectedRows
+    },
+    // 页码改变
+    pageNoChangePop(page) {
+      this.pagePop.pageNo = page
+      this.choosedArr = []
+      this.selectedRowKeys = []
+      // 获取列表
+      this.getDetailDown()
+    },
+    onShowSizeChangePop(current, pageSize) {
+      this.pagePop.pageNo = 1
+      this.pagePop.pageSize = pageSize
+      this.getDetailDown()
+    },
+    // 必须是同一个部门的才可以点击确定
+    checkDeptIdConsistency(arr) {
+      const deptIdList = arr.map(obj => obj.deptId);
+      const uniqueNames = new Set(deptIdList);
+      if (uniqueNames.size === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    checkDeptIdAndTeacherConsistency(arr) {
+      const deptIdList = arr.map(obj => obj.deptId);
+      const currentLeveldList = arr.map(obj => obj.currentLevel);
+      const uniqueNames = new Set(deptIdList);
+      const uniquecurrentLevel = new Set(currentLeveldList);
+      if (uniqueNames.size === 1 && uniquecurrentLevel.size === 1) {
+        return true;
+      } else {
+        return false;
+      }
     },
     // 查询
     iSearch() {
@@ -392,8 +748,6 @@ export default {
         .finally(() => {
           this.cancelLoading()
         })
-      this.selectedRowKeys = []
-      this.choosedArr = []
     },
     // 重置
     iRest: debounce(function () {
@@ -404,35 +758,24 @@ export default {
         total: 0,
       }
       this.formInline = {}
-      this.selectedRowKeys = []
-      this.choosedArr = []
       this.getDataList()
     }, 250, { leading: true, trailing: false }),
     // 重新分配
     reAllocation(row){
       this.editPoint = row.currentLevel
       this.editId = row.id
+      console.log('行，知道了',row);
+      this.assignTeacher = '修改讲师'
+      this.assignTitle = '重新分配'
       var _this = this;
-      if(row.currentLevel == '1'){
-        educationDetail({ id: row.id }).then((res) => {
-          _this.editForm.resolve = '公司级培训讲师签署'
-          _this.editForm.resolvePeople = res.data.trainerCompanyUserName +'/'+ res.data.trainerCompanyJobNumber
-        })
-      }else if(row.currentLevel == '2'){
-        educationDetail({ id: row.id }).then((res) => {
-          _this.editForm.resolve = '车间(部门)级培训讲师签署'
-          _this.editForm.resolvePeople = res.data.trainerDeptUserName +'/'+ res.data.trainerDeptJobNumber
-        })
-      }else if(row.currentLevel == '3'){
-        educationDetail({ id: row.id }).then((res) => {
-          _this.editForm.resolve = '班组级培训讲师签署'
-          _this.editForm.resolvePeople = res.data.trainerGroupUserName +'/'+ res.data.trainerGroupJobNumber
-        })
-      }
       this.$antConfirm({
         title: '重新分配签署人员会影响原有流程，是否确认进行重新分配？',
         onOk() {
-          _this.addVisible = true;
+          _this.popId = row.id
+          _this.assignVisible = true
+          _this.choosedArr = []
+          _this.selectedRowKeys = []
+          _this.getDetailDown()
         }
       })
     },
@@ -441,43 +784,61 @@ export default {
       if (!formValidator.formAll(this, "editForm")) {
         return;
       }
-      if(this.editForm.holdUserId.length > 1){
-        this.$antMessage.warn('只能选择一名人员！');
-        return
-      }
       if(this.editPoint == 1) {
-        this.editParams = {
-          id:this.editId,
-          trainerCompanyUserId:this.editForm.holdUserId[0],
-          trainerCompanyJobNumber:this.editForm.holdUserJobNumber[0],
-          trainerCompanyUserName:this.editForm.holdUserName[0]
-        }
+        this.$nextTick(()=>{
+          this.choosedArr.forEach(item => {
+            this.dataSource.forEach( _item => {
+              if(item.id === _item.id) {
+                _item.companyTrainerUserId = this.editForm.holdUserId[0],
+                _item.companyTrainerUserName = this.editForm.holdUserName[0],
+                _item.companyTrainerJobNumber = this.editForm.holdUserJobNumber[0]
+                item.companyTrainerUserId = this.editForm.holdUserId[0],
+                item.companyTrainerUserName = this.editForm.holdUserName[0],
+                item.companyTrainerJobNumber = this.editForm.holdUserJobNumber[0]
+              }
+            })
+          })
+        })
       } else if (this.editPoint == 2){
-        this.editParams = {
-          id:this.editId,
-          trainerDeptUserId:this.editForm.holdUserId[0],
-          trainerDeptJobNumber:this.editForm.holdUserJobNumber[0],
-          trainerDeptUserName:this.editForm.holdUserName[0]
-        }
+        this.$nextTick(()=>{
+          this.choosedArr.forEach(item => {
+            this.dataSource.forEach( _item => {
+              if(item.id === _item.id) {
+                _item.deptTrainerUserId = this.editForm.holdUserId[0],
+                _item.deptTrainerUserName = this.editForm.holdUserName[0],
+                _item.deptTrainerJobNumber = this.editForm.holdUserJobNumber[0]
+                item.deptTrainerUserId = this.editForm.holdUserId[0],
+                item.deptTrainerUserName = this.editForm.holdUserName[0],
+                item.deptTrainerJobNumber = this.editForm.holdUserJobNumber[0]
+              }
+            })
+          })
+        })
       } else if (this.editPoint == 3){
-        this.editParams = {
-          id:this.editId,
-          trainerGroupUserId:this.editForm.holdUserId[0],
-          trainerGroupJobNumber:this.editForm.holdUserJobNumber[0],
-          trainerGroupUserName:this.editForm.holdUserName[0]
-        }
+        this.$nextTick(()=>{
+          this.choosedArr.forEach(item => {
+            this.dataSource.forEach( _item => {
+              if(item.id === _item.id) {
+                _item.groupTrainerUserId = this.editForm.holdUserId[0],
+                _item.groupTrainerUserName = this.editForm.holdUserName[0],
+                _item.groupTrainerJobNumber = this.editForm.holdUserJobNumber[0]
+                item.groupTrainerUserId = this.editForm.holdUserId[0],
+                item.groupTrainerUserName = this.editForm.holdUserName[0],
+                item.groupTrainerJobNumber = this.editForm.holdUserJobNumber[0]
+              }
+            })
+          })
+        })
       }
-      educationReallocation(this.editParams).then((res)=>{
-        if(res.code == 20000){
-          this.$antMessage.success('分配成功')
-          this.addVisible = false
-          this.editParams = {}
-          this.editForm = {}
-        } else {
-          this.$antMessage.warn(res.message)
-          return
-        }
-      })
+      this.needChooseArr.push(this.choosedArr)
+      this.selectedRowKeys = []
+      this.addVisible = false;
+      console.log('this.choosedArr88888',this.choosedArr);
+    },
+    // 分配人员取消按钮
+    popCancle() {
+      this.popVisible = false;
+      this.popForm = {};
     },
     // 点击取消按钮
     addCancle() {
@@ -512,6 +873,18 @@ export default {
       this.editForm.holdUserName = this.getName(list);
       this.editForm.holdUserJobNumber = this.getWorkNum(list);
     },
+    personThingTwo(data) {
+      this.popForm.deptTrainerUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.popForm.deptTrainerUserName = this.getName(list);
+      this.popForm.deptTrainerJobNumber = this.getWorkNum(list);
+    },
+    personThingThree(data) {
+      this.popForm.groupTrainerUserId = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.popForm.groupTrainerUserName = this.getName(list);
+      this.popForm.groupTrainerJobNumber = this.getWorkNum(list);
+    },
     // 删除
     rmSafetyEduItem(row){
       this.$antConfirm({
@@ -539,6 +912,13 @@ export default {
     margin-right: 15px;
   }
 }
+.clx-model {
+  ::v-deep .ant-modal {
+    width: 1200px !important;
+    padding-bottom: 0px !important;
+  }
+}
+
 ::v-deep .dashed-btn{
   .ant-btn-primary {
     background: #f1f4ff;

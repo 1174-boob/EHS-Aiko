@@ -68,7 +68,7 @@
             <a-form-model-item label="公司级" v-if="isAgainPage && againCurrentLevel>2">
               <div>已培训通过，无需选择</div>
             </a-form-model-item>
-            <StaffOrDept
+            <!-- <StaffOrDept
               v-else
               ref="trainerDeptUserId"
               :labelTitle="'车间（部门）级'"
@@ -79,10 +79,10 @@
               :deptTreeId="deptTreeId"
               :checkAbel="false"
               @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerDeptUserId', codeAttr: 'trainerDeptJobNumber', nameAttr: 'trainerDeptUserName' }, 'checkedTreeNodeDept')"
-            />
+            /> -->
           </template>
 
-          <StaffOrDept
+          <!-- <StaffOrDept
             ref="trainerGroupUserId"
             :labelTitle="'班组级'"
             :treeRoles="iRules"
@@ -92,7 +92,7 @@
             :deptTreeId="deptTreeId"
             :checkAbel="false"
             @getTreeData="(value) => handleStaffFormData(value, { idAttr: 'trainerGroupUserId', codeAttr: 'trainerGroupJobNumber', nameAttr: 'trainerGroupUserName' }, 'checkedTreeNodeGroup')"
-          />
+          /> -->
 
           <StaffOrDept
             ref="trainerEsdUserId"
@@ -298,57 +298,6 @@ export default {
           },
           minWidth: 120,
         },
-        {
-          title: "性别",
-          dataIndex: "sex",
-          key: "sex",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 120,
-        },
-        {
-          title: "身份证号",
-          dataIndex: "idNumber",
-          key: "idNumber",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 160,
-        },
-        {
-          title: "家庭住址",
-          dataIndex: "address",
-          key: "address",
-          customRender: (text) => {
-            text = text ? text : ''
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-          minWidth: 160,
-        },
       ],
       // 添加一行弹窗-显示隐藏
       selTempDrawerShow: false,
@@ -526,7 +475,7 @@ export default {
       this[fnName]()
         .then(res => {
           this.$antMessage.success('保存成功');
-          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement' })
+          this.$router.push({ path: '/ehsGerneralManage/securityArchiveManagement/safetyEduManagement',query:{activeKey:1} })
         })
         .catch(err => { })
         .finally(() => {

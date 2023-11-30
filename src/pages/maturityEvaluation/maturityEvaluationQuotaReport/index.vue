@@ -14,15 +14,15 @@
     <DashBtn>
       <div>
         <a-button type="dashed" @click="addDept">添加部门</a-button>
-        <a-button type="dashed" @click="actionEdit">开始配置</a-button>
+        <a-button type="dashed" @click="actionEdit()">开始配置</a-button>
       </div>
     </DashBtn>
     <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-      <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
+      <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" rowKey="maturityEvaluationReportId" :pagination="false">
         <div slot="status" slot-scope="record">{{getMappingValue(configStatusList, "key", record.status).value}}</div>
         <div slot="updateUser" slot-scope="record">{{record.workNum ? record.userName + "/" + record.workNum : record.userName}}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" @click="actionEdit(record)">配置</span>
+          <span class="color-0067cc cursor-pointer" @click="actionEdit(record)">编辑</span>
           <span class="color-ff4d4f cursor-pointer" @click="handleDelete(record)">删除</span>
         </div>
       </a-table>
@@ -59,7 +59,7 @@ import cancelLoading from '@/mixin/cancelLoading';
 import { debounce } from 'lodash';
 import { formValidator } from "@/utils/clx-form-validator.js";
 import StaffOrDept from "@/components/staffOrDept";
-import { getMaturityEvaluationQuotaReportList, addMaturityEvaluationQuotaReportDept,deleteMaturityEvaluationQuotaReportDept } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaluationQuotaReportList, addMaturityEvaluationQuotaReportDept, deleteMaturityEvaluationQuotaReportDept } from "@/services/maturityEvaluation.js";
 export default {
   components: { StaffOrDept },
   mixins: [teableCenterEllipsis, cancelLoading],
@@ -90,25 +90,25 @@ export default {
         },
         {
           title: '配置状态',
-          dataIndex: 'configStatus',
-          customRender: v => {
-            return v == 1 ? '未配置' : v == 2 ? '已配置' : '--'
+          dataIndex: 'configurationStatus',
+          customRender: (text) => {
+            return text ? '已配置' : '未配置'
           }
         },
         {
           title: '修改人',
           dataIndex: 'updateUserName',
-
         },
         {
           title: '修改时间',
           dataIndex: 'updateTime',
+          width: 160,
         },
         {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           fixed: 'right', // 固定操作列
-          width: 200 // 宽度根据操作自定义设置
+          width: 120 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
@@ -126,29 +126,37 @@ export default {
     this.columns.splice(0, 0, this.addCommonColumnItem());
     this.getDataList();
   },
+  activated() {
+    setTimeout(() => {
+      if (!this.keepalive) {
+        this.iRest()
+      }
+    }, 20);
+  },
   methods: {
     getDataList() {
       let params = {
         ...this.formInline,
-        ...this.page
+        pageNo: this.page.pageNo,
+        pageSize: this.page.pageSize,
       }
       return getMaturityEvaluationQuotaReportList(params)
-      .then((res) => {
-        let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
-        // 处理页码 问题
-        if (tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
-          this.page.pageNo = 1;
-          this.getDataList();
-          return
-        }
+        .then((res) => {
+          let { list: tableDataList, total } = res.data ? res.data : { list: [], total: 0 };
+          // 处理页码 问题
+          if (tableDataList.length === 0 && (this.page.pageNo !== 1 && this.page.total !== 0)) {
+            this.page.pageNo = 1;
+            this.getDataList();
+            return
+          }
 
-        this.tableDataList = tableDataList || [];
-        this.page.total = total;
-      })
-      .catch((err) => {})
-      .finally(() => {
-        this.cancelLoading();
-      })
+          this.tableDataList = tableDataList || [];
+          this.page.total = total;
+        })
+        .catch((err) => { })
+        .finally(() => {
+          this.cancelLoading();
+        })
     },
     // 查询
     iSearch() {
@@ -178,6 +186,9 @@ export default {
 
     //添加部门
     addDept() {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaReportAddDept")) {
+        return;
+      }
       this.addVisible = true
     },
     //关闭弹窗
@@ -200,52 +211,63 @@ export default {
         let apiData = {
           ...this.addForm,
         }
-        console.log('this.addForm',apiData);
+        console.log('this.addForm', apiData);
         this.handleLoadingTwo()
         addMaturityEvaluationQuotaReportDept(apiData)
-        .then(res => {
-          this.$antMessage.success("添加成功！");
-          this.addCancle()
-          this.getDataList()
-        })
-        .catch(err=>{})
-        .finally(()=>{
-          setTimeout(() => {
-            this.cancelLoadingTwo()
-          }, 200);
-        })
+          .then(res => {
+            this.$antMessage.success("添加成功！");
+            this.addCancle()
+            this.getDataList()
+          })
+          .catch(err => { })
+          .finally(() => {
+            setTimeout(() => {
+              this.cancelLoadingTwo()
+            }, 200);
+          })
       },
       2000,
       { leading: true, trailing: false }
     ),
     // 获取组织下所有部门
     corporationDeptChange(value) {
-      console.log(value)
       this.deptData = value;
     },
     //删除
-    handleDelete(e) {
+    handleDelete(targetItem) {
+      if (!this.canClickBtnMixin("maturityEvaluationQuotaReportRmBtn")) {
+        return;
+      }
       this.$antConfirm({
         title: '确定删除部门吗?',
-        onOk:()=> {
-          return deleteMaturityEvaluationQuotaReportDept({ id: e.id })
-          .then(res => {
-            this.$antMessage.success("删除成功！");
-            this.getDataList()
-          })
-          .catch(err=>{})
+        onOk: () => {
+          let apiData = {
+            maturityEvaluationReportId: targetItem.maturityEvaluationReportId
+          }
+          return deleteMaturityEvaluationQuotaReportDept(apiData)
+            .then(res => {
+              this.$antMessage.success("删除成功！");
+              this.getDataList()
+            })
+            .catch(err => { })
         },
       });
     },
 
-    async actionEdit(record) {
-      let queryObj = { id: null }
+    // 开始配置、编辑
+    actionEdit(record) {
+      let queryObj = {}
       if (record) {
+        if (!this.canClickBtnMixin("maturityEvaluationQuotaReportEditConfig")) {
+          return;
+        }
         queryObj = {
-          id: record.id,
-          configStatus: record.configStatus,
-          deptId: record.deptId,
+          maturityEvaluationReportId: record.maturityEvaluationReportId,
           deptName: record.deptName
+        }
+      } else {
+        if (!this.canClickBtnMixin("maturityEvaluationQuotaReportStartConfig")) {
+          return;
         }
       }
       this.$router.push({
@@ -253,8 +275,6 @@ export default {
         query: queryObj
       })
     },
-
-
   }
 }
 </script>
