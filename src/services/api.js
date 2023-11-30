@@ -836,6 +836,8 @@ export const healthUserUpdate = params => post(`${serviceNameList.health}/api/eh
 export const healthUserDetail = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDetail`, params);
 // 人员台账-分页查询职业病诊断表
 export const selectDiagnosis = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDiagnosis`, params);
+// 人员台账-分页查询入职前工作经历
+export const selectPreWork = params => post(`${serviceNameList.health}/api/ehs/health/user/selectPreWork`, params);
 // 人员台账-分页查询关联既往病史列表
 export const selectMedical = params => post(`${serviceNameList.health}/api/ehs/health/user/selectMedical`, params);
 // 人员台账-分页查询关联职业史列表
