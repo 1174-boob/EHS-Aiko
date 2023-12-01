@@ -196,7 +196,7 @@ export default {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           fixed: 'right', // 固定操作列
-          width: 140 // 宽度根据操作自定义设置
+          width: 180 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
