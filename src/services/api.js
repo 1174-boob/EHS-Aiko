@@ -760,6 +760,11 @@ export const responsibilitySign = params => post(`${serviceNameList.health}/api/
 // 安全责任书-批量签署
 export const responsibilitySignBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign/batch`, params);
 
+//用户信息-检查当前登录的用户有没有手机号和身份证
+export const getCheckPhoneAndIdNumberExist = params =>  post(`ehs-customer/api/user/checkPhoneAndIdNumberExist`, params)
+//用户信息-更新当前登录的用户的手机号和身份证号
+export const getEditPhoneAndIdNumber = params =>  post(`ehs-customer/api/user/editPhoneAndIdNumber`, params)
+
 // 三级安全教育管理-选择模板
 export const managementListPage = params => post(`${serviceNameList.health}/api/ehs/security/template/management/list/page`, params);
 // 三级安全教育管理-导入excel获取批量的培训用户

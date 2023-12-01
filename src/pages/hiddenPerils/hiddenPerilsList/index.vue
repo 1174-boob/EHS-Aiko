@@ -140,7 +140,7 @@
                 @click="actionEdit(row, 'deal')"
                 >6处理</span
               >-->
-              <span v-if="row.processStatus != 'close'" class="color-0067cc m-r-15" @click="authorization(row)">授权</span>
+              <span v-if="row.processStatus != 'close'" class="color-0067cc cursor-pointer m-r-15" @click="authorization(row)">授权</span>
               <span class="color-ff4d4f cursor-pointer" @click="actionDelete(row)">删除</span>
             </div>
           </template>
