@@ -1011,6 +1011,8 @@ export const emergentProcessResolve = params => post(`${serviceNameList.danger}/
 export const emergentProcessLog = params => get(`${serviceNameList.danger}/api/ehs/emergent/process/getLog`, params);
 // 应急演练审批-删除
 export const emergentProcessDeleteDrillProcess = params => get(`${serviceNameList.danger}/api/ehs/emergent/process/deleteDrillProcess`, params);
+// 应急演练审批-授权
+export const reassignDangerHandlerUser = params => post(`${serviceNameList.danger}/api/ehs/emergent/process/reassign/handler/user`, params);
 
 // 地图标注-新增
 export const mapLabelAdd = params => post(`${serviceNameList.monitor}/api/ehs/monitor/map/label/add`, params);
