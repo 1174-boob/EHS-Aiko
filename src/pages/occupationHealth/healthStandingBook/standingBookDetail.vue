@@ -90,6 +90,10 @@
               <div class="title">接触危害：</div>
               <div class="detail more" :title="healthForm.hazardFactors">{{healthForm.hazardFactors ? healthForm.hazardFactors : '--'}}</div>
             </div>
+            <div class="info">
+              <div class="title">建议PPE：</div>
+              <div class="detail more" :title="recommendationsPPE">{{recommendationsPPE ? recommendationsPPE : '--'}}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -133,6 +137,7 @@ import dictionary from '@/utils/dictionary';
 import defUrl from "@/assets/img/default.png";
 import {
   healthUserDetail,
+  stationDetail,
   getPortraitUrlt,
 } from "@/services/api.js";
 export default {
@@ -146,6 +151,7 @@ export default {
       standingBook: false,
       id: null,
       healthForm: {},
+      recommendationsPPE:'',
       checkResultDict:{},
       avatarUrl:'',
       educationDict: {},
@@ -211,6 +217,13 @@ export default {
           this.getPortraitUrlt(data.photo);
         } else {
           this.avatarUrl = defUrl;
+        }
+        if (data.post) {
+          stationDetail({dangerousStationId:data.post}).then(res=>{
+            this.recommendationsPPE = res.data.recommendationsPPE?res.data.recommendationsPPE:'--'
+          }).catch((err)=>{
+            console.log(err);
+          })
         }
       }).catch(err => {
         console.log(err);

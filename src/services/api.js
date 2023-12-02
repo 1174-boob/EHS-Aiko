@@ -839,6 +839,8 @@ export const healthUserSave = params => post(`${serviceNameList.health}/api/ehs/
 export const healthUserUpdate = params => post(`${serviceNameList.health}/api/ehs/health/user/update`, params);
 // 人员台账-详情
 export const healthUserDetail = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDetail`, params);
+// 人员台账-根据详情查找建议PPE
+export const stationDetail = params => post(`${serviceNameList.health}/api/ehs/dangerous/station/detail`, params);
 // 人员台账-分页查询职业病诊断表
 export const selectDiagnosis = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDiagnosis`, params);
 // 人员台账-分页查询入职前工作经历
