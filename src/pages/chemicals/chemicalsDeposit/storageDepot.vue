@@ -228,6 +228,22 @@ export default {
           align:"center"
         },
         {
+          title: '去向',
+          dataIndex: 'whereabouts',
+          key: "whereabouts",
+          customRender: (text) => {
+            text = text ? text : ''
+            return (
+              <a-popover autoAdjustOverflow>
+                <div slot="content">
+                  <p>{{ text }}</p>
+                </div>
+                <span>{{ text }}</span>
+              </a-popover>
+            );
+          },
+        },
+        {
           title: "存取记录",
           scopedSlots: { customRender: 'access' },
           key: "access",

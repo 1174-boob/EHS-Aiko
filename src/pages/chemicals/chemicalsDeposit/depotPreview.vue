@@ -66,6 +66,9 @@
           <a-form-model-item class="flex" label="单位" prop="unit">
             <a-input v-model.trim="storageForm.unit" placeholder="请输入单位" />
           </a-form-model-item>
+          <a-form-model-item class="flex" label="去向" prop="whereabouts">
+            <a-input v-model.trim="storageForm.whereabouts" placeholder="请输入去向" />
+          </a-form-model-item>
           <a-form-model-item class="flex" label="备注">
             <a-input v-model.trim="storageForm.remark" placeholder="请输入备注" />
           </a-form-model-item>
@@ -147,6 +150,11 @@ export default {
           key: "unit",
         },
         {
+          title: "去向",
+          dataIndex: "whereabouts",
+          key: "whereabouts",
+        },
+        {
           title: "备注",
           dataIndex: "remark",
           key: "remark",
@@ -189,6 +197,9 @@ export default {
           { required: true, validator: this.stockValidator, trigger: ['blur', 'change'] },
         ],
         unit: [
+          { required: true, message: "不能为空", trigger: 'blur' },
+        ],
+        whereabouts: [
           { required: true, message: "不能为空", trigger: 'blur' },
         ],
       }
