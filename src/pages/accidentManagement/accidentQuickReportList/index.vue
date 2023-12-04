@@ -72,9 +72,9 @@
             <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">处理</span>
             <span class="color-0067cc cursor-pointer" @click="actionDel(record)">删除</span>
           </div>
-          <div slot="accidentType" slot-scope="record">
+          <!-- <div slot="accidentType" slot-scope="record">
             {{getMappingValue(accidentType, "dictValue", record.accidentType).dictLabel}}
-          </div>
+          </div> -->
           <div slot="accidentLevel" slot-scope="record">
             {{getMappingValue(accidentLevelList, "dictValue", record.accidentLevel).dictLabel}}
           </div>
@@ -82,7 +82,7 @@
             {{record.draftPersonName ? (record.draftPersonName + "/" + record.draftPersonJobNumber) : record.draftPersonJobNumber}}
           </div>
           <div slot="approvalStatus" slot-scope="record">
-            {{getMappingValue(statusList, "key", record.approvalStatus).value}}
+            {{getMappingValue(statusList, "key", record.status).value}}
           </div>
         </a-table>
       </CommonTable>
@@ -95,7 +95,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from '@/mixin/cancelLoading';
 import { debounce } from 'lodash';
 import dictionary from '@/utils/dictionary'
-import {  accidentEventPageList, accidentEventDownload, accidentEventDelete } from '@/services/accident';
+import { accidentReportPageList, accidentReportDownload, accidentReportDelete } from '@/services/accident';
 import store from '@/store'
 export default {
     components: {  },
@@ -136,11 +136,11 @@ export default {
             scopedSlots: { customRender: 'accidentLevel' },
             width: 200
           },
-          {
-            title: '事故类型',
-            scopedSlots: { customRender: 'accidentType' },
-            width: 200
-          },
+          // {
+          //   title: '事故类型',
+          //   scopedSlots: { customRender: 'accidentType' },
+          //   width: 200
+          // },
           {
             title: '责任部门',
             dataIndex: 'dutyDeptNameList',
@@ -215,7 +215,7 @@ export default {
         this.accidentType = this.getDictItemList("accident_type");
         this.personalInjury = this.getDictItemList("accident_level_person");
         this.propertyLoss = this.getDictItemList("accident_level_money");
-        this.statusList = dictionary("approvalStatus");
+        this.statusList = dictionary("accidentReportStatus");
         this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
       },
       corporationChange() {
@@ -227,10 +227,10 @@ export default {
       },
       // 变岗申请+处理按钮
       toCreate(record) {
-        if (record.formId) {
-          this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentQuickReportEdit", query: {formId: record.formId, isEdit: true}});
+        if (record.accidentReportId) {
+          this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentQuickReportEdit", query: {accidentReportId: record.accidentReportId, isEdit: true}});
         } else {
-          this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentQuickReportCreate", query: {formId: record.formId, isCreate: true}});
+          this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentQuickReportCreate", query: {accidentReportId: record.accidentReportId, isCreate: true}});
         }
       },
       // 导出Excel
@@ -242,7 +242,7 @@ export default {
           pageNo: this.page.pageNo
         }
         try {
-          const res = await accidentEventDownload(para)
+          const res = await accidentReportDownload(para)
           if(res){
             const name = '事故事件导出'
             const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
@@ -263,7 +263,7 @@ export default {
       // 变岗审批列表
       getDataList() {
         this.tableSpinning=  true
-        return accidentEventPageList({
+        return accidentReportPageList({
           pageNo: this.page.pageNo,
           pageSize: this.page.pageSize,
           draftStatus: 2,
@@ -312,12 +312,12 @@ export default {
       
       // 按钮-详情
       actionLook(record) {
-        this.$router.push({ path: "/safeManage/emergencyManagement/accidentManagement/accidentQuickReportDetail", query: { formId: record.formId, isView: true } });
+        this.$router.push({ path: "/safeManage/emergencyManagement/accidentManagement/accidentQuickReportDetail", query: { accidentReportId: record.accidentReportId, isView: true } });
       },
       // 按钮-删除
       actionDel(record) {
-        accidentEventDelete({
-          formId: record.formId
+        accidentReportDelete({
+          accidentReportId: record.accidentReportId
         }).then(res => {
           this.$antMessage.success("删除成功！");
           this.getDataList();

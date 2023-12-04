@@ -8,10 +8,10 @@
             <a-form-model ref="iForm" :model="iForm" :rules="rules" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-row>
                 <a-col :span="12">
+                  <CommonDept ref="commonDept" :CommonFormInline="iForm" :rules="rules" :notTablePage="true" :hasDepartment="true" :labelCol="labelCol" :wrapperCol="wrapperCol" :disabled="disabled"  @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
                   <a-form-model-item ref="applicant" label="申请人" prop="applicant">
                     <a-input disabled v-model="iForm.applicant" placeholder="请输入申请人"></a-input>
                   </a-form-model-item>
-                  <CommonDept ref="commonDept" :CommonFormInline="iForm" :rules="rules" :notTablePage="true" :hasDepartment="true" :labelCol="labelCol" :wrapperCol="wrapperCol" :disabled="disabled"  @corporationChange="corporationChange" @corporationDeptChange="corporationDeptChange"></CommonDept>
                   <a-form-model-item ref="deptId" label="起草人部门" prop="deptId">
                     <DeptTree
                       :disabled="disabled"
@@ -39,6 +39,11 @@
                   </a-form-model-item>
                   <a-form-model-item ref="accidentTime" label="事故具体时间" prop="accidentTime">
                     <a-time-picker :disabled="disabled" style="width: 100%;" v-model="iForm.accidentTime" format="HH:mm:ss" valueFormat="HH:mm:ss" placeholder="请选择事故具体时间" />
+                  </a-form-model-item>
+                  <a-form-model-item ref="accidentDateType" label="事故时间类型" prop="accidentDateType">
+                    <a-select :disabled="disabled" v-model="iForm.accidentDateType" placeholder="请选择事故时间类型">
+                      <a-select-option v-for="item of accidentDateType" :value="item.key" :key="item.key">{{item.value}}</a-select-option>
+                    </a-select>
                   </a-form-model-item>
                 </a-col>
                 <a-col :span="12">
@@ -82,7 +87,9 @@
                     </a-select>
                   </a-form-model-item>
                   <a-form-model-item ref="accidentLocation" label="事故地点" prop="accidentLocation">
-                    <a-textarea :disabled="disabled" v-model.trim="iForm.accidentLocation" :maxLength="50" placeholder="请输入事故地点"></a-textarea>
+                    <a-select :disabled="disabled" v-model="iForm.accidentLocation" placeholder="请选择事故地点">
+                      <a-select-option v-for="item of accidentLocation" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
+                    </a-select>
                   </a-form-model-item>
                 </a-col>
               </a-row>
@@ -349,6 +356,8 @@ export default {
     return {
       spinning: true,
       accidentType: [],
+      accidentLocation: [],
+      accidentDateType: [],
       personalInjury: [],
       propertyLoss: [],
       accidentReasonType: [],
@@ -453,7 +462,10 @@ export default {
           { required: true, message: "事故经过不能为空", trigger: "blur" },
         ],
         accidentLocation: [
-          { required: true, message: "事故地点不能为空", trigger: "blur" },
+          { required: true, message: "事故地点不能为空", trigger: "change" },
+        ],
+        accidentDateType: [
+          { required: true, message: "事故时间类型不能为空", trigger: "change" },
         ],
         propertyLoss: [
           { required: true, message: "财产损失(元)不能为空", trigger: "blur" },
@@ -516,6 +528,8 @@ export default {
       console.log(this.iForm.deptId,this.iForm.deptName,'xxx');
     }
     this.accidentType = this.getDictItemList("accident_type");
+    this.accidentLocation = this.getDictItemList("accidentLocation");
+    this.accidentDateType = dictionary("accidentDateType");
     this.personalInjury = this.getDictItemList("accident_level_person");
     this.propertyLoss = this.getDictItemList("accident_level_money");
     this.accidentReasonType = this.getDictItemList("accident_reason_type");
