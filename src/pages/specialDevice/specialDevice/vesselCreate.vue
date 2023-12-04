@@ -231,15 +231,15 @@ export default {
         'specialEquipmentDetail.equipmentLocation': [
           { required: true, message: '请输入设备位置', trigger: ['blur', 'change'] },
         ],
-        'specialEquipmentDetail.containerLimit': [
-          { required: true, message: '请输入容积', trigger: ['blur', 'change'] },
-        ],
-        'specialEquipmentDetail.equipmentDesignPower': [
-          { required: true, message: '请输入设计压力', trigger: ['blur', 'change'] },
-        ],
-        'specialEquipmentDetail.equipmentDesignTemperature': [
-          { required: true, message: '请输入设计温度', trigger: ['blur', 'change'] },
-        ],
+        // 'specialEquipmentDetail.containerLimit': [
+        //   { required: true, message: '请输入容积', trigger: ['blur', 'change'] },
+        // ],
+        // 'specialEquipmentDetail.equipmentDesignPower': [
+        //   { required: true, message: '请输入设计压力', trigger: ['blur', 'change'] },
+        // ],
+        // 'specialEquipmentDetail.equipmentDesignTemperature': [
+        //   { required: true, message: '请输入设计温度', trigger: ['blur', 'change'] },
+        // ],
         'specialEquipmentDetail.equipmentMedium': [
           { required: true, message: '请输入介质', trigger: ['blur', 'change'] },
         ],

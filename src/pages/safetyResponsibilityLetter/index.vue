@@ -106,6 +106,30 @@
         >
       </template>
     </CommonModal>
+    <CommonModal :title="'个人认证'" :visible="storageVisible" :cancelFn="storageCancle">
+        <template slot="form">
+          <a-form-model
+            ref="storageForm"
+            :model="storageForm"
+            :rules="tankFormRules"
+            :label-col="{ style: { width: '90px' } }"
+            :wrapper-col="{ style: { width: 'calc(100% - 90px)' } }"
+            :colon="false"
+            labelAlign="left"
+          >
+            <a-form-model-item class="flex" label="手机号" prop="phone">
+              <a-input :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
+            </a-form-model-item>
+            <a-form-model-item class="flex" label="身份证号" prop="idNumber">
+              <a-input v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+            </a-form-model-item>
+          </a-form-model>
+        </template>
+        <template slot="btn">
+          <a-button @click="storageCancle">取消</a-button>
+          <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
+        </template>
+      </CommonModal>
     <!-- 上传 -->
     <Upload :importVisible="importVisible" @closeAddVisible="closeAddVisible" :pushStatus='pushStatus' :type="type"/>
   </div>
@@ -123,7 +147,7 @@ import dictionary from "@/utils/dictionary";
 import moment from 'moment'
 import { debounce, cloneDeep } from 'lodash'
 import serviceNameList from '@/config/default/service.config.js'
-import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch, certificateDetail} from "@/services/api.js"
+import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
@@ -158,6 +182,19 @@ export default {
       curIndex: -1,
       signatureStatus2:'',
       importVisible: false,
+      userInfoData:{},
+      storageVisible: false,
+      storageForm: {},
+      tankFormRules: {
+        phone: [
+          { required: true, validator: formValidator.texTphoneNumber, trigger: "blur" },
+        ],
+        idNumber: [
+          { required: true, validator: formValidator.texTidCard, trigger: 'blur', },
+        ]
+      },
+      phoneValue:'',
+      idNumberValue:'',
       type: 0,
       countInfo: {
         total: '', //总数
@@ -295,6 +332,44 @@ export default {
     }
   },
   methods: {
+    initPop(){
+      let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+      this.userInfoData = zconsole_userInfo.other
+      this.userPhone = this.userInfoData.phone
+      this.phoneValue = this.userInfoData.phone
+      this.idNumberValue = this.userInfoData.idNumber
+      // 先判断一下是否要弹出个人认证的弹框
+      getCheckPhoneAndIdNumberExist({}).then((res) => {
+        console.log("数据全");
+      }).catch((err) => {
+        this.storageVisible = true;
+        this.$nextTick(()=>{
+          this.$set(this.storageForm,"idNumber",this.idNumberValue)
+          this.$set(this.storageForm,"phone",this.phoneValue)
+        })
+      });
+    },
+    // 关闭弹框
+    storageCancle() {
+      this.storageVisible = false;
+      this.storageForm = {};
+    },
+    // 弹框确定
+    storageConfirm() {
+      if (this.storageForm.idNumber != this.userInfoData.idNumber) {
+        if (!formValidator.formAll(this, 'storageForm')) {
+          return;
+        }
+      }
+      let apiData = {
+        phone:this.storageForm.phone,
+        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumberValue:this.storageForm.idNumber,
+      }
+      getEditPhoneAndIdNumber(apiData).then((res) =>{
+        this.storageVisible = false;
+        this.storageForm = {};
+      })
+    },
     async init() {
       this.getDataList()
       this.getCertCount()
@@ -404,6 +479,7 @@ export default {
     },
     // 批量签署
     async batchSign() {
+      this.initPop()
       // console.log('批量签署',this.choosedArr);
       if (!this.choosedArr.length) {
         this.$antMessage.warning('至少选择一条数据！')
