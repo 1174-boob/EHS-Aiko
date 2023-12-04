@@ -34,7 +34,7 @@
             </vxe-column>
             <vxe-column field="companyCorrectScore" title="讲师纠错">
               <template #default="{ row }">
-                <a-input :disabled="type == 'show' || row.currentLevel != 1" @change="handleChange(row)" class="editable-input" v-model="row.companyCorrectScore" :maxLength="30"></a-input>
+                <a-input :disabled="type == 'show' || row.currentLevel != 1 || row.status == 3" @change="handleChange(row)" class="editable-input" v-model="row.companyCorrectScore" :maxLength="30"></a-input>
               </template>
             </vxe-column>
           </vxe-colgroup>
@@ -46,7 +46,7 @@
             </vxe-column>
             <vxe-column field="deptCorrectScore" title="讲师纠错">
               <template #default="{ row }">
-                <a-input :disabled="type == 'show' || row.currentLevel != 2" @change="handleChange(row)" class="editable-input" v-model="row.deptCorrectScore" :maxLength="30"></a-input>
+                <a-input :disabled="type == 'show' || row.currentLevel != 2 || row.status == 3" @change="handleChange(row)" class="editable-input" v-model="row.deptCorrectScore" :maxLength="30"></a-input>
               </template>
             </vxe-column>
           </vxe-colgroup>
@@ -58,7 +58,7 @@
             </vxe-column>
             <vxe-column field="groupCorrectScore" title="讲师纠错">
               <template #default="{ row }">
-                <a-input :disabled="type == 'show' || row.currentLevel != 3" @change="handleChange(row)" class="editable-input" v-model="row.groupCorrectScore" :maxLength="30"></a-input>
+                <a-input :disabled="type == 'show' || row.currentLevel != 3 || row.status == 3" @change="handleChange(row)" class="editable-input" v-model="row.groupCorrectScore" :maxLength="30"></a-input>
               </template>
             </vxe-column>
           </vxe-colgroup>
