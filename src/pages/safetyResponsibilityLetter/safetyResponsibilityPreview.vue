@@ -94,7 +94,7 @@
               </a-button>
             </a-form-model-item>
             <a-form-model-item class="flex" :label-col="labelColSpec" :wrapper-col="wrapperColSpec" label="发送短信手机号">
-              <span style="font-Size:24px">{{userPhone}}</span>
+              <span style="font-Size:24px">{{userPhone?userPhone:'--'}}</span>
             </a-form-model-item>
             <a-form-model-item class="flex" :label-col="labelCol" :wrapper-col="wrapperCol" label="验证码" prop="code">
               <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input>
@@ -113,6 +113,30 @@
         <a-button :style="{ marginLeft: '8px' }" type="primary" v-show="!filePreview" @click="sign">签署</a-button>
         <a-button :style="{ marginLeft: '8px' }" @click="back">返回</a-button>
       </FixedBottom>
+      <CommonModal :title="'个人认证'" :visible="storageVisible" :cancelFn="storageCancle">
+        <template slot="form">
+          <a-form-model
+            ref="storageForm"
+            :model="storageForm"
+            :rules="tankFormRules"
+            :label-col="{ style: { width: '90px' } }"
+            :wrapper-col="{ style: { width: 'calc(100% - 90px)' } }"
+            :colon="false"
+            labelAlign="left"
+          >
+            <a-form-model-item class="flex" label="手机号" prop="phone">
+              <a-input :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
+            </a-form-model-item>
+            <a-form-model-item class="flex" label="身份证号" prop="idNumber">
+              <a-input v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+            </a-form-model-item>
+          </a-form-model>
+        </template>
+        <template slot="btn">
+          <a-button @click="storageCancle">取消</a-button>
+          <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
+        </template>
+      </CommonModal>
     </div>
   </a-spin>
 </template>
@@ -121,7 +145,7 @@
 import { formValidator } from "@/utils/clx-form-validator.js"
 import SendCodeButton from '@/components/sendCodeButton/index.vue'
 import FixedBottom from "@/components/commonTpl/fixedBottom";
-import { responsibilityDetail,responsibilitySendCode,responsibilitySign} from "@/services/api.js";
+import { responsibilityDetail,responsibilitySendCode,responsibilitySign,getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber} from "@/services/api.js";
 import '@/utils/dzjm.min.js'
 import pdf from "vue-pdf";
 // import CMapReaderFactory from "vue-pdf/src/CMapReaderFactory.js";
@@ -156,6 +180,19 @@ export default {
       filePreview: false,
       editForm:{},
       activeKey:'',
+      userInfoData:{},
+      storageVisible: false,
+      storageForm: {},
+      tankFormRules: {
+        phone: [
+          { required: true, validator: formValidator.texTphoneNumber, trigger: "blur" },
+        ],
+        idNumber: [
+          { required: true, validator: formValidator.texTidCard, trigger: 'blur', },
+        ]
+      },
+      phoneValue:'',
+      idNumberValue:'',
       // 表单验证
       editFormRules: {
         code: [
@@ -166,17 +203,55 @@ export default {
     };
   },
   created() {
+    this.initPop()
     this.activeKey = this.$route.query.activeKey
     console.log(this.activeKey,9999);
     this.id = this.$route.query.id
     this.filePreview = this.$route.query.filePreview
     this.getPaperUrl()
-    let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
-    this.userPhone = zconsole_userInfo.user.phone
   },
   mounted() {
   },
   methods: {
+    initPop(){
+      let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+      this.userInfoData = zconsole_userInfo.other
+      this.userPhone = this.userInfoData.phone
+      this.phoneValue = this.userInfoData.phone
+      this.idNumberValue = this.userInfoData.idNumber
+      // 先判断一下是否要弹出个人认证的弹框
+      getCheckPhoneAndIdNumberExist({}).then((res) => {
+        console.log("数据全");
+      }).catch((err) => {
+        this.storageVisible = true;
+        this.$nextTick(()=>{
+          this.$set(this.storageForm,"idNumber",this.idNumberValue)
+          this.$set(this.storageForm,"phone",this.phoneValue)
+        })
+      });
+    },
+    // 关闭弹框
+    storageCancle() {
+      this.storageVisible = false;
+      this.storageForm = {};
+      this.back()
+    },
+    // 弹框确定
+    storageConfirm() {
+      if (this.storageForm.idNumber != this.userInfoData.idNumber) {
+        if (!formValidator.formAll(this, 'storageForm')) {
+          return;
+        }
+      }
+      let apiData = {
+        phone:this.storageForm.phone,
+        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumberValue:this.storageForm.idNumber,
+      }
+      getEditPhoneAndIdNumber(apiData).then((res) =>{
+        this.storageVisible = false;
+        this.storageForm = {};
+      })
+    },
     // 获取到pdf总页数时触发 会传入总页数
     getTotalPage(page) {
       this.pageTotal = page

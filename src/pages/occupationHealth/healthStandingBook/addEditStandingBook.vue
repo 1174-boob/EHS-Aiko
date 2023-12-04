@@ -113,7 +113,7 @@
               <CommonTable :noPaging="true">
                 <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="exposureList" :rowKey="(record, index)=>{return index}" :pagination="false">
                   <div slot="time" slot-scope="record">
-                    {{record.startTime?record.startTime.join('-'):'--'}} 至 {{record.endTime?record.endTime.join('-'):'--'}}
+                    {{record.startTime? (Array.isArray(record.startTime) ?record.startTime.join('-'):record.startTime):'--'}} 至 {{record.startTime? (Array.isArray(record.endTime) ?record.endTime.join('-'):record.endTime):'--'}}
                   </div>
                   <div slot="action" slot-scope="text,record,index">
                     <span class="color-0067cc cursor-pointer m-r-15" @click="occupationalHistoryEdit(record,index)">编辑</span>
@@ -203,16 +203,18 @@
             :placeholder="['开始日期', '结束日期']"
             />
           </a-form-model-item>
-          <a-form-model-item class="flex" label="部门" prop="departmentId">
-            <OrganizeLazyTree v-model="occupationalHistoryForm.departmentId" ref="organizeLazyTree" @deptFormValidator="deptFormValidator" @change="organizeChange"/>
+          <a-form-model-item class="flex" label="工作单位" prop="departmentName">
+            <a-input v-model.trim="occupationalHistoryForm.departmentName" placeholder="请输入工作单位"/>
+            <!-- <OrganizeLazyTree v-model="occupationalHistoryForm.departmentId" ref="organizeLazyTree" @deptFormValidator="deptFormValidator" @change="organizeChange"/> -->
           </a-form-model-item>
-          <a-form-model-item class="flex" label="岗位" prop="post">
-            <a-select v-model="occupationalHistoryForm.post" placeholder="请选择岗位" show-search :filter-option="filterOption" allowClear @change="hazardousChange">
+          <a-form-model-item class="flex" label="岗位" prop="postName">
+            <!-- <a-select v-model="occupationalHistoryForm.post" placeholder="请选择岗位" show-search :filter-option="filterOption" allowClear @change="hazardousChange">
               <a-select-option v-for="item in hazardousPost" :value="item.value" :key="item.value">{{item.label}}</a-select-option>
-            </a-select>
+            </a-select> -->
+            <a-input v-model.trim="occupationalHistoryForm.postName" placeholder="请输入岗位"/>
           </a-form-model-item>
           <a-form-model-item class="flex" label="危害因素" prop="hazardFactors">
-            <a-input v-model.trim="occupationalHistoryForm.hazardFactors" placeholder="根据岗位带出" disabled/>
+            <a-input v-model.trim="occupationalHistoryForm.hazardFactors" placeholder="请输入危害因素"/>
             <!-- <a-select v-model="occupationalHistoryForm.hazardFactors" placeholder="请选择危害因素" show-search :filter-option="filterOption" allowClear>
               <a-select-option v-for="item in hazard_factors" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
             </a-select> -->
@@ -529,7 +531,7 @@ export default {
           scopedSlots: { customRender: "time" },
         },
         {
-          title: "部门",
+          title: "工作单位",
           dataIndex: "departmentName",
           key: "departmentName",
         },
@@ -737,10 +739,10 @@ export default {
         time: [
           { required: true, message:"不能为空", trigger: ['blur', 'change'] },
         ],
-        departmentId: [
+        departmentName: [
           { required: true, message:"不能为空", trigger: ['blur', 'change'] },
         ],
-        post: [
+        postName: [
           { required: true, message:"不能为空", trigger: ['blur', 'change'] },
         ],
         hazardFactors: [
@@ -1087,39 +1089,39 @@ export default {
       }
       
     },
-    organizeChange(key,value) {
-      this.occupationalHistoryForm.departmentName = value[0];
-      stationAll({deptId:key}).then(res=>{
-        this.hazardousPost = res.data;
-        this.hazardousPost.forEach(item=>{
-          this.$set(this.hazardousPostDict, item.value, item.label);
-        })
-        this.$set(this.occupationalHistoryForm,'post',undefined)
-        this.$set(this.occupationalHistoryForm,'hazardFactors', "")
-      }).catch(err=>{
-        console.log(err);
-      })
-    },
-    hazardousChange(val) {
-      if(val) {
-        harmFactor({dangerousStationId:val}).then(res=>{
-          const data = res.data;
-          if(data && data.length>=1) {
-            this.occupationalHistoryForm.hazardFactors = data.join();
-          } else {
-            this.occupationalHistoryForm.hazardFactors = ""
-          }
-          this.$forceUpdate();
-        }).catch(err=>{
-          console.log(err);
-        })
-        this.occupationalHistoryForm.postName = this.hazardousPostDict[val];
-      } else {
-        this.occupationalHistoryForm.postName = '';
-        this.occupationalHistoryForm.hazardFactors = ""
-      }
+    // organizeChange(key,value) {
+    //   this.occupationalHistoryForm.departmentName = value[0];
+    //   stationAll({deptId:key}).then(res=>{
+    //     this.hazardousPost = res.data;
+    //     this.hazardousPost.forEach(item=>{
+    //       this.$set(this.hazardousPostDict, item.value, item.label);
+    //     })
+    //     this.$set(this.occupationalHistoryForm,'post',undefined)
+    //     this.$set(this.occupationalHistoryForm,'hazardFactors', "")
+    //   }).catch(err=>{
+    //     console.log(err);
+    //   })
+    // },
+    // hazardousChange(val) {
+    //   if(val) {
+    //     harmFactor({dangerousStationId:val}).then(res=>{
+    //       const data = res.data;
+    //       if(data && data.length>=1) {
+    //         this.occupationalHistoryForm.hazardFactors = data.join();
+    //       } else {
+    //         this.occupationalHistoryForm.hazardFactors = ""
+    //       }
+    //       this.$forceUpdate();
+    //     }).catch(err=>{
+    //       console.log(err);
+    //     })
+    //     this.occupationalHistoryForm.postName = this.hazardousPostDict[val];
+    //   } else {
+    //     this.occupationalHistoryForm.postName = '';
+    //     this.occupationalHistoryForm.hazardFactors = ""
+    //   }
       
-    },
+    // },
     filterTree(inputValue, treeNode) {
       return treeNode.data.props.deptName.includes(inputValue)
     },
@@ -1151,7 +1153,7 @@ export default {
         if (!corporationDeptId) {
           corporationDeptId = this.getMappingValue(this.getCommonAddOrgnizeList, "id", this.healthForm.corporationId).deptId;
         }
-        this.$refs.organizeLazyTree.getOrganizeLazyTree(corporationDeptId, true);
+        // this.$refs.organizeLazyTree.getOrganizeLazyTree(corporationDeptId, true);
       })      
     },
     // 编辑职业史及职业病危害接触史
@@ -1177,9 +1179,9 @@ export default {
           if (!corporationDeptId) {
             corporationDeptId = this.getMappingValue(this.getCommonAddOrgnizeList, "id", this.healthForm.corporationId).deptId;
           }
-          this.$refs.organizeLazyTree.getOrganizeLazyTree(corporationDeptId, true).then(res => {
-            this.$refs.organizeLazyTree.getOrganizeEmersionTree(record.departmentId, corporationDeptId);
-          })
+          // this.$refs.organizeLazyTree.getOrganizeLazyTree(corporationDeptId, true).then(res => {
+          //   this.$refs.organizeLazyTree.getOrganizeEmersionTree(record.departmentId, corporationDeptId);
+          // })
         })
       }
     },
@@ -1452,9 +1454,9 @@ export default {
         })
       }
     },
-    deptFormValidator(val) {
-      formValidator.formItemValidate(this, 'departmentId', 'healthForm')
-    },
+    // deptFormValidator(val) {
+    //   formValidator.formItemValidate(this, 'departmentId', 'healthForm')
+    // },
     // 文本框校验
     inputValidator(rule, value, callback) {
       if (!value) {

@@ -41,7 +41,7 @@
     <div slot="fixedBottom">
       <FixedBottom>
         <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button>
-        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) && closeBtn">直接关闭</a-button>
+        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) || closeBtn">直接关闭</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-if="hideDangerForm.processStatus == 'close'">返回</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-if="hideDangerForm.processStatus != 'close' && hideDangerForm.handerId.indexOf(currentUserId) == -1">返回</a-button>
         <div v-if="hideDangerForm.processStatus == 'confirmation' && hideDangerForm.handerId.indexOf(currentUserId) > -1">
@@ -171,8 +171,10 @@ export default {
     this.getLogList();
     if (!this.canShowModalMixin("closeTheHiddenDangerDirectly")) {
       this.closeBtn = false;
+      return
     } else {
       this.closeBtn = true;
+      return
     }
   },
   methods: {

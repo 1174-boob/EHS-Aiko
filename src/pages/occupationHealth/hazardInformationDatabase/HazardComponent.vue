@@ -76,6 +76,9 @@
           <a-form-model-item class="flex" label="岗位" prop="jobName" v-if="tabKey==2">
             <a-input v-model.trim="hazardForm.jobName" placeholder="该岗位输入后跟部门关联" />
           </a-form-model-item>
+          <a-form-model-item class="flex" label="建议PPE" prop="recommendationsPPE" v-if="tabKey==2">
+            <a-input v-model.trim="hazardForm.recommendationsPPE" placeholder="请输入建议PPE" />
+          </a-form-model-item>
           <a-form-model-item class="flex" label="职业危害因素" prop="hazardous" v-if="tabKey==2">
             <div style="width:300px;height:30px;color:#999">以下化学类和物理类至少需要填写一项</div>
           </a-form-model-item>
@@ -335,6 +338,15 @@ export default {
           dataIndex: "physicalHarm",
           key: "physicalHarm",
           width: 300,
+          customRender: (text, record, index) => {
+            return text ? text : "--";
+          },
+        },
+        {
+          title: "建议PPE",
+          dataIndex: "recommendationsPPE",
+          key: "recommendationsPPE",
+          width: 200,
           customRender: (text, record, index) => {
             return text ? text : "--";
           },

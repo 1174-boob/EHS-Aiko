@@ -760,6 +760,11 @@ export const responsibilitySign = params => post(`${serviceNameList.health}/api/
 // 安全责任书-批量签署
 export const responsibilitySignBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign/batch`, params);
 
+//用户信息-检查当前登录的用户有没有手机号和身份证
+export const getCheckPhoneAndIdNumberExist = params =>  post(`ehs-customer/api/user/checkPhoneAndIdNumberExist`, params)
+//用户信息-更新当前登录的用户的手机号和身份证号
+export const getEditPhoneAndIdNumber = params =>  post(`ehs-customer/api/user/editPhoneAndIdNumber`, params)
+
 // 三级安全教育管理-选择模板
 export const managementListPage = params => post(`${serviceNameList.health}/api/ehs/security/template/management/list/page`, params);
 // 三级安全教育管理-导入excel获取批量的培训用户
@@ -834,6 +839,8 @@ export const healthUserSave = params => post(`${serviceNameList.health}/api/ehs/
 export const healthUserUpdate = params => post(`${serviceNameList.health}/api/ehs/health/user/update`, params);
 // 人员台账-详情
 export const healthUserDetail = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDetail`, params);
+// 人员台账-根据详情查找建议PPE
+export const stationDetail = params => post(`${serviceNameList.health}/api/ehs/dangerous/station/detail`, params);
 // 人员台账-分页查询职业病诊断表
 export const selectDiagnosis = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDiagnosis`, params);
 // 人员台账-分页查询入职前工作经历
@@ -1006,6 +1013,8 @@ export const emergentProcessResolve = params => post(`${serviceNameList.danger}/
 export const emergentProcessLog = params => get(`${serviceNameList.danger}/api/ehs/emergent/process/getLog`, params);
 // 应急演练审批-删除
 export const emergentProcessDeleteDrillProcess = params => get(`${serviceNameList.danger}/api/ehs/emergent/process/deleteDrillProcess`, params);
+// 应急演练审批-授权
+export const reassignDangerHandlerUser = params => post(`${serviceNameList.danger}/api/ehs/emergent/process/reassign/handler/user`, params);
 
 // 地图标注-新增
 export const mapLabelAdd = params => post(`${serviceNameList.monitor}/api/ehs/monitor/map/label/add`, params);
