@@ -88,7 +88,7 @@
         <!-- hdclose：待关闭 -->
         <a-button class="m-r-10" @click="submit('close')" v-show="hideDangerForm.processStatus == 'hdclose'">关闭</a-button>
         <!-- <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button> -->
-        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) || closeBtn">直接关闭</a-button>
+        <a-button class="m-r-10" @click="shutDown" v-show="lookBtn && (draftPersonBtn || closeBtn)">直接关闭</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'close' ">返回</a-button>
       </FixedBottom>
     </div>
@@ -161,12 +161,13 @@ export default {
         userDanger: {},
       },
       closeBtn:false,
+      draftPersonBtn: false,
+      lookBtn:false,
       withdForm:{},
       withdrawOrDownTitle: '撤回',
       withdrawOrDownArea: '撤回原因',
       withdrawOrDownVisible: false,
       showStatus:false,
-      closeStatus:true,
       currentUserId: sessionStorage.getItem('zconsole_userInfo') ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.jobNumber : '',
       labelCol: { span: 4 },
       wrapperCol: { span: 20 },
@@ -269,19 +270,22 @@ export default {
           //查看情况
           if (this.routeObj.type && this.routeObj.type == "look") {
             this.hideDangerForm.processStatus = "close";
+            this.lookBtn = true
           }
           if(res.data.processStatus == 'verification'){
             this.showStatus = true
           }
-          if(res.data.processStatus == 'close'){
-            this.closeStatus = false
+          console.log('res.data.draftPersonId',res.data.draftPersonId,'this.currentUserId',this.currentUserId);
+          if(res.data.draftPersonId == this.currentUserId) {
+            this.draftPersonBtn = true
+            console.log(1,this.lookBtn,2,(this.draftPersonBtn || this.closeBtn));
           }
           if (res.data.userDanger) {
             //回显隐患整改措施
             this.addForm.dangerRectificationMeasures =
               res.data.userDanger.dangerRectificationMeasures || undefined;
             //回显隐患整改照片
-            if (res.data.userDanger.dangerRectificationPhotoList.length) {
+            if (res.data.userDanger.dangerRectificationPhotoList&&res.data.userDanger.dangerRectificationPhotoList.length) {
               this.addForm.dangerRectificationPhotoList = this.dealImgEcho(
                 res.data.userDanger.dangerRectificationPhotoList,
                 "fileName",
