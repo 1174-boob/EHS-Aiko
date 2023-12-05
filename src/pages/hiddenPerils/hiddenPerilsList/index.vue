@@ -4,42 +4,45 @@
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
         <a-form-model-item label="隐患编号">
-          <a-input v-model="formInline.dangerCode" placeholder="请输入"></a-input>
+          <a-input v-model="formInline.dangerCode" allowClear placeholder="请输入"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="隐患简述">
+          <a-input v-model="formInline.dangerSketch" allowClear placeholder="请输入"></a-input>
         </a-form-model-item>
         <a-form-model-item label="状态">
-          <a-select v-model="formInline.processStatus" placeholder="请选择">
+          <a-select v-model="formInline.processStatus" placeholder="请选择" allowClear>
             <a-select-option v-for="item in statusList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="检查类型">
-          <a-select v-model="formInline.checkType" placeholder="请选择">
+          <a-select v-model="formInline.checkType" placeholder="请选择" allowClear>
             <a-select-option v-for="item in checkList" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="隐患类别">
-          <a-select v-model="formInline.dangerCategory" placeholder="请选择">
+          <a-select v-model="formInline.dangerCategory" placeholder="请选择" allowClear>
             <a-select-option v-for="item in troubleList" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="隐患级别">
-          <a-select v-model="formInline.dangerLevel" placeholder="请选择">
+          <a-select v-model="formInline.dangerLevel" placeholder="请选择" allowClear>
             <a-select-option v-for="item in troubleClassList" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="数据筛选">
-          <a-select v-model="formInline.dataFilter" placeholder="请选择">
+          <a-select v-model="formInline.dataFilter" placeholder="请选择" allowClear>
             <a-select-option v-for="item in filterList" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="责任部门">
-          <DeptTree v-model="formInline.responsibilityDept" :deptData="deptData"></DeptTree>
+          <DeptTree v-model="formInline.responsibilityDept" allowClear :deptData="deptData"></DeptTree>
           <!-- <a-input v-model="formInline.responsibilityDept" placeholder="请输入"></a-input> -->
         </a-form-model-item>
         <a-form-model-item label="起草人">
-          <a-input v-model="formInline.drafter" placeholder="请输入"></a-input>
+          <a-input v-model="formInline.drafter" allowClear placeholder="请输入"></a-input>
         </a-form-model-item>
         <a-form-model-item label="处理人">
-          <a-input v-model="formInline.hander" placeholder="请输入"></a-input>
+          <a-input v-model="formInline.hander" allowClear placeholder="请输入"></a-input>
         </a-form-model-item>
         <a-form-model-item label="创建时间">
           <a-range-picker format="YYYY-MM-DD" v-model="formInline.timeArr" :placeholder="['开始日期', '结束日期']" />
