@@ -82,26 +82,77 @@
         <a-form-model
           ref="editForm"
           :model="editForm"
-          :label-col="labelCol"
-          :wrapper-col="wrapperCol"
+          :label-col="labelColLong"
+          :wrapper-col="wrapperColLong"
           labelAlign="left"
         >
           <a-form-model-item class="flex" label="签名区域" prop="sealData">
-            <div class="test">
-              <div id="testEle" class="testInfo"></div>
+            <div class="test" id="testBody">
+              <div v-if="nameLength == '3'" class="testInfoThree" id="testInfoBorderThree" :style="{'border': '2px dashed grey'}">
+                <div 
+                  id="testEle1"  
+                  class="testItemThree"
+                  :style="{'backgroundImage': 'url(' + firstImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+                <div 
+                  id="testEle2"
+                  class="testItemThree"
+                  :style="{'backgroundImage': 'url(' + secondImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+                <div 
+                  id="testEle3"  
+                  class="testItemThree"
+                  :style="{'backgroundImage': 'url(' + thirdImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+              </div>
+              <div v-if="nameLength == '2'" class="testInfoTwo" id="testInfoBorderTwo" :style="{'border': '2px dashed grey'}">
+                <div 
+                  id="testEle4"  
+                  class="testItemTwo"
+                  :style="{'backgroundImage': 'url(' + forthImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+                <div 
+                  id="testEle5"
+                  class="testItemTwo"
+                  :style="{'backgroundImage': 'url(' + fifthImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+              </div>
             </div>
-            <a-button type="primary" class="m-l-15 m-t-10" @click="signUndo">
+            <!-- <a-button type="primary" class="m-l-15 m-t-10" @click="signUndo">
               撤销
-            </a-button>
-            <a-button type="primary" class="m-l-15 m-t-10" @click="signRedo">
-              重签
-            </a-button>
+            </a-button> -->
+            <div style="display: flex; justify-content: space-between;">
+              <a-button style="flex-shrink: 0;" type="primary" class="m-l-15 m-t-10" @click="signRedo">
+                重签
+              </a-button>
+              <p style="color: #999;flex-shrink: 1;">提示：请使用正楷字体描写签字引导</p>
+            </div>
           </a-form-model-item>
         </a-form-model>
       </template>
       <template slot="btn">
         <a-button @click="signCancle">取消</a-button>
-        <a-button type="primary" class="m-l-15" @click="signConfirm"
+        <a-button type="primary" class="m-l-15" :loading='loading' @click="signConfirm"
           >确定</a-button
         >
       </template>
@@ -146,8 +197,9 @@ import '@/utils/dzjm.min.js'
 import dictionary from "@/utils/dictionary";
 import moment from 'moment'
 import { debounce, cloneDeep } from 'lodash'
+import html2canvas from 'html2canvas'
 import serviceNameList from '@/config/default/service.config.js'
-import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber} from "@/services/api.js"
+import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
@@ -158,10 +210,26 @@ export default {
     return {
       dictionary,
       signVisible: false,
-      mSign: null,
+      paraData:{},
+      mSign1: null,
+      mSign2: null,
+      mSign3: null,
+      mSign4: null,
+      mSign5: null,
       editForm:{},
+      nameLength: '',
+      firstImage:'',
+      secondImage:'',
+      thirdImage:'',
+      forthImage:'',
+      fifthImage:'',
+      dataWithoutPrefix:'',
+      dataWithoutPrefixTwo:'',
+      loading:false,
       labelCol: { span: 3 },
       wrapperCol: { span: 21 },
+      labelColLong: { span: 3 },
+      wrapperColLong: { span: 21 },
       formInline: {
         entryDateStart: undefined,
         entryDateEnd: undefined,
@@ -325,6 +393,25 @@ export default {
     this.init()
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
     this.userId = zconsole_userInfo.user.userId
+    let para = {
+      totalHeight: '500',
+      totalWidth: '150'
+    }
+    getSignatureImage(para).then((res)=>{
+      // console.log('res1111',res.data);
+      if (res.data.length == 3){
+        this.$nextTick(()=>{
+          this.nameLength = '3'
+          this.firstImage = 'data:image/png;base64,' + res.data[0]
+          this.secondImage = 'data:image/png;base64,' + res.data[1]
+          this.thirdImage = 'data:image/png;base64,' + res.data[2]
+        })
+      } else if(res.data.length == 2){
+        this.nameLength = '2'
+        this.forthImage = 'data:image/png;base64,' + res.data[0]
+        this.fifthImage = 'data:image/png;base64,' + res.data[1]
+      }
+    })
   },
   activated(){
     if(this.$route.query.activeKey == 3){
@@ -352,6 +439,7 @@ export default {
     // 关闭弹框
     storageCancle() {
       this.storageVisible = false;
+      this.signVisible = false
       this.storageForm = {};
     },
     // 弹框确定
@@ -494,15 +582,61 @@ export default {
         return;
       } else {
         this.signVisible = true
-        this.$nextTick(()=>{
-          //所有功能演示代码
-          this.mSign = new EleSign({
-            ele: null
-          });
-          this.mSign.init();
-          this.mSign.moutedEle(document.getElementById("testEle"))
+        let para = {
+          totalHeight: '500',
+          totalWidth: '150'
+        }
+        getSignatureImage(para).then((res)=>{
+        // console.log('res1111',res.data);
+          if (res.data.length == 3){
+            this.$nextTick(()=>{
+              this.nameLength = '3'
+              this.firstImage = 'data:image/png;base64,' + res.data[0]
+              this.secondImage = 'data:image/png;base64,' + res.data[1]
+              this.thirdImage = 'data:image/png;base64,' + res.data[2]
+            })
+            
+          } else if(res.data.length == 2){
+            this.nameLength = '2'
+            this.forthImage = 'data:image/png;base64,' + res.data[0]
+            this.fifthImage = 'data:image/png;base64,' + res.data[1]
+          }
         })
-        console.log(this.selectedRowKeys,'idList999');
+        if (this.nameLength == '3') {
+          this.$nextTick(()=>{
+            //所有功能演示代码
+            this.mSign1 = new EleSign({
+              ele: null
+            });
+            this.mSign2 = new EleSign({
+              ele: null
+            });
+            this.mSign3 = new EleSign({
+              ele: null
+            });
+            this.mSign1.init();
+            this.mSign2.init();
+            this.mSign3.init();
+            this.mSign1.moutedEle(document.getElementById("testEle1"))
+            this.mSign2.moutedEle(document.getElementById("testEle2"))
+            this.mSign3.moutedEle(document.getElementById("testEle3"))
+          })
+        } else if (this.nameLength == '2'){
+          this.$nextTick(()=>{
+            //所有功能演示代码
+            this.mSign4 = new EleSign({
+              ele: null
+            });
+            this.mSign5 = new EleSign({
+              ele: null
+            });
+            this.mSign4.init();
+            this.mSign5.init();
+            this.mSign4.moutedEle(document.getElementById("testEle4"))
+            this.mSign5.moutedEle(document.getElementById("testEle5"))
+          })
+        }
+        // console.log(this.selectedRowKeys,'idList999');
       }
     },
     // 批量下载
@@ -519,34 +653,184 @@ export default {
     },
     // 点击确定按钮
     signConfirm(){
-      if(JSON.parse(this.mSign.toJson()).data.length > 0) {
-        var baseUrl = this.mSign.toJpeg();
-        var dataWithoutPrefix = baseUrl.split(',')[1];
-        // console.log(baseUrl, '生成的base64')
-      } else {
-        this.$antMessage.warn('请签署姓名!')
-        return
+      if (this.nameLength =='3') {
+        if(JSON.parse(this.mSign1.toJson()).data.length > 0 && JSON.parse(this.mSign2.toJson()).data.length > 0 && JSON.parse(this.mSign3.toJson()).data.length > 0) {
+          var baseUrl1 = this.mSign1.toPng();
+          var dataWithoutPrefix1 = baseUrl1.split(',')[1];
+          var baseUrl2 = this.mSign2.toPng();
+          var dataWithoutPrefix2 = baseUrl2.split(',')[1];
+          var baseUrl3 = this.mSign3.toPng();
+          var dataWithoutPrefix3 = baseUrl3.split(',')[1];
+        } else {
+          this.$antMessage.warn('请签署姓名!')
+          return
+        }
+      } else if (this.nameLength =='2') {
+        if(JSON.parse(this.mSign4.toJson()).data.length > 0 && JSON.parse(this.mSign5.toJson()).data.length > 0) {
+          var baseUrl4 = this.mSign4.toPng();
+          var dataWithoutPrefix4 = baseUrl4.split(',')[1];
+          var baseUrl5 = this.mSign5.toPng();
+          var dataWithoutPrefix5 = baseUrl5.split(',')[1];
+        } else {
+          this.$antMessage.warn('请签署姓名!')
+          return
+        }
       }
       if (!formValidator.formAll(this, "editForm")) return;
-      let params = {
-        idList: this.selectedRowKeys,
-        sealData: dataWithoutPrefix,
-      }
-      responsibilitySignBatch(params).then((res)=>{
-        if(res.code == 20000){
-          this.$antMessage.success("签署成功！");
-          this.signVisible = false
-          this.selectedRowKeys = []
-          this.choosedArr = []
-          this.getDataList()
+      if (this.nameLength == '3'){
+        this.paraData = {
+          signatureList: [dataWithoutPrefix1,dataWithoutPrefix2,dataWithoutPrefix3],
         }
-      })
+      } else if (this.nameLength == '2'){
+        this.paraData = {
+          signatureList: [dataWithoutPrefix4,dataWithoutPrefix5],
+        }
+      }
+      console.log('paraaaa',this.paraData);
+      if (this.nameLength == '3') {
+        verifySignature(this.paraData).then((res)=>{
+          console.log('res1111',res);
+          if(res.code == '20000'){  
+            this.loading = true
+            const element = document.getElementById('testBody');  
+            const elementInfoBorder = document.getElementById('testInfoBorderThree');
+            const elementSonfirst = document.getElementById('testEle1');
+            const elementSonSecond = document.getElementById('testEle2');
+            const elementSonThird = document.getElementById('testEle3');  
+            // 获取元素的背景图像并删除它  
+            elementInfoBorder.style.border = 'none'
+            elementSonfirst.style.backgroundImage = 'none';  
+            elementSonSecond.style.backgroundImage = 'none';  
+            elementSonThird.style.backgroundImage = 'none';  
+            // 获取元素的尺寸  
+            const w = element.offsetWidth * 0.9;  
+            const h = element.offsetHeight * 0.9;  
+            const offsetTop = element.offsetTop;  
+            const offsetLeft = element.offsetLeft;  
+            const canvas = document.createElement('canvas');  
+            let abs = 0;  
+            const winI = document.body.clientWidth;  
+            const winO = window.innerWidth;  
+            if (winO > winI) {  
+              abs = (winO - winI) / 2;  
+            }  
+            canvas.width = w * 2;  
+            canvas.height = h * 2;  
+            const context = canvas.getContext('2d');  
+            context.scale(2, 2);  
+            context.translate(-offsetLeft - abs, -offsetTop);  
+            html2canvas(element, {  
+              allowTaint: true,  
+              scale: 1 ,
+            }).then((res) => {  
+              const pageDate = res.toDataURL('image/jpeg', 1.0);  
+              console.log('我要变强111',pageDate,);  
+              this.dataWithoutPrefix = pageDate.split(',')[1]
+              let params = {
+                idList: this.selectedRowKeys,
+                sealData: this.dataWithoutPrefix,
+              }
+              responsibilitySignBatch(params).then((res)=>{
+                if(res.code == 20000){
+                  this.$antMessage.success("签署成功！");
+                  this.signVisible = false
+                  this.loading = false
+                  this.selectedRowKeys = []
+                  this.choosedArr = []
+                  this.getDataList()
+                }
+              }).catch(()=>{
+                this.signVisible = false
+                this.loading = false
+              })
+            });  
+          }
+        })
+      } else if (this.nameLength == '2'){
+        verifySignature(this.paraData).then((res)=>{
+          console.log('res1111',res);
+          if(res.code == '20000'){ 
+            this.loading = true 
+            const element = document.getElementById('testBody');  
+            const elementInfoBorder = document.getElementById('testInfoBorderTwo');
+            const elementSonForth = document.getElementById('testEle4');
+            const elementSonFifth = document.getElementById('testEle5');
+            // 获取元素的背景图像并删除它  
+            elementInfoBorder.style.border = 'none'
+            elementSonForth.style.backgroundImage = 'none';  
+            elementSonFifth.style.backgroundImage = 'none';  
+            // 获取元素的尺寸  
+            const w = element.offsetWidth * 0.9;  
+            const h = element.offsetHeight * 0.9;  
+            const offsetTop = element.offsetTop;  
+            const offsetLeft = element.offsetLeft;  
+            const canvas = document.createElement('canvas');  
+            let abs = 0;  
+            const winI = document.body.clientWidth;  
+            const winO = window.innerWidth;  
+            if (winO > winI) {  
+              abs = (winO - winI) / 2;  
+            }  
+            canvas.width = w * 2;  
+            canvas.height = h * 2;  
+            const context = canvas.getContext('2d');  
+            context.scale(2, 2);  
+            context.translate(-offsetLeft - abs, -offsetTop);  
+            html2canvas(element, {  
+              allowTaint: true,  
+              scale: 1 ,
+            }).then((res) => {  
+              const pageDate = res.toDataURL('image/jpeg', 1.0);  
+              // console.log('我要变强222',pageDate,);  
+              this.dataWithoutPrefixTwo = pageDate.split(',')[1]
+              console.log('this.dataWithoutPrefixTwo+++++++',this.dataWithoutPrefixTwo);
+              let params = {
+                idList: this.selectedRowKeys,
+                sealData: this.dataWithoutPrefixTwo ,
+              }
+              responsibilitySignBatch(params).then((res)=>{
+                if(res.code == 20000){
+                  this.$antMessage.success("签署成功！");
+                  this.signVisible = false
+                  this.loading = false
+                  this.selectedRowKeys = []
+                  this.choosedArr = []
+                  this.getDataList()
+                }
+              }).catch(()=>{
+                this.signVisible = false
+                this.loading = false
+              })
+            });  
+          }
+        })
+      }
+      // let params = {
+      //   idList: this.selectedRowKeys,
+      //   sealData: dataWithoutPrefix,
+      // }
+      // responsibilitySignBatch(params).then((res)=>{
+      //   if(res.code == 20000){
+      //     this.$antMessage.success("签署成功！");
+      //     this.signVisible = false
+      //     this.selectedRowKeys = []
+      //     this.choosedArr = []
+      //     this.getDataList()
+      //   }
+      // })
     },
     signUndo() {
       this.mSign.undo();
     },
     signRedo() {
-      this.mSign.clear();
+      if (this.nameLength == '3') {
+        this.mSign1.clear();
+        this.mSign2.clear();
+        this.mSign3.clear();
+      } else if (this.nameLength == '2'){
+        this.mSign4.clear();
+        this.mSign5.clear();
+      }
     },
     // 点击取消按钮
     signCancle() {
@@ -752,9 +1036,27 @@ export default {
     border: 1px dashed #0067cc !important;
   }
 }
-.testInfo {
-  border: 2px dashed grey;
+.testInfoThree {
+  // border: 2px dashed grey;
   overflow: hidden;
+  display: flex;
+}
+.testInfoTwo{
+  // border: 2px dashed grey;
+  overflow: hidden;
+  display: flex;
+}
+.testItemThree {
+  flex: 1;
+  width: 33%;
+  height: 100%;
+  // border: 1px solid black;
+}
+.testItemTwo {
+  flex: 1;
+  width: 50%;
+  height: 100%;
+  // border: 1px solid black;
 }
 .pe-data-item{
   display: inline-block;

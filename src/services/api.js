@@ -765,6 +765,11 @@ export const getCheckPhoneAndIdNumberExist = params =>  post(`ehs-customer/api/u
 //用户信息-更新当前登录的用户的手机号和身份证号
 export const getEditPhoneAndIdNumber = params =>  post(`ehs-customer/api/user/editPhoneAndIdNumber`, params)
 
+// 签名校验  
+export const verifySignature = params =>  post(`${serviceNameList.health}/api/ehs/security/education/verify/signature`, params)
+// 生成对应的图片信息(签名模板) 
+export const getSignatureImage = params =>  post(`${serviceNameList.health}/api/ehs/security/education/get/signature/image`, params)
+
 // 三级安全教育管理-选择模板
 export const managementListPage = params => post(`${serviceNameList.health}/api/ehs/security/template/management/list/page`, params);
 // 三级安全教育管理-导入excel获取批量的培训用户
