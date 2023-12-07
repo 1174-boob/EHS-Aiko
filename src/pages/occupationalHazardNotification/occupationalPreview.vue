@@ -274,8 +274,8 @@ export default {
   },
   created() {
     let para = {
-      totalHeight: '500',
-      totalWidth: '150'
+      totalHeight: '150',
+      totalWidth: '500'
     }
     getSignatureImage(para).then((res)=>{
       // console.log('res1111',res.data);
@@ -439,8 +439,8 @@ export default {
       console.log('点击签署按钮');
       this.signVisible = true
       let para = {
-        totalHeight: '500',
-        totalWidth: '150'
+        totalHeight: '150',
+        totalWidth: '500'
       }
       getSignatureImage(para).then((res)=>{
         // console.log('res1111',res.data);

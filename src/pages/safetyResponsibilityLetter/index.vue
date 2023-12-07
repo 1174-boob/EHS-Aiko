@@ -394,8 +394,8 @@ export default {
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
     this.userId = zconsole_userInfo.user.userId
     let para = {
-      totalHeight: '500',
-      totalWidth: '150'
+      totalHeight: '150',
+      totalWidth: '500'
     }
     getSignatureImage(para).then((res)=>{
       // console.log('res1111',res.data);
@@ -583,8 +583,8 @@ export default {
       } else {
         this.signVisible = true
         let para = {
-          totalHeight: '500',
-          totalWidth: '150'
+          totalHeight: '150',
+          totalWidth: '500'
         }
         getSignatureImage(para).then((res)=>{
         // console.log('res1111',res.data);

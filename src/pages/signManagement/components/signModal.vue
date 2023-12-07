@@ -304,8 +304,8 @@ export default {
       if (newVal) {
         console.log('newVal',newVal);
         let para = {
-          totalHeight: '500',
-          totalWidth: '150'
+          totalHeight: '150',
+          totalWidth: '500'
         }
         getSignatureImage(para).then((res)=>{
           // console.log('res1111',res.data);
