@@ -126,32 +126,11 @@ export default {
                     align: "center",
                 },
                 {
-                    title: "分数",
-                    dataIndex: "fraction",
-                    key: "fraction",
-                    align: "center",
-                },
-                {
-                    title: "等级",
-                    dataIndex: "grade",
-                    key: "grade",
-                    align: "center",
-                },
-                {
-                    title: "备注",
-                    dataIndex: "remarks",
-                    key: "remarks",
-                    align: "center",
-                    customRender: (v) => {
-                        return v ? 'v' : '--'
-                    },
-                },
-                {
                     title: "认证报告",
                     scopedSlots: { customRender: "report" },
                     key: "report",
                     align: "center",
-                    width: 100, // 宽度根据操作自定义设置
+                    width: 200, // 宽度根据操作自定义设置
                 },
                 {
                     title: "操作",
@@ -159,7 +138,7 @@ export default {
                     key: "action",
                     align: "center",
                     fixed: "right", // 固定操作列
-                    width: 80, // 宽度根据操作自定义设置
+                    width: 150, // 宽度根据操作自定义设置
                 },
             ],
             tableDataList: null,

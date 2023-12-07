@@ -9,7 +9,9 @@
                 <a-col :span="11">
                   <CommonSearchItem
                     ref="commonSearchItem"
-                    :CommonFormInline="addForm"
+                    :CommonFormInline="
+                                                              addForm
+                                                        "
                     :notTablePage="true"
                     :disabled="type == 2"
                     :hasDepartment="true"
@@ -20,50 +22,68 @@
                   <StaffOrDept
                     :treeType="'user'"
                     :propKey="'equipmentDeptCertifier'"
+                    :treeRoles="addFormRules"
                     :labelTitle="'设备担当部门认证人'"
-                    :checkAbel="false"
                     :label-col="{ span: 7 }"
                     :onPreview="type == 2"
-                    :checkedTreeNode="checkedTreeNode1"
-                    @getTreeData="getDutyUserList1"
-                    :wrapper-col="{span: 17,}"
+                    :checkedTreeNode="
+                                                              checkedTreeNode1
+                                                        "
+                    @getTreeData="
+                                                              getDutyUserList1
+                                                        "
+                    :wrapper-col="{
+                                                              span: 17,
+                                                        }"
                   />
                   <StaffOrDept
                     :treeType="'user'"
                     :propKey="'powerDeptCertifier'"
+                    :treeRoles="addFormRules"
                     :labelTitle="'厂务部门认证人'"
-                    :treePlaceholder="'厂务部门认证人与环安部门认证人需至少填写一项'"
-                    :checkAbel="false"
                     :label-col="{ span: 7 }"
                     :onPreview="type == 2"
-                    :checkedTreeNode="checkedTreeNode2"
-                    @getTreeData="getDutyUserList2"
-                    :wrapper-col="{ span: 17,}"
+                    :checkedTreeNode="
+                                                              checkedTreeNode2
+                                                        "
+                    @getTreeData="
+                                                              getDutyUserList2
+                                                        "
+                    :wrapper-col="{
+                                                              span: 17,
+                                                        }"
                   />
                 </a-col>
                 <a-col :span="11">
                   <StaffOrDept
                     :treeType="'user'"
                     :propKey="'techniqueDeptCertifier'"
-                    :treePlaceholder="'厂务部门认证人与环安部门认证人需至少填写一项'"
+                    :treeRoles="addFormRules"
                     :labelTitle="'环安部门认证人'"
                     :label-col="{ span: 7 }"
-                    :checkAbel="false"
                     :onPreview="type == 2"
-                    :checkedTreeNode="checkedTreeNode3"
-                    @getTreeData="getDutyUserList3"
-                    :wrapper-col="{span: 17,}"
+                    :checkedTreeNode="
+                                                              checkedTreeNode3
+                                                        "
+                    @getTreeData="
+                                                              getDutyUserList3
+                                                        "
+                    :wrapper-col="{
+                                                              span: 17,
+                                                        }"
                   />
                 </a-col>
-                <a-col :span="11">
-                  <!-- <p style="color:#ccc;margin-left:20px;">厂务部门认证人与环安部门认证人需至少填写一项</p> -->
-                </a-col>
+                <a-col :span="11"></a-col>
                 <a-col :span="11">
                   <a-form-model-item label="认证设备" prop="itemCommandList">
                     <a-button
                       type="primary"
-                      :disabled="type == 2"
-                      @click="handleOpenDrawer"
+                      :disabled="
+                                                                    type == 2
+                                                              "
+                      @click="
+                                                                    handleOpenDrawer
+                                                              "
                     >
                       <a-icon type="plus" />选择设备
                     </a-button>
@@ -74,7 +94,9 @@
             </a-form-model>
           </div>
           <div>
-            <div class="plate" v-for="( i, index) in addForm.itemCommandList" :key="index">
+            <div class="plate" v-for="(
+                                            i, index
+                                      ) in addForm.itemCommandList" :key="index">
               <div class="baseInfo">
                 <a-row type="flex" justify="space-around">
                   <a-col :span="4">序号：{{ index + 1 }}</a-col>
@@ -117,8 +139,14 @@
                 <div slot="report" slot-scope="record">
                   <span
                     class="color-0067cc cursor-pointer"
-                    v-if="record.certificationReport"
-                    @click=" hazardFileDownload(record.certificationReport)"
+                    v-if="
+                                                              record.certificationReport
+                                                        "
+                    @click="
+                                                              hazardFileDownload(
+                                                                    record.certificationReport
+                                                              )
+                                                        "
                   >认证报告.pdf</span>
                 </div>
                 <div slot="action" slot-scope="record">
@@ -126,7 +154,12 @@
                   <span
                     v-else
                     class="color-0067cc cursor-pointer"
-                    @click="handleEdit(record,index)"
+                    @click="
+                                                              handleEdit(
+                                                                    record,
+                                                                    index
+                                                              )
+                                                        "
                   >编辑</span>
                 </div>
               </a-table>
@@ -275,12 +308,6 @@
                                                 addItemForm.unqualifiedReason
                                           " placeholder="请输入不合格原因" />
           </a-form-model-item>
-          <a-form-model-item class="flex" label="分数" prop="fraction">
-            <a-input @change='inputChange' type='number' v-model="addItemForm.fraction" placeholder="请输入分数" />
-          </a-form-model-item>
-          <a-form-model-item class="flex" label="等级" prop="grade">
-            <a-input v-model="addItemForm.grade"  placeholder="优:90(含)分以上; 良[80,90); 合格[70, 80); 不合格 [0,70)" disabled/>
-          </a-form-model-item>
           <a-form-model-item class="flex" label="厂商名称" prop="manufacturerName">
             <a-input v-model="addItemForm.manufacturerName" placeholder="请输入厂商名称" />
           </a-form-model-item>
@@ -288,9 +315,6 @@
             <a-input v-model="
                                                 addItemForm.manufacturerAuthenticator
                                           " placeholder="请输入厂商认证人" />
-          </a-form-model-item>
-          <a-form-model-item class="flex" label="备注" prop="remarks">
-            <a-input v-model="addItemForm.remarks" placeholder="请输入"/>
           </a-form-model-item>
           <a-form-model-item class="flex" label="认证报告" prop="certificationReport">
             <UploadBtnStyle :accept="['.pdf']" :maxSize="30" :limit="1" :fileLists="fileList" @handleSuccess="handleSuccessRefFile"></UploadBtnStyle>
@@ -368,20 +392,20 @@ export default {
             trigger: "change",
           },
         ],
-        // powerDeptCertifier: [
-        //   {
-        //     required: true,
-        //     message: "厂务部门认证人不能为空",
-        //     trigger: "change",
-        //   },
-        // ],
-        // techniqueDeptCertifier: [
-        //   {
-        //     required: true,
-        //     message: "环安部门认证人不能为空",
-        //     trigger: "change",
-        //   },
-        // ],
+        powerDeptCertifier: [
+          {
+            required: true,
+            message: "厂务部门认证人不能为空",
+            trigger: "change",
+          },
+        ],
+        techniqueDeptCertifier: [
+          {
+            required: true,
+            message: "环安部门认证人不能为空",
+            trigger: "change",
+          },
+        ],
         itemCommandList: [
           {
             required: true,
@@ -426,24 +450,6 @@ export default {
           },
         },
         {
-          title: "分数",
-          dataIndex: "fraction",
-          key: "fraction",
-          align: "center",
-          customRender: (t) => {
-            return t ? t : "--";
-          },
-        },
-        {
-          title: "等级",
-          dataIndex: "grade",
-          key: "grade",
-          align: "center",
-          customRender: (t) => {
-            return t ? t : "--";
-          },
-        },
-        {
           title: "厂商名称",
           dataIndex: "manufacturerName",
           key: "manufacturerName",
@@ -456,20 +462,11 @@ export default {
           align: "center",
         },
         {
-          title: "备注",
-          dataIndex: "remarks",
-          key: "remarks",
-          align: "center",
-          customRender: (t) => {
-            return t ? t : "--";
-          },
-        },
-        {
           title: "认证报告",
           scopedSlots: { customRender: "report" },
           key: "report",
           align: "center",
-          width: 100, // 宽度根据操作自定义设置
+          width: 200, // 宽度根据操作自定义设置
         },
         {
           title: "操作",
@@ -477,7 +474,7 @@ export default {
           key: "action",
           align: "center",
           fixed: "right", // 固定操作列
-          width: 80, // 宽度根据操作自定义设置
+          width: 150, // 宽度根据操作自定义设置
         },
       ],
       validRules: {
@@ -519,13 +516,6 @@ export default {
           {
             required: true,
             message: "不合格原因不能为空",
-            trigger: "change",
-          },
-        ],
-        fraction: [
-          {
-            required: true,
-            message: "分数不能为空",
             trigger: "change",
           },
         ],
@@ -592,19 +582,6 @@ export default {
   },
   mounted() { },
   methods: {
-    // 分数判定
-    inputChange(e){
-      console.log('e333',e.target.value);
-      if (e.target.value > 90){
-        this.$set(this.addItemForm,'grade','优')
-      } else if (e.target.value < 90 && e.target.value >= 80){
-        this.$set(this.addItemForm,'grade','良')
-      } else if (e.target.value < 80 && e.target.value >= 70){
-        this.$set(this.addItemForm,'grade','合格')
-      } else if (e.target.value < 70 && e.target.value >= 0){
-        this.$set(this.addItemForm,'grade','不合格')
-      }
-    },
     initData() {
       authDetails({ approvalId: this.approvalId })
         .then((res) => {
@@ -659,13 +636,6 @@ export default {
             return false;
           }
           if (this.type == 1) {
-            console.log(console.log(this.addForm,'this.addForm'));
-            if (!this.addForm.powerDeptCertifier && !this.addForm.techniqueDeptCertifier) {
-              this.$antMessage.warning(
-                "厂务部门认证人与环安部门认证人需至少填写一项"
-              );
-              return false;
-            }
             authAdd({
               ...this.addForm,
               approvalStatus: n,
@@ -675,15 +645,10 @@ export default {
                 let { handlerList, id: approvalId } = res.data || { handlerList: '', approvalId: '' }
                 if (n == 1) {
                   this.pushTask(handlerList, approvalId)
-                  this.$router.push({
-                    path: "/safeManage/deviceSafeManage/deviceSafety/deviceAuth",
-                  });
-                } else {
-                  this.$router.push({
+                }
+                this.$router.push({
                   path: "/safeManage/deviceSafeManage/deviceSafety/deviceAuthDrafts",
                 });
-                }
-                
               });
           } else {
             console.log("NNNNNN2", n);
@@ -699,12 +664,6 @@ export default {
     //编辑
     editData(n) {
       console.log("NNNNNN2", n);
-      if (!this.addForm.powerDeptCertifier && !this.addForm.techniqueDeptCertifier) {
-        this.$antMessage.warning(
-          "厂务部门认证人与环安部门认证人需至少填写一项"
-        );
-        return false;
-      }
       authEdit({
         ...this.addForm,
         approvalId: this.approvalId,
