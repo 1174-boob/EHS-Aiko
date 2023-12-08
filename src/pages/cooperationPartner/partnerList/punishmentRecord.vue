@@ -65,6 +65,9 @@
           <a-form-model-item class="flex modal-form-text" label="处罚金额(元)">
             <div>{{currentMsg.punishAmount}}</div>
           </a-form-model-item>
+          <a-form-model-item class="flex modal-form-text" label="实际缴纳(元)">
+            <div>{{currentMsg.actualAmountPaid?currentMsg.actualAmountPaid:'/'}}</div>
+          </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="处罚依据">
             <div>{{currentMsg.punishBasis}}</div>
           </a-form-model-item>
@@ -86,6 +89,9 @@
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="详情">
             <div>{{currentMsg.punishInfo}}</div>
+          </a-form-model-item>
+          <a-form-model-item label="罚款文件" :labelCol="{ style: { width: '98px' } }" :wrapperCol="{ style: { width: 'calc(100% - 98px)' } }" class="flex">
+            <UploadBtnStyle :onlyShow="true" :showAcceptText="true" :accept="['.doc','.docx','.pdf','.xls','.xlsx','.ppt']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccess"></UploadBtnStyle>
           </a-form-model-item>
         </a-form-model>
       </template>
@@ -122,6 +128,16 @@
               v-model="editForm.punishAmount"
             />
           </a-form-model-item>
+          <a-form-model-item class="flex" label="实际缴纳金额" prop="actualAmountPaid">
+            <a-input-number
+              :min="1"
+              :default-value="0"
+              :formatter="value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+              :parser="value => value.replace(/\￥\s?|(,*)/g, '')"
+              placeholder="请输入实际缴纳金额"
+              v-model="editForm.actualAmountPaid"
+            />
+          </a-form-model-item>
           <a-form-model-item class="flex" label="处罚依据" prop="punishBasis">
             <a-input v-model="editForm.punishBasis" placeholder="请输入处罚依据" />
           </a-form-model-item>
@@ -150,6 +166,9 @@
           </a-form-model-item>
           <a-form-model-item class="flex" label="详情" prop="punishInfo">
             <a-textarea placeholder="请输入详情" v-model="editForm.punishInfo" allowClear :maxLength="300" />
+          </a-form-model-item>
+          <a-form-model-item label="罚款文件" :labelCol="{ style: { width: '98px' } }" :wrapperCol="{ style: { width: 'calc(100% - 98px)' } }" class="flex">
+            <UploadBtnStyle :showAcceptText="true" :accept="['.doc','.docx','.pdf','.xls','.xlsx','.ppt']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccess"></UploadBtnStyle>
           </a-form-model-item>
         </a-form-model>
       </template>
@@ -203,7 +222,7 @@
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from '@/mixin/cancelLoading';
 import { formValidator } from "@/utils/clx-form-validator.js";
-
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import UploadCanRemove from "@/components/upload/uploadCanRemove.vue";
 
 import moment from 'moment'
@@ -211,11 +230,11 @@ import dayJs from "dayjs";
 
 import { debounce } from 'lodash';
 import { cloneDeep } from 'lodash'
-import { punishPageList, punishInsert, punishUpdate, punishDelete, GetDispatchList } from "@/services/api.js";
+import { punishPageList, punishInsert, punishUpdate, punishDelete, GetDispatchList,GetfileMsgList } from "@/services/api.js";
 export default {
   mixins: [teableCenterEllipsis, cancelLoading],
   components: {
-    UploadCanRemove
+    UploadBtnStyle
   },
   data() {
     return {
@@ -230,6 +249,7 @@ export default {
         pageSize: 10,
         total: 0,
       },
+      infoFileIdList: null,
       tableList: [],
 
       // 查看
@@ -238,7 +258,9 @@ export default {
       columnsCheckedStaffLook: [],
 
       // 新增+编辑
-      editForm: {},
+      editForm: {
+        fineDocumentFileIdList:[],
+      },
       editVisible: false,
       editText: "",
       // 表单验证
@@ -343,6 +365,16 @@ export default {
     this.editForm = { corporationId: this.dataMsg.corporationId }
   },
   methods: {
+    // 批量导入成功
+    handleSuccess(fileList) {
+      let newList = []
+      newList = fileList.map((item) => {
+        return item.id
+      })
+      this.editForm.fineDocumentFileIdList = newList
+      console.log('this.editForm.fineDocumentFileIdList',this.editForm.fineDocumentFileIdList);
+      // this.editForm.fineDocumentFileList = fileList
+    },
     getTableList() {
       this.tableDataListCheckedStaff = [];
       let { timeArr } = this.formInline
@@ -400,12 +432,34 @@ export default {
       this.tableDataListCheckedStaff = record.violators && JSON.parse(record.violators);
       this.currentMsg = record;
       this.lookVisible = true;
+      this.getFile(record)
     },
     actionEdit(record) {
       this.tableDataListCheckedStaff = record.violators && JSON.parse(record.violators);
       this.editText = "编辑";
       this.editForm = cloneDeep(record);
       this.editVisible = true;
+      this.getFile(record)
+    },
+    getFile(record){
+      if(record.fineDocumentFileList){
+        const para = record.fineDocumentFileList.map((item)=> {
+          return item.id
+        })
+        GetfileMsgList(para).then((res) => {
+          let result = res.data || []
+          this.infoFileIdList = (result || []).map(item => {
+            return {
+              uid: item.id,
+              name: item.sourceFileName,
+              status: 'done',
+              url: item.filePath
+            }
+          }) 
+        }).catch((err) =>{
+          console.log(err)
+        }) 
+      }
     },
     actionDelete(record) {
       this.$antConfirm({
@@ -468,6 +522,7 @@ export default {
     // 新增
     addInstructor() {
       this.editText = "新增";
+      this.infoFileIdList = []
       this.editForm = {
         punishTime: moment().format("YYYY-MM-DD")
       };
