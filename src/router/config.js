@@ -715,9 +715,9 @@ const options = {
                     },
                     {
                       path: 'storageTank',
-                      name: '化学品柜储存管理',
+                      name: '化学品现场使用管理',
                       meta: {
-                        title: '化学品柜储存管理',
+                        title: '化学品现场使用管理',
                         routerCode:'storageTank',
                         isKeepalive:true,
                         isPage: true,

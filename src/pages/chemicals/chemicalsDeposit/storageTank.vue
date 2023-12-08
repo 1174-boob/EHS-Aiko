@@ -1,17 +1,17 @@
 <template>
   <div class="storage-tank clx-show-scroll clx-flex-1 beauty-scroll">
-    <PageTitle>化学品柜储存管理</PageTitle>
+    <PageTitle>化学品现场使用管理</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="true" :departmentMultiple="true" deptLabel="管理部门"></CommonSearchItem>
         <a-form-model-item label="柜架编号">
           <a-input v-model="formInline.code" placeholder="请输入柜架编号" allowClear></a-input>
         </a-form-model-item>
-        <a-form-model-item label="柜架名称">
-          <a-input v-model="formInline.name" placeholder="请输入柜架名称" allowClear></a-input>
+        <a-form-model-item label="车间名称">
+          <a-input v-model="formInline.name" placeholder="请输入车间名称" allowClear></a-input>
         </a-form-model-item>
-        <a-form-model-item label="柜架类型">
-          <a-select v-model="formInline.shelfType" placeholder="请选择货架类型" show-search :filter-option="filterOption">
+        <a-form-model-item label="存放类型">
+          <a-select v-model="formInline.shelfType" placeholder="请选择存放类型" show-search :filter-option="filterOption">
             <a-select-option v-for="item of storage_type" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
@@ -141,7 +141,7 @@ export default {
           width: 200
         },
         {
-          title: "柜架名称",
+          title: "车间名称",
           dataIndex: "name",
           key: "name",
           width: 200
@@ -159,7 +159,7 @@ export default {
           width: 220
         },
         {
-          title: "柜架类型",
+          title: "存放类型",
           dataIndex: "shelfType",
           key: "shelfType",
           width: 120,

@@ -8,22 +8,28 @@
             <a-form-model-item v-if="addEdit=='edit'" label="柜架编号" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input v-model="tankForm.code" placeholder="请输入柜架编号" disabled/>
             </a-form-model-item>
-            <a-form-model-item label="柜架名称" prop="name" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-input v-model.trim="tankForm.name" placeholder="请输入柜架名称" disabled/>
+            <a-form-model-item label="车间名称" prop="name" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input v-model.trim="tankForm.name" placeholder="请输入车间名称" disabled/>
             </a-form-model-item>
             <staffOrDept :labelTitle="'管理人员'" :checkedTreeNode="checkedTreeNode" :treeRoles="tankRules" :onPreview="true" :propKey="'personList'" :labelCol="labelCol" :wrapperCol="wrapperCol"></staffOrDept>
-            <a-form-model-item label="柜架类型" prop="shelfType" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <a-select v-model="tankForm.shelfType" placeholder="请选择货架类型" disabled>
+            <a-form-model-item label="存放类型" prop="shelfType" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-select v-model="tankForm.shelfType" placeholder="请选择存放类型" disabled>
                 <a-select-option v-for="item of storage_type" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
               </a-select>
             </a-form-model-item>
             <a-form-model-item label="轴位" prop="axialPosition" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-input v-model.trim="tankForm.axialPosition" placeholder="请输入轴位" disabled/>
             </a-form-model-item>
+            <a-form-model-item label="来源" prop="source" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input v-model.trim="tankForm.source" placeholder="请输入来源" disabled/>
+            </a-form-model-item>
             <a-form-model-item label="是否可用" prop="usable" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-select v-model="tankForm.usable" placeholder="请选择是否可用" disabled>
                 <a-select-option v-for="item in usage" :value="item.value" :key="item.value">{{item.label}}</a-select-option>
               </a-select>
+            </a-form-model-item>
+            <a-form-model-item label="使用地点/设备" prop="useLocationOrEquipment" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-input v-model.trim="tankForm.useLocationOrEquipment" placeholder="请输入使用地点/设备" disabled/>
             </a-form-model-item>
           </a-col>
           <a-col :span="12"></a-col>
@@ -126,7 +132,12 @@ export default {
       userTreeFields: { value: 'key' },
       dataSource: [],
       columns: [
-      {
+        {
+          title: "编号",
+          dataIndex: "number",
+          key: "number",
+        },
+        {
           title: "化学品名称",
           dataIndex: "chemicalName",
           key: "chemicalName",
@@ -143,6 +154,16 @@ export default {
           title: "单位",
           dataIndex: "unit",
           key: "unit",
+        },
+        {
+          title: "关键设备",
+          dataIndex: "keyEquipment",
+          key: "keyEquipment",
+        },
+        {
+          title: "联锁",
+          dataIndex: "interlocking",
+          key: "interlocking",
         },
         {
           title: "备注",
@@ -181,6 +202,12 @@ export default {
         ],
         axialPosition: [
           { required: true, message: "不能为空", trigger: 'blur' },
+        ],
+        source: [
+          { required: true, validator: this.inputValidator, trigger: ['blur', 'change'] },
+        ],
+        useLocationOrEquipment: [
+          { required: true, validator: this.inputValidator, trigger: ['blur', 'change'] },
         ],
         usable: [
           { required: true, message: "不能为空", trigger: ['blur', 'change'] },

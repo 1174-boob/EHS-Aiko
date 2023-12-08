@@ -132,6 +132,11 @@ export default {
       dataSource: [],
       columns: [
         {
+          title: "编号",
+          dataIndex: "number",
+          key: "number",
+        },
+        {
           title: "化学品名称",
           dataIndex: "chemicalName",
           key: "chemicalName",
@@ -148,6 +153,16 @@ export default {
           title: "单位",
           dataIndex: "unit",
           key: "unit",
+        },
+        {
+          title: "关键设备",
+          dataIndex: "keyEquipment",
+          key: "keyEquipment",
+        },
+        {
+          title: "联锁",
+          dataIndex: "interlocking",
+          key: "interlocking",
         },
         {
           title: "去向",

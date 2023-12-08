@@ -77,6 +77,9 @@
           :colon="false"
           labelAlign="left"
         >
+          <a-form-model-item class="flex" label="编号" prop="number">
+            <a-input v-model.trim="storageForm.number" placeholder="若没有相关信息可填无" />
+          </a-form-model-item>
           <a-form-model-item class="flex" label="化学品名称" prop="chemicalName">
             <a-select v-model="storageForm.chemicalName" placeholder="请选择化学品名称" show-search :filter-option="filterOption" allowClear>
               <a-select-option v-for="item of chemical" :value="item.dictValue" :key="item.dictValue">{{item.dictLabel}}</a-select-option>
@@ -87,6 +90,12 @@
           </a-form-model-item>
           <a-form-model-item class="flex" label="单位" prop="unit">
             <a-input v-model.trim="storageForm.unit" placeholder="请输入单位" />
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="关键设备" prop="keyEquipment">
+            <a-input v-model.trim="storageForm.keyEquipment" placeholder="若没有相关信息可填无" />
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="联锁" prop="interlocking">
+            <a-input v-model.trim="storageForm.interlocking" placeholder="若没有相关信息可填无" />
           </a-form-model-item>
           <a-form-model-item class="flex" label="去向" prop="whereabouts">
             <a-input v-model.trim="storageForm.whereabouts" placeholder="请输入去向" />
@@ -153,6 +162,11 @@ export default {
       dataSource: [],
       columns: [
         {
+          title: "编号",
+          dataIndex: "number",
+          key: "number",
+        },
+        {
           title: "化学品名称",
           dataIndex: "chemicalName",
           key: "chemicalName",
@@ -169,6 +183,16 @@ export default {
           title: "单位",
           dataIndex: "unit",
           key: "unit",
+        },
+        {
+          title: "关键设备",
+          dataIndex: "keyEquipment",
+          key: "keyEquipment",
+        },
+        {
+          title: "联锁",
+          dataIndex: "interlocking",
+          key: "interlocking",
         },
         {
           title: "去向",
@@ -218,6 +242,15 @@ export default {
           { required: true, message: "不能为空", trigger: 'blur' },
         ],
         whereabouts: [
+          { required: true, message: "不能为空", trigger: 'blur' },
+        ],
+        number: [
+          { required: true, message: "不能为空", trigger: 'blur' },
+        ],
+        keyEquipment: [
+          { required: true, message: "不能为空", trigger: 'blur' },
+        ],
+        interlocking: [
           { required: true, message: "不能为空", trigger: 'blur' },
         ],
       }
