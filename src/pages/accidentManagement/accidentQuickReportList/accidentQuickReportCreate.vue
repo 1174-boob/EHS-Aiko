@@ -35,6 +35,7 @@
                       :disabled="disabled"
                       :placeholder="iForm.dutyDeptIdList ? '请选择':'请输入责任部门'"
                       v-model="iForm.dutyDeptIdList"
+                      :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
                       :deptData="treeData"
                       @change="deptChange"
                       multiple
@@ -136,7 +137,7 @@
                 </a-col>
               </a-row>
               <template title="受伤人员情况">
-                <div>
+                <div v-if="iForm.personalInjury == '1'">
                   <div class="m-t-20 border-b-e7">
                     <PageTitle>
                       受伤人员情况
@@ -150,31 +151,28 @@
                     </PageTitle>
                   </div>
                   <div class="m-t-20"></div>
+                  <a-form-model-item ref="injuryList" label=" " prop="injuryList" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+                    <CommonTable :noPaging="true" :class="{'none-events': disabled}">
+                      <a-table
+                        style="width:100%;"
+                        :columns="columns"
+                        :scroll="{ x: 800 }"
+                        :locale="{emptyText: emptyText}"
+                        :data-source="iForm.injuryList"
+                        :rowKey="(record, index)=>{return index}"
+                        :pagination="false"
+                      >
+                        <div slot="workRelatedInjury" slot-scope="record">
+                          {{getMappingValue(requiredList, "key", record.workRelatedInjury).value}}
+                        </div>
+                        <div slot="action" slot-scope="record">
+                          <span class="color-0067cc cursor-pointer m-r-15" @click="tableRowEdit(record)">编辑</span>
+                          <span class="color-0067cc cursor-pointer" @click="tableRowDel(record)">删除</span>
+                        </div>
+                      </a-table>
+                    </CommonTable>
+                  </a-form-model-item>
                 </div>
-                <a-form-model-item ref="accidentAnalyseMeasuresList" label=" " prop="accidentAnalyseMeasuresList" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
-                  <CommonTable :noPaging="true" :class="{'none-events': disabled}">
-                    <a-table
-                      style="width:100%;"
-                      :columns="columns"
-                      :scroll="{ x: 800 }"
-                      :locale="{emptyText: emptyText}"
-                      :data-source="iForm.accidentAnalyseMeasuresList"
-                      :rowKey="(record, index)=>{return index}"
-                      :pagination="false"
-                    >
-                      <div slot="reasonType" slot-scope="record">
-                        {{getMappingValue(accidentReasonType, "dictValue", record.reasonType).dictLabel}}
-                      </div>
-                      <div slot="reasonCategory" slot-scope="record">
-                        {{getMappingValue(accidentReasonClass, "dictValue", record.reasonCategory).dictLabel}}
-                      </div>
-                      <div slot="action" slot-scope="record">
-                        <span class="color-0067cc cursor-pointer m-r-15" @click="tableRowEdit(record)">编辑</span>
-                        <span class="color-0067cc cursor-pointer" @click="tableRowDel(record)">删除</span>
-                      </div>
-                    </a-table>
-                  </CommonTable>
-                </a-form-model-item>
               </template>
               <a-row>
                 <a-col :span="24">
@@ -189,21 +187,26 @@
         <CommonModal title="受伤人员情况" :visible="addCasNoModelShow" :cancelFn="addModalCancle">
           <template slot="form">
             <a-form-model ref="addModleForm" :model="addModleForm" :rules="addModleFormRules" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" :colon="false" labelAlign="left">
-              <a-form-model-item label="原因类型" prop="reasonType">
-                <a-select v-model="addModleForm.reasonType" show-search placeholder="请选择" :filter-option="filterOptionMixin">
-                  <a-select-option v-for="item in accidentReasonType" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+              <a-form-model-item label="受伤人员年资" prop="injuredUserSeniority">
+                <a-date-picker style="width: 100%;" v-model="addModleForm.injuredUserSeniority" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" placeholder="请选择受伤人员年资" />
+              </a-form-model-item>
+              <StaffOrDept
+                ref="injuredUserId"
+                :labelTitle="'受伤人员'"
+                :propKey="'injuredUserId'"
+                :treePlaceholder="deptTreeIdFrt?'请选择' : '请选择受伤人员'"
+                :checkedTreeNode="checkedTreeNodeFrt"
+                :deptTreeId="deptTreeIdFrt"
+                :checkAbel="false"
+                @getTreeData="getTreeDataFrt"
+              />
+              <a-form-model-item label="初判是否为工伤" prop="workRelatedInjury">
+                <a-select v-model="addModleForm.workRelatedInjury" placeholder="请选择初判是否为工伤" allowClear>
+                  <a-select-option v-for="notice of requiredList" :value="notice.key" :key="notice.key">{{notice.value}}</a-select-option>
                 </a-select>
               </a-form-model-item>
-              <a-form-model-item label="原因分类" prop="reasonCategory">
-                <a-select v-model="addModleForm.reasonCategory" show-search placeholder="请选择">
-                  <a-select-option v-for="item in accidentReasonClass" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="事故原因分析" prop="reasonAnalyse">
-                <a-textarea :maxLength="1000" v-model="addModleForm.reasonAnalyse" placeholder="请输入事故原因分析"></a-textarea>
-              </a-form-model-item>
-              <a-form-model-item label="事故整改措施" prop="rectificationMeasures">
-                <a-textarea :maxLength="1000" v-model="addModleForm.rectificationMeasures" placeholder="请输入事故整改措施"></a-textarea>
+              <a-form-model-item label="伤害部位/程度" prop="injuryLocationDegree">
+                <a-input v-model="addModleForm.injuryLocationDegree" placeholder="请输入伤害部位/程度" />
               </a-form-model-item>
             </a-form-model>
           </template>
@@ -245,9 +248,11 @@ export default {
       deptTreeIdFst: undefined,
       deptTreeIdSnd: undefined,
       deptTreeIdTrd: undefined,
+      deptTreeIdFrt: undefined,
       checkedTreeNodeFst: [],
       checkedTreeNodeSnd: [],
       checkedTreeNodeTrd: [],
+      checkedTreeNodeFrt: [],
       spinning: true,
       accidentType: [],
       accidentLocation: [],
@@ -258,34 +263,34 @@ export default {
       addModleForm: {},
       addModleFormRules: {
         reasonType: [
-          { required: true, message: "原因类型不能为空", trigger: "change" },
+          { required: true, message: "受伤人员年资不能为空", trigger: "change" },
         ],
         reasonCategory: [
-          { required: true, message: "原因分类不能为空", trigger: "change" },
+          { required: true, message: "受伤人员不能为空", trigger: "change" },
         ],
         reasonAnalyse: [
-          { required: true, message: "事故原因分析不能为空", trigger: "blur" },
+          { required: true, message: "初判是否为工伤不能为空", trigger: "blur" },
         ],
         rectificationMeasures: [
-          { required: true, message: "事故整改措施不能为空", trigger: "blur" },
+          { required: true, message: "伤害部位/程度不能为空", trigger: "blur" },
         ],
       },
       columns: [
         {
           title: '受伤人员年资',
-          scopedSlots: { customRender: 'reasonType' },
+          dataIndex: 'injuredUserSeniority',
         },
         {
           title: '受伤人员',
-          scopedSlots: { customRender: 'reasonCategory' },
+          dataIndex: 'injuredUserName',
         },
         {
           title: '初判是否为工伤',
-          dataIndex: 'reasonAnalyse',
+          scopedSlots: { customRender: 'workRelatedInjury' },
         },
         {
           title: '伤害部位/程度',
-          dataIndex: 'rectificationMeasures',
+          dataIndex: 'injuryLocationDegree',
         },
         {
           title: '操作',
@@ -304,6 +309,7 @@ export default {
         dutyDeptNameList: [],
         injuryList: [],
       },
+      injuryList: [],
       rules: { // 调岗
         applicant: [
           { required: true, message: "申请人不能为空", trigger: "blur" },
@@ -395,7 +401,8 @@ export default {
         { dictLabel: '一般事故', dictValue: '2' },
         { dictLabel: '严重事故', dictValue: '3' },
         { dictLabel: '重大事故', dictValue: '4' },
-      ]
+      ],
+      requiredList: []
     };
   },
   async created() {
@@ -410,6 +417,7 @@ export default {
     this.accidentType = this.getDictItemList("accident_type");
     this.accidentLocation = this.getDictItemList("accidentLocation");
     this.personalInjury = dictionary("personalInjury");
+    this.requiredList = dictionary("required");
     this.propertyLoss = this.getDictItemList("accident_level_money");
     this.accidentReasonType = this.getDictItemList("accident_reason_type");
     this.accidentReasonClass = this.getDictItemList("accident_cause_classification");
@@ -469,6 +477,16 @@ export default {
       this.$set(this.iForm, 'dutyDirectorId', dutyDirectorId)
       this.departOrPerpleChange([dutyDirectorName], 'dutyDirectorName')
       formValidator.formItemValidate(this, "dutyDirectorId", "iForm")
+    },
+    getTreeDataFrt(value) {
+      let { treeIdList, treeNameAndCodeList } = value
+      this.checkedTreeNodeFrt = treeIdList
+      let { id, treeName, treeCode } = treeNameAndCodeList && treeNameAndCodeList.length ? treeNameAndCodeList[0] : {}
+      let injuredUserId = id
+      let injuredUserName = (treeName || '') + (treeName && treeCode ? '/' : '') + (treeCode || '')
+      this.$set(this.addModleForm, 'injuredUserId', injuredUserId)
+      this.$set(this.addModleForm, 'injuredUserName', injuredUserName)
+      formValidator.formItemValidate(this, "injuredUserId", "addModleForm")
     },
     // 各部门改变
     departOrPerpleChange(lab, attrName) {
@@ -551,7 +569,7 @@ export default {
       if (!formValidator.formAll(this, 'addModleForm')){
         return;
       }
-      let arr = this.iForm.accidentAnalyseMeasuresList;
+      let arr = this.iForm.injuryList;
       if (!Array.isArray(arr)) {
         arr = [];
       }
@@ -559,10 +577,11 @@ export default {
         ...this.addModleForm,
         _id: nanoid()
       })
-      this.$set(this.iForm, 'accidentAnalyseMeasuresList', arr)
+      console.log(this.addModleForm, 'this.addModleForm')
+      this.$set(this.iForm, 'injuryList', arr)
       this.addModleForm = {};
       this.addCasNoModelShow = false;
-      formValidator.formItemValidate(this, 'accidentAnalyseMeasuresList', 'iForm')
+      formValidator.formItemValidate(this, 'injuryList', 'iForm')
     },
     tableRowEdit(row) {
       this.addModleForm = { ...row };
@@ -570,13 +589,13 @@ export default {
     },
     tableRowDel(row) {
       let ind;
-      for (let i = 0; i < this.iForm.accidentAnalyseMeasuresList.length; i++) {
-        if (this.iForm.accidentAnalyseMeasuresList[i]._id == row._id) {
+      for (let i = 0; i < this.iForm.injuryList.length; i++) {
+        if (this.iForm.injuryList[i]._id == row._id) {
           ind = i;
           break;
         }
       }
-      this.iForm.accidentAnalyseMeasuresList.splice(ind, 1);
+      this.iForm.injuryList.splice(ind, 1);
     },
     // 编辑 | 查看 | 处理，获取回显数据
     async getEchoData() {
@@ -603,9 +622,9 @@ export default {
         // iForm.fileList = this.handleFileIdS(iForm.fileList);
 
         // 表格回显
-        if (Array.isArray(iForm.accidentAnalyseMeasuresList)) {
-          for (let i = 0; i < iForm.accidentAnalyseMeasuresList.length; i++) {
-            iForm.accidentAnalyseMeasuresList[i]._id = nanoid();
+        if (Array.isArray(iForm.injuryList)) {
+          for (let i = 0; i < iForm.injuryList.length; i++) {
+            iForm.injuryList[i]._id = nanoid();
           }
         }
         this.dataMsg = { ...iForm };
@@ -696,7 +715,7 @@ export default {
       this.btnLoading = true;
       promiseFn(para).then(res => {
         this.$router.push({
-          path: '/safeManage/emergencyManagement/accidentManagement/accidentDraft'
+          path: '/safeManage/emergencyManagement/accidentManagement/accidentQuickReportList'
         })
       }).catch(err => { })
       .finally( () => {

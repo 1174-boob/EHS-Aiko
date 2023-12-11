@@ -176,7 +176,7 @@ export default {
     },
     // 获取当前课程学习进度api
     getCandidateFileStudyDetailFn() {
-      let apiData = { courseId: this.courseId }
+      let apiData = { coursePushId: this.$route.query.paperObj ? JSON.parse(this.$route.query.paperObj).coursePushId : '' }
       return getCandidateFileStudyDetailApi(apiData)
         .then(res => {
           // 已有学习记录的课程
@@ -203,7 +203,7 @@ export default {
     // 开始学习api
     startCandidateFileStudyFn() {
       // return Promise.resolve()
-      let apiData = { courseId: this.courseId }
+      let apiData = { courseId: this.courseId, coursePushId: this.$route.query.paperObj ? JSON.parse(this.$route.query.paperObj).coursePushId : '' }
       return startCandidateFileStudyApi(apiData)
     },
     // 格式化课件大小
@@ -215,7 +215,7 @@ export default {
     // 开始/继续 学习
     goMyCourseStudy(row) {
       console.log(row);
-      const query = { courseId: row.courseId, moduleId: row.moduleId, coursewareId: row.coursewareId }
+      const query = { courseId: row.courseId, moduleId: row.moduleId, coursewareId: row.coursewareId, paperObj: this.$route.query.paperObj }
       if (this.studyHasRecordIds.includes('' + row.moduleId + row.coursewareId)) {
         this.$router.push({
           path: '/ehsGerneralManage/educationmanagement/myCourseStudy',
@@ -247,7 +247,7 @@ export default {
     goMyExamIng() {
       let paperId = this.courseDetails.paper[0].paperId
       // formType 1通过课程进入 2通过考试进入 
-      let query = { paperId, courseId: this.courseId, formType: 1 }
+      let query = { paperId, courseId: this.courseId, formType: 1, paperObj: this.$route.query.paperObj }
       this.$router.push({
         path: '/ehsGerneralManage/educationmanagement/myExamIng',
         query

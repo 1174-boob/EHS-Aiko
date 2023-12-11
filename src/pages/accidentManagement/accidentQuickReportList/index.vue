@@ -69,7 +69,7 @@
         <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
           <div slot="action" slot-scope="record">
             <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
-            <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">处理</span>
+            <span v-if="record.status == '1'" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">编辑</span>
             <span class="color-0067cc cursor-pointer" @click="actionDel(record)">删除</span>
           </div>
           <!-- <div slot="accidentType" slot-scope="record">

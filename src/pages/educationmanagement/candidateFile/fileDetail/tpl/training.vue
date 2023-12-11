@@ -90,7 +90,8 @@ export default {
       let query = {
         userId: this.userId,
         companyId: this.companyId,
-        courseId: row.courseId
+        courseId: row.courseId,
+        coursePushId: row.coursePushId,
       }
       this.$router.push({
         path: '/ehsGerneralManage/educationmanagement/filePreview',
@@ -106,7 +107,8 @@ export default {
         let apiData = {
           userId: this.userId,
           companyId: this.companyId,
-          courseId: row.courseId
+          courseId: row.courseId,
+          coursePushId: row.coursePushId,
         }
         getCandidateFileDetailExamExport(apiData)
           .then(res => {
