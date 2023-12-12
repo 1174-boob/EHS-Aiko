@@ -69,7 +69,10 @@ const progressStart = (to, from, next, options) => {
  * @param options
  */
 const loginGuard = (to, from, next, options) => {
+  // BOE自己加的
   let userKey = getQueryVariable('userKey');
+  // 来自用户自己的门户页
+  let code = getQueryVariable('code');
   // 首先判断是否为随机登录，如果是，则清空所有信息
   if(userKey) {
     if (userKey != sessionStorage.getItem('userKey')) {
@@ -80,7 +83,8 @@ const loginGuard = (to, from, next, options) => {
   }
   // 获取token和用户信息
   let userInfo = sessionStorage.getItem('zconsole_userInfo');
-  if (process.env.NODE_ENV == "development") {
+  // 本地 && 没有userKey和code的测试环境
+  if (process.env.NODE_ENV == "development" || (code == undefined && userKey == undefined)) {
     // 开发环境是否存在用户信息
     if (!userInfo) {
       if (!loginIgnore.includes(to)) {
@@ -99,7 +103,8 @@ const loginGuard = (to, from, next, options) => {
       }
     }
   }
-  if (process.env.NODE_ENV == "production") {
+  // 生产、有userKey或有code的测试环境
+  else if (process.env.NODE_ENV == "production" || code || userKey) {
     // 生产环境是否存在用户信息
     if (userInfo) {
       if (store.state.setting.hasRightToken) {
