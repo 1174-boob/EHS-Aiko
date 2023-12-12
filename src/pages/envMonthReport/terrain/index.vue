@@ -30,6 +30,7 @@
           <span class="color-0067cc cursor-pointer" v-if="(record.status=='01'||record.status=='04')&&record.createUserId==userId" @click="handleEditInfo(record)">编辑</span>
           <span class="color-0067cc cursor-pointer" v-if="(record.status=='01'||record.status=='04')&&record.createUserId==userId" @click="handleSubmit(record)">提交审批</span>
           <span class="color-0067cc cursor-pointer" @click="handleDispose(record)" v-if="record.status=='02'&&record.handleUser==userId">处理</span>
+          <span class="color-0067cc cursor-pointer" @click="handleDelete(record)">删除</span>
         </div>
       </a-table>
     </CommonTable>
@@ -104,7 +105,7 @@ import cancelLoading from "@/mixin/cancelLoading";
 import getDictionaryItemObj from "@/utils/dictionary.js";
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { debounce } from "lodash";
-import { getEnvMonthList, envMonthExport, envMonthSubmit } from "@/services/envMonth.js";
+import { getEnvMonthList, envMonthExport, envMonthSubmit, environmentMonthDelete } from "@/services/envMonth.js";
 import serviceNameList from "@/config/default/service.config.js";
 import dayJs from "dayjs";
 export default {
@@ -357,6 +358,30 @@ export default {
           type: 2,
           monthlyId: e.monthlyId,
           manage: true
+        },
+      });
+    },
+    handleDelete(e) {
+      if (!this.canClickBtnMixin("testManagement-del")) {
+        return;
+      }
+      const _this = this;
+      this.$antConfirm({
+        title: '确定删除吗？',
+        onOk() {
+          environmentMonthDelete({
+            monthlyId: e.monthlyId
+          })
+            .then((res) => {
+              _this.$antMessage.success(res.message);
+              _this.initData();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        },
+        onCancel() {
+          _this.$antMessage.info('取消删除');
         },
       });
     },

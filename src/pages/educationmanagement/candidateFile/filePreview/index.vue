@@ -23,6 +23,8 @@ export default {
       companyId: undefined,
       courseId: undefined,
       testId: undefined,
+      testPushId: undefined,
+      coursePushId: undefined,
     };
   },
   created() {
@@ -30,6 +32,8 @@ export default {
     this.companyId = this.$route.query.companyId
     this.courseId = this.$route.query.courseId
     this.testId = this.$route.query.testId
+    this.testPushId = this.$route.query.testPushId
+    this.coursePushId = this.$route.query.coursePushId
     this.getPaperUrl()
   },
   methods: {
@@ -39,6 +43,8 @@ export default {
         companyId: this.companyId,
         courseId: this.courseId,
         testId: this.testId,
+        testPushId: this.testPushId,
+        coursePushId: this.coursePushId,
       }
       getCandidateFileDetailExamExport(apiData)
         .then(res => {

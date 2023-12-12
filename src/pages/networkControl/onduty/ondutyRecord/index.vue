@@ -54,9 +54,18 @@
                   </a-form-model-item>
                 </a-col>
                 <a-col :span="spanCol">
-                  <a-form-model-item ref="dutyUserNameList" label="值班员" prop="dutyUserNameList">
-                    <a-input v-model="iFrom.dutyUserNameList" disabled />
-                  </a-form-model-item>
+                  <StaffOrDept
+                    :treeType="'user'"
+                    :propKey="'dutyUserIdList'"
+                    :treeRoles="iRules"
+                    :onPreview="isShowPage"
+                    :labelTitle="'值班员'"
+                    :label-col="labelCol"
+                    :wrapper-col="wrapperCol"
+                    @getTreeData="personThingOne"
+                    :checkedTreeNode="iFrom.dutyUserIdList"
+                    :deptTreeId="iFrom.deptId"
+                  />
                 </a-col>
               </a-row>
             </template>
@@ -353,9 +362,10 @@ import RoomDataModel from './comp/roomDataModel.vue'
 import { getDictConfigData } from "@/utils/dictionary.js";
 import dictionary from "@/utils/dictionary.js";
 import dayJs from "dayjs";
+import StaffOrDept from "@/components/staffOrDept";
 import ondutyMixin from '@/pages/networkControl/onduty/mixin/ondutyMixin.js'
 export default {
-  components: { FixedBottom, CustomTable, FireDataModel, EngineDataModel, RoomDataModel },
+  components: { FixedBottom,StaffOrDept, CustomTable, FireDataModel, EngineDataModel, RoomDataModel },
   mixins: [chemicalDict, cancelLoading, deptAndUser, ondutyMixin],
   data() {
     return {
@@ -379,6 +389,9 @@ export default {
         fireEngineCheckList: [],
       },
       iRules: {
+        dutyUserIdList: [
+          { required: true, message: "值班员不能为空", trigger: "change" },
+        ],
         systemList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'systemList', text: '系统数据' },],
         fireFightingSystemTableList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'fireFightingSystemTableList', text: '消防系统CRT每日检测', targetAttr: 'fire', },],
         otherList: [{ required: true, validator: this.customTableValidator, trigger: "change", targetName: 'otherList', text: '其他交接' },],
@@ -412,6 +425,33 @@ export default {
     },
   },
   methods: {
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
+      }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
+    },
+    //值班员
+    personThingOne(data) {
+      this.iFrom.dutyUserIdList = data.treeIdList;
+      let list = data.treeNameAndCodeList || [];
+      this.iFrom.dutyUserNameList = this.getName(list);
+      this.iFrom.dutyUserJobNumberList = this.getWorkNum(list);
+    },
     // 页面初始化
     initPage() {
       // 获取页面详情

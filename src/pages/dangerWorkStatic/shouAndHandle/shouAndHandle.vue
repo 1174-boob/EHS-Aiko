@@ -597,7 +597,7 @@ export default {
           return revokeDangerWorkStaticItemApi({ operateId: this.operateId })
             .then((res) => {
               this.$antMessage.success('撤回成功');
-              this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+              this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
             })
             .catch(err => {
               console.log(err, err);
@@ -634,7 +634,7 @@ export default {
           this.pushTask(securityUser, title);
           this.$antMessage.success('提交成功');
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
         })
         .catch(err => { })
         .finally(() => {
@@ -643,7 +643,7 @@ export default {
     },
     // 代办推送
     async pushTask(securityUser, title) {
-      const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${this.operateId}`
+      const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/workManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${this.operateId}`
       // 处理userId
       let guardianCode = this.iFromDefault.dangerGuardian.map(item => item.guardianCode)
       guardianCode = guardianCode.join()
@@ -679,7 +679,7 @@ export default {
               this.$antMessage.success('关闭成功');
               // 关闭代办推送
               this.closePushTask()
-              this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+              this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
             })
             .catch(err => { });
         },
@@ -706,7 +706,7 @@ export default {
           this.$antMessage.success('关闭成功');
           // 关闭代办推送
           this.closePushTask()
-          this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
         })
         .catch(() => { })
     },
@@ -723,7 +723,7 @@ export default {
           if (isChangePage) {
             this.$antMessage.success('暂存成功');
             // 跳转列表页
-            this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+            this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
           }
         })
         .catch(err => { })
@@ -749,7 +749,7 @@ export default {
           // 关闭代办推送
           this.closePushTask()
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
         })
         .catch(err => { })
         .finally(() => {
@@ -760,7 +760,7 @@ export default {
     iBack() {
       this.setKeepalive(true)
       // 跳转列表页
-      this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+      this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
     },
   }
 }

@@ -53,8 +53,6 @@
           <a-icon type="plus" />新建
         </a-button>
         <a-button type="dashed" @click="earlyWarningTest">预警测试</a-button>
-      </div>
-      <div>
         <UploadBtnStyle
           :action="actions"
           :showAcceptText="false"
@@ -65,9 +63,8 @@
           :btnIcon="false"
           @handleSuccess="handleSuccess"
         ></UploadBtnStyle>
-        <a-button type="primary" class="btn m-l-20" @click="downTpl"
-          >下载导入模板</a-button
-        >
+        <a-button type="primary" style="margin-left:10px" @click="downTpl">下载导入模板</a-button>
+        <a-button type="dashed" @click="batchExport" :loading="downLoading">批量导出</a-button>
       </div>
     </DashBtn>
     <CommonTable
@@ -270,6 +267,7 @@ import { debounce } from "lodash";
 import { cloneDeep } from "lodash";
 import {
   gasPageList,
+  gasExport,
   gasInsert,
   gasUpdate,
   gasDelete,
@@ -290,6 +288,7 @@ export default {
       },
       selectedRowKeys: [],
       detailVisible: false,
+      downLoading: false,
       currentMsg: {},
 
       editForm: {},
@@ -427,6 +426,29 @@ export default {
       window.open(
         window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/特气报警系统设备信息维护批量导入模板.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/特气报警系统设备信息维护批量导入模板.xlsx`
       );
+    },
+    async batchExport() {
+      this.downLoading = true;
+      let para = {
+        ...this.formInline,
+        gasEquipIdList: this.selectedRowKeys
+      }
+      let res = await gasExport(para);
+      if(res){
+        const name = '特气报警导出';
+        const blob = new Blob([res], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+        const downloadElement = document.createElement('a')
+        const href = URL.createObjectURL(blob) //创建下载链接
+        downloadElement.href = href
+        downloadElement.download = name + '.xlsx'
+        document.body.appendChild(downloadElement)
+        downloadElement.click()
+        document.body.removeChild(downloadElement)// 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+        this.$antMessage.success("导出成功");
+        this.selectedRowKeys = []
+      }
+      this.downLoading = false;
     },
     // 批量导入成功
     handleSuccess(fileList) {
@@ -732,6 +754,16 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+::v-deep .dashed-btn{
+  .ant-btn-primary {
+    background: #f1f4ff;
+    color: #0067cc;
+    border: 1px dashed #9fcaf5 !important;
+  }
+  .ant-btn-primary:hover {
+    border: 1px dashed #0067cc !important;
+  }
+}
 /deep/ td {
   img {
     width: 30px;

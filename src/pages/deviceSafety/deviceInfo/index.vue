@@ -126,16 +126,18 @@
         <a-button type="dashed" @click="handleDownloadTemplate"
           >下载模板</a-button
         >
-        <UploadBtnStyle
-          :action="action"
-          :showAcceptText="false"
-          :accept="['.xlsx', '.xls']"
-          :showUploadList="false"
-          :btnText="'批量导入'"
-          :btnType="'dashed'"
-          :btnIcon="false"
-          class="upload-btn-style"
-        ></UploadBtnStyle>
+        <span @click="canClickImpot">
+          <UploadBtnStyle
+            :action="action"
+            :showAcceptText="false"
+            :accept="['.xlsx', '.xls']"
+            :showUploadList="false"
+            :btnText="'批量导入'"
+            :btnType="'dashed'"
+            :btnIcon="false"
+            class="upload-btn-style"
+          ></UploadBtnStyle>
+        </span>
         <!-- <a-button type="dashed">批量导入</a-button> -->
         <a-button type="dashed" @click="handelDownload">导出Excel</a-button>
       </div>
@@ -812,6 +814,9 @@ export default {
       }
     },
     handelDownload() {
+      if (!this.canClickBtnMixin("toExportDevice")) {
+        return;
+      }
       console.log("下载");
       deviceExport(this.searchFormData).then((res) => {
         const name = "设备导出";
@@ -862,8 +867,17 @@ export default {
     },
     //新增弹框
     addDevice() {
+      if (!this.canClickBtnMixin("toAddDevice")) {
+        return;
+      }
       this.modalTitle = "新增";
       this.addVisible = true;
+    },
+    // 批量导入添加校验条件
+    canClickImpot(){
+      if (!this.canClickBtnMixin("toImportDevice")) {
+        return;
+      }
     },
     //取消弹框
     addCancle() {
@@ -873,6 +887,9 @@ export default {
     },
     //修改设备
     editDevice(e) {
+      if (!this.canClickBtnMixin("toEditDevice")) {
+        return;
+      }
       this.modalTitle = "编辑";
       this.addVisible = true;
       this.operationEquipmentId = e.equipmentId;
@@ -889,6 +906,9 @@ export default {
     },
     //删除设备
     handleDeleteDevice(e) {
+      if (!this.canClickBtnMixin("toDeleteDevice")) {
+        return;
+      }
       let _this = this;
       this.$antConfirm({
         title: "确定删除设备吗?",

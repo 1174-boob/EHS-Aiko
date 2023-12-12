@@ -116,6 +116,8 @@ export const GetIsCompany = params => get(`ehs-customer/api/company/detail`, par
 export const GetContractCount = params => get(`${serviceNameList.contract}/api/contract/open/contractSize`, params);
 //获取新闻公告列表总览页-右下角
 export const GetNewsBulletin = params => post(`${serviceNameList.notice}/api/notice/publish/page/list`, params);
+//系统公告导出
+export const noticeExport = params => postExcel(`ehs-customer/api/ehs/policylaw/file/download`, params);
 //ehs政策法规新增
 export const InsertPolicyLaw = params => post(`ehs-customer/api/ehs/policylaw/insertPolicyLaw`, params);
 //ehs政策法规编辑
@@ -469,16 +471,18 @@ export const selectPolicy = params => post(`ehs-customer/api/ehs/policylaw/selec
 export const PushTask = params => post(`ehs-customer/api/ehs/task/pushTask`, params);
 
 // 设备信息维护
-// 火灾-分页查-增-改-删
+// 火灾-分页查-增-改-删-导出
 export const firePageList = params => post(`${serviceNameList.danger}/api/ehs/equip/fire/page/list`, params);
 export const fireInsert = params => post(`${serviceNameList.danger}/api/ehs/equip/fire/insert`, params);
 export const fireUpdate = params => post(`${serviceNameList.danger}/api/ehs/equip/fire/update`, params);
 export const fireDelete = params => get(`${serviceNameList.danger}/api/ehs/equip/fire/delete`, params);
-// 特气-分页查-增-改-删
+export const fireExport = params => postExcel(`${serviceNameList.danger}/api/ehs/equip/fire/file/download`, params);
+// 特气-分页查-增-改-删-导出
 export const gasPageList = params => post(`${serviceNameList.danger}/api/ehs/equip/gas/page/list`, params);
 export const gasInsert = params => post(`${serviceNameList.danger}/api/ehs/equip/gas/insert`, params);
 export const gasUpdate = params => post(`${serviceNameList.danger}/api/ehs/equip/gas/update`, params);
 export const gasDelete = params => get(`${serviceNameList.danger}/api/ehs/equip/gas/delete`, params);
+export const gasExport = params => postExcel(`${serviceNameList.danger}/api/ehs/equip/gas/file/download`, params);
 
 // 黑名单
 // 违规记录分页查-增-改-删
@@ -671,6 +675,8 @@ export const updateCheckResult = params => post(`${serviceNameList.health}/api/e
 export const findHealthUserByDeptId = params => get(`${serviceNameList.health}/api/ehs/health/user/findUser`, params);
 //上传|更新体检报告
 export const uploadCheckFile = params => post(`${serviceNameList.health}/api/ehs/health/check/upload/checkFile`, params);
+//上传|更新体检报告
+export const addHistoryHealthyCheck = params => post(`${serviceNameList.health}/api/ehs/health/check/addHistoryHealthyCheck`, params);
 //草稿箱体检预约删除
 export const healthCheckDelete = params => get(`${serviceNameList.health}/api/ehs/health/check/delete`, params);
 //体检审批通过
@@ -694,6 +700,114 @@ export const feathJobPosition = params => post(`${serviceNameList.health}/api/eh
 //体检审批记录
 export const getTaskComments = params => get(`${serviceNameList.btp}/api/ehs/camunda/getTaskComments`, params);
 
+// 安全档案管理
+// 证书管理-新增
+export const certificateAdd = params => post(`${serviceNameList.health}/api/ehs/security/certificate/add`, params);
+// 证书管理-删除
+export const certificateDelete = params => post(`${serviceNameList.health}/api/ehs/security/certificate/delete`, params);
+// 证书管理-编辑
+export const certificateEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/edit`, params);
+// 证书管理-详情
+export const certificateDetail = params => post(`${serviceNameList.health}/api/ehs/security/certificate/detail`, params);
+// 证书管理-分页(三个格)
+export const getCertificateCount = params => post(`${serviceNameList.health}/api/ehs/security/certificate/count`, params);
+// 证书管理-分页
+export const getCertificateList = params => post(`${serviceNameList.health}/api/ehs/security/certificate/list/page`, params);
+// 证书管理-消息管理详情
+export const getPushNotifyDetail = params => post(`${serviceNameList.health}/api/ehs/security/certificate/push/notify/detail`, params);
+// 证书管理-消息管理编辑
+export const getPushNotifyEdit = params => post(`${serviceNameList.health}/api/ehs/security/certificate/push/notify/edit`, params);
+// 证书管理-批量导入
+export const getCertificateImport = params => post(`${serviceNameList.health}/api/ehs/security/certificate/file/import`, params);
+// 证书管理-新增外部员工时搜索厂商
+export const getInvitationSupplier = params => post(`ehs-customer/api/ehs/invitation/supplier/no/page`, params);
+
+// 职业危害告知书导入
+export const getNotificationImport = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/file/import`, params);
+// 职业危害告知书-分页
+export const getNotificationList = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/list/page`, params);
+// 职业危害告知书-分页(三个格)
+export const getNotificationCount = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/count`, params);
+// 职业危害告知书-批量推送
+export const pushNotification = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/push`, params);
+// 职业危害告知书-删除 
+export const notificationDelete = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/delete`, params);
+// 职业危害告知书-详情 
+export const notificationDetail = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/detail`, params);
+// 职业危害告知书-发送短信验证码
+export const notificationSendCode = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/send/code`, params);
+// 职业危害告知书-签署
+export const notificationSign = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/sign`, params);
+// 职业危害告知书-公司盖章后导入
+export const notificationImportSignPDF = params => post(`${serviceNameList.health}/api/ehs/security/occupational/hazard/notification/file/import/signPDF`, params);
+
+// 安全责任书-删除
+export const responsibilityDelete = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/delete`, params);
+// 安全责任书-详情
+export const responsibilityDetail = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/detail`, params);
+// 安全责任书-人员导入
+export const responsibilityFileImport = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/file/import`, params);
+// 安全责任书-分页
+export const getResponsibilityList = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/list/page`, params);
+// 安全责任书-分页(三个格)
+export const getResponsibilityCount = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
+// 安全责任书-批量推送
+export const pushResponsibility = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/push`, params);
+// 安全责任书-发送短信验证码
+export const responsibilitySendCode = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/send/code`, params);
+// 安全责任书-签署
+export const responsibilitySign = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign`, params);
+// 安全责任书-批量签署
+export const responsibilitySignBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign/batch`, params);
+
+//用户信息-检查当前登录的用户有没有手机号和身份证
+export const getCheckPhoneAndIdNumberExist = params =>  post(`ehs-customer/api/user/checkPhoneAndIdNumberExist`, params)
+//用户信息-更新当前登录的用户的手机号和身份证号
+export const getEditPhoneAndIdNumber = params =>  post(`ehs-customer/api/user/editPhoneAndIdNumber`, params)
+
+// 签名校验  
+export const verifySignature = params =>  post(`${serviceNameList.health}/api/ehs/security/education/verify/signature`, params)
+// 生成对应的图片信息(签名模板) 
+export const getSignatureImage = params =>  post(`${serviceNameList.health}/api/ehs/security/education/get/signature/image`, params)
+
+// 三级安全教育管理-选择模板
+export const managementListPage = params => post(`${serviceNameList.health}/api/ehs/security/template/management/list/page`, params);
+// 三级安全教育管理-导入excel获取批量的培训用户
+export const educationImportUser = params => post(`${serviceNameList.health}/api/ehs/security/education/import/user`, params);
+// 三级安全教育管理-三级安全教育管理发起
+export const educationAdd = params => post(`${serviceNameList.health}/api/ehs/security/education/add`, params);
+// 三级安全教育-重新发起
+export const againAddSafetyEduReSendApi = params => post(`${serviceNameList.health}/api/ehs/security/education/reIssue`, params);
+
+// 三级安全教育管理-三级安全教育管理删除
+export const educationDelete = params => post(`${serviceNameList.health}/api/ehs/security/education/delete`, params);
+// 三级安全教育管理-三级安全教育管理详情
+export const educationDetail = params => post(`${serviceNameList.health}/api/ehs/security/education/detail`, params);
+// 三级安全教育管理-三级安全教育管理列表分页
+export const getEducationListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/list/page`, params);
+// 三级安全教育管理-三级安全教育管理详情子集查询
+export const getEducationUserListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/records/user/list/page`, params);
+// 三级安全教育管理-成绩纠错
+export const educationCorrect = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/correct`, params);
+// 三级安全教育管理-成绩确认
+export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
+// 三级安全教育管理-重新分配
+export const educationReallocation = params => post(`${serviceNameList.health}/api/ehs/security/education/reallocation`, params);
+// 三级安全教育管理-分配讲师
+export const assignInstructor = params => post(`${serviceNameList.health}/api/ehs/security/education/assign/instructor`, params);
+
+// 安全档案报表-证书
+export const securityCertificate = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/certificate`, params);
+// 安全档案报表-职业危害告知书
+export const hazardNotification = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/occupational/hazard/notification`, params);
+// 安全档案报表-安全责任书
+export const responsibilityStatement = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/safety/responsibility/statement`, params);
+// 安全档案报表-培训数据
+export const educationRecords = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/education`, params);
+// 安全档案报表-三级安全
+export const reportRecords = params => post(`${serviceNameList.health}/api/ehs/safety/file/report/security/education/records`, params);
+// 安全档案报表-汇总
+export const reportSummary= params => post(`${serviceNameList.health}/api/ehs/safety/file/report/summary`, params);
 
 
 // 危害岗位信息数据库
@@ -730,8 +844,12 @@ export const healthUserSave = params => post(`${serviceNameList.health}/api/ehs/
 export const healthUserUpdate = params => post(`${serviceNameList.health}/api/ehs/health/user/update`, params);
 // 人员台账-详情
 export const healthUserDetail = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDetail`, params);
+// 人员台账-根据详情查找建议PPE
+export const stationDetail = params => post(`${serviceNameList.health}/api/ehs/dangerous/station/detail`, params);
 // 人员台账-分页查询职业病诊断表
 export const selectDiagnosis = params => post(`${serviceNameList.health}/api/ehs/health/user/selectDiagnosis`, params);
+// 人员台账-分页查询入职前工作经历
+export const selectPreWork = params => post(`${serviceNameList.health}/api/ehs/health/user/selectPreWork`, params);
 // 人员台账-分页查询关联既往病史列表
 export const selectMedical = params => post(`${serviceNameList.health}/api/ehs/health/user/selectMedical`, params);
 // 人员台账-分页查询关联职业史列表
@@ -900,6 +1018,8 @@ export const emergentProcessResolve = params => post(`${serviceNameList.danger}/
 export const emergentProcessLog = params => get(`${serviceNameList.danger}/api/ehs/emergent/process/getLog`, params);
 // 应急演练审批-删除
 export const emergentProcessDeleteDrillProcess = params => get(`${serviceNameList.danger}/api/ehs/emergent/process/deleteDrillProcess`, params);
+// 应急演练审批-授权
+export const reassignDangerHandlerUser = params => post(`${serviceNameList.danger}/api/ehs/emergent/process/reassign/handler/user`, params);
 
 // 地图标注-新增
 export const mapLabelAdd = params => post(`${serviceNameList.monitor}/api/ehs/monitor/map/label/add`, params);

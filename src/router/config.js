@@ -10,6 +10,7 @@ import { chemicalsMsds } from './children/chemicalsMsds'
 import { occupationHealth } from './children/occupationHealth'
 import { dangerSource } from './children/dangerSource'
 import { dangerWork } from './children/dangerWorkStatic'
+import { normalWork } from './children/normalWorkStatic'
 import { hiddenPerils } from './children/hiddenPerils'
 import { safeCorp } from './children/safeMonthReport'
 import { emergency } from './children/emergency';
@@ -19,9 +20,10 @@ import { networkControl } from './children/networkControl'
 import { improveProposal } from './children/improveProposal'
 import { performanceManagement } from './children/performanceManagement'
 import { performanceManagementBranch, performanceManagementBranchMap } from './children/performanceManagementBranch'
+import { maturityEvaluationRouteData } from './children/maturityEvaluationRouteData'
 import { specialDevice } from './children/specialDevice'
 // import { getDictTree } from '@/services/api'
-import { accidentManagementDA, dangerWorkDA, resourcepoolDA, hiddenPerilsDA, emergencyManagementDA } from './children/dataAnalysis/dataAnalysis.js'
+import { accidentManagementDA, dangerWorkDA, normalWorkDA, resourcepoolDA, hiddenPerilsDA, emergencyManagementDA } from './children/dataAnalysis/dataAnalysis.js'
 const view = {
   tabs: () => import('@/layouts/tabs'),
   blank: () => import('@/layouts/BlankView'),
@@ -247,19 +249,46 @@ const options = {
               ]
             },
             {
-              path: 'dangerWorkStatic',
-              name: '危险作业管理',
+              path: 'workManage',
+              name: '作业管理',
               meta: {
-                title: '危险作业管理',
+                title: '作业管理',
                 icon: 'none',
-                isPage: false,
               },
+              isPage: false,
               component: NoBreadcrumb,
               children: [
-                ...dangerWork,
-                ...dangerWorkDA,
+                {
+                  path: 'dangerWorkStatic',
+                  name: '危险作业管理',
+                  meta: {
+                    title: '危险作业管理',
+                    icon: 'none',
+                    isPage: false,
+                  },
+                  component: NoBreadcrumb,
+                  children: [
+                    ...dangerWork,
+                    ...dangerWorkDA,
+                  ]
+                },
+                {
+                  path: 'normalWorkStatic',
+                  name: '一般作业管理',
+                  meta: {
+                    title: '一般作业管理',
+                    icon: 'none',
+                    isPage: false,
+                  },
+                  component: NoBreadcrumb,
+                  children: [
+                    ...normalWork,
+                    ...normalWorkDA,
+                  ]
+                },
               ]
             },
+            
             {
               path: 'emergencyManagement',
               name: '应急管理',
@@ -304,6 +333,54 @@ const options = {
                         isPage: true,
                       },
                       component: resolve => require(['@/pages/accidentManagement/accident/index.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportList',
+                      name: '事故快报台账',
+                      meta: {
+                        title: '事故快报台账',
+                        routerCode:'accidentQuickReportList',
+                        isKeepalive:true,
+                        isPage: true,
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/index.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportCreate',
+                      name: '新建事故快报',
+                      meta: {
+                        title: '新建事故快报',
+                        routerCode:'accidentQuickReportList',
+                        isPage: true,
+                        invisible: true,
+                        isCreate: true, // 新建
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/accidentQuickReportCreate.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportEdit',
+                      name: '编辑事故快报',
+                      meta: {
+                        title: '编辑事故快报',
+                        routerCode:'accidentQuickReportList',
+                        isPage: true,
+                        invisible: true,
+                        isEdit: true // 编辑
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/accidentQuickReportCreate.vue'], resolve),
+                    },
+                    {
+                      path: 'accidentQuickReportDetail',
+                      name: '查看事故快报',
+                      meta: {
+                        title: '查看事故快报',
+                        routerCode:'accidentQuickReportList',
+                        isPage: true,
+                        invisible: true,
+                        disabled: true,
+                        isView: true, // 查看
+                      },
+                      component: resolve => require(['@/pages/accidentManagement/accidentQuickReportList/accidentQuickReportCreate.vue'], resolve),
                     },
                     {
                       path: 'accidentDraft',
@@ -477,7 +554,7 @@ const options = {
                   ]
                 },
                 {
-                  path: 'specialeDevice',
+                  path: 'specialDevice',
                   name: '特种设备管理',
                   meta: {
                     title: '特种设备管理',
@@ -638,9 +715,9 @@ const options = {
                     },
                     {
                       path: 'storageTank',
-                      name: '化学品柜储存管理',
+                      name: '化学品现场使用管理',
                       meta: {
-                        title: '化学品柜储存管理',
+                        title: '化学品现场使用管理',
                         routerCode:'storageTank',
                         isKeepalive:true,
                         isPage: true,
@@ -1327,6 +1404,16 @@ const options = {
                   component: resolve => require(['@/pages/testManagement/testManagementOne/index.vue'], resolve),
                 },
                 {
+                  path: 'detailTest',
+                  name: '查看考试',
+                  meta: {
+                    title: '查看考试',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/testManagement/testManagementOne/detailTest.vue'], resolve),
+                },
+                {
                   path: 'addcourse',
                   name: '新建课程',
                   meta: {
@@ -1357,6 +1444,160 @@ const options = {
                   component: resolve => require(['@/pages/courseManagement/detailCourse.vue'], resolve),
                 },
                 ...resourcepoolDA,
+              ]
+            },
+            {
+              path: 'securityArchiveManagement',
+              name: '安全档案管理',
+              meta: {
+                title: '安全档案管理',
+                icon: 'none',
+              },
+              component: NoBreadcrumb,
+              children: [
+                {
+                  path: 'certificatesManagement',
+                  name: '证书管理',
+                  meta: {
+                    title: '证书管理',
+                    routerCode:'certificatesManagement',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/certificatesManagement/index.vue'], resolve),
+                },
+                {
+                  path: 'employeesMessagesSet',
+                  name: '消息推送设置',
+                  meta: {
+                    title: '消息推送设置',
+                    routerCode:'employeesMessagesSet',
+                    isPage: true,
+                    invisible: true,
+                    isKeepalive:true,
+                  },
+                  component: resolve => require(['@/pages/certificatesManagement/employeesMessagesSet.vue'], resolve),
+                },
+                {
+                  path: 'occupationalHazardNotification',
+                  name: '职业危害告知书',
+                  meta: {
+                    title: '职业危害告知书',
+                    routerCode:'occupationalHazardNotification',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/occupationalHazardNotification/index.vue'], resolve),
+                  children: []
+                },
+                {
+                  path: 'occupationalPreview',
+                  name: '签署告知书',
+                  meta: {
+                    title: '签署告知书',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/occupationalHazardNotification/occupationalPreview.vue'], resolve),
+                },
+                {
+                  path: 'safetyResponsibilityLetter',
+                  name: '安全责任书',
+                  meta: {
+                    title: '安全责任书',
+                    routerCode:'safetyResponsibilityLetter',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/safetyResponsibilityLetter/index.vue'], resolve),
+                  children: []
+                },
+                {
+                  path: 'safetyResponsibilityPreview',
+                  name: '签署责任书',
+                  meta: {
+                    title: '签署责任书',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyResponsibilityLetter/safetyResponsibilityPreview.vue'], resolve),
+                },
+                {
+                  path: 'safetyEduManagement',
+                  name: '三级安全教育管理',
+                  meta: {
+                    title: '三级安全教育管理',
+                    routerCode:'safetyEduManagement',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduManagement/index.vue'], resolve),
+                },
+                {
+                  path: 'safetyEduInitiate',
+                  name: '三级安全教育管理发起',
+                  meta: {
+                    title: '发起',
+                    routerCode:'safetyEduInitiate',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduManagement/safetyEduInitiate/index.vue'], resolve),
+                },
+                {
+                  path: 'safetyEduCorrectionGrades',
+                  name: '三级安全教育管理成绩纠错',
+                  meta: {
+                    title: '成绩纠错',
+                    routerCode:'safetyEduCorrectionGrades',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduManagement/safetyEduCorrectionGrades/index.vue'], resolve),
+                },
+
+                {
+                  path: 'safetyEduArchives',
+                  name: '三级安全教育档案',
+                  meta: {
+                    title: '三级安全教育档案',
+                    routerCode:'safetyEduArchives',
+                    isKeepalive:true,
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduArchives/index.vue'], resolve),
+                },
+                {
+                  path: 'safetyEduArchivesPreview',
+                  name: '三级安全教育档案预览',
+                  meta: {
+                    title: '三级安全教育档案预览',
+                    routerCode:'safetyEduArchivesPreview',
+                    isPage: true,
+                    invisible: true,
+                  },
+                  component: resolve => require(['@/pages/safetyEduArchives/safetyEduArchivesPreview.vue'], resolve),
+                },
+                {
+                  path: 'signManagement',
+                  name: '签名管理',
+                  meta: {
+                    title: '签名管理',
+                    routerCode:'signManagement',
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/signManagement/index.vue'], resolve),
+                },
+                {
+                  path: 'securityArchiveReport',
+                  name: '安全档案报表',
+                  meta: {
+                    title: '安全档案报表',
+                    routerCode:'securityArchiveReport',
+                    isPage: true,
+                  },
+                  component: resolve => require(['@/pages/securityArchiveReport/index.vue'], resolve),
+                },
               ]
             },
             {
@@ -1723,6 +1964,19 @@ const options = {
               component: NoBreadcrumb,
               children: [
                 ...performanceManagementBranch,
+              ]
+            },
+            {
+              path: 'maturityEvaluation',
+              name: '成熟度评价',
+              meta: {
+                title: '成熟度评价',
+                icon: 'none',
+                isPage: false,
+              },
+              component: NoBreadcrumb,
+              children: [
+                ...maturityEvaluationRouteData,
               ]
             },
           ]

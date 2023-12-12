@@ -24,6 +24,34 @@
         </template>
       </vxe-table>
     </CommonTable>
+
+    <PageTitle>职业禁忌人员</PageTitle>
+    <!-- 职业健康体检 -->
+    <CommonTable :page="Cpage" :pageNoChange="CpageNoChange" :showSizeChange="CshowSizeChange">
+      <a-table
+        bordered
+        :columns="columns"
+        :scroll="{ x: 800 }"
+        :data-source="contrainList"
+        :rowKey="(record, index)=>{return index}"
+        :pagination="false"
+      >
+      </a-table>
+    </CommonTable>
+
+    <PageTitle>禁忌调岗</PageTitle>
+    <!-- 职业健康体检 -->
+    <CommonTable :page="Tpage" :pageNoChange="TpageNoChange" :showSizeChange="TshowSizeChange">
+      <a-table
+        bordered
+        :columns="columns"
+        :scroll="{ x: 800 }"
+        :data-source="tabooList"
+        :rowKey="(record, index)=>{return index}"
+        :pagination="false"
+      >
+      </a-table>
+    </CommonTable>
     <div class="echarts-style">
       <!-- 职业健康体检分析 -->
       职业健康体检分析
@@ -34,7 +62,7 @@
 
 <script>
 import Echarts from "@/components/echarts/index.vue";
-import { headOccupationHealthDetail, analysisOccupationHealthHeadAnalysis } from '@/services/safeMonth'
+import { headOccupationHealthDetail, analysisOccupationHealthHeadAnalysis, contrainHealthStaffDetail, tabooHealthStaffDetail } from '@/services/safeMonth'
 import dataAnalysis from "@/pages/hiddenPerils/dataAnalysis/mixin/dataAnalysis.js";
 import { barObj } from "@/pages/hiddenPerils/dataAnalysis/mixin/dataAnalysis.js";
 import { cloneDeep, debounce } from "lodash";
@@ -114,10 +142,56 @@ export default {
         ],
         series: []
       },
+      columns: [
+        {
+          title: '人员名称',
+          dataIndex: 'name',
+          key: "name",
+        },
+        {
+          title: '工号',
+          dataIndex: 'workNum',
+          key: "workNum",
+        },
+        {
+          title: '危害因素',
+          dataIndex: 'hazardFactors',
+          key: "hazardFactors",
+        },
+        {
+          title: '岗位名称',
+          dataIndex: 'postName',
+          key: "postName",
+        },
+        {
+          title: '部门名称',
+          dataIndex: 'deptName',
+          key: "deptName",
+        },
+        {
+          title: '组织名称',
+          dataIndex: 'corporationName',
+          key: "corporationName",
+        }
+      ],
+      contrainList: [],
+      tabooList: [],
+      Cpage: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      Tpage: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      },
     }
   },
   mounted() {
     this.searchTable();
+    this.contrainHealthStaffDetail();
+    this.tabooHealthStaffDetail();
   },
   computed: {
     // 组织现地机构
@@ -208,6 +282,44 @@ export default {
       } else {
         this.dataList = [];
       }
+    },
+    async contrainHealthStaffDetail() {
+      const { data } = await contrainHealthStaffDetail({pageNo: this.Cpage.pageNo, pageSize: this.Cpage.pageSize, ...this.searchData});
+      console.log(data, '??1')
+      if(data) {
+        this.contrainList = data.staffList || [];
+      } else {
+        this.contrainList = [];
+      }
+    },
+    async tabooHealthStaffDetail() {
+      const { data } = await tabooHealthStaffDetail({pageNo: this.Tpage.pageNo, pageSize: this.Tpage.pageSize, ...this.searchData});
+      console.log(data, '??2')
+      if(data) {
+        this.tabooList = data.staffList || [];
+      } else {
+        this.tabooList = [];
+      }
+    },
+    CpageNoChange(page) {
+      this.Cpage.pageNo = page;
+      // 获取列表
+      this.searchTable();
+    },
+    TpageNoChange(page) {
+      this.Tpage.pageNo = page;
+      // 获取列表
+      this.searchTable();
+    },
+    CshowSizeChange(page, pageSize) {
+      this.Cpage.pageNo = 1;
+      this.Cpage.pageSize = pageSize;
+      this.searchTable();
+    },
+    TshowSizeChange(page, pageSize) {
+      this.Tpage.pageNo = 1;
+      this.Tpage.pageSize = pageSize;
+      this.searchTable();
     },
     async searchEchart(analysisType, infoType) {
       let apiData = {

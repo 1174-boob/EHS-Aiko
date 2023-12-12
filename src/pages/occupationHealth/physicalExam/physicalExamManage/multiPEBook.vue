@@ -36,6 +36,9 @@
               <a-form-model-item v-if="isShowDate" label="体检日期" prop="checkDate" :label-col="labelCol" :wrapper-col="wrapperCol" >
                 <a-date-picker :disabled="!canSelectDate" format="YYYY-MM-DD" @change="handleCheckDateChange" v-model="form.checkDate" placeholder="请选择有效期"/>
               </a-form-model-item>
+              <a-form-model-item v-if="isShowFile" label="体检通知单"  prop="physicalExaminationNoticeFileIdList" :label-col="labelCol" :wrapper-col="wrapperCol">
+                <UploadBtnStyle :onlyShow="!canSelectDate" :showAcceptText="true" :accept="['.pdf']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccessSpec"></UploadBtnStyle>
+              </a-form-model-item>
             </a-col>
           </a-row>
         </a-form-model>
@@ -104,13 +107,14 @@
 <script>
 import FixedBottom from "@/components/commonTpl/fixedBottom"
 import ApproveModal from './comp/ApproveModal'
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import OPLog from './comp/OPLog'
 import { formValidator } from "@/utils/clx-form-validator.js"
 import oldDictionary from '@/utils/dictionary'
 import dictionary from '@/utils/newDictionary'
 import OrganizeLazyTree from '@/components/organizeLazyTree/organizeLazyTree.vue'
 import { getCityOptions, findHealthUserByDeptId, healthManageUpdate,
-healthManageAdd, healthManageDetail, healthApproveManageDetail, getFlowLogApi, PushTask } from '@/services/api'
+healthManageAdd, healthManageDetail,GetfileMsgList, healthApproveManageDetail, getFlowLogApi, PushTask } from '@/services/api'
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import { getQueryVariable } from "@/utils/util.js";
 import moment from 'moment'
@@ -118,13 +122,15 @@ import moment from 'moment'
 import { debounce } from 'lodash'
 export default {
   mixins: [optionsMixin],
-  components: { FixedBottom, OrganizeLazyTree, OPLog, ApproveModal },
+  components: { FixedBottom, OrganizeLazyTree, OPLog, ApproveModal,UploadBtnStyle },
   data() {
     return {
       innerLabelCol: { span: 9 },
       innerWrapperCol: { span: 15 },
       rebackVisable: false,
       rebackMsg: '',
+      isShowFile:false,
+      infoFileIdList: [],
       curIndex: -1,
       curRow: null,
       chooseStaffVisible: false,
@@ -344,6 +350,29 @@ export default {
         this.$set(this.form, 'checkDate', data.checkDate)
         console.log(this.form)
         this.$refs.commonSearchItem.corporationChange(this.form.corporationId, this.form.deptId)
+        if (data.physicalExaminationNoticeFileList && data.physicalExaminationNoticeFileList.length > 0) {
+          const fileIdDetailList = data.physicalExaminationNoticeFileList.map((item)=> {
+            return item.id
+          })
+          GetfileMsgList(fileIdDetailList).then((res) => {
+            let result = res.data || []
+            this.infoFileIdList = (result || []).map(item => {
+              return {
+                uid: item.id,
+                name: item.sourceFileName,
+                status: 'done',
+                url: item.filePath
+              }
+            }) 
+          }).catch((err) =>{
+            console.log(err)
+          }) 
+        }
+        if (this.infoStatus.indexOf('__002') > -1 || this.status === 'end'){
+          this.isShowFile = true
+        } else {
+          this.isShowFile = false
+        }
       }
     },
     departmentChange(value, label, extra) {
@@ -356,6 +385,14 @@ export default {
       return ((this.formOptions || []).find(item => {
         return item.dictValue === val
       }) || {}).dictLabel
+    },
+    handleSuccessSpec(fileList){
+      let newList = []
+      newList = fileList.map((item) => {
+        return item.id
+      })
+      console.log(newList,999);
+      this.form.physicalExaminationNoticeFileIdList = newList
     },
     async handleTreeChange(value, label) {
       // console.log(value, label, 'tree data')
@@ -404,6 +441,7 @@ export default {
       this.approveVisible = true
       this.$nextTick(() => {
         this.modalInfo.date = this.form.checkDate
+        this.modalInfo.physicalExaminationNoticeFileIdList = this.form.physicalExaminationNoticeFileIdList
         this.$refs.approveModal && this.$refs.approveModal.setApproveData(this.modalInfo)
       })
     },

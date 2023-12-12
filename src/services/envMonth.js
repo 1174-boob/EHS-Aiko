@@ -111,6 +111,8 @@ export const envMonthApprovalWithdraw = params => post( envMonth + '/api/ehs/mon
 
 //环境月报现地 撤回
 export const getLog = params => post( envMonth + '/api/ehs/month/environmentMonth/getLog', params);
+//环境月报现地 删除
+export const environmentMonthDelete = params => post( envMonth + '/api/ehs/month/environmentMonth/delete', params);
 
 
 //环境月报现地 撤回

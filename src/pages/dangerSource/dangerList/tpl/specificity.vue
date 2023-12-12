@@ -264,6 +264,14 @@ export default {
           },
         },
         {
+          title: "危险源名称",
+          dataIndex: "riskName",
+          width: 150,
+          customRender: (text, record, index) => {
+            return text ? text : "--";
+          },
+        },
+        {
           title: "危险源种类",
           dataIndex: "riskClass",
           width: 150,

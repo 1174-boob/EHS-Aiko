@@ -68,6 +68,9 @@
             <staffOrDept class="staff-Dept" ref="improveProposalMemberList" :onPreview="disabled" :labelTitle="'提案完善小组成员'" :treeRoles="emRules" :propKey="'improveProposalMemberList'" :checkedTreeNode="improveProposalMemberList" @getTreeData="getImproveProposalMemberList" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
             <staffOrDept class="staff-Dept" ref="departmentReviewerList" :onPreview="(action=='edit' || action=='preview') ? true : false" :labelTitle="'部门级评审员'" :treeRoles="emRules" :propKey="'departmentReviewerList'" :checkedTreeNode="departmentReviewerList" @getTreeData="getReviewerList" :comment="comment" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
             <staffOrDept v-if="action=='edit'" :onPreview="(emForm.proposalLevel =='1' && action=='edit') ? false : true" class="staff-Dept" ref="deptReviewerList" :labelTitle="'工厂级评审员'" :treeRoles="emRules" :propKey="'deptReviewerList'" :checkedTreeNode="deptReviewerList" @getTreeData="getTreeData" :comment="comment1" :label-col="labelCol" :wrapper-col="wrapperCol"></staffOrDept>
+            <a-form-model-item label="附件" :label-col="labelCol" :wrapper-col="wrapperCol" class="flex">
+              <UploadBtnStyle :onlyShow="disabled" :showAcceptText="true" :accept="['.doc','.docx','.pdf','.xls','.xlsx','.ppt']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccess"></UploadBtnStyle>
+            </a-form-model-item>
           </a-col>
         </a-row>
       </a-form-model>
@@ -120,16 +123,18 @@ import moment from "moment";
 import chemicalDict from "@/mixin/chemicalDict.js";
 import { formValidator } from "@/utils/clx-form-validator.js";
 import UploadCanRemove from "@/components/upload/uploadCanRemove.vue";
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import staffOrDept from "@/components/staffOrDept";
 import ReviewRecord from "./reviewRecord.vue"
-import { proposalAdd,proposalDetail, proposalDataDetail,proposalUpdate,PushTask } from "@/services/api.js";
+import { proposalAdd,proposalDetail, GetfileMsgList,proposalDataDetail,proposalUpdate,PushTask } from "@/services/api.js";
 export default {
   mixins:[chemicalDict],
   components: {
     FixedBottom,
     UploadCanRemove,
     staffOrDept,
-    ReviewRecord
+    ReviewRecord,
+    UploadBtnStyle
   },
   props: {
     action: {
@@ -145,8 +150,11 @@ export default {
     return {
       emForm: {
         proposalLevel: '1',
-        deptId: undefined
+        deptId: undefined,
+        fileIdList:[],
+        fileList:[]
       },
+      infoFileIdList: [],
       comment: "说明：至少选择3名评委",
       comment1:'说明：所在部门经理及以上人员为评委',
       portalStatus: "",
@@ -286,6 +294,26 @@ export default {
             this.afterImprovePhotoList = fileLists;
             this.emForm.afterImprovePhotoList = photoList;
           }
+          if (this.emForm.fileList && this.emForm.fileList.length > 0) {
+            const fileIdDetailList = this.emForm.fileList.map((item)=> {
+              return item.id
+            })
+            GetfileMsgList(fileIdDetailList).then((res) => {
+              // console.log(res.data,898989)
+              let result = res.data || []
+              this.infoFileIdList = (result || []).map(item => {
+                return {
+                  uid: item.id,
+                  name: item.sourceFileName,
+                  status: 'done',
+                  url: item.filePath
+                }
+              }) 
+              // console.log('this.infoFileIdList',this.infoFileIdList);
+            }).catch((err) =>{
+              console.log(err)
+            }) 
+          }
           const recordsVoList = data.recordsVoList;
           for(let ele of recordsVoList) {
             let level = ele.proposalLevel;
@@ -300,6 +328,15 @@ export default {
         this.emForm.draftPersonName = user.name ? user.name : '';
         this.emForm.draftPersonJobNumber = user.jobNumber ? user.jobNumber : '';
       }
+    },
+    // 批量导入成功
+    handleSuccess(fileList) {
+      let newList = []
+      newList = fileList.map((item) => {
+        return item.id
+      })
+      console.log(newList,999);
+      this.emForm.fileIdList = newList
     },
     // 获取组织下所有部门
     corporationDeptChange(value) {

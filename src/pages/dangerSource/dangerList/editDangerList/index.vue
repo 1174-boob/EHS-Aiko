@@ -84,6 +84,12 @@
           </div>
           <a-row>
             <a-col :span="12">
+              <a-form-model-item label="危险源名称" prop="riskName">
+                <a-input
+                  v-model.trim="iFrom.riskName"
+                  placeholder="请输入危险源名称"
+                ></a-input>
+              </a-form-model-item>
               <a-form-model-item label="危险源类型" prop="riskType">
                 <a-select v-model="iFrom.riskType" placeholder="请选择">
                   <a-select-option

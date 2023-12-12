@@ -20,7 +20,9 @@
             </a-tree-select>
           </a-form-model-item>
           <a-form-model-item label="事故地点">
-            <a-input v-model="formInline.accidentLocation" placeholder="请输入事故地点"></a-input>
+            <a-select v-model="formInline.accidentLocation" placeholder="请选择事故地点">
+              <a-select-option v-for="item in accidentLocation" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+            </a-select>
           </a-form-model-item>
           <a-form-model-item label="事故类型">
             <a-select v-model="formInline.accidentType" placeholder="请选择事故类型">
@@ -47,6 +49,11 @@
               <a-select-option v-for="item in statusList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
             </a-select>
           </a-form-model-item>
+          <a-form-model-item label="事故时间类型">
+            <a-select v-model="formInline.accidentDateType" placeholder="请选择事故时间类型">
+              <a-select-option v-for="item in accidentDateType" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
+            </a-select>
+          </a-form-model-item>
           <a-form-model-item label="事故日期">
             <a-range-picker v-model="formInline.accidentDate" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD" />
           </a-form-model-item>
@@ -71,6 +78,8 @@
           <div slot="action" slot-scope="record">
             <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
             <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">处理</span>
+            <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">编辑</span>
+            <span v-if="record.handleId && (record.approvalStatus == '5' || record.approvalStatus == '6')" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">培训任务</span>
             <span class="color-0067cc cursor-pointer" @click="actionDel(record)">删除</span>
           </div>
           <div slot="accidentType" slot-scope="record">
@@ -105,6 +114,8 @@ export default {
     data() {
       return {
         tableSpinning:false,
+        accidentLocation: [],
+        accidentDateType: [],
         accidentType: [],
         personalInjury: [],
         propertyLoss: [],
@@ -164,6 +175,11 @@ export default {
             width: 200
           },
           {
+            title: '状态',
+            scopedSlots: { customRender: 'createUser' },
+            width: 200
+          },
+          {
             title: '创建时间',
             dataIndex: 'createTime',
             width: 200
@@ -214,6 +230,8 @@ export default {
     },
     methods: {
       initConfigPage(){
+        this.accidentLocation = this.getDictItemList("accidentLocation");
+        this.accidentDateType = dictionary("accidentDateType");
         this.accidentType = this.getDictItemList("accident_type");
         this.personalInjury = this.getDictItemList("accident_level_person");
         this.propertyLoss = this.getDictItemList("accident_level_money");

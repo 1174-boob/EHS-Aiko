@@ -164,7 +164,7 @@ export default {
         })
     },
     goDetail(row) {
-      let query = { courseId: row.courseId }
+      let query = { courseId: row.courseId, paperObj: JSON.stringify(row) }
       this.$router.push({
         path: '/ehsGerneralManage/educationmanagement/myCourseDetail',
         query: query

@@ -627,7 +627,7 @@ export default {
 
           this.$antMessage.success('提交成功');
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticAccount' })
+          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount' })
         })
         .catch(err => { })
         .finally(() => {
@@ -637,7 +637,7 @@ export default {
     // 代办推送
     async pushTask(securityUser, operateId) {
       if (operateId) {
-        const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${operateId}`
+        const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/workManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${operateId}`
         const pushTask = await PushTask({
           title: "危险作业前确认",
           approval: 'dangerWorkStatic',
@@ -675,7 +675,7 @@ export default {
         .then(res => {
           this.$antMessage.success('保存成功');
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/dangerWorkStatic/dangerWorkStaticDraft' })
+          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticDraft' })
         })
         .catch(err => { })
         .finally(() => {

@@ -70,6 +70,7 @@ export default {
       taskId: '',
       id: '',
       date: null,
+      physicalExaminationNoticeFileIdList:[],
       infoStatus: '',
       createUserId: '',
       userId: '',
@@ -153,6 +154,7 @@ export default {
       this.status = status
       this.date = data.date
       this.handler = data.handler
+      this.physicalExaminationNoticeFileIdList = data.physicalExaminationNoticeFileIdList
       this.step = 1
     },
     async nextConfirm() {
@@ -234,6 +236,7 @@ export default {
       let para = {
         opinion: this.rebackMsg,
         date: this.date,
+        physicalExaminationNoticeFileIdList: this.physicalExaminationNoticeFileIdList,
         id: this.id,
         taskId: this.taskId
       }

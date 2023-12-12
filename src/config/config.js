@@ -5,7 +5,7 @@ module.exports = {
     mode: 'dark',
   },
   multiPage: true,
-  // asyncRoutes: process.env.NODE_ENV === 'production' ? true : false,
+  asyncRoutes: process.env.NODE_ENV === 'production' ? true : false,
   animate: {
     name: 'lightSpeed',
     direction: 'left'

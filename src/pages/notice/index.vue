@@ -35,6 +35,7 @@
         <a-button type="dashed" @click="goNoticeAddEdit">
           <a-icon type="plus" />新建
         </a-button>
+        <a-button type="primary" @click="noticeExportFile" :loading="downLoading">批量导出</a-button>
       </div>
     </DashBtn>
     <CommonTable :page="page" :spinning="tableSpinning" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
@@ -69,7 +70,7 @@ import cancelLoading from '@/mixin/cancelLoading';
 // 可伸缩表格
 import dragTable from "@/mixin/dragTable.js"
 import { debounce } from 'lodash';
-import { SelectPolicylaw, DeletePolicylaw } from "@/services/api.js";
+import { SelectPolicylaw, DeletePolicylaw, noticeExport } from "@/services/api.js";
 import dayJs from 'dayjs';
 import dictionary from "@/utils/dictionary.js";
 
@@ -79,6 +80,7 @@ export default {
     return {
       formInline: {},
       typeObj: {},
+      downLoading: false,
       condition: {},
       tableSpinning:false,
       page: {
@@ -259,6 +261,31 @@ export default {
     // 跳转新建页面
     goNoticeAddEdit() {
       this.$router.push("/notice/noticeAddEdit");
+    },
+    // 批量导出
+    async noticeExportFile() {
+      this.downLoading = true;
+      let para = {
+        ...this.formInline,
+        type : '2'
+      }
+      para.organizationId = para.corporationId
+      para.timeArr = []
+      let res = await noticeExport(para);
+      if(res){
+        const name = '通知公告导出';
+        const blob = new Blob([res], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+        const downloadElement = document.createElement('a')
+        const href = URL.createObjectURL(blob) //创建下载链接
+        downloadElement.href = href
+        downloadElement.download = name + '.xlsx'
+        document.body.appendChild(downloadElement)
+        downloadElement.click()
+        document.body.removeChild(downloadElement)// 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+        this.$antMessage.success("导出成功");
+      }
+      this.downLoading = false;
     },
     // 页码改变
     pageNoChange(page) {

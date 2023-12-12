@@ -38,3 +38,18 @@ export const accidentEventHanderInfo = (params, headers) => post(serviceNameList
 export const accidentEventDownload = (params, headers) => postExcel(serviceNameList.safe + '/api/ehs/accident/event/download', params, headers)
 // 事故事件日志
 export const accidentEventGetLog = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/event/getLog', params, headers)
+
+
+
+// 事故快报分页查询
+export const accidentReportPageList = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/report/page/list', params, headers)
+// 事故快报新增
+export const accidentReportAdd = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/report/add', params, headers)
+// 事故快报删除
+export const accidentReportDelete = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/report/delete', params, headers)
+// 事故快报更新
+export const accidentReportUpdate = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/report/update', params, headers)
+// 事故快报详情
+export const accidentReportDetail = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/report/detail', params, headers)
+// 事故快报导出
+export const accidentReportDownload = (params, headers) => postExcel(serviceNameList.safe + '/api/ehs/accident/report/download', params, headers)

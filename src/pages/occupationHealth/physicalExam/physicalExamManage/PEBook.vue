@@ -124,6 +124,9 @@
                 <a-form-model-item v-if="isShowDate" label="体检日期" prop="checkDate" :label-col="labelCol" :wrapper-col="wrapperCol">
                   <a-date-picker :disabled="!canSelectDate" format="YYYY-MM-DD" @change="handleCheckDateChange" v-model="form.checkDate" placeholder="请选择有效期" />
                 </a-form-model-item>
+                <a-form-model-item v-if="isShowFile" label="体检通知单"  prop="physicalExaminationNoticeFileIdList" :label-col="labelCol" :wrapper-col="wrapperCol">
+                  <UploadBtnStyle :onlyShow="!canSelectDate" :showAcceptText="true" :accept="['.pdf']" :showUploadList="true" :fileLists="infoFileIdList" :btnText="'上传文件'" :btnType="'default'" @handleSuccess="handleSuccessSpec"></UploadBtnStyle>
+                </a-form-model-item>
               </a-col>
             </a-row>
           </a-form-model>
@@ -168,13 +171,14 @@
 <script>
 import FixedBottom from "@/components/commonTpl/fixedBottom"
 import OPLog from './comp/OPLog'
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import ApproveModal from './comp/ApproveModal'
 import { formValidator } from "@/utils/clx-form-validator.js"
 import oldDictionary from '@/utils/dictionary'
 import dictionary from '@/utils/newDictionary'
 import OrganizeLazyTree from '@/components/organizeLazyTree/organizeLazyTree.vue'
 import {
-  getCityOptions, selectDetailByPersonId, healthManageUpdate,
+  getCityOptions, selectDetailByPersonId, healthManageUpdate,GetfileMsgList,
   healthManageAdd, healthManageDetail, healthApproveManageDetail, getFlowLogApi, PushTask
 } from "@/services/api.js"
 import moment from 'moment'
@@ -183,7 +187,7 @@ import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMix
 import { getQueryVariable } from "@/utils/util.js";
 export default {
   mixins: [optionsMixin],
-  components: { FixedBottom, OrganizeLazyTree, OPLog, ApproveModal },
+  components: { FixedBottom, OrganizeLazyTree, OPLog, ApproveModal ,UploadBtnStyle},
   data() {
     return {
       userInfo: {},
@@ -192,6 +196,8 @@ export default {
       rebackMsg: '',
       chooseStaffVisible: false,
       tableDataList: [],
+      isShowFile:false,
+      infoFileIdList: [],
       staffArr: [],
       plainOptions: [],
       status: '',//审批状态
@@ -358,6 +364,29 @@ export default {
         }
         this.$set(this.form, 'checkDate', data.checkDate)
         this.$set(this.form, 'checkAgency', data.checkAgency)
+        if (data.physicalExaminationNoticeFileList && data.physicalExaminationNoticeFileList.length > 0) {
+          const fileIdDetailList = data.physicalExaminationNoticeFileList.map((item)=> {
+            return item.id
+          })
+          GetfileMsgList(fileIdDetailList).then((res) => {
+            let result = res.data || []
+            this.infoFileIdList = (result || []).map(item => {
+              return {
+                uid: item.id,
+                name: item.sourceFileName,
+                status: 'done',
+                url: item.filePath
+              }
+            }) 
+          }).catch((err) =>{
+            console.log(err)
+          }) 
+        }
+        if (this.infoStatus.indexOf('002') > -1 || this.status === 'end'){
+          this.isShowFile = true
+        } else {
+          this.isShowFile = false
+        }
         // this.$set(this.form, 'remarks', data.remarks)
         console.log(this.form, '....this.form');
       }
@@ -367,6 +396,14 @@ export default {
         return
       }
       this.form.checkDate = moment(val).format('YYYY-MM-DD')
+    },
+    handleSuccessSpec(fileList){
+      let newList = []
+      newList = fileList.map((item) => {
+        return item.id
+      })
+      console.log(newList,999);
+      this.form.physicalExaminationNoticeFileIdList = newList
     },
     addRow() {
       this.moduleData = {}
@@ -407,6 +444,7 @@ export default {
       this.approveVisible = true
       this.$nextTick(() => {
         this.modalInfo.date = this.form.checkDate
+        this.modalInfo.physicalExaminationNoticeFileIdList = this.form.physicalExaminationNoticeFileIdList
         this.$refs.approveModal && this.$refs.approveModal.setApproveData(this.modalInfo)
       })
     },

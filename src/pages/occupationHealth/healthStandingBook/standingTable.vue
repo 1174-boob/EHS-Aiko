@@ -212,7 +212,7 @@ export default {
           scopedSlots: { customRender: "time" },
         },
         {
-          title: "部门",
+          title: "工作单位",
           dataIndex: "departmentName",
           key: "departmentName",
           align:"center",

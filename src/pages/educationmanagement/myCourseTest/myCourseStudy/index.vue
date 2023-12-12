@@ -55,13 +55,15 @@ export default {
       coursewareId: undefined,
       // 在当前页面
       innerPage: true,
+      paperObj: {},
     };
   },
   created() {
-    let { courseId, moduleId, coursewareId } = this.$route.query
+    let { courseId, moduleId, coursewareId, paperObj } = this.$route.query
     this.courseId = courseId
     this.moduleId = moduleId
     this.coursewareId = coursewareId
+    this.paperObj = paperObj ? JSON.parse(paperObj) : {}
     this.getMyCourseStudyTargetDetailFn()
   },
   computed: {
@@ -76,7 +78,8 @@ export default {
       let apiData = {
         courseId: this.courseId,
         moduleId: this.moduleId,
-        coursewareId: this.coursewareId
+        coursewareId: this.coursewareId,
+        coursePushId: this.paperObj.coursePushId
       };
       getMyCourseStudyTargetDetailApi(apiData)
         .then((res) => {

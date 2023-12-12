@@ -266,7 +266,8 @@ export default {
 
 <style lang="less" scoped>
 ::v-deep .model-content {
-  padding: 0 80px !important;
+  padding: 0 165px 0px 0px !important;
+  width: 964px;
 }
 .clx-model-body {
   margin-bottom: 20px;
