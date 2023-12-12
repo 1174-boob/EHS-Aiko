@@ -624,7 +624,7 @@ export default {
 
     //返回事件
     back() {
-      this.setKeepalive(true)
+      // this.setKeepalive(true)
       this.$router.go(-1);
     },
   },
