@@ -162,6 +162,26 @@
             </a-form-model-item>
           </a-col>
         </a-row>
+
+        <div class="m-t-20 border-b-e7">
+          <PageTitle>入职前工作经历
+            <a-button class="plus-line" type="dashed" @click="beforeWorkExp"><a-icon type="plus" />新增</a-button>
+          </PageTitle>
+        </div>
+        <a-row class="m-t-20">
+          <a-col :span="24">
+            <a-form-model-item label=" " :label-col="labelTable" :wrapper-col="wrapperTable">
+              <CommonTable :noPaging="true">
+                <a-table :columns="beforeWorkExpColumns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="beforeWorkExpList" :rowKey="(record, index)=>{return index}" :pagination="false">
+                  <div slot="action" slot-scope="text,record,index">
+                    <span class="color-0067cc cursor-pointer m-r-15" @click="beforeWorkExpEdit(record,index)">编辑</span>
+                    <span class="color-ff4d4f cursor-pointer" @click="beforeWorkExpDelete(record,index)">删除</span>
+                  </div>
+                </a-table>
+              </CommonTable>
+            </a-form-model-item>
+          </a-col>
+        </a-row>
       </a-form-model>
     </div>
     <!-- 职业史及职业病危害接触史弹框 -->
@@ -278,6 +298,55 @@
         <a-button type="primary" class="m-l-15" @click="occupationalDiseaseConfirm">确定</a-button>
       </template>
     </CommonModal>
+
+    <!-- 前工作经历弹框 -->
+    <CommonModal :title="'前工作经历'" :visible="beforeWorkExpVisible" :cancelFn="beforeWorkExpCancel">
+      <template slot="form">
+        <a-form-model
+          ref="beforeWorkExpForm"
+          :model="beforeWorkExpForm"
+          :rules="beforeWorkExpRules"
+          :label-col="{ style: { width: '90px' } }"
+          :wrapper-col="{ style: { width: 'calc(100% - 90px)' } }"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="起止时间" prop="time">
+            <!-- <a-range-picker v-model="formInline.dateTime" valueFormat="YYYY-MM-DD" class="search-range-picker" format="YYYY-MM-DD" style="width: 200px" :placeholder="['开始日期','结束日期']" /> -->
+            <a-range-picker
+            v-model.trim="beforeWorkExpForm.workTime"
+            :disabled-date="disabledDate"
+            valueFormat="YYYY-MM-DD" 
+            class="search-range-picker" 
+            format="YYYY-MM-DD"
+            :placeholder="['开始日期', '结束日期']"
+            />
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="原工作单位" prop="formerCompany">
+            <a-input v-model.trim="beforeWorkExpForm.formerCompany" placeholder="请输入原工作单位"/>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="任职部门" prop="formerDepartment">
+            <a-input v-model.trim="beforeWorkExpForm.formerDepartment" placeholder="请输入任职部门"/>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="离职前岗位" prop="formerJob">
+            <a-input v-model.trim="beforeWorkExpForm.formerJob" placeholder="请输入离职前岗位"/>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="主要职责" prop="duty">
+            <a-input v-model.trim="beforeWorkExpForm.duty" placeholder="请输入主要职责"/>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="离职原因" prop="reason">
+            <a-input v-model.trim="beforeWorkExpForm.reason" placeholder="请输入离职原因"/>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="备注" prop="remarks">
+            <a-input v-model.trim="beforeWorkExpForm.remarks" placeholder="请输入备注"/>
+          </a-form-model-item>
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="beforeWorkExpCancel">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="beforeWorkExpConfirm">确定</a-button>
+      </template>
+    </CommonModal>
     <div slot="fixedBottom">
       <FixedBottom>
         <div>
@@ -299,6 +368,7 @@ import {
   healthUserUpdate,
   getPortraitUrlt,
   selectDiagnosis,
+  selectPreWork,
   selectMedical,
   selectExposure,
   stationAll,
@@ -312,6 +382,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { nanoid } from "nanoid";
 import dictionary from '@/utils/dictionary';
 import OrganizeLazyTree from '@/components/organizeLazyTree/organizeLazyTree.vue'
+import dayJs from 'dayjs';
 
 export default {
   mixins: [teableCenterEllipsis],
@@ -341,6 +412,7 @@ export default {
       occupationalIndex: null,
       anamnesisIndex: null,
       diseaseIndex: null,
+      beforeWorkExpIndex: null,
       headImgs: [],
       cityOptions: [],
       hazardousPost:[],
@@ -416,6 +488,33 @@ export default {
       exposureList:[],
       medicalList:[],
       diagnosisList:[],
+      beforeWorkExpForm: {},
+      beforeWorkExpList:[],
+      beforeWorkExpVisible: false,
+      beforeWorkExpTitle: '新增',
+      beforeWorkExpRules: {
+        workTime: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ],
+        formerCompany: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ],
+        formerDepartment: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ],
+        formerJob: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ],
+        duty: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ],
+        reason: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ],
+        remarks: [
+          { required: true, message:"不能为空", trigger: ['blur', 'change'] },
+        ]
+      },
       postDict: {},
       hazardousPostDict: {},
       columns:[
@@ -548,6 +647,72 @@ export default {
           title: "诊断日期",
           dataIndex: "diagnosisTime",
           key: "diagnosisTime",
+          align:'center',
+        },
+        {
+          title: "备注",
+          dataIndex: "remarks",
+          key: "remarks",
+          align:'center',
+        },
+        {
+          title: "操作",
+          scopedSlots: { customRender: "action" },
+          key: "action",
+          fixed: "right",
+          align:'center',
+          width: 200
+        }
+      ],
+      beforeWorkExpColumns:[
+        {
+          title: "序号",
+          width: 100,
+          align:"center",
+          customRender: (text, record, index) => {
+            return index + 1;
+          },
+        },
+        {
+          title: "开始日期",
+          dataIndex: "workStartTime",
+          key: "workStartTime",
+          align:'center',
+        },
+        {
+          title: "结束日期",
+          dataIndex: "workEndTime",
+          key: "workEndTime",
+          align:'center',
+        },
+        {
+          title: "原工作单位",
+          dataIndex: "formerCompany",
+          key: "formerCompany",
+          align:'center',
+        },
+        {
+          title: "任职部门",
+          dataIndex: "formerDepartment",
+          key: "formerDepartment",
+          align:'center',
+        },
+        {
+          title: "离职前岗位",
+          dataIndex: "formerJob",
+          key: "formerJob",
+          align:'center',
+        },
+        {
+          title: "主要职责",
+          dataIndex: "duty",
+          key: "duty",
+          align:'center',
+        },
+        {
+          title: "离职原因",
+          dataIndex: "reason",
+          key: "reason",
           align:'center',
         },
         {
@@ -732,6 +897,7 @@ export default {
         vm.fullPath = fullPath;
         vm.gethealthDetail(id);
         vm.getDiagnosis(id);
+        vm.getSelectPreWork(id);
         vm.getMedical(id);
         vm.getExposure(id);
       })
@@ -849,6 +1015,16 @@ export default {
       }
       const data = await selectDiagnosis(params);
       this.diagnosisList = data.data.list;
+    },
+    // 分页查询入职前工作经历
+    async getSelectPreWork(id) {
+      const params = {
+        id,
+        pageNo: 1,
+        pageSize: 1000000,
+      }
+      const data = await selectPreWork(params);
+      this.beforeWorkExpList = data.data.list;
     },
     // 关联既往病史列表
     async getMedical(id) {
@@ -1147,6 +1323,44 @@ export default {
       this.occupationalDiseaseVisible = false;
       this.occupationalDiseaseForm = {};
     },
+    beforeWorkExp() {
+      this.beforeWorkExpTitle = '新增';
+      this.beforeWorkExpList = [];
+      this.beforeWorkExpVisible = true;
+    },
+    beforeWorkExpCancel() {
+      this.beforeWorkExpVisible = false;
+    },
+    beforeWorkExpConfirm() {
+      if (!formValidator.formAll(this, 'beforeWorkExpForm')) {
+        return;
+      }
+      if(this.beforeWorkExpTitle == '新增') {
+        if (this.beforeWorkExpForm.workTime) {
+          this.beforeWorkExpForm.workStartTime = this.beforeWorkExpForm.workTime[0] ? dayJs(this.beforeWorkExpForm.workTime[0]).format("YYYY-MM-DD") : "";
+          this.beforeWorkExpForm.workEndTime = this.beforeWorkExpForm.workTime[1] ? dayJs(this.beforeWorkExpForm.workTime[1]).format("YYYY-MM-DD") : "";
+        }
+        const data = {
+          ...this.beforeWorkExpForm,
+          workStartTime: this.beforeWorkExpForm.workStartTime,
+          workEndTime: this.beforeWorkExpForm.workEndTime
+        }
+        this.beforeWorkExpList.push(data);
+      } else {
+        if (this.beforeWorkExpForm.workTime) {
+          this.beforeWorkExpForm.workStartTime = this.beforeWorkExpForm.workTime[0] ? dayJs(this.beforeWorkExpForm.workTime[0]).format("YYYY-MM-DD") : "";
+          this.beforeWorkExpForm.workEndTime = this.beforeWorkExpForm.workTime[1] ? dayJs(this.beforeWorkExpForm.workTime[1]).format("YYYY-MM-DD") : "";
+        }
+        const data = {
+          ...this.beforeWorkExpForm,
+          workStartTime: this.beforeWorkExpForm.workStartTime,
+          workEndTime: this.beforeWorkExpForm.workEndTime
+        }
+        this.beforeWorkExpList[this.beforeWorkExpIndex] = data;
+      }
+      this.beforeWorkExpVisible = false;
+      this.beforeWorkExpForm = {};
+    },
     // 职业病编辑
     actionEdit(record,index) {
       console.log(record);
@@ -1173,6 +1387,28 @@ export default {
         },
       });
     },
+    beforeWorkExpEdit(record,index) {
+      this.beforeWorkExpIndex = index;
+      this.beforeWorkExpTitle = '编辑';
+      this.beforeWorkExpForm = {
+        ...record,
+        workStartTime: record.workStartTime,
+        workEndTime: record.workEndTime
+      }
+      this.beforeWorkExpVisible = true;
+    },
+    beforeWorkExpDelete(record,index) {
+      const _this = this;
+      this.$antConfirm({
+        title: '确定删除吗？',
+        onOk() {
+          _this.beforeWorkExpList.splice(index,1);
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+    },
     saveConfirm() {
       if (!formValidator.formAll(this, 'healthForm')) {
         return;
@@ -1187,6 +1423,7 @@ export default {
           exposureList: this.exposureList,
           medicalList: this.medicalList,
           diagnosisList: this.diagnosisList,
+          preWorkList: this.beforeWorkExpList,
         }
         healthUserSave(params).then(res=>{
           this.$antMessage.success(res.message);
@@ -1205,6 +1442,7 @@ export default {
           exposureList: this.exposureList,
           medicalList: this.medicalList,
           diagnosisList: this.diagnosisList,
+          preWorkList: this.beforeWorkExpList,
         }
         healthUserUpdate(params).then(res=>{
           this.$antMessage.success(res.message);

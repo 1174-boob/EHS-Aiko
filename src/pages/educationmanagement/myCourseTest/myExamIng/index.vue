@@ -106,10 +106,14 @@ export default {
       formType: 1,
       // 开始考试时间-用于计算考试时长
       testDate: undefined,
-      autoSubmitMsgTime: 2
+      autoSubmitMsgTime: 2,
+      testObj: {},
+      paperObj: {},
     };
   },
   created() {
+    this.testObj = this.$route.query.testObj ? JSON.parse(this.$route.query.testObj) : {};
+    this.paperObj = this.$route.query.paperObj ? JSON.parse(this.$route.query.paperObj) : {};
     this.formType = this.$route.query.formType || 1
     sessionStorage.setItem('ehs-myExamDetailFormType', this.formType)
     if (this.formType == 1) {  // 1通过课程进入
@@ -238,7 +242,9 @@ export default {
         courseId: this.formType == 1 ? this.courseId : undefined,
         testDate: this.testDate,
         accessScore: this.paperDetail.accessScore,
-        paperScoreDtoList: paperList
+        paperScoreDtoList: paperList,
+        coursePushId: this.formType == 1 ? this.paperObj.coursePushId : undefined,
+        testPushId: this.formType == 2 ? this.testObj.testPushId : undefined,
       }
       // console.log('参数', apiData);
       // return

@@ -91,7 +91,7 @@ export default {
             return
           } else {
             // formType 1通过课程进入 2通过考试进入 
-            let query = { testId: this.testDetai.testId, paperId: this.examDetai.paperId, formType: 2 }
+            let query = { testId: this.testDetai.testId, paperId: this.examDetai.paperId, formType: 2, testObj: JSON.stringify(this.testDetai) }
             this.closeModel()
             this.$router.push({
               path: '/ehsGerneralManage/educationmanagement/myExamIng',

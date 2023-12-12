@@ -82,12 +82,11 @@
 <script>
 import { deptDict } from "@/services/api.js";
 import { ExamDetail, ExamPushInfo, ExamPushCodeInfo } from "@/services/questionmodel.js";
-import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { debounce } from 'lodash';
 import cancelLoading from '@/mixin/cancelLoading';
 
 export default {
-  mixins: [teableCenterEllipsis, cancelLoading],
+  mixins: [cancelLoading],
   data() {
     return {
       activeKey: "1",
@@ -270,10 +269,6 @@ export default {
         this.tableDataList = res.data.list;
         this.page.total = res.data.total;
       });
-    },
-    handleChange(key) {
-    },
-    onChange(key) {
     },
     // 获取推送列表
     getDataList() {
