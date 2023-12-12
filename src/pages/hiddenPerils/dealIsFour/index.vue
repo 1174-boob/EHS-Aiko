@@ -341,8 +341,8 @@
           ">驳回</a-button>
         <!-- hdclose：待关闭 -->
         <a-button class="m-r-10" @click="submit('close')" v-show="hideDangerForm.processStatus == 'hdclose'">关闭</a-button>
-        <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button>
-        <a-button class="m-r-10" @click="shutDown" v-show="(routeObj.type && routeObj.type == 'look') && closeStatus &&(hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1) || closeBtn">直接关闭</a-button>
+        <a-button class="m-r-10" @click="withdraw" v-show="lookBtn && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button>
+        <a-button class="m-r-10" @click="shutDown" v-show="lookBtn && (draftPersonBtn || closeBtn)">直接关闭</a-button>
         <!-- close：已关闭 -->
         <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'close'">返回</a-button>
       </FixedBottom>
@@ -414,7 +414,8 @@ export default {
       withdrawOrDownVisible: false,
       showStatus:false,
       closeBtn:false,
-      closeStatus:true,
+      draftPersonBtn: false,
+      lookBtn:false,
       currentUserId: sessionStorage.getItem('zconsole_userInfo') ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.jobNumber : '',
       addFormRules: {
         dangerCauseAnalysis: [
@@ -839,6 +840,7 @@ export default {
       //查看情况
       if (this.routeObj.type && this.routeObj.type == "look") {
         this.hideDangerForm.processStatus = "close";
+        this.lookBtn = true
       }
     },
 
@@ -877,8 +879,10 @@ export default {
           if(res.data.processStatus == 'verification'){
             this.showStatus = true
           }
-          if(res.data.processStatus == 'close'){
-            this.closeStatus = false
+          console.log('res.data.draftPersonId',res.data.draftPersonId,'this.currentUserId',this.currentUserId);
+          if(res.data.draftPersonId == this.currentUserId) {
+            this.draftPersonBtn = true
+            console.log(1,this.lookBtn,2,(this.draftPersonBtn || this.closeBtn));
           }
           this.hideDangerForm.deptId = res.data.draftDeptId; //回显部门人员
         })

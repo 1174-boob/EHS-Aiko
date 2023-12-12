@@ -43,7 +43,7 @@
       <a-table bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
         <div slot="createUserJobNumber" slot-scope="record">{{ record.createUserName }}/{{ record.createUserJobNumber }}</div>
         <div slot="action" slot-scope="record">
-          <span class="color-0067cc cursor-pointer" v-if="record.status == '0' && record.eduUserIdList.indexOf(userId) != -1" @click="assignLecturers(record)">分配讲师</span>
+          <span class="color-0067cc cursor-pointer" v-if="record.status == '0' && record.eduUserIdList && record.eduUserIdList.indexOf(userId) != -1" @click="assignLecturers(record)">分配讲师</span>
           <span class="color-0067cc cursor-pointer" v-if="record.status == '2'" @click="goCorrectionGrades(record,'add')">成绩纠错</span>
           <span class="color-0067cc cursor-pointer" @click="goCorrectionGrades(record,'show')">查看</span>
           <span class="color-0067cc cursor-pointer" v-if="!((record.status == '3') || (record.status == '0'))" @click="reAllocation(record)">重新分配</span>

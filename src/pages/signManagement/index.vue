@@ -16,12 +16,39 @@
       </div>
     </a-spin>
 
+    <CommonModal :title="'个人认证'" :visible="storageVisible" :cancelFn="storageCancle">
+      <template slot="form">
+        <a-form-model
+          ref="storageForm"
+          :model="storageForm"
+          :rules="tankFormRules"
+          :label-col="{ style: { width: '90px' } }"
+          :wrapper-col="{ style: { width: 'calc(100% - 90px)' } }"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="手机号" prop="phone">
+            <a-input :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="身份证号" prop="idNumber">
+            <a-input v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+          </a-form-model-item>
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="storageCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
+      </template>
+    </CommonModal>
+
     <!-- 绘制签名弹窗 -->
     <SignModal v-model="signModalShow" :sealDataId="sealDataId" @signOnOk="signOnOk" />
   </div>
 </template>
 
 <script>
+import { formValidator } from "@/utils/clx-form-validator.js"
+import { getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,} from "@/services/api.js";
 import cancelLoading from '@/mixin/cancelLoading'
 import { getSignManagementDataApi,rmSignManagementDataApi } from "@/services/safetyEduArchives"
 import SignModal from './components/signModal.vue'
@@ -35,6 +62,19 @@ export default {
       userId: undefined,
       signUrl: '',
       sealDataId:undefined,
+      userInfoData:{},
+      storageVisible: false,
+      storageForm: {},
+      tankFormRules: {
+        phone: [
+          { required: true, validator: formValidator.texTphoneNumber, trigger: "blur" },
+        ],
+        idNumber: [
+          { required: true, validator: formValidator.texTidCard, trigger: 'blur', },
+        ]
+      },
+      phoneValue:'',
+      idNumberValue:'',
     }
   },
   created() {
@@ -69,9 +109,54 @@ export default {
 
     // 批量签署-打开弹窗
     openSignModal() {
-      this.signModalShow = true
+      this.initPop()
+      // this.signModalShow = true
     },
 
+    initPop(){
+      let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+      this.userInfoData = zconsole_userInfo.other
+      this.userPhone = this.userInfoData.phone
+      this.phoneValue = this.userInfoData.phone
+      this.idNumberValue = this.userInfoData.idNumber
+      // 先判断一下是否要弹出个人认证的弹框
+      getCheckPhoneAndIdNumberExist({}).then((res) => {
+        console.log("数据全");
+        this.signModalShow = true
+      }).catch((err) => {
+        this.storageVisible = true;
+        this.$nextTick(()=>{
+          this.$set(this.storageForm,"idNumber",this.idNumberValue)
+          this.$set(this.storageForm,"phone",this.phoneValue)
+        })
+      });
+    },
+    // 关闭弹框
+    storageCancle() {
+      this.storageVisible = false;
+      this.storageForm = {};
+    },
+    // 弹框确定
+    storageConfirm() {
+      if (this.storageForm.idNumber != this.userInfoData.idNumber) {
+        if (!formValidator.formAll(this, 'storageForm')) {
+          return;
+        }
+      }
+      let apiData = {
+        phone:this.storageForm.phone,
+        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumberValue:this.storageForm.idNumber,
+      }
+      getEditPhoneAndIdNumber(apiData).then((res) =>{
+        this.storageVisible = false;
+        this.storageForm = {};
+      }).catch((err) =>{
+        console.log(err);
+      }).finally(()=>{
+      })
+      this.signModalShow = true
+
+    },
     // 批量签署-弹窗提交成功
     signOnOk() {
       this.$antMessage.success("绘制成功！");
