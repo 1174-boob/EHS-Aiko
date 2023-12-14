@@ -759,6 +759,8 @@ export const responsibilitySendCode = params => post(`${serviceNameList.health}/
 export const responsibilitySign = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign`, params);
 // 安全责任书-批量签署
 export const responsibilitySignBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/sign/batch`, params);
+// 安全责任书-批量发起
+export const responsibilityInitiateBatch = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/dept/list/build`, params);
 
 //用户信息-检查当前登录的用户有没有手机号和身份证
 export const getCheckPhoneAndIdNumberExist = params =>  post(`ehs-customer/api/user/checkPhoneAndIdNumberExist`, params)
