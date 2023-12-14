@@ -199,14 +199,14 @@
       </a-form-model>
 
       <div class="flex">
-        <div style="flex-basis: 40%;" class="left border-radius-3 border-f4 pd-l-20 pd-r-20 pd-t-20 pd-b-20 m-r-20">
+        <div style="flex-basis: 40%; padding-right:35px" class="left border-radius-3 border-f4 pd-l-20 pd-t-20 pd-b-20 m-r-20">
           <div class="m-b-20 font-16 font-weight-bold">选择人员</div>
           <div class="staff m-b-20 flex align-items-center">
             <staffOrDeptPush :labelTitle="''" :checkedTreeNode="checkedStaffNode" @getTreeData="getTreeData" :treePlaceholder="'请选择组织人员'" @getRootData="getRootData"></staffOrDeptPush>
           </div>
         </div>
         <div class="right border-radius-3 border-f4 pd-l-20 pd-r-20 pd-t-20 pd-b-20" style="overflow: hidden; flex: 1;">
-          <div class="m-b-20 font-16 font-weight-bold">人员已选（{{checkedUserTitle.length}}）人</div>
+          <div class="m-b-20 font-16 font-weight-bold">人员已选</div>
           <CommonTable :noPaging="true">
             <a-table :columns="columnsDetail1" :locale="{emptyText: emptyText}" :data-source="checkedUserTitle" :pagination="false"></a-table>
           </CommonTable>

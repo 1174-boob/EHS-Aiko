@@ -62,8 +62,14 @@ export const exportMaturityEvaDataConfigData = params => postExcel( customizatio
 //  评价结果
 export const getMaturityEvaDataSumEvaluatResult = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/analysis/evaluation/results', params);
 
-//  评价结果
+//  主要扣分明细
 export const getMaturityEvaDataSumDeductPoints = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/analysis/details/of/major/deductions', params);
+
+//  部门得分环比统计
+export const getMonthStatisics = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/analysis/department/score/month/on/month/statistics', params);
+
+//  部门得分月度统计
+export const getDepartmentScore = params => post( customization + '/api/ehs/customization/ax/maturity/evaluation/data/analysis/monthly/statistics/of/department/score', params);
 
 //各部门绩效得分统计图（柱状图）
 export const achDeptSummaryBar = params => post( customization + '/api/ehs/kpi/dept/data/achDeptSummaryBar', params);
