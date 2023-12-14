@@ -39,6 +39,11 @@
           </div>
           <a-row>
             <a-col :span="12">
+              <a-form-model-item label="危险源名称" prop="riskName">
+                <a-input v-model.trim="iFrom.riskName" :maxLength="30" placeholder="请输入" :disabled='true'></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-model-item label="危险源类型" prop="riskType">
                 <a-select v-model="iFrom.riskType" placeholder="请选择" :disabled='true' >
                   <a-select-option v-for="item in dangerHazardtype" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>

@@ -46,7 +46,7 @@
           <a-button type="link" class="color-0067cc cursor-pointer" @click="actionLook(record)">查看</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="jumpAddOrDetail('change', record)" :disabled="record.status !='2'">编辑</a-button>
           <a-button type="link" class="color-0067cc cursor-pointer" @click="jumpLook(record)">预览</a-button>
-          <a-button type="link" class="color-0067cc cursor-pointer" @click="downloadCode(record)">下载二维码</a-button>
+          <a-button type="link" class="color-0067cc cursor-pointer" @click="downloadCode(record)">二维码</a-button>
           <a-button type="link" class="color-ff4d4f cursor-pointer" @click="deleteDict(record)">删除</a-button>
         </div>
       </a-table>
@@ -149,7 +149,7 @@ export default {
           scopedSlots: { customRender: "action" },
           key: "action",
           fixed: "right", // 固定操作列
-          width: 300, // 宽度根据操作自定义设置
+          width: 330, // 宽度根据操作自定义设置
         },
       ],
       dictList: [],

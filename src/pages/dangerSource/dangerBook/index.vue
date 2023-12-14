@@ -296,6 +296,14 @@ export default {
           },
         },
         {
+          title: "危险源名称",
+          dataIndex: "riskName",
+          width: 150,
+          customRender: (text, record, index) => {
+            return text ? text : "--";
+          },
+        },
+        {
           title: '可能导致的事件',
           dataIndex: 'possibleEvents',
           width: 150,
