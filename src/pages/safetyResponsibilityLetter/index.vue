@@ -53,7 +53,8 @@
       <div>
         <a-button type="primary" @click="importPersonnel">导入人员</a-button>
         <a-button type="primary" @click="batchPush">批量推送</a-button>
-        <a-button type="primary" @click="batchSign">批量签署</a-button>
+        <a-button type="primary" @click="batchInitiate">批量发起</a-button>
+        <a-button type="primary" @click="batchSign">批量签署</a-button> 
         <a-button type="primary" @click="batchExport">批量下载</a-button>
       </div>
     </DashBtn>
@@ -181,8 +182,79 @@
           <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
         </template>
       </CommonModal>
+
+    <!-- 批量发起 -->
+    <CommonModal class="table-modal" title="批量发起" :visible="pushVisible" :cancelFn="pushCancle">
+      <a-form-model ref="ruleFormItem" :model="formInlineItem" :rules="iRulesItem" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+        <a-form-model-item ref="corporationId" label="" prop="corporationId" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+          <CommonDept
+            ref="corporationId"
+            :CommonFormInline="formInlineItem"
+            :rules="iRulesItem"
+            :hasDepartment="false"
+            :label-col="{ span: 5 }" 
+            :wrapper-col="{ span: 19 }"
+          ></CommonDept>
+        </a-form-model-item>
+      </a-form-model>
+
+      <div class="flex">
+        <div style="flex-basis: 40%; padding-right:35px" class="left border-radius-3 border-f4 pd-l-20 pd-t-20 pd-b-20 m-r-20">
+          <div class="m-b-20 font-16 font-weight-bold">选择人员</div>
+          <div class="staff m-b-20 flex align-items-center">
+            <staffOrDeptPush :labelTitle="''" :checkedTreeNode="checkedStaffNode" @getTreeData="getTreeData" :treePlaceholder="'请选择组织人员'" @getRootData="getRootData"></staffOrDeptPush>
+          </div>
+        </div>
+        <div class="right border-radius-3 border-f4 pd-l-20 pd-r-20 pd-t-20 pd-b-20" style="overflow: hidden; flex: 1;">
+          <div class="m-b-20 font-16 font-weight-bold">人员已选</div>
+          <CommonTable :noPaging="true">
+            <a-table :columns="columnsDetail1" :locale="{emptyText: emptyText}" :data-source="checkedUserTitle" :pagination="false"></a-table>
+          </CommonTable>
+        </div>
+      </div>
+      <div>
+        <div class="ttile border-b-e7">
+          <PageTitle class="ttile-text required-star">模板</PageTitle>
+          <DashBtn class="ttile-bbtn">
+            <div>
+              <a-button type="dashed" @click="openSelTempDrawer()">
+                <a-icon type="plus" />选择
+              </a-button>
+            </div>
+          </DashBtn>
+        </div>
+        <div class="m-t-20"></div>
+      </div>
+      <a-form-model ref="ruleForm" :model="iFrom" :rules="iRules" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+        <a-form-model-item ref="selTempList" label=" " prop="selTempList" :label-col="{ span: 0 }" :wrapper-col="{ span: 24 }">
+          <ul class="sel-tempList" v-if="Array.isArray(iFrom.selTempList) && iFrom.selTempList.length">
+            <li class="selTempItem" v-for="item in iFrom.selTempList" :key="item.templateId">
+              <img class="pic" :src="item.coverFile?.filePath || ''" :alt="item.templateName" />
+              <div class="mask">
+                <div class="maskBtn">
+                  <a-icon class="eyeBtn" type="eye" @click="openTempPreviewModel(item)" />
+                  <a-icon class="deleteBtn" type="delete" @click="rmSelTempItem(item)" />
+                </div>
+              </div>
+            </li>
+          </ul>
+          <a-empty description="暂未选择" v-else />
+        </a-form-model-item>
+      </a-form-model>
+      <template slot="btn1">
+        <a-button @click="pushCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" :loading="loadingInitiate" @click="pushConfirm">发起</a-button>
+      </template>
+    </CommonModal>
+    
     <!-- 上传 -->
     <Upload :importVisible="importVisible" @closeAddVisible="closeAddVisible" :pushStatus='pushStatus' :type="type"/>
+
+    <!-- 选择模板抽屉 -->
+    <SelTempDrawer v-model="selTempDrawerShow" :selTempList="iFrom.selTempList" @changeSelTempDrawerList="changeSelTempDrawerList" />
+
+    <!-- 预览模板弹窗 -->
+    <TempPreviewModel v-model="tempPreviewModelShow" :previewData="previewData" :readOnly="true" />
   </div>
 </template>
 <script>
@@ -198,14 +270,17 @@ import dictionary from "@/utils/dictionary";
 import moment from 'moment'
 import { debounce, cloneDeep } from 'lodash'
 import html2canvas from 'html2canvas'
+import staffOrDeptPush from "@/components/staffOrDeptPush";
+import SelTempDrawer from "./components/selTempDrawer.vue";
+import TempPreviewModel from './components/tempPreviewModel.vue';
 import serviceNameList from '@/config/default/service.config.js'
-import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js"
+import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch,responsibilityInitiateBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
 export default {
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
-  components: { Upload },
+  components: { Upload, staffOrDeptPush, TempPreviewModel, SelTempDrawer },
   data() {
     return {
       dictionary,
@@ -239,6 +314,34 @@ export default {
         signatureFinalDate: []
       },
       choosedArr: [],
+      loadingInitiate: false,
+      pushVisible: false,
+      selTempDrawerShow: false,
+      tempPreviewModelShow: false,
+      previewData: {},
+      checkedStaffNode: [],
+      userTreeData: [],// 组织
+      checkedUserTitle: [],
+      columnsDetail1: [
+        {
+          title: "姓名",
+          dataIndex: "name",
+          key: "name"
+        },
+        {
+          title: "工号",
+          dataIndex: "workNum",
+          key: "workNum"
+        }
+      ],
+      iFrom: {},
+      formInlineItem:{},
+      iRulesItem: {
+        corporationId: [{ required: true, message: "组织不能为空", trigger: "change" },],
+      },
+      iRules: {
+        selTempList: [{ required: true, message: "模板不能为空", trigger: "change" },],
+      },
       selectedRowKeys: [],
       page: {
         pageNo: 1,
@@ -537,6 +640,176 @@ export default {
       this.selectedRowKeys = []
       this.choosedArr = []
       this.getDataList()
+    },
+    // 选择模板抽屉
+    openSelTempDrawer() {
+      this.selTempDrawerShow = true;
+    },
+    // 模板change事件
+    changeSelTempDrawerList(selTempList) {
+      this.$set(this.iFrom, 'selTempList', selTempList)
+      formValidator.formItemValidate(this, 'selTempList', 'ruleForm')
+    },
+    // 预览模板弹窗
+    openTempPreviewModel(item) {
+      this.previewData = item
+      this.tempPreviewModelShow = true
+    },
+    // 删除选择的模板
+    rmSelTempItem(rmItem) {
+      this.$antConfirm({
+        title: '确认删除？',
+        onOk: () => {
+          const newSelTempList = this.iFrom.selTempList.filter(item => item.templateId != rmItem.templateId)
+          this.$set(this.iFrom, 'selTempList', newSelTempList)
+          formValidator.formItemValidate(this, 'selTempList', 'ruleForm')
+          return Promise.resolve()
+        }
+      })
+    },
+    // 批量发起
+    batchInitiate(){
+      this.pushVisible = true;
+      this.checkedUserTitle = [];
+      this.iFrom = {}
+      this.formInlineItem = {}
+    },
+    // 关闭批量发起弹框
+    pushCancle() {
+      this.pushVisible = false;
+      this.checkedUserTitle = [];
+      this.iFrom = {}
+      this.formInlineItem = {}
+    },
+    // 表单校验
+    formValidate() {
+      // 如果页面表单验证有报错则滚动到表单验证报错的地方
+      let formAll = true
+      this.$refs["ruleForm"].validate((valid, object) => {
+        if (!valid) {
+          formAll = false
+          this.scrollView(object);
+        }
+      });
+      return formAll
+    },
+    // 表单校验
+    formValidateItem() {
+      // 如果页面表单验证有报错则滚动到表单验证报错的地方
+      let formAll = true
+      this.$refs["ruleFormItem"].validate((valid, object) => {
+        if (!valid) {
+          formAll = false
+          this.scrollView(object);
+        }
+      });
+      return formAll
+    },
+    // 滚动到表单验证报错的地方
+    scrollView(object) {
+      for (const i in object) {
+        let dom = this.$refs[i];
+        // 这里是针对遍历的情况（多个输入框），取值为数组
+        if (Object.prototype.toString.call(dom) !== "[object Object]") {
+          dom = dom[0];
+        }
+        // 第一种方法（包含动画效果）
+        dom.$el.scrollIntoView({
+          // 滚动到指定节点
+          // 值有start,center,end，nearest，当前显示在视图区域中间
+          block: "center",
+          // 值有auto、instant,smooth，缓动动画（当前是慢速的）
+          behavior: "smooth",
+        });
+        break; // 因为我们只需要检测一项,所以就可以跳出循环了
+      }
+    },
+    // 确认发起
+    pushConfirm(){
+      if (!this.formValidateItem()) {
+        return
+      }
+      if (this.checkedUserTitle.length == 0) {
+        this.$antMessage.warning("您还未选择人员");
+        return;
+      }
+      if (!this.formValidate()) {
+        return
+      }
+      this.formInlineItem.corporationName = this.matchOrganizeName(this.formInlineItem.corporationId),
+      console.log('this.formInlineItem',this.formInlineItem);
+      console.log('templateId',this.iFrom.selTempList[0].templateId);
+      // return
+      console.log('确认发起',this.checkedUserTitle);
+      for (let i = 0; i < this.checkedUserTitle.length; i++) {
+        this.checkedUserTitle[i].deptName = this.findDeptName(this.userTreeData, this.checkedUserTitle[i].deptId);
+      }
+      let userListTotal = this.checkedUserTitle;
+      userListTotal.forEach(item => {
+        item.userId = item.key
+        item.userName = item.name
+        item.userCode = item.workNum
+      })
+      console.log('userListTotal全部数据',userListTotal);
+      const userList = userListTotal.filter(item => item.isLeaf);
+      const deptList = userListTotal.filter(item => !item.isLeaf);
+      console.log('userList人员',userList);
+      console.log('deptList部门',deptList);
+      const userIdList = userList.map(item  => item.userId)
+      const deptIdList = deptList.map(item  => item.deptId)
+      let params = {
+        userIdList:userIdList,
+        deptIdList:deptIdList,
+        templateId:this.iFrom.selTempList[0].templateId,
+        corporationId: this.formInlineItem.corporationId,
+        corporationName: this.formInlineItem.corporationName
+      }
+      console.log('paramsb',params);
+      this.loadingInitiate = true
+      responsibilityInitiateBatch(params).then((res)=>{
+        this.$antMessage.success(res.message)
+        this.loadingInitiate = false
+        this.pushCancle()
+      }).catch(err =>{
+        this.$antMessage.warning(err.message)
+      }).finally(()=>{
+        this.loadingInitiate = false
+      })
+      // console.log('userIdList222',userIdList,'deptIdList333',deptIdList);
+    },
+    // 获取内部人员数据
+    getRootData(treeData) {
+      this.userTreeData = treeData;
+    },
+    // 改变组织人员
+    getTreeData(obj) {
+      console.log(obj);
+      let arr = obj.treeNameAndCodeList || [];
+      let brr = [];
+      console.log('obj.treeNameAndCodeList@SH',obj.treeNameAndCodeList);
+      for (let i = 0; i < arr.length; i++) {
+        // console.log('arr[i]',arr[i]);
+        brr.push({
+          name: arr[i].treeName,
+          workNum: arr[i].treeCode,
+          deptId: arr[i].treeParentId,
+          deptName: arr[i].treeParentName,
+          isLeaf: arr[i].isLeaf,
+          key: arr[i].id,
+        });
+      }
+      this.checkedUserTitle = [...brr]; // 传给后端得数据
+    },
+    findDeptName(userTreeData, deptId) {
+      for (let i = 0; i < userTreeData.length; i++) {
+        if (userTreeData[i].key == deptId) {
+          return userTreeData[i].value;
+        } else {
+          if (userTreeData[i].children) {
+            return this.findDeptName(userTreeData[i].children, deptId);
+          }
+        }
+      }
     },
     // 批量推送
     async batchPush() {
@@ -1021,6 +1294,93 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.sel-tempList {
+  padding-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 18px;
+  grid-row-gap: 18px;
+
+  .selTempItem {
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      .mask {
+        display: flex;
+      }
+    }
+
+    .selRadioBox {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      padding: 4px 8px 4px;
+      z-index: 2;
+
+      ::v-deep .ant-radio-inner {
+        border-color: #0067cc;
+      }
+    }
+
+    .pic {
+      width: 100%;
+    }
+
+    .mask {
+      display: none;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.5);
+      align-items: center;
+      justify-content: center;
+
+      .maskBtn {
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .eyeBtn {
+          font-size: 24px;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+
+        .deleteBtn {
+          font-size: 22px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+.table-modal {
+  ::v-deep  .ant-select-selection {
+    width: 400px !important;
+  }
+  /deep/ .ant-modal {
+    width: 1200px !important;
+    .clx-model-body {
+      max-height: 700px;
+      padding-bottom: 30px;
+    }
+    .pos-btn {
+      bottom: 20px;
+      width: 100%;
+      background: #fff;
+      padding-top: 20px;
+    }
+  }
+}
+::v-deep .selectClass {
+  .ant-select-selection {
+    width: 400px !important;
+  }
+}
 ::v-deep .ant-modal-content {
   .model-content-form {
     padding: 0 111px 0 102px !important;
