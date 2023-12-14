@@ -342,7 +342,7 @@ export default {
     // 报告-编辑/查看
     echoReportEdit() {
       checkItemList({ checkType: this.$route.query.checkType, equipType: this.$route.query.equipType}).then(res => {
-        console.log(res.data,'万千傻逼随它去');
+        console.log(res.data,'res.dataaaa');
         if (res.data.length != 0 ){
           let resultObj = res.data || {};
           // 表格回显
