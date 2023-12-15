@@ -53,7 +53,7 @@
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
-import { getDangerWorkStaticListApi, rmDangerWorkStaticItemApi } from "@/services/dangerWorkStatic.js";
+import { operateInfoListPag, rmDangerWorkStaticItemApi } from "@/services/dangerWorkStatic.js";
 import chemicalDict from "@/mixin/chemicalDict.js";
 import dictionary from "@/utils/dictionary";
 export default {
@@ -158,7 +158,7 @@ export default {
         pageSize: this.page.pageSize,
       };
       this.tableSpinning = true
-      getDangerWorkStaticListApi(params)
+      operateInfoListPag(params)
         .then((res) => {
           let { list: tableList, total } = res.data ? res.data : { list: [], total: 0 };
           tableList = tableList || [];
