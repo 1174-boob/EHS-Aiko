@@ -41,13 +41,13 @@
             <vxe-column field="typeAndProject" title="项目" min-width="200">
               <template #default="{ row }">{{row.project}}</template>
             </vxe-column>
-            <vxe-column field="typeAndProject" title="定义" min-width="200">
+            <vxe-column field="maturityEvaluationIndexId" title="定义" min-width="200">
                <template #default="{ row }">{{row.definition}}</template>
             </vxe-column>
-            <vxe-column field="typeAndProject" title="分值" width="100">
+            <vxe-column field="score" title="分值" width="100">
               <template #default="{ row }">{{row.score}}</template>
             </vxe-column>
-            <vxe-column field="typeAndProject" title="得分" width="100">
+            <vxe-column field="maturityEvaluationIndexId" title="得分" width="100">
               <template #default="{ row }">{{row.pointsDeductionFinalScore}}</template>
             </vxe-column>
             <vxe-column field="calculationDetails" title="计算明细" min-width="240" :show-overflow="false"></vxe-column>
@@ -184,7 +184,7 @@ export default {
     },
     // 最终得分
     finalScore() {
-      return rmDuplicatesByKey(this.reportData, 'typeAndProject')
+      return rmDuplicatesByKey(this.reportData, 'pointsDeductionFinalScore')  // maybe 出问题 原来的typeAndProject
         .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionFinalScore).toString(), 0)
     },
     // 分档
@@ -203,7 +203,7 @@ export default {
     }
   },
   methods: {
-    rowspanMethod: rowspanMethod(['maturityEvaluationReportType', 'typeAndProject']),
+    rowspanMethod: rowspanMethod(['maturityEvaluationReportType', 'typeAndProject','maturityEvaluationIndexId','score','maturityEvaluationIndexItemId']),
     // 获取详情
     getDetals() {
       const apiData = {
@@ -299,13 +299,13 @@ export default {
       row.pointsDeductionNumber = value || 0
       row.pointsDeductionNumberScore = BigNumber(row.pointsDeductionNumber).times(row.pointsDeductions).toNumber()
 
-      const { score, maturityEvaluationReportType, project } = row
+      const { score, maturityEvaluationReportType, project, maturityEvaluationIndexId } = row
       const deductionScore = this.reportData
-        .filter(item => item.maturityEvaluationReportType == maturityEvaluationReportType && item.project == project)
+        .filter(item => item.maturityEvaluationReportType == maturityEvaluationReportType && item.maturityEvaluationIndexId == maturityEvaluationIndexId && item.project == project)
         .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionNumberScore).toNumber(), 0)
 
       this.reportData.forEach(item => {
-        if (item.maturityEvaluationReportType == maturityEvaluationReportType && item.project == project) {
+        if (item.maturityEvaluationReportType == maturityEvaluationReportType && item.maturityEvaluationIndexId == maturityEvaluationIndexId && item.project == project) {
           const pointsDeductionFinalScore = BigNumber(score).minus(deductionScore).toNumber()
           item.pointsDeductionFinalScore = pointsDeductionFinalScore < 0 ? 0 : pointsDeductionFinalScore
         }
