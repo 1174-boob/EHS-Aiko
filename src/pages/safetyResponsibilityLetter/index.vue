@@ -751,12 +751,13 @@ export default {
         item.userCode = item.workNum
       })
       console.log('userListTotal全部数据',userListTotal);
-      const userList = userListTotal.filter(item => item.isLeaf);
+      const userList = userListTotal.filter(item => item.isLeaf || item.isLeaf == undefined);
       const deptList = userListTotal.filter(item => !item.isLeaf);
       console.log('userList人员',userList);
       console.log('deptList部门',deptList);
       const userIdList = userList.map(item  => item.userId)
-      const deptIdList = deptList.map(item  => item.deptId)
+      const deptIdListUnde = deptList.map(item  => item.deptId)
+      const deptIdList = deptIdListUnde.filter(element => element !== undefined);
       let params = {
         userIdList:userIdList,
         deptIdList:deptIdList,
