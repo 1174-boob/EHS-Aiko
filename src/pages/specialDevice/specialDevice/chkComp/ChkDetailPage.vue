@@ -146,7 +146,7 @@
 // import { VxeTablePropTypes } from 'vxe-table'
 // 通用行合并函数（将相同多列数据合并为一行）
 const rowspanMethod = ({ row, _rowIndex, column, visibleData }) => {
-  const fields = ['checkName']
+  const fields = ['checkName','checkContent']
   const cellValue = row[column.field]
   if (cellValue && fields.includes(column.field)) {
     const prevRow = visibleData[_rowIndex - 1]
