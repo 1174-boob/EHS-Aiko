@@ -197,6 +197,7 @@ import { formValidator } from "@/utils/clx-form-validator.js"
 import SendCodeButton from '@/components/sendCodeButton/index.vue'
 import FixedBottom from "@/components/commonTpl/fixedBottom";
 import html2canvas from 'html2canvas'
+import { getQueryVariable } from "@/utils/util.js";
 import { notificationDetail,notificationSendCode,notificationSign,getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js";
 import '@/utils/dzjm.min.js'
 import pdf from "vue-pdf";
@@ -295,7 +296,7 @@ export default {
     this.initPop()
     this.activeKey = this.$route.query.activeKey
     console.log(this.activeKey,9999);
-    this.id = this.$route.query.id
+    this.id = this.$route.query.id != undefined ?this.$route.query.id:getQueryVariable('id')
     this.filePreview = this.$route.query.filePreview
     this.getPaperUrl()
   },
