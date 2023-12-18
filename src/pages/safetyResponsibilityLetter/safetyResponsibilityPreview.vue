@@ -200,6 +200,7 @@ import html2canvas from 'html2canvas'
 import { responsibilityDetail,responsibilitySendCode,responsibilitySign,getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js";
 import '@/utils/dzjm.min.js'
 import pdf from "vue-pdf";
+import { getQueryVariable } from "@/utils/util.js";
 // import CMapReaderFactory from "vue-pdf/src/CMapReaderFactory.js";
 import CMapReaderFactory from "vue-pdf-signature/src/CMapReaderFactory.js";
 import { debounce } from "lodash";
@@ -295,7 +296,7 @@ export default {
     this.initPop()
     this.activeKey = this.$route.query.activeKey
     console.log(this.activeKey,9999);
-    this.id = this.$route.query.id
+    this.id = this.$route.query.id != undefined ?this.$route.query.id:getQueryVariable('id')
     this.filePreview = this.$route.query.filePreview
     this.getPaperUrl()
   },
@@ -416,7 +417,7 @@ export default {
     },
     getPaperUrl() {
       let apiData = {
-        id: this.id,
+        id: this.id, // 需要从地址栏取
       }
       responsibilityDetail(apiData)
         .then(res => {
