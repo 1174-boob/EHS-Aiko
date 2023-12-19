@@ -161,7 +161,7 @@
         </template>
       </CommonModal>
       <FixedBottom>
-        <a-button :style="{ marginLeft: '8px' }" type="primary" v-show="!filePreview" @click="sign">签署</a-button>
+        <a-button :style="{ marginLeft: '8px' }" type="primary" v-if="signatureStatus != '2'" v-show="!filePreview" @click="sign">签署</a-button>
         <a-button :style="{ marginLeft: '8px' }" @click="back">返回</a-button>
       </FixedBottom>
       <CommonModal :title="'个人认证'" :visible="storageVisible" :cancelFn="storageCancle">
@@ -232,6 +232,7 @@ export default {
       pdfUrl: '',
       userPhone:'',
       fileId:'',
+      signatureStatus :'',
       id: undefined,
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
@@ -427,6 +428,7 @@ export default {
           this.pdfUrl = pdf.createLoadingTask({ url: res.data.gatherFile.filePath, CMapReaderFactory });
 
           this.fileId = res.data.fileId
+          this.signatureStatus = res.data.signatureStatus
         })
         .catch(err => {
           console.log(err);
