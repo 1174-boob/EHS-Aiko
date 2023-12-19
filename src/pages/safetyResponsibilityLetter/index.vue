@@ -669,6 +669,9 @@ export default {
     },
     // 批量发起
     batchInitiate(){
+      if (!this.canClickBtnMixin("responsibilityBatchInitiate")) {
+        return;
+      }
       this.pushVisible = true;
       this.checkedUserTitle = [];
       this.iFrom = {}
@@ -814,6 +817,9 @@ export default {
     },
     // 批量推送
     async batchPush() {
+      if (!this.canClickBtnMixin("responsibilityBatchPush")) {
+        return;
+      }
       console.log(this.choosedArr);
       if (!this.choosedArr.length) {
         this.$antMessage.warning('请选择推送人员！')
@@ -841,6 +847,9 @@ export default {
     },
     // 批量签署
     async batchSign() {
+      if (!this.canClickBtnMixin("responsibilityBatchSign")) {
+        return;
+      }
       this.initPop()
       // console.log('批量签署',this.choosedArr);
       if (!this.choosedArr.length) {
@@ -915,6 +924,9 @@ export default {
     },
     // 批量下载
     async batchExport() {
+      if (!this.canClickBtnMixin("responsibilityBatchExport")) {
+        return;
+      }
       console.log('批量下载',this.choosedArr);
       if (!this.choosedArr.length) {
         this.$antMessage.warning('至少选择一条数据！')
@@ -1185,6 +1197,9 @@ export default {
     },
     // 导入人员-打开弹框
     importPersonnel() {
+      if (!this.canClickBtnMixin("responsibilityImportPersonnel")) {
+        return;
+      }
       this.importVisible = true
       this.type = 1
       this.pushStatus = 1
