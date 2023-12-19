@@ -1292,6 +1292,9 @@ export default {
     },
     // 删除
     reSend(row){
+      if (!this.canClickBtnMixin("responsibilityDelete")) {
+        return;
+      }
       this.$antConfirm({
         title: '确认删除？',
         onOk: async () => {

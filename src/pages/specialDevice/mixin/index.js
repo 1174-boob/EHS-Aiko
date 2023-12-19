@@ -13,6 +13,7 @@ const mixin = {
       infoFileIdList: [],
       draftDeptData: [],//起草人部门
       deptData: [],//保管部门
+      iFrom:{},
       deptTreeId: '',//人员组件接收的保管组织id
     }
   },
@@ -77,8 +78,8 @@ const mixin = {
         },
       }
       console.log('data.safeAnnexList',data.safeAnnexList);
-      this.iFrom.fireAlarmList = data.safeAnnexList.length == 0 ? [] : data.safeAnnexList
-      console.log('this.iFrom.fireAlarmList2',this.iFrom.fireAlarmList);
+      this.iFrom.fireAlarmList = data.safeAnnexList && data.safeAnnexList.length == 0 ? null : data.safeAnnexList
+      // console.log('this.iFrom.fireAlarmList2',this.iFrom.fireAlarmList);
       const specialVehicleImagesList = data.specialEquipmentDetailDto.specialVehicleImagesFileList; 
       if( specialVehicleImagesList && specialVehicleImagesList.length > 0) {
         const fileLists = [];
