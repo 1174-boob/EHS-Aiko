@@ -280,7 +280,9 @@ export default {
   created() {
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
-      this.$set(this.newlyForm, 'draftDeptCode', adminDeptId ? [adminDeptId] : []);
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.$set(this.newlyForm, 'draftDeptCode', adminDeptId ? adminDeptId : '');
+      this.$set(this.newlyForm, 'draftDept', adminDeptName ? adminDeptName : '');
     }
     this.setRouterCode("specialDeviceAccount")
     if(this.isCreate) {
@@ -310,8 +312,8 @@ export default {
     },
     openFireModel(row) {
       console.log(row, '该条数据信息')
-      this.fireType = row.safeAnnexId ? '编辑' : '新增';
-      this.formModelFireData = row.safeAnnexId ? row : {};
+      this.fireType = row.fireTimeStamp || row.safeAnnexId? '编辑' : '新增';
+      this.formModelFireData = row.fireTimeStamp || row.safeAnnexId? row : {};
       this.inspectionRecordModelShowFire = true;
     },
     openInspectionRecordModelFire(row) {
