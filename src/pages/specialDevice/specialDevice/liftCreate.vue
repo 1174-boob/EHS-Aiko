@@ -232,7 +232,9 @@ export default {
   created() {
     if(sessionStorage.getItem("zconsole_userInfo")) {
       let adminDeptId = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptId;
-      this.$set(this.newlyForm, 'draftDeptCode', adminDeptId ? [adminDeptId] : []);
+      let adminDeptName = JSON.parse(sessionStorage.getItem("zconsole_userInfo")).user.adminDeptName;
+      this.$set(this.newlyForm, 'draftDeptCode', adminDeptId ? adminDeptId : '');
+      this.$set(this.newlyForm, 'draftDept', adminDeptName ? adminDeptName : '');
     }
     this.setRouterCode("specialDeviceAccount")
     if(this.isCreate) {
