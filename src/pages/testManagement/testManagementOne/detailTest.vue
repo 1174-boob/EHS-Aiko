@@ -8,7 +8,7 @@
         <SearchTerm>
           <a-form-model layout="inline" :model="formInline" :colon="false">
             <a-form-model-item label="选择时间">
-              <a-date-picker placeholder="请选择时间" format="YYYY-MM-DD" v-model="formInline.time" @change="onChange" />
+              <a-date-picker placeholder="请选择时间" format="YYYY-MM-DD" v-model="formInline.time"/>
             </a-form-model-item>
             <!-- 搜索栏按钮需要加固定的float-right类名 -->
             <a-form-model-item class="float-right">
@@ -18,7 +18,7 @@
           </a-form-model>
         </SearchTerm>
         <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-          <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
+          <a-table :columns="columns" bordered :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
             <div slot="action" slot-scope="record">
               <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
               <span class="color-0067cc cursor-pointer" @click="actionExport(record)">导出</span>
@@ -343,7 +343,7 @@ export default {
     // 推送列表-查看
     getDataListDetail(record) {
       return ExamPushCodeInfo({
-        testId: record.testId,
+        testId: this.dataMsg.testId,
         pushCode: record.pushCode,
         time: '',
         userName: '',

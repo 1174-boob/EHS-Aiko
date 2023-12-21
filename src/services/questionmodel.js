@@ -56,6 +56,6 @@ export const ExamDetail = params => postExcel(course + '/api/exam/getResultOfTod
 // 获取考试推送列表
 export const ExamPushInfo = params => post(course + '/api/push/exam/pushInfo', params);
 // 获取推送详情列表
-export const ExamPushCodeInfo = params => postExcel(course + '/api/push/exam/pushCodeInfo', params);
+export const ExamPushCodeInfo = params => post(course + '/api/push/exam/pushCodeInfo', params);
 // 下载二维码
 export const GetQrCode = params => get(course + '/api/exam/getQrCode', params);
