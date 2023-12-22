@@ -38,3 +38,11 @@ export const operateInfoEdit = params => post(`${serviceNameList.safe}/api/ehs/s
 export const operateInfoDetail = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/detail`, params);
 // 一般作业台账-删除
 export const operateInfoDelete = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/delete`, params);
+// 一般作业台账-查看、处理-获取日志
+export const operateInfoGetLog = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/getLog`, params);
+// 一般作业台账-处理-关闭作业
+export const operateInfoGetLogClose = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/close`, params);
+// 一般作业台账-查看-撤回作业
+export const operateInfoGetLogWithdraw = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/withdraw`, params);
+// 一般作业台账-处理-通过
+export const operateInfoGetLogHanderInfo = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/handerInfo`, params);

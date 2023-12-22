@@ -14,7 +14,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="施工位置">
-          <a-input v-model="formInline.areaLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
+          <a-input v-model="formInline.constructionLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -25,9 +25,11 @@
     <!--表格列表 -->
     <CommonTable :page="page" :spinning="tableSpinning" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
       <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
-        <template v-for="(item) in columnsAll">
+        <template v-for="(item,index) in columnsAll">
           <vxe-column :key="item.id" :field="item.props" :min-width="item.minWidth?item.minWidth:120" :title="item.title">
             <template #default="{ row }">
+              <span v-if="index == 6">{{row.supervisionPersonName+'/'+row.supervisionPersonJobNumber}}</span>
+              <span v-if="index == 7">{{row.estimatedConstructionDateStart+'-'+row.estimatedConstructionDateEnd}}</span>
               <span>{{ row[item.props] }}</span>
             </template>
           </vxe-column>
@@ -53,7 +55,7 @@
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
-import { operateInfoListPag, rmDangerWorkStaticItemApi } from "@/services/dangerWorkStatic.js";
+import { operateInfoListPag, operateInfoDelete } from "@/services/dangerWorkStatic.js";
 import chemicalDict from "@/mixin/chemicalDict.js";
 import dictionary from "@/utils/dictionary";
 export default {
@@ -75,67 +77,65 @@ export default {
           title: "作业编号",
           disabled: true,
           isDefault: true,
-          props: 'operateNumber',
+          props: 'generalOperateNumber',
+          minWidth: 170,
         },
         {
           id: 3,
           title: "所属组织",
           disabled: true,
           isDefault: true,
-          props: 'areaLocation',
+          props: 'corporationName',
         },
         {
           id: 4,
           title: "所属厂区",
           isDefault: true,
-          props: 'operateBrief',
+          props: 'plantAreaName',
         },
         {
           id: 5,
           title: "申请部门",
           disabled: true,
           isDefault: true,
-          props: 'operateTypeText',
+          props: 'applicationDepartmentName',
         },
         {
           id: 6,
           title: "施工位置",
           disabled: true,
           isDefault: true,
-          props: 'operateLevelText',
+          props: 'constructionLocation',
         },
         {
           id: 7,
           title: "设备/工程名称",
           isDefault: true,
-          props: 'applyDepartName',
+          props: 'nameOfEquipmentOrWorks',
         },
         {
           id: 8,
           title: "监督人",
           isDefault: true,
-          props: 'applyUserName',
         },
         {
           id: 9,
           title: "施工日期",
           isDefault: true,
-          props: 'createTime',
           minWidth: 160,
         },
         {
           id: 10,
           title: "施工日类型",
           isDefault: true,
-          props: 'createTime',
-          minWidth: 160,
+          props: 'typeOfConstructionDayName',
         },
         {
           id: 11,
           title: "申请日期",
           isDefault: true,
           props: 'createTime',
-          minWidth: 160,
+          minWidth: 120,
         },
       ],
       tableList: [],
@@ -144,7 +144,7 @@ export default {
     };
   },
   created() {
-    this.setRouterCode('dangerWorkStaticDraft')
+    this.setRouterCode('normalWorkStaticDraft')
     this.getTableList()
   },
   methods: {
@@ -162,6 +162,7 @@ export default {
         .then((res) => {
           let { list: tableList, total } = res.data ? res.data : { list: [], total: 0 };
           tableList = tableList || [];
+          console.log('tableList草稿箱',tableList);
           // 处理数据
           tableList.forEach(item => {
             // 作业类别
@@ -202,8 +203,8 @@ export default {
     },
     //跳转新增、编辑页面
     jumpAddOrDetail(type, row) {
-      let query = row ? { operateId: row.operateId } : {};
-      let path = type == 'add' ? "/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAddAndChange" : "/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAddAndChange"
+      let query = row ? { generalOperateId: row.generalOperateId } : {};
+      let path = type == 'add' ? "/safeManage/workManage/normalWorkStatic/normalWorkStaticAddAndChange" : "/safeManage/workManage/normalWorkStatic/normalWorkStaticAddAndChange"
       this.$router.push({
         path,
         query,
@@ -214,7 +215,7 @@ export default {
       this.$antConfirm({
         title: "确定删除吗?",
         onOk: () => {
-          return rmDangerWorkStaticItemApi({ operateId: row.operateId })
+          return operateInfoDelete({ generalOperateId: row.generalOperateId })
             .then((res) => {
               this.$antMessage.success('删除成功');
               this.getTableList();

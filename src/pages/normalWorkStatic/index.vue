@@ -31,7 +31,7 @@
             <a-select-option v-for="item in dictionary('hazardScreen')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="作业日期">
+        <a-form-model-item label="施工日期">
           <a-range-picker v-model="formInline.dateTime" valueFormat="YYYY-MM-DD" class="search-range-picker" format="YYYY-MM-DD" style="width: 200px" :placeholder="['开始日期','结束日期']" />
         </a-form-model-item>
         <a-form-model-item class="float-right">
@@ -45,7 +45,7 @@
         <a-button type="dashed" @click="jumpAddOrDetail('add')">
           <a-icon type="plus" />新建
         </a-button>
-        <template v-if="allButtonCodeList.includes('dangerWorkStaticAddAndChange')">
+        <template v-if="allButtonCodeList.includes('normalWorkStaticAddAndChange')">
           <UploadBtnStyle
             :action="action"
             :showAcceptText="false"
@@ -87,7 +87,14 @@
           <vxe-column :key="item.id" :field="item.props" :min-width="item.minWidth?item.minWidth:120" :title="item.title">
             <template #default="{ row }">
               <span :class="circleFn(row)" v-if="index == 0"></span>
-              <span>{{ row[item.props] }}</span>
+              <span v-if="index == 6">{{row.supervisionPersonName+'/'+row.supervisionPersonJobNumber}}</span>
+              <span v-if="index == 7">{{row.estimatedConstructionDateStart+'-'+row.estimatedConstructionDateEnd}}</span>
+              <span v-if="index != 8">{{ row[item.props] }}</span>
+              <span v-if="index == 8">
+                {{
+                  processStatusDict(row.processStatus)
+                }}
+              </span>
             </template>
           </vxe-column>
         </template>
@@ -115,15 +122,13 @@ import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
 import { exportDangerWorkStaticApi, operateInfoListPag, operateInfoDelete } from "@/services/dangerWorkStatic.js";
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
-import QRcodeModel from "@/components/qrCodeModel/qrCodeModel.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
 import serviceNameList from '@/config/default/service.config.js'
 import dictionary from "@/utils/dictionary";
 import dayJs from 'dayjs';
-import SelTable from "./components/selTable.vue";
 import deptAndUser from './mixin/deptAndUser.js'
 export default {
-  components: { UploadBtnStyle, QRcodeModel, SelTable },
+  components: { UploadBtnStyle },
   mixins: [cancelLoading, chemicalDict, deptAndUser],
   data() {
     return {
@@ -132,7 +137,7 @@ export default {
       selectShowList: [],
       dictionary,
       // 导入文件地址
-      action: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/danger/importFile`:`${serviceNameList.safe}/api/ehs/safe/danger/importFile`,
+      action: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/general/operate/info/importFile`:`${serviceNameList.safe}/api/ehs/safe/general/operate/info/importFile`,
       page: {
         pageNo: 1,
         pageSize: 10,
@@ -186,22 +191,20 @@ export default {
           id: 7,
           title: "监督人",
           isDefault: true,
-          props: 'supervisionPersonName',
+          // props: 'supervisionPersonName',
         },
         {
           id: 8,
           title: "施工日期",
           isDefault: true,
-          props: 'estimatedConstructionDateStart',
+          minWidth: 160,
+          // props: 'estimatedConstructionDateStart',
         },
         {
           id: 9,
           title: "状态",
           isDefault: true,
           props: 'processStatus',
-          customRender: (text, record, index) => {
-            return this.processStatusDict[text] ? this.processStatusDict[text] : '--';
-          },
         },
         {
           id: 10,
@@ -214,7 +217,7 @@ export default {
           title: "申请日期",
           isDefault: true,
           props: 'createTime',
-          minWidth: 160,
+          minWidth: 120,
         },
       ],
       tableList: [],
@@ -222,7 +225,6 @@ export default {
       // 表头本地的名称
       setColumLocalStorageName: 'ehs_dangerWorkStatic_tableColumn',
       columnsIng: [],
-      tableList: [],
       outOrganizeTreeList: [],
       // 制造/施工内容下拉
       hazardLevelList: [],
@@ -231,11 +233,10 @@ export default {
       typeOfConstructionDay: [],
       explosionProofArea: [],
       safetyProtectionEquipment: [],
-      processStatusDict: {}, //状态字典
-      processStatus: []
     };
   },
   created() {
+    // console.log(this.allButtonCodeList,'ccc');
     // 厂区信息
     this.plantArea = this.getMappingValue(this.dictTypeData, "dictType", "plant_area").dictItem;
     // 施工日类型
@@ -244,11 +245,7 @@ export default {
     this.explosionProofArea = this.getMappingValue(this.dictTypeData, "dictType", "explosion_proof_area").dictItem;
     // 安全防护用具
     this.safetyProtectionEquipment = this.getMappingValue(this.dictTypeData, "dictType", "safety_protection_equipment").dictItem;
-    this.setRouterCode('dangerWorkStaticAccount')
-    this.processStatus = dictionary("dangerstatus"); //状态字典
-    this.processStatus.forEach((ele) => {
-      this.$set(this.processStatusDict, ele.key, ele.value);
-    });
+    this.setRouterCode('normalWorkStaticAccount')
     this.initConfigPage()
     this.getTableList()
   },
@@ -266,6 +263,15 @@ export default {
     },
   },
   methods: {
+    processStatusDict(text) {
+      if (text.includes('In')) {
+        return text = '作业中';
+      } else if (text.includes('Before')) {
+        return  text = '作业前';
+      } else {
+        return '关闭';
+      }
+    },
     initConfigPage(){
       this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
       // 从本地获取表头显示信息
@@ -301,13 +307,6 @@ export default {
         className = 'yellow-circle'
       }
       return className
-    },
-    // 打开自定义列弹窗
-    openSelTable() {
-      if (!this.canClickBtnMixin("dangerWorkStaticAccount-autoColumns")) {
-        return;
-      }
-      this.selectModel = true
     },
     // 申请事项改变
     operateTypeChange(val) {
@@ -381,7 +380,7 @@ export default {
     },
     //跳转新增、编辑页面
     jumpAddOrDetail(type, row) {
-      let query = row ? { operateId: row.operateId } : {};
+      let query = row ? { generalOperateId: row.generalOperateId } : {};
       let path = type == 'add' ? "/safeManage/workManage/normalWorkStatic/normalWorkStaticAddAndChange" : "/safeManage/workManage/normalWorkStatic/normalWorkStaticAddAndChange"
       this.$router.push({
         path,
@@ -390,7 +389,7 @@ export default {
     },
     // 跳转查看页面
     goShowAndHandlePage(type, row) {
-      let query = { operateId: row.operateId };
+      let query = { generalOperateId: row.generalOperateId };
       let path = type == 'show' ? '/safeManage/workManage/normalWorkStatic/normalWorkStaticShow' : '/safeManage/workManage/normalWorkStatic/normalWorkStaticHandle'
       this.$router.push({
         path,
@@ -401,7 +400,7 @@ export default {
     isResolveVisible(row) {
       let showBtn = false
       if (row.processStatus !== '' && row.processStatus != 'Closed') {
-        showBtn = row.handlerId && row.handlerId.indexOf(this.userId) != -1
+        showBtn = row.handerUserId && row.handerUserId.indexOf(this.userId) != -1
       } else {
         showBtn = false
       }
@@ -455,7 +454,7 @@ export default {
     },
     // 下载模板
     downloadTem() {
-      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/danger.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/danger.xlsx`)
+      window.open(window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/file/template/一般作业批量导入.xlsx` : `${process.env.VUE_APP_API_BASE_URL}file/template/一般作业批量导入.xlsx`)
     },
     // 批量导出
     exportAll() {

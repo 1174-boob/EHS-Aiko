@@ -54,6 +54,27 @@ export const getDangerWorkDACompareOptionApi = params => post(`${serviceNameList
 // 危险作业管理-对比分析-导出
 export const exportDangerWorkDACompareOptionApi = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/data/analysis/operate/statistics/comp/bar/download`, params);
 
+// 一般作业管理-柱状图统计-查询
+export const generalOperation = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation`, params);
+// 一般作业管理-柱状图统计下载-导出
+export const generalOperationExport = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/download`, params);
+// 一般作业管理-防爆区域柱状图-查询
+export const explosionProofArea = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/explosion/proof/area`, params);
+// 一般作业管理-防爆区域柱状图-导出
+export const explosionProofAreaExport = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/explosion/proof/area/download`, params);
+// 一般作业管理-防爆区域饼状图-查询
+export const explosionProofAreaCookie = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/explosion/proof/area/cookie`, params);
+// 一般作业管理-防爆区域饼状图-导出
+export const explosionProofAreaCookieExport = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/explosion/proof/area/cookie/download`, params);
+// 一般作业管理-施工日类型饼状图-查询
+export const constructionDayCookie = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/type/of/construction/day/cookie`, params);
+// 一般作业管理-施工日类型饼状图-导出
+export const constructionDayCookieExport = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/type/of/construction/day/cookie/download`, params);
+// 一般作业管理-同比环比对比分析-查询
+export const comparativeAnalysisBar = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/comparative/analysis/bar`, params);
+// 一般作业管理-施工日类型饼状图-导出
+export const comparativeAnalysisBarExport = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/data/analysis/general/operation/comparative/analysis/bar/download`, params);
+
 // 教育培训-列表-表头-查询
 export const getResourcepoolDAColumnsApi = params => post(`${serviceNameList.course}/api/ehs/statical/data`, params);
 // 教育培训-科目数据分析-查询

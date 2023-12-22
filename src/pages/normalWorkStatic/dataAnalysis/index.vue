@@ -56,10 +56,10 @@
       </div>
     </template>
 
-    <template title="作业类别">
+    <template title="防爆区域">
       <div class="injury-box">
         <div class="title">
-          <div class="title-left">作业类别</div>
+          <div class="title-left">防爆区域</div>
           <div class="title-right"></div>
         </div>
         <template v-if="propertyLossOption.series && propertyLossOption.series.length">
@@ -75,10 +75,10 @@
 
     <a-row :gutter="{xl:20,xxl:30}">
       <a-col :span="12">
-        <template title="作业类别">
+        <template title="防爆区域">
           <div class="injury-box">
             <div class="title">
-              <div class="title-left">作业类别</div>
+              <div class="title-left">防爆区域</div>
               <div class="title-right"></div>
             </div>
             <template v-if="eventTypeOption.series[0].data && eventTypeOption.series[0].data.length">
@@ -93,10 +93,10 @@
         </template>
       </a-col>
       <a-col :span="12">
-        <template title="作业类型">
+        <template title="施工日类型">
           <div class="injury-box">
             <div class="title">
-              <div class="title-left">作业类型</div>
+              <div class="title-left">施工日类型</div>
               <div class="title-right"></div>
             </div>
             <template v-if="eventLevelOption.series[0].data && eventLevelOption.series[0].data.length">
@@ -121,7 +121,7 @@ import { cloneDeep, debounce, isEmpty } from "lodash";
 import cancelLoading from "@/mixin/cancelLoading";
 import Echarts from "@/components/echarts/index.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
-import { getOperationOptionApi, exportOperationOptionApi, getJobCategoryOptionApi, exportJobCategoryOptionApi, getJobCategoryPieOptionApi, exportJobCategoryPieOptionApi, getJobTypePieOptionApi, exportJobTypePieOptionApi } from "@/services/dataAnalysis/index.js";
+import { generalOperation, generalOperationExport, explosionProofArea, explosionProofAreaExport, explosionProofAreaCookie, explosionProofAreaCookieExport, constructionDayCookie, constructionDayCookieExport } from "@/services/dataAnalysis/index.js";
 import moment from 'moment'
 import dataAnalysis from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
 import { barObj, pieObj } from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
@@ -180,7 +180,7 @@ export default {
         ],
         series: []
       },
-      // 作业类别
+      // 防爆区域
       propertyLossOption: {
         tooltip: {
           ...barObj.tooltip
@@ -215,7 +215,7 @@ export default {
         ],
         series: []
       },
-      // 作业类别
+      // 防爆区域
       eventTypeOption: {
         toolbox: {
           emphasis: {
@@ -230,7 +230,7 @@ export default {
         series: [
           {
             radius: pieObj.radius,
-            name: '作业类别',
+            name: '防爆区域',
             type: 'pie',
             label: {
               formatter: "{b}: {d}%",
@@ -239,7 +239,7 @@ export default {
           }
         ]
       },
-      // 作业类型
+      // 施工日类型
       eventLevelOption: {
         toolbox: {
           emphasis: {
@@ -254,7 +254,7 @@ export default {
         series: [
           {
             radius: pieObj.radius,
-            name: '作业类型',
+            name: '施工日类型',
             type: 'pie',
             label: {
               formatter: "{b}: {d}%",
@@ -281,29 +281,29 @@ export default {
       this.injuryOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getOperationOptionApiFn',
         exportFnObj: {
-          apiName: exportOperationOptionApi,
+          apiName: generalOperationExport,
           fileName: '作业情况总览',
         }
       })
       this.propertyLossOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getJobCategoryOptionApiFn',
         exportFnObj: {
-          apiName: exportJobCategoryOptionApi,
-          fileName: '作业类别',
+          apiName: explosionProofAreaExport,
+          fileName: '防爆区域',
         }
       })
       this.eventTypeOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getJobCategoryPieOptionApiFn',
         exportFnObj: {
-          apiName: exportJobCategoryPieOptionApi,
-          fileName: '作业类别',
+          apiName: explosionProofAreaCookieExport,
+          fileName: '防爆区域',
         }
       })
       this.eventLevelOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getJobTypePieOptionApiFn',
         exportFnObj: {
-          apiName: exportJobTypePieOptionApi,
-          fileName: '作业类型',
+          apiName: constructionDayCookieExport,
+          fileName: '施工日类型',
         }
       })
     },
@@ -326,7 +326,7 @@ export default {
       let apiData = {
         ...this.getApiData()
       }
-      return getOperationOptionApi(apiData)
+      return generalOperation(apiData)
         .then(res => {
           let ajaxData = res.data || []
           if (ajaxData && ajaxData.length) {
@@ -350,12 +350,12 @@ export default {
         })
         .catch(errr => { })
     },
-    // 作业类别-api
+    // 防爆区域-api
     getJobCategoryOptionApiFn() {
       let apiData = {
         ...this.getApiData()
       }
-      return getJobCategoryOptionApi(apiData)
+      return explosionProofArea(apiData)
         .then(res => {
           let ajaxData = res.data || []
           if (ajaxData && ajaxData.length) {
@@ -370,24 +370,24 @@ export default {
         })
         .catch(errr => { })
     },
-    // 作业类别-饼图-api
+    // 防爆区域-饼图-api
     getJobCategoryPieOptionApiFn() {
       let apiData = {
         ...this.getApiData()
       }
-      return getJobCategoryPieOptionApi(apiData)
+      return explosionProofAreaCookie(apiData)
         .then(res => {
           let ajaxData = res.data || []
           this.eventTypeOption.series[0].data = cloneDeep(ajaxData)
         })
         .catch(errr => { })
     },
-    // 作业类型-饼图-api
+    // 施工日类型-饼图-api
     getJobTypePieOptionApiFn() {
       let apiData = {
         ...this.getApiData()
       }
-      return getJobTypePieOptionApi(apiData)
+      return constructionDayCookie(apiData)
         .then(res => {
           let ajaxData = res.data || []
           this.eventLevelOption.series[0].data = cloneDeep(ajaxData)

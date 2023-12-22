@@ -82,7 +82,8 @@ export default {
       }
       this.handleLoading()
       let methodsName = this.modelType == 'pass' ? 'iSaveApi' : (this.modelType == 'reject' ? 'iRejectApi' : 'iEndCloseApi')
-      let securityUser = this.formRole.securityUser ? this.formRole.securityUser.join() : undefined
+      console.log(this.formRole.securityUser,'this.formRole.securityUser');
+      let securityUser = this.formRole.securityUser ? this.formRole.securityUser: undefined
       this.$parent[methodsName](this.formRole.opinion, securityUser)
         .finally(() => {
           this.cancelLoading()

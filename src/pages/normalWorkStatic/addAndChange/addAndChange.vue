@@ -4,9 +4,9 @@
       <a-form-model ref="ruleForm" :model="iFrom" :rules="iRules" :label-col="labelCol" :wrapper-col="wrapperCol">
         <template title="基本信息">
           <div>
-            <div class="m-t-20 border-b-e7">
+            <!-- <div class="m-t-20 border-b-e7">
               <PageTitle>基本信息</PageTitle>
-            </div>
+            </div> -->
             <div class="m-t-20"></div>
           </div>
           <a-row>
@@ -219,11 +219,6 @@
         </div>
       </FixedBottom>
     </div>
-
-    <!-- 添加现场监护人弹窗 -->
-    <AddCasNoModel v-model="addCasNoModelShow" :addCasNoModelData="addCasNoModelData" :moduleList="iFrom.dangerGuardian" :deptTreeId="deptTreeId" @changeModuleList="changeModuleList" />
-    <!-- 添加特种作业员弹窗 -->
-    <AddSpecialModel v-model="addSpecialModelShow" :addSpecialModelData="addSpecialModelData" :moduleList="iFrom.dangerSpecialPerson" @changeSpecialModuleList="changeSpecialModuleList" />
   </HasFixedBottomWrapper>
 </template>
 <script>
@@ -231,9 +226,7 @@ import { formValidator } from "@/utils/clx-form-validator.js";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { cloneDeep } from 'lodash'
 import FixedBottom from "@/components/commonTpl/fixedBottom.vue";
-import AddCasNoModel from "./components/addCasNoModel.vue";
-import AddSpecialModel from "./components/addSpecialModel.vue";
-import { addDangerWorkStaticApi, getDangerWorkStaticDetailApi, editDangerWorkStaticApi, operateInfoSave, operateInfoEdit, operateInfoDetail } from '@/services/dangerWorkStatic.js'
+import { operateInfoSave, operateInfoEdit, operateInfoDetail } from '@/services/dangerWorkStatic.js'
 import chemicalDict from "@/mixin/chemicalDict.js";
 import cancelLoading from "@/mixin/cancelLoading";
 import dictionary from "@/utils/dictionary";
@@ -243,7 +236,7 @@ import StaffOrDept from "@/components/staffOrDept";
 import deptAndUser from '../mixin/deptAndUser.js'
 import dayJs from "dayjs";
 export default {
-  components: { FixedBottom, AddCasNoModel, AddSpecialModel, StaffOrDept },
+  components: { FixedBottom, StaffOrDept },
   mixins: [teableCenterEllipsis, chemicalDict, cancelLoading, deptAndUser],
   data() {
     return {
@@ -323,9 +316,6 @@ export default {
           width: 200 // 宽度根据操作自定义设置
         }
       ],
-      // 添加一行弹窗-显示隐藏
-      addCasNoModelShow: false,
-      addCasNoModelData: {},
 
       columnsSpecial: [
         {
@@ -394,9 +384,6 @@ export default {
           width: 200 // 宽度根据操作自定义设置
         }
       ],
-      // 添加一行弹窗-显示隐藏
-      addSpecialModelShow: false,
-      addSpecialModelData: {},
       // 部门数据
       outOrganizeTreeList: [],
       // 是否跨夜
@@ -429,17 +416,17 @@ export default {
       ScheckedTreeNode: [],
       PcheckedTreeNode: [],
       // 主键id
-      operateId: undefined,
+      generalOperateId: undefined,
       deptTreeId: undefined,
     }
   },
   created() {
-    this.operateId = this.$route.query.operateId + '' || undefined
+    this.generalOperateId = this.$route.query.generalOperateId + '' || undefined
   },
   computed: {
     // 当前页面是否为新增
     isAddPage() {
-      return !this.$route.query.operateId
+      return !this.$route.query.generalOperateId
     },
   },
   mounted() {
@@ -450,10 +437,10 @@ export default {
     moment,
     // 页面初始化
     initPage() {
-      // if (this.iFrom.estimatedConstructionDate) {
-      //   this.iFrom.estimatedConstructionDateStart = this.iFrom.estimatedConstructionDate[0] ? dayJs(this.iFrom.estimatedConstructionDate[0]).format("YYYY-MM-DD") : "";
-      //   this.iFrom.estimatedConstructionDateEnd = this.iFrom.estimatedConstructionDate[1] ? dayJs(this.iFrom.estimatedConstructionDate[1]).format("YYYY-MM-DD") : "";
-      // }
+      if (this.iFrom.estimatedConstructionDate) {
+        this.iFrom.estimatedConstructionDateStart = this.iFrom.estimatedConstructionDate[0] ? dayJs(this.iFrom.estimatedConstructionDate[0]).format("YYYY-MM-DD") : "";
+        this.iFrom.estimatedConstructionDateEnd = this.iFrom.estimatedConstructionDate[1] ? dayJs(this.iFrom.estimatedConstructionDate[1]).format("YYYY-MM-DD") : "";
+      }
       if (this.isAddPage) {
         this.spinning = false
       } else {
@@ -577,21 +564,29 @@ export default {
     },
     // 获取页面详情
     getPageDetail() {
-      let operateId = this.operateId
-      let apiData = { operateId }
+      let generalOperateId = this.generalOperateId
+      let apiData = { generalOperateId }
       return new Promise((resove, rej) => {
         operateInfoDetail(apiData)
           .then(res => {
             console.log(res, 'operateInfoDetail')
             let iFrom = res.data
-            iFrom.dangerGuardian = this.addGuid(iFrom.dangerGuardian)
-            iFrom.dangerSpecialPerson = this.addGuid(iFrom.dangerSpecialPerson == null? [] : iFrom.dangerSpecialPerson)
             this.operateTypeChange(iFrom.operateType, false)
             // 部门回显
             this.$refs.corporationId.corporationChange(iFrom.corporationId, iFrom.deptId)
             this.checkedTreeNode = iFrom.applyUserCode ? [iFrom.applyUserCode] : [];
             setTimeout(() => {
               this.iFrom = iFrom
+              if (this.iFrom.estimatedConstructionDateStart && this.iFrom.estimatedConstructionDateEnd) {
+                this.$nextTick(()=>{
+                  let estimatedConstructionDate = [this.iFrom.estimatedConstructionDateStart,this.iFrom.estimatedConstructionDateEnd]
+                  this.$set(this.iFrom, 'estimatedConstructionDate', estimatedConstructionDate)
+                })
+              }
+              this.CcheckedTreeNode = iFrom.constructionCompetentDepartmentId ? [iFrom.constructionCompetentDepartmentId] : [];
+              this.AcheckedTreeNode = iFrom.applicationDepartmentId ? [iFrom.applicationDepartmentId] : [];
+              this.ScheckedTreeNode = iFrom.supervisionPersonId ? [iFrom.supervisionPersonId] : [];
+              this.PcheckedTreeNode = iFrom.personInChargeOfTheDepartmentInTheConstructionAreaId ? [iFrom.personInChargeOfTheDepartmentInTheConstructionAreaId] : [];
             });
             resove()
           })
@@ -627,23 +622,32 @@ export default {
       }
     },
     // 表单校验
-    formValidate() {
-      // 如果页面表单验证有报错则滚动到表单验证报错的地方
-      let formAll = true
-      this.$refs["ruleForm"].validate((valid, object) => {
+    // formValidate() {
+    //   // 如果页面表单验证有报错则滚动到表单验证报错的地方
+    //   let formAll = true
+    //   this.$refs["ruleForm"].validate((valid, object) => {
+    //     if (!valid) {
+    //       formAll = false
+    //       this.scrollView(object);
+    //     }
+    //   });
+    //   if (!this.iFrom.applyUserCode) {
+    //     formAll = false
+    //   }
+
+    //   return formAll
+    // },
+    // 提交之前的流程api
+    iSubmit() {
+      this.$refs.ruleForm.validate((valid, object) => {
         if (!valid) {
-          formAll = false
           this.scrollView(object);
         }
       });
-      if (!this.iFrom.applyUserCode) {
-        formAll = false
+      if (!formValidator.formAll(this, 'ruleForm')){
+        console.log('?????',this.iFrom);
+        return;
       }
-
-      return formAll
-    },
-    // 提交之前的流程api
-    iSubmit() {
       if (this.iFrom.estimatedConstructionDate) {
         this.iFrom.estimatedConstructionDateStart = this.iFrom.estimatedConstructionDate[0] ? dayJs(this.iFrom.estimatedConstructionDate[0]).format("YYYY-MM-DD") : "";
         this.iFrom.estimatedConstructionDateEnd = this.iFrom.estimatedConstructionDate[1] ? dayJs(this.iFrom.estimatedConstructionDate[1]).format("YYYY-MM-DD") : "";
@@ -660,10 +664,6 @@ export default {
         .then(res => {
           // 代办推送
           console.log(res, '....')
-          let securityUser = this.iFrom.dangerGuardian.map(item => item.guardianCode)
-          securityUser = securityUser.join()
-          let operateId = this.isAddPage ? (res.data ? res.data.id : undefined) : this.operateId
-          this.pushTask(securityUser, operateId)
 
           this.$antMessage.success('提交成功');
           // 跳转列表页
@@ -675,71 +675,51 @@ export default {
         })
     },
     // 代办推送
-    async pushTask(securityUser, operateId) {
-      if (operateId) {
-        const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/workManage/dangerWorkStatic/dangerWorkStaticHandle&operateId=${operateId}`
+    async pushTask(securityUser, generalOperateId) {
+      if (generalOperateId) {
+        const url = process.env.VUE_APP_LOGIN_URL + "client_id=" + process.env.VUE_APP_CLIENTID + "&response_type=" + process.env.VUE_APP_RESPONSE_TYPE + "&redirect_uri=" + process.env.VUE_APP_REDIRECT_URI + "&routeUrl=" + `/safeManage/workManage/dangerWorkStatic/dangerWorkStaticHandle&generalOperateId=${generalOperateId}`
         const pushTask = await PushTask({
           title: "一般作业前确认",
           approval: 'dangerWorkStatic',
           userId: securityUser,
           url: url,
           docNumber: this.iFrom?.operateNumber,   //业务id
-          docId: operateId,  //主键id
+          docId: generalOperateId,  //主键id
         })
       }
     },
-    // 删除外协厂商信息属性
-    rmAttrFn() {
-      this.iFrom.outCompany = undefined
-      this.iFrom.outPrincipal = undefined
-      this.iFrom.outPrincipalContact = undefined
-      this.iFrom.outSafety = undefined
-      this.iFrom.outSafetyContact = undefined
-      this.iFrom.dangerSpecialPerson = undefined
-    },
     // 保存api
     iSave() {
-      console.log(this.iFrom);
-      if (!this.formValidate() || this.loading || this.spinning) {
-        return
+      this.$refs.ruleForm.validate((valid, object) => {
+        if (!valid) {
+          this.scrollView(object);
+        }
+      });
+      if (!formValidator.formAll(this, 'ruleForm')){
+        console.log('?????',this.iFrom);
+        return;
       }
+      if (this.iFrom.estimatedConstructionDate) {
+        this.iFrom.estimatedConstructionDateStart = this.iFrom.estimatedConstructionDate[0] ? dayJs(this.iFrom.estimatedConstructionDate[0]).format("YYYY-MM-DD") : "";
+        this.iFrom.estimatedConstructionDateEnd = this.iFrom.estimatedConstructionDate[1] ? dayJs(this.iFrom.estimatedConstructionDate[1]).format("YYYY-MM-DD") : "";
+      }
+      console.log(999,this.iFrom);
       let apiData = { ...this.iFrom, isDraft: 1 }
-      return
-      const apiName = this.isAddPage ? addDangerWorkStaticApi : editDangerWorkStaticApi
+      // return
+      const apiName = this.isAddPage ? operateInfoSave : operateInfoEdit
       this.handleLoadingTwo();
       apiName(apiData)
         .then(res => {
           this.$antMessage.success('保存成功');
           // 跳转列表页
-          this.$router.push({ path: '/safeManage/workManage/dangerWorkStatic/dangerWorkStaticDraft' })
+          this.$router.push({ path: '/safeManage/workManage/normalWorkStatic/normalWorkStaticDraft' })
         })
         .catch(err => { })
         .finally(() => {
           this.cancelLoadingTwo();
         })
     },
-    // 特种作业员-打开窗口-新增、编辑
-    openAddSpecialModelModel(row) {
-      this.addSpecialModelData = row ? row : {}
-      this.addSpecialModelShow = true;
-    },
-    // 特种作业员-添加、修改一行
-    changeSpecialModuleList(moduleDataList) {
-      this.$set(this.iFrom, 'dangerSpecialPerson', moduleDataList)
-      formValidator.formItemValidate(this, 'dangerSpecialPerson', 'ruleForm')
-    },
-    // 特种作业员-删除一行
-    specialtableRowRm(row) {
-      this.$antConfirm({
-        title: "确定删除吗?",
-        onOk: () => {
-          this.iFrom.dangerSpecialPerson = this.iFrom.dangerSpecialPerson.filter(item => {
-            return item.guid != row.guid
-          })
-          formValidator.formItemValidate(this, 'dangerSpecialPerson', 'ruleForm')
-        },
-      });
-    },
+    
     // 取消
     cancleSubmit() {
       this.setKeepalive(true)
@@ -750,32 +730,6 @@ export default {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
-      });
-    },
-    // 现场监护人-打开窗口-新增、编辑
-    openAddCasNoModel(row) {
-      if (this.iFrom.corporationId) {
-        this.addCasNoModelData = row ? row : {}
-        this.addCasNoModelShow = true;
-      } else {
-        this.$antMessage.warn('请先选择所属组织')
-      }
-    },
-    // 现场监护人-添加、修改一行
-    changeModuleList(moduleDataList) {
-      this.$set(this.iFrom, 'dangerGuardian', moduleDataList)
-      formValidator.formItemValidate(this, 'dangerGuardian', 'ruleForm')
-    },
-    // 现场监护人-删除一行
-    tableRowRm(row) {
-      this.$antConfirm({
-        title: "确定删除吗?",
-        onOk: () => {
-          this.iFrom.dangerGuardian = this.iFrom.dangerGuardian.filter(item => {
-            return item.guid != row.guid
-          })
-          formValidator.formItemValidate(this, 'dangerGuardian', 'ruleForm')
-        },
       });
     },
   }

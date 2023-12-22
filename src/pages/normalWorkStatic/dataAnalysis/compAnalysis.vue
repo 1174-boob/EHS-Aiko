@@ -71,7 +71,7 @@ import { cloneDeep, debounce, isEmpty } from "lodash";
 import cancelLoading from "@/mixin/cancelLoading";
 import Echarts from "@/components/echarts/index.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
-import { getDangerWorkDACompareOptionApi, exportDangerWorkDACompareOptionApi } from "@/services/dataAnalysis/index.js";
+import { comparativeAnalysisBar, comparativeAnalysisBarExport } from "@/services/dataAnalysis/index.js";
 import moment from 'moment'
 import dataAnalysis from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
 import { barObj } from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
@@ -138,7 +138,7 @@ export default {
         },
         {
           key: '2',
-          value: '作业类别',
+          value: '防爆区域',
         },
       ]
     }
@@ -158,7 +158,7 @@ export default {
       this.injuryOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getInjuryOptionApiFn',
         exportFnObj: {
-          apiName: exportDangerWorkDACompareOptionApi,
+          apiName: comparativeAnalysisBarExport,
           fileName: '对比分析',
         }
       })
@@ -182,7 +182,7 @@ export default {
       let apiData = {
         ...this.getApiData()
       }
-      return getDangerWorkDACompareOptionApi(apiData)
+      return comparativeAnalysisBar(apiData)
         .then(res => {
           let ajaxData = res.data || []
           if (ajaxData && ajaxData.length) {
