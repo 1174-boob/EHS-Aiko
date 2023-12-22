@@ -3,8 +3,11 @@
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
         <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :hasDepartment="true" deptLabel="所属部门"></CommonSearchItem>
+        <a-form-model-item label="发起人">
+          <a-input v-model="formInline.launchUserJobNumberOrName" placeholder="请输入发起人" allowClear></a-input>
+        </a-form-model-item>
         <a-form-model-item label="签署人">
-          <a-input v-model="formInline.signatureUserJobNumberOrName" placeholder="请输入签署人"></a-input>
+          <a-input v-model="formInline.signatureUserJobNumberOrName" placeholder="请输入签署人" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="签署状态">
           <a-select allowClear show-search v-model="formInline.signatureStatus" placeholder="请选择状态">
