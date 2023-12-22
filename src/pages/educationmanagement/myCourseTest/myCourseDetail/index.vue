@@ -229,6 +229,7 @@ export default {
           coursewareId: row.coursewareId,
           studyCount: 0,
           studyDuration: 0,
+          coursePushId: this.$route.query.paperObj ? JSON.parse(this.$route.query.paperObj).coursePushId : ''
         }
         // 更新学习进度为0
         return setMyCourseStudyCountApi(apiData)

@@ -25,6 +25,7 @@
 <script>
 import { SelectPolicylawDetail } from "@/services/api.js";
 import FixedBottom from "@/components/commonTpl/fixedBottom";
+import { getQueryVariable } from "@/utils/util.js"
 export default {
   components: { FixedBottom },
   data() {
@@ -40,7 +41,8 @@ export default {
       next(vm => {
         vm.setRouterCode("notice");
         vm.fromPath = from.path;
-        vm.getParams(to.query.id);
+        console.log(111);
+        vm.getParams(to.query.id != undefined ? to.query.id : getQueryVariable('id'));
       });
     } else { //从编辑页面进入
       next(vm => {
@@ -73,8 +75,9 @@ export default {
     // 获取预览数据
     getNoticeMsg(query = {}) {
       console.log("qqqq====", query);
-      if (query.id) {
-        this.getParams(query.id);
+      if (query.id != undefined ? query.id : getQueryVariable('id')) {
+        console.log(999);
+        this.getParams(query.id != undefined ? query.id : getQueryVariable('id'));
       } else {
         const noticeMsg = JSON.parse(sessionStorage.getItem('noticeMsg'));
         if (noticeMsg) {

@@ -70,7 +70,7 @@ export default {
       // this.editor.config.uploadImgServer = 'http://otp.cdinfotech.top/file/upload_images'// 配置服务器端地址
       this.editor.config.uploadImgServer = window.location.host.indexOf('localhost') < 0 ? `${process.env.VUE_APP_API_PROXY_TARGET}/ehs-customer/api/file/uploadFile` : `ehs-customer/api/file/uploadFile`// 配置服务器端地址
       this.editor.config.uploadImgHeaders.Authorization = token_type + " " + token; // 自定义 header
-      this.editor.config.uploadFileName = 'file' // 后端接受上传文件的参数名
+      this.editor.config.uploadFileName = 'multipartFile' // 后端接受上传文件的参数名
       this.editor.config.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为 2M
       this.editor.config.uploadImgMaxLength = 6 // 限制一次最多上传 3 张图片
       this.editor.config.uploadImgTimeout = 3 * 60 * 1000 // 设置超时时间
