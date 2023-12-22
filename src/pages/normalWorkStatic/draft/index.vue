@@ -3,15 +3,13 @@
     <PageTitle>一般作业草稿箱</PageTitle>
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <a-form-model-item label="申请事项">
-          <a-select v-model="formInline.operateType" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin" @change="operateTypeChange">
-            <a-select-option v-for="item in getChemicalDictList('hazard_category')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+        <a-form-model-item label="施工日类型">
+          <a-select allowClear v-model="formInline.typeOfConstructionDayId" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin" @change="operateTypeChange">
+            <a-select-option v-for="item in getChemicalDictList('type_of_construction_day')" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="制造/施工内容">
-          <a-select v-model="formInline.operateLevel" show-search placeholder="请选择" option-filter-prop="children" style="width: 200px" :filter-option="filterOptionMixin">
-            <a-select-option v-for="item in hazardLevelList" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
-          </a-select>
+        <a-form-model-item label="设备/工程名称">
+          <a-input v-model="formInline.nameOfEquipmentOrWorks" :maxLength="30" placeholder="请输入设备/工程名称" allowClear></a-input>
         </a-form-model-item>
         <a-form-model-item label="施工位置">
           <a-input v-model="formInline.constructionLocation" :maxLength="30" placeholder="请输入施工位置" allowClear></a-input>
