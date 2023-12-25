@@ -84,7 +84,7 @@ const loginGuard = (to, from, next, options) => {
   // 获取token和用户信息
   let userInfo = sessionStorage.getItem('zconsole_userInfo');
   // 本地 && 没有userKey和code的测试环境
-  if (process.env.NODE_ENV == "development" || (code == undefined && userKey == undefined)) {
+  if (process.env.NODE_ENV == "development" || (window.location.href.indexOf('https') < 0)) {
     // 开发环境是否存在用户信息
     if (!userInfo) {
       if (!loginIgnore.includes(to)) {
