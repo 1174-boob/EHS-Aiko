@@ -81,14 +81,22 @@ const loginGuard = (to, from, next, options) => {
       sessionStorage.clear();
     }
   }
+  // http://10.254.131.77/html/ziehs/?routeUrl=/safeManage/deviceSafeManage/specialDevice/skyCarEdit&id=1668524811854376960&userKey=177hor1g&code=ADCCDD0AB44888F7697418DF7C40E0073AFCEDA8665B1044565A356B95E797A9A0FB9DA47EF159B0F8BA376B4BBA6990
   // 获取token和用户信息
   let userInfo = sessionStorage.getItem('zconsole_userInfo');
   // 本地 && 没有userKey和code的测试环境
-  if (process.env.NODE_ENV == "development" || (window.location.href.indexOf('https') < 0)) {
+  if (process.env.NODE_ENV == "development" || (window.location.href.indexOf('https') < 0) && (code == undefined && userKey == undefined)) {
+    // console.log('process.env.NODE_ENV == "development"',process.env.NODE_ENV == "development"?'development':'!不是development');
+    // console.log('(window.location.href.indexOf',(window.location.href.indexOf('https') < 0)?'不包含https':'包含https');
+    // console.log(code == undefined && userKey == undefined,111);
+    // console.log(code,'code');
+    // console.log(userKey,'userKey');
+    
     // 开发环境是否存在用户信息
     if (!userInfo) {
       if (!loginIgnore.includes(to)) {
         sessionStorage.clear();
+        console.log('还是会去么');
         next({ path: '/login' })
       } else {
         next()
