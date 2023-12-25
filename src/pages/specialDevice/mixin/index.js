@@ -4,6 +4,7 @@ import { formValidator } from "@/utils/clx-form-validator.js";
 import oldDictionary from '@/utils/dictionary'
 import { mapGetters } from 'vuex'
 import { debounce } from 'lodash'
+import { getQueryVariable } from "@/utils/util.js"
 import { queryDeptTree, GetfileMsgList } from '@/services/api'
 import moment from 'moment'
 import { specialEquipmentInsert, specialEquipmentUpdate, specialEquipmentDetail } from "@/services/specialDevice.js"
@@ -68,7 +69,7 @@ const mixin = {
     },
     async fetchDetail() {
       let para = {
-        specialEquipmentId: this.$route.query.id
+        specialEquipmentId: this.$route.query.id != undefined ? this.$route.query.id : getQueryVariable('id')
       }
       const { data } = await specialEquipmentDetail(para)
       this.newlyForm = {
