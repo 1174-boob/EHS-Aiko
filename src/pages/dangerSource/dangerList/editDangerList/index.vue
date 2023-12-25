@@ -588,6 +588,7 @@ export default {
             //策划控制
             regulations: res.data.regulations || undefined,
           };
+          console.log('@@@scc',obj.possibleEvents);
           this.iFrom = obj;
         }
       });
@@ -620,8 +621,8 @@ export default {
       }
       let obj = { ...this.iFrom, id: this.listObj.id };
       //1共性  2特异性
-      let PromiseThing =
-        this.listObj.type == 1 ? EditCommonList : EditSpecificityList;
+      let PromiseThing = this.listObj.type == 1 ? EditCommonList : EditSpecificityList;
+      obj.possibleEvents = JSON.stringify(obj.possibleEvents)   
       PromiseThing(obj).then((res) => {
         this.$antMessage.success("编辑成功");
         this.$router.push({
