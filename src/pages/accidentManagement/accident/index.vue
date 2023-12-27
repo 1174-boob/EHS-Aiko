@@ -175,11 +175,6 @@ export default {
             width: 200
           },
           {
-            title: '状态',
-            scopedSlots: { customRender: 'createUser' },
-            width: 200
-          },
-          {
             title: '创建时间',
             dataIndex: 'createTime',
             width: 200

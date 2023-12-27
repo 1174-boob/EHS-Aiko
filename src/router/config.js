@@ -12,6 +12,7 @@ import { dangerSource } from './children/dangerSource'
 import { dangerWork } from './children/dangerWorkStatic'
 import { normalWork } from './children/normalWorkStatic'
 import { hiddenPerils } from './children/hiddenPerils'
+import { hiddenPerilsAssociation } from './children/hiddenPerilsAssociation'
 import { safeCorp } from './children/safeMonthReport'
 import { emergency } from './children/emergency';
 import { envMonthReport } from './children/envMonthReport'
@@ -268,6 +269,7 @@ const options = {
                   },
                   component: NoBreadcrumb,
                   children: [
+                    ...hiddenPerilsAssociation,
                     ...dangerWork,
                     ...dangerWorkDA,
                   ]

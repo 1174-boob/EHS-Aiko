@@ -74,6 +74,7 @@
           <a-button type="dashed" @click="noAuth">下载导入模板</a-button>
         </template>
         <a-button type="dashed" :loading="loadingThree" @click="exportAll">批量导出</a-button>
+        <a-button type="dashed" @click="relatedHazards">关联隐患</a-button>
       </div>
       <div class="ttips">
         <div class="circle-item">
@@ -92,7 +93,8 @@
     </DashBtn>
     <!--表格列表 -->
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="showSizeChange">
-      <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
+      <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" ref="table" @checkbox-change="checkboxChange" @checkbox-all="selectAllCheckboxChange" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableList">
+        <vxe-column type="checkbox" width="60"></vxe-column>
         <template v-for="(item,index) in columnsIng">
           <vxe-column :key="item.id" :field="item.props" :min-width="item.minWidth?item.minWidth:120" :title="item.title">
             <template #default="{ row }">
@@ -101,9 +103,10 @@
             </template>
           </vxe-column>
         </template>
-        <vxe-column field="action" fixed="right" title="操作" width="150">
+        <vxe-column field="action" fixed="right" title="操作" width="180">
           <template #default="{ row }">
             <div class="table-btn-box">
+              <span class="color-0067cc cursor-pointer" @click="hiddenDangerSituation(row)">隐患情况</span>
               <span class="color-0067cc cursor-pointer" @click="goShowAndHandlePage('show',row)">查看</span>
               <span class="color-0067cc cursor-pointer" v-if="isResolveVisible(row)" @click="goShowAndHandlePage('handle',row)">处理</span>
               <span class="color-ff4d4f cursor-pointer" @click="delDataList(row)">删除</span>
@@ -158,6 +161,7 @@ export default {
         pageSize: 10,
         total: 0,
       },
+      checkBoxKeyList: [],
       formInline: {},
       columnsAll: [
         {
@@ -451,6 +455,7 @@ export default {
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page;
+      this.checkBoxKeyList = [];
       // 获取列表
       this.getTableList();
     },
@@ -493,6 +498,32 @@ export default {
         .finally(() => {
           this.cancelLoadingThree()
         })
+    },
+    hiddenDangerSituation(row){
+      console.log('隐患情况单挑数据',row);
+      this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+    },
+    checkboxChange() {
+      const checkedRows = this.$refs.table.getCheckboxRecords()
+      const checkedRowsKeys = checkedRows.map(item => item.operateId)
+      // console.log('单选@@',checkedRows);
+      // console.log('单选Key',checkedRowsKeys);
+      this.checkBoxKeyList = checkedRowsKeys
+    },
+    selectAllCheckboxChange(checked) {
+      const checkedRows = checked.records
+      const checkedRowsKeys = checkedRows.map(item => item.operateId)
+      // console.log('全选@@',checkedRows);
+      // console.log('全选key',checkedRowsKeys);
+      this.checkBoxKeyList = checkedRowsKeys
+    },
+    relatedHazards(){
+      console.log('checkBoxKeyList',this.checkBoxKeyList);
+      this.$router.push({
+        path: "/safeManage/workManage/dangerWorkStatic/addHiddenPerilsAssociation",
+        query: { checkBoxKeyList: this.checkBoxKeyList },
+      });
+      this.$refs.table.clearCheckboxRow()//清除之前已选的复选框
     },
     // 重置
     iRest: debounce(
