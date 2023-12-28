@@ -76,6 +76,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import dragTable from "@/mixin/dragTable.js";
 import cancelLoading from "@/mixin/cancelLoading";
 // import { formValidator } from "@/utils/clx-form-validator.js";
+import html2canvas from 'html2canvas'
 import { debounce, cloneDeep } from "lodash";
 import {
   TestListPage,
@@ -346,7 +347,7 @@ export default {
       this.QRcodeModelShow = false;
     },
     downloadBtn() {
-      return
+      // return
       html2canvas(this.$refs.imageWrapper).then((canvas) => {
 				let dataURL = canvas.toDataURL('image/png')
 				this.imgUrl = dataURL
