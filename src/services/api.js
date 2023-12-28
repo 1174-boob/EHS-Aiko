@@ -753,6 +753,8 @@ export const getResponsibilityList = params => post(`${serviceNameList.health}/a
 export const getResponsibilityCount = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/count`, params);
 // 安全责任书-批量推送
 export const pushResponsibility = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/push`, params);
+// 安全责任书-批量导出
+export const pushResponsibilityExport = params => postExcel(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/download`, params);
 // 安全责任书-发送短信验证码
 export const responsibilitySendCode = params => post(`${serviceNameList.health}/api/ehs/security/safety/responsibility/statement/send/code`, params);
 // 安全责任书-签署

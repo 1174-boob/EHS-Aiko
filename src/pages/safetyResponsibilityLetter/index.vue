@@ -59,6 +59,7 @@
         <a-button type="primary" @click="batchInitiate">批量发起</a-button>
         <a-button type="primary" @click="batchSign">批量签署</a-button> 
         <a-button type="primary" @click="batchExport">批量下载</a-button>
+        <a-button type="primary" :loading="downLoading" @click="exportAll">批量导出</a-button>
       </div>
     </DashBtn>
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
@@ -277,7 +278,7 @@ import staffOrDeptPush from "@/components/staffOrDeptPush";
 import SelTempDrawer from "./components/selTempDrawer.vue";
 import TempPreviewModel from './components/tempPreviewModel.vue';
 import serviceNameList from '@/config/default/service.config.js'
-import {getResponsibilityCount, getResponsibilityList, pushResponsibility, responsibilityDelete, responsibilitySignBatch,responsibilityInitiateBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js"
+import {getResponsibilityCount, getResponsibilityList, pushResponsibility,pushResponsibilityExport, responsibilityDelete, responsibilitySignBatch,responsibilityInitiateBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
@@ -486,7 +487,8 @@ export default {
       ],
       tableDataList: [],
       classificationList: [],
-      userId: undefined
+      userId: undefined,
+      downLoading: false,
     }
   },
   created() {
@@ -817,6 +819,27 @@ export default {
           }
         }
       }
+    },
+    // 批量导出
+    async exportAll() {
+      if (!this.canClickBtnMixin("responsibilityBatchExportOut")) {
+        return;
+      }
+      this.downLoading = true;
+      const name = '安全责任书';
+      let res = await pushResponsibilityExport(this.formInline);
+      if(res){
+        const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const downloadElement = document.createElement('a');
+        const href = URL.createObjectURL(blob); //创建下载链接
+        downloadElement.href = href;
+        downloadElement.download = name + '.xlsx';
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement);// 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+      }
+      this.downLoading = false;
     },
     // 批量推送
     async batchPush() {
