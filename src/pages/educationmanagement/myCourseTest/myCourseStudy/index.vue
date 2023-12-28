@@ -143,6 +143,7 @@ export default {
         courseId: this.courseId,
         moduleId: this.moduleId,
         coursewareId: this.coursewareId,
+        coursePushId: this.paperObj.coursePushId,
         studyCount,
         studyDuration,
       }

@@ -582,6 +582,7 @@ export default {
             productionLoss: res.data.productionLoss || undefined,
             cvalues: res.data.cvalues || undefined,
             cvalue: res.data.cvalue || undefined,
+            riskName: res.data.riskName || undefined,
             valueRisk: res.data.valueRisk || undefined,
             hazardLevel: res.data.hazardLevel || undefined,
             riskClassification: res.data.riskClassification || undefined,
