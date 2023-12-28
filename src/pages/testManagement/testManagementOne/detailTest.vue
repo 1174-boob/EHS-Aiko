@@ -50,11 +50,11 @@
                 <span>{{deptCache[row.deptId]}}</span>
               </template>-->
             </vxe-column>
-            <vxe-column field="studyStatus" :min-width="120" title="学习状态">
+            <!-- <vxe-column field="studyStatus" :min-width="120" title="学习状态3">
               <template #default="{ row }">
                 <span>{{findText(studyStatusList, "key", row.studyStatus).value}}</span>
               </template>
-            </vxe-column>
+            </vxe-column> -->
             <vxe-column field="testStatus" :min-width="120" title="考试状态">
               <template #default="{ row }">
                 <span>{{findText(testStatusList, "key", row.testStatus).value}}</span>
@@ -112,11 +112,6 @@ export default {
           title: '推送人数',
           dataIndex: 'pushUser',
           key: "pushUser"
-        },
-        {
-          title: '学习人数',
-          dataIndex: 'learnUser',
-          key: "learnUser"
         },
         {
           title: '考试人数',
