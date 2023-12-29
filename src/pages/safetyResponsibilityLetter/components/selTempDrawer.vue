@@ -9,7 +9,7 @@
               :needDeptName="true"></CommonSearchItem>
             <a-form-model-item label="模板类型">
               <a-select allowClear show-search v-model="formInline.templateTypeId" placeholder="请选择模板类型" @change="templateTypeIdChange">
-                <a-select-option v-for="item in getDictTarget('u', 'template_type')" :key="item.key" :value="item.key">{{
+                <a-select-option v-for="item in templateTypeIdList" :key="item.key" :value="item.key">{{
                   item.value }}</a-select-option>
               </a-select>
             </a-form-model-item>
@@ -56,6 +56,7 @@
         <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
           <vxe-table  ref="table" @checkbox-change="checkboxChange" class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tempShowList">
             <vxe-column type="checkbox" width="60"></vxe-column>
+            <vxe-column field="corporationName" :min-width="120" title="所属组织"></vxe-column>
             <vxe-column field="templateTypeName" :min-width="120" title="模版名称"></vxe-column>
             <vxe-column field="templateClassificationName" :min-width="120" title="模板分类"></vxe-column>
             <vxe-column field="templateName" :min-width="120" title="模版名称">
@@ -115,6 +116,12 @@ export default {
       selTempListIng:[],
       // 当前展示的模板信息
       tempShowList: [],
+      templateTypeIdList:[
+        {
+          key : 'safety_responsibility_statement',
+          value: '安全责任书'
+        }
+      ],
       // 当前预览模板的信息
       previewData: {},
       dangerOperate:[],
