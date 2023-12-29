@@ -9,7 +9,7 @@
               :needDeptName="true"></CommonSearchItem>
             <a-form-model-item label="模板类型">
               <a-select allowClear show-search v-model="formInline.templateTypeId" placeholder="请选择模板类型" @change="templateTypeIdChange">
-                <a-select-option v-for="item in getDictTarget('u', 'template_type')" :key="item.key" :value="item.key">{{
+                <a-select-option v-for="item in templateTypeIdList" :key="item.key" :value="item.key">{{
                   item.value }}</a-select-option>
               </a-select>
             </a-form-model-item>
@@ -115,6 +115,12 @@ export default {
       selTempListIng:[],
       // 当前展示的模板信息
       tempShowList: [],
+      templateTypeIdList:[
+        {
+          key : 'safety_responsibility_statement',
+          value: '安全责任书'
+        }
+      ],
       // 当前预览模板的信息
       previewData: {},
       dangerOperate:[],
