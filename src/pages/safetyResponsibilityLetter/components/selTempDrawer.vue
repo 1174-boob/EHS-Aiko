@@ -7,12 +7,12 @@
           <a-form-model layout="inline" :model="formInline" :colon="false">
             <CommonSearchItem ref="commonSearchItem" :hasDepartment="false" :CommonFormInline="formInline"
               :needDeptName="true"></CommonSearchItem>
-            <a-form-model-item label="模板类型">
+            <!-- <a-form-model-item label="模板类型">
               <a-select allowClear show-search v-model="formInline.templateTypeId" placeholder="请选择模板类型" @change="templateTypeIdChange">
                 <a-select-option v-for="item in templateTypeIdList" :key="item.key" :value="item.key">{{
                   item.value }}</a-select-option>
               </a-select>
-            </a-form-model-item>
+            </a-form-model-item> -->
             <a-form-model-item label="模板分类">
               <a-select allowClear show-search v-model="formInline.templateClassificationId" placeholder="请选择模板分类">
                 <a-select-option v-for="item in templateClassificationList" :key="item.key" :value="item.key">{{
@@ -57,7 +57,7 @@
           <vxe-table  ref="table" @checkbox-change="checkboxChange" class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tempShowList">
             <vxe-column type="checkbox" width="60"></vxe-column>
             <vxe-column field="corporationName" :min-width="120" title="所属组织"></vxe-column>
-            <vxe-column field="templateTypeName" :min-width="120" title="模版名称"></vxe-column>
+            <vxe-column field="templateTypeName" :min-width="120" title="模板类型"></vxe-column>
             <vxe-column field="templateClassificationName" :min-width="120" title="模板分类"></vxe-column>
             <vxe-column field="templateName" :min-width="120" title="模版名称">
              
@@ -111,7 +111,9 @@ export default {
       boxLoading:true,
       tableSpinning:false,
       tempPreviewModelShow: false,
-      formInline: {},
+      formInline: {
+        templateTypeId :'safety_responsibility_statement'
+      },
       // 当前选择的模板信息
       selTempListIng:[],
       // 当前展示的模板信息
@@ -138,7 +140,7 @@ export default {
       return this.selTempListIng.map(item=>item.templateId)
     },
     templateClassificationList(){
-      const dictGroupCode = this.formInline.templateTypeId
+      const dictGroupCode = 'safety_responsibility_statement'
       return dictGroupCode ? (getDictTarget('u', dictGroupCode) || []) : []
     },
   }, 
@@ -153,6 +155,7 @@ export default {
         pageNo: this.page.pageNo,
         ...this.formInline,
       }
+      params.templateTypeId = 'safety_responsibility_statement'
       // this.boxLoading = true
       this.tableSpinning = true
       return managementListPage(params)
@@ -243,6 +246,7 @@ export default {
         this.$nextTick(() => {
           // this.boxLoading = true
           this.tableSpinning = true
+          
           this.selTempListIng = cloneDeep(this.selTempList)
           this.iRest()
           this.getDataList()
