@@ -220,10 +220,10 @@ import dictionary from "@/utils/dictionary";
 import serviceNameList from "@/config/default/service.config.js";
 import Upload from "@/pages/hiddenPerils/components/uploadHidden/index.vue";
 import {
-  GethiddenPerilsList,
-  DelhiddenPerilsList,
-  ExportHiddenList,
-  reassignHandlerUser
+  GethiddenPerilsListAssociation,
+  DelhiddenPerilsListAssociation,
+  ExportHiddenListAssociation,
+  reassignHandlerUserAssociation
 } from "@/services/hiddenPerils.js";
 import dayJs from "dayjs";
 import { formValidator } from "@/utils/clx-form-validator.js"
@@ -392,6 +392,7 @@ export default {
     this.initConfigPage()
     this.setRouterCode('hiddenPerilsListAssociation')
     this.getDataList(); //获取列表
+    console.log('query.dangerOperateId@@@@@SCC',this.$route.query.dangerOperateId);
   },
   activated() {
     setTimeout(() => {
@@ -490,7 +491,7 @@ export default {
       };
       this.loading = true;
       this.tableSpinning=true;
-      return GethiddenPerilsList(params)
+      return GethiddenPerilsListAssociation(params)
         .then((res) => {
           this.loading = false;
           let tableList = res.data.list;
@@ -596,7 +597,7 @@ export default {
           params.draftDeptId = this.formInline.deptId ? this.formInline.deptId : ""
           params.deptId = undefined
           this.loadingExport = true;
-          ExportHiddenList(params)
+          ExportHiddenListAssociation(params)
             .then((res) => {
               this.spreadSheetExcel(res, "隐患排查台账");
               this.loadingExport = false;
@@ -614,7 +615,7 @@ export default {
           params.draftDeptId = this.formInline.deptId ? this.formInline.deptId : ""
           params.deptId = undefined
           this.loadingExport = true;
-          ExportHiddenList(params)
+          ExportHiddenListAssociation(params)
             .then((res) => {
               this.spreadSheetExcel(res, "隐患排查台账");
               this.loadingExport = false;
@@ -707,7 +708,7 @@ export default {
         handlerUserJobNumber:this.editForm.holdUserJobNumber[0],
         handlerUserName:this.editForm.holdUserName[0]
       }
-      reassignHandlerUser(this.editParams).then((res)=>{
+      reassignHandlerUserAssociation(this.editParams).then((res)=>{
         if(res.code == 20000){
           this.$antMessage.success('授权成功')
           // 获取列表
@@ -780,7 +781,7 @@ export default {
         content: "确认删除？",
         cancelText: "取消",
         onOk: () => {
-          DelhiddenPerilsList({
+          DelhiddenPerilsListAssociation({
             hideDangerId: record.hideDangerId,
           })
             .then((res) => {

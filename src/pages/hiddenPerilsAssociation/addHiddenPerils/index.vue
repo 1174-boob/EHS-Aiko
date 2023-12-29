@@ -177,11 +177,11 @@ import dictionary from "@/utils/dictionary.js";
 import moment from "moment";
 import StaffOrDept from "@/components/staffOrDept";
 import {
-  AddhiddenPerilsList,
-  DetailhiddenPerilsList,
-  UpdatehiddenPerilsList,
+  AddhiddenPerilsListAssociation,
+  DetailhiddenPerilsListAssociation,
+  UpdatehiddenPerilsListAssociation,
   GetParentResponsibilityDept,
-  GetHiddenNextPeople,
+  GetHiddenNextPeopleAssociation,
 } from "@/services/hiddenPerils.js";
 import OrganizeLazyTree from "@/components/organizeLazyTree/organizeLazyTree.vue";
 import { PushTask, getDepartmentTree ,searchManagerAuto} from "@/services/api";
@@ -289,6 +289,7 @@ export default {
       this.deptIdList = adminDeptId ? [adminDeptId] : [];
       this.deptNameList = adminDeptName
     }
+    console.log('this.$route.query@SCC.dangerOperateIdList',this.$route.query.dangerOperateIdList);
     this.checkList = this.getChemicalDictList('checkType')
     this.troubleList = this.getChemicalDictList('httype')
     this.troubleClassList = this.getChemicalDictList('htlevel')
@@ -361,7 +362,7 @@ export default {
     // 消息推送
     async infoPush(obj, type) {
       // 获取下级审批人
-      let nextPeopleData = await GetHiddenNextPeople({ hideDangerId: obj.hideDangerId })
+      let nextPeopleData = await GetHiddenNextPeopleAssociation({ hideDangerId: obj.hideDangerId })
       let nextUserId = nextPeopleData?.data?.handleId
 
       if (type == "submit") {
@@ -476,7 +477,7 @@ export default {
         dangerPhotoList: this.dealIdList(this.hideDangerForm.dangerPhotoList || []),
       };
       //判断是新增还是编辑
-      let PromiseThing = this.routerObj.hideDangerId ? UpdatehiddenPerilsList : AddhiddenPerilsList;
+      let PromiseThing = this.routerObj.hideDangerId ? UpdatehiddenPerilsListAssociation : AddhiddenPerilsListAssociation;
       this.loading = true;
       PromiseThing(obj)
         .then((res) => {
@@ -488,7 +489,11 @@ export default {
 
           this.loading = false;
           this.$antMessage.success(`${type == "save" ? "保存成功" : "提交成功"}`);
-          this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+          if (type == "submit") {
+            this.$router.push("/safeManage/workManage/dangerWorkStatic/dangerWorkStaticAccount");
+          } else if (type == "save") {
+            this.$router.push("/safeManage/workManage/dangerWorkStatic/draftBoxListAssociation");
+          }
         })
         .catch((err) => {
           this.loading = false;
@@ -544,7 +549,7 @@ export default {
 
     //获取详情
     getDetail() {
-      DetailhiddenPerilsList({ hideDangerId: this.routerObj.hideDangerId })
+      DetailhiddenPerilsListAssociation({ hideDangerId: this.routerObj.hideDangerId })
         .then((res) => {
           this.hideDangerForm = res.data;
 

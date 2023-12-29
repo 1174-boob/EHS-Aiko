@@ -51,7 +51,7 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { debounce } from "lodash";
-import { GethiddenPerilsList, DelhiddenPerilsList, } from "@/services/hiddenPerils.js";
+import { GethiddenPerilsListAssociation, DelhiddenPerilsListAssociation, } from "@/services/hiddenPerils.js";
 import chemicalDict from "@/mixin/chemicalDict.js";
 export default {
   components: { UploadBtnStyle },
@@ -205,7 +205,7 @@ export default {
       };
       this.loading = true;
       this.tableSpinning = true
-      return GethiddenPerilsList(params)
+      return GethiddenPerilsListAssociation(params)
         .then((res) => {
           this.loading = false;
           this.tableList = res.data.list;
@@ -273,7 +273,7 @@ export default {
         content: "确认删除？",
         cancelText: "取消",
         onOk: () => {
-          DelhiddenPerilsList({
+          DelhiddenPerilsListAssociation({
             hideDangerId: record.hideDangerId,
           })
             .then((res) => {

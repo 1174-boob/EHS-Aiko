@@ -68,7 +68,7 @@
 import serviceNameList from "@/config/default/service.config.js";
 import UploadBtnStyle from "@/components/upload/uploadStyleXt.vue";
 import { formValidator } from "@/utils/clx-form-validator.js";
-import { ImportHidden } from "@/services/hiddenPerils.js";
+import { ImportHiddenAssociation } from "@/services/hiddenPerils.js";
 export default {
   components: { UploadBtnStyle },
   props: {
@@ -82,7 +82,7 @@ export default {
   data() {
     return {
       loading: false,
-      actions: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.safe}/api/ehs/safe/hide/danger/upload`,
+      actions: `${process.env.VUE_APP_API_BASE_URL}${serviceNameList.safe}/api/ehs/safe/association/hide/danger/upload`,
       labelCol: { span: 4 }, // 设置左边label宽度
       wrapperCol: { span: 17 }, // 设置右边表单宽度
       addForm: {
@@ -106,7 +106,7 @@ export default {
         return;
       }
       this.loading = true;
-      ImportHidden({
+      ImportHiddenAssociation({
         fileId: this.addForm.fileListExel[0].id,
         fileName: this.addForm.fileListExel[0].name,
         list: this.addForm.list,

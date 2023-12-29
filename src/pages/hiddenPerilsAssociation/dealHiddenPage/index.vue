@@ -100,15 +100,15 @@ import { formValidator } from "@/utils/clx-form-validator.js";
 import BackModel from "@/pages/hiddenPerils/components/backRason/index.vue";
 import dayJs from "dayjs";
 import {
-  DetailhiddenPerilsList,
-  DelayhiddenPerilsList,
-  BackhiddenPerilsList,
-  PassOrBackhiddenPerils,
+  DetailhiddenPerilsListAssociation,
+  DelayhiddenPerilsListAssociation,
+  BackhiddenPerilsListAssociation,
+  PassOrBackhiddenPerilsAssociation,
   GetParentResponsibilityDept,
-  GetHiddenNextPeople,
-  HiddenLogList,
-  directClose,
-  withdrawCreateUser
+  GetHiddenNextPeopleAssociation,
+  HiddenLogListAssociation,
+  directCloseAssociation,
+  withdrawCreateUserAssociation
 } from "@/services/hiddenPerils.js";
 import StaffOrDept from "@/components/staffOrDept";
 import moment from "moment";
@@ -185,7 +185,7 @@ export default {
     // 消息推送
     async infoPush(urlJump, userIdOld) {
       // 获取下级审批人
-      let nextPeopleData = await GetHiddenNextPeople({ hideDangerId: this.routeObj.hideDangerId })
+      let nextPeopleData = await GetHiddenNextPeopleAssociation({ hideDangerId: this.routeObj.hideDangerId })
       let nextUserId = nextPeopleData?.data?.handleId
       const url =
         process.env.VUE_APP_LOGIN_URL +
@@ -216,7 +216,7 @@ export default {
 
     //获取操作日志
     getLogList() {
-      HiddenLogList({ hideDangerId: this.routeObj.hideDangerId })
+      HiddenLogListAssociation({ hideDangerId: this.routeObj.hideDangerId })
         .then((res) => {
           this.logList = res.data;
         })
@@ -250,7 +250,7 @@ export default {
         withdrawInfo: this.withdForm.withdrawInfo,
       }
       if(this.withdrawOrDownTitle == '撤回'){
-        withdrawCreateUser(params).then(()=>{
+        withdrawCreateUserAssociation(params).then(()=>{
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
@@ -259,7 +259,7 @@ export default {
           console.log(err);
         })
       }else if(this.withdrawOrDownTitle == '直接关闭'){
-        directClose(params).then(()=>{
+        directCloseAssociation(params).then(()=>{
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
@@ -274,7 +274,7 @@ export default {
       //type：distribution:分配担当  rectification:直接整改  delay:延期申请  back:退回起草人
       if (type == "rectification") {
         this.loading = true;
-        DelayhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
+        DelayhiddenPerilsListAssociation({ hideDangerId: this.routeObj.hideDangerId })
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`直接整改成功`);
@@ -311,7 +311,7 @@ export default {
           pass: true,
         };
         this.loading = true;
-        PassOrBackhiddenPerils(obj)
+        PassOrBackhiddenPerilsAssociation(obj)
           .then((res) => {
             if (this.hideDangerForm.fourPass) {
               //四不放过
@@ -355,7 +355,7 @@ export default {
 
     //获取详情
     getDetail() {
-      DetailhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
+      DetailhiddenPerilsListAssociation({ hideDangerId: this.routeObj.hideDangerId })
         .then((res) => {
           this.loadingSpin = false;
           this.hideDangerForm = res.data;
@@ -408,8 +408,8 @@ export default {
 
       //true为延期申请 false驳回
       let PromiseThing = this.typeModel
-        ? DelayhiddenPerilsList
-        : PassOrBackhiddenPerils;
+        ? DelayhiddenPerilsListAssociation
+        : PassOrBackhiddenPerilsAssociation;
 
       PromiseThing(obj)
         .then((res) => {
@@ -435,7 +435,7 @@ export default {
       // console.log(obj,'...obj');
       let obj1 = { ...obj, hideDangerId: this.routeObj.hideDangerId };
       if (obj) {
-        BackhiddenPerilsList(obj1)
+        BackhiddenPerilsListAssociation(obj1)
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`退回起草人成功`);
@@ -474,7 +474,7 @@ export default {
             return Promise.reject()
           })
           .then(res => {
-            return DelayhiddenPerilsList(obj)
+            return DelayhiddenPerilsListAssociation(obj)
               .then((res) => {
                 if (this.hideDangerForm.fourPass) {
                   //四不放过

@@ -161,7 +161,7 @@ export default {
         pageSize: 10,
         total: 0,
       },
-      checkBoxKeyList: [],
+      dangerOperateIdList: [],
       formInline: {},
       columnsAll: [
         {
@@ -455,7 +455,7 @@ export default {
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page;
-      this.checkBoxKeyList = [];
+      this.dangerOperateIdList = [];
       // 获取列表
       this.getTableList();
     },
@@ -501,27 +501,30 @@ export default {
     },
     hiddenDangerSituation(row){
       console.log('隐患情况单挑数据',row);
-      this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+      this.$router.push({
+        path:"/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation",
+        query:{ dangerOperateId: row.dangerOperateId },
+      } );
     },
     checkboxChange() {
       const checkedRows = this.$refs.table.getCheckboxRecords()
       const checkedRowsKeys = checkedRows.map(item => item.operateId)
       // console.log('单选@@',checkedRows);
       // console.log('单选Key',checkedRowsKeys);
-      this.checkBoxKeyList = checkedRowsKeys
+      this.dangerOperateIdList = checkedRowsKeys
     },
     selectAllCheckboxChange(checked) {
       const checkedRows = checked.records
       const checkedRowsKeys = checkedRows.map(item => item.operateId)
       // console.log('全选@@',checkedRows);
       // console.log('全选key',checkedRowsKeys);
-      this.checkBoxKeyList = checkedRowsKeys
+      this.dangerOperateIdList = checkedRowsKeys
     },
     relatedHazards(){
-      console.log('checkBoxKeyList',this.checkBoxKeyList);
+      console.log('dangerOperateIdList',this.dangerOperateIdList);
       this.$router.push({
         path: "/safeManage/workManage/dangerWorkStatic/addHiddenPerilsAssociation",
-        query: { checkBoxKeyList: this.checkBoxKeyList },
+        query: { dangerOperateIdList: this.dangerOperateIdList },
       });
       this.$refs.table.clearCheckboxRow()//清除之前已选的复选框
     },

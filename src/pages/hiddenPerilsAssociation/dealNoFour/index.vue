@@ -133,13 +133,13 @@ import BackModel from "@/pages/hiddenPerils/components/backRason/index.vue";
 import Log from "@/components/logList/index.vue";
 import UploadCanRemove from "@/components/upload/uploadCanRemove.vue";
 import {
-  DetailhiddenPerilsList,
-  DelayhiddenPerilsList,
-  BackhiddenPerilsList,
-  HiddenLogList,
-  GetHiddenNextPeople,
-  directClose,
-  withdrawCreateUser
+  DetailhiddenPerilsListAssociation,
+  DelayhiddenPerilsListAssociation,
+  BackhiddenPerilsListAssociation,
+  HiddenLogListAssociation,
+  GetHiddenNextPeopleAssociation,
+  directCloseAssociation,
+  withdrawCreateUserAssociation
 } from "@/services/hiddenPerils.js";
 import { getQueryVariable } from "@/utils/util.js";
 import { PushTask } from "@/services/api";
@@ -218,7 +218,7 @@ export default {
     // 消息推送
     async infoPush(urlJump) {
       // 获取下级审批人
-      let nextPeopleData = await GetHiddenNextPeople({ hideDangerId: this.routeObj.hideDangerId })
+      let nextPeopleData = await GetHiddenNextPeopleAssociation({ hideDangerId: this.routeObj.hideDangerId })
       let nextUserId = nextPeopleData?.data?.handleId
       const url =
         process.env.VUE_APP_LOGIN_URL +
@@ -249,7 +249,7 @@ export default {
 
     //获取操作日志
     getLogList() {
-      HiddenLogList({ hideDangerId: this.routeObj.hideDangerId })
+      HiddenLogListAssociation({ hideDangerId: this.routeObj.hideDangerId })
         .then((res) => {
           this.logList = res.data;
         })
@@ -261,7 +261,7 @@ export default {
 
     //获取详情
     getDetail() {
-      DetailhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
+      DetailhiddenPerilsListAssociation({ hideDangerId: this.routeObj.hideDangerId })
         .then((res) => {
           this.loadingSpin = false;
           let obj = { ...res.data, deptId: res.data.draftDeptId };
@@ -316,7 +316,7 @@ export default {
     cancleBackFlag(obj) {
       if (obj) {
         let params = { ...obj, hideDangerId: this.routeObj.hideDangerId };
-        BackhiddenPerilsList(params)
+        BackhiddenPerilsListAssociation(params)
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`驳回成功`);
@@ -362,7 +362,7 @@ export default {
         withdrawInfo: this.withdForm.withdrawInfo,
       }
       if(this.withdrawOrDownTitle == '撤回'){
-        withdrawCreateUser(params).then(()=>{
+        withdrawCreateUserAssociation(params).then(()=>{
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
@@ -371,7 +371,7 @@ export default {
           console.log(err);
         })
       }else if(this.withdrawOrDownTitle == '直接关闭'){
-        directClose(params).then(()=>{
+        directCloseAssociation(params).then(()=>{
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
@@ -403,7 +403,7 @@ export default {
         };
         this.loading = true;
         this.setKeepalive(true)
-        DelayhiddenPerilsList(obj)
+        DelayhiddenPerilsListAssociation(obj)
           .then(() => {
             // this.setKeepalive(true)
             this.infoPush("/safeManage/workManage/dangerWorkStatic/dealNoFourAssociation");
@@ -423,7 +423,7 @@ export default {
         //通过、关闭
         this.loading = true;
         this.setKeepalive(true)
-        DelayhiddenPerilsList({ hideDangerId: this.routeObj.hideDangerId })
+        DelayhiddenPerilsListAssociation({ hideDangerId: this.routeObj.hideDangerId })
           .then(() => {
             this.infoPush("/safeManage/workManage/dangerWorkStatic/dealNoFourAssociation");
             this.loading = false;

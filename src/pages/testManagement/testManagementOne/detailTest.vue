@@ -18,7 +18,7 @@
           </a-form-model>
         </SearchTerm>
         <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-          <a-table :columns="columns" bordered :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
+          <a-table :columns="columns" bordered :scroll="{ x: 800 }" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
             <div slot="action" slot-scope="record">
               <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
               <span class="color-0067cc cursor-pointer" @click="actionExport(record)">导出</span>
@@ -36,7 +36,7 @@
               <a-input placeholder="请输入员工姓名" v-model="formInlineDetail.userName" />
             </a-form-model-item>
             <a-form-model-item class="float-right">
-              <a-button type="primary" :loading="loadingTwo" @click="iSearchDetail">查询</a-button>
+              <a-button type="primary" @click="iSearchDetail">查询</a-button>
               <a-button @click="iRestDetail">重置</a-button>
             </a-form-model-item>
           </a-form-model>
@@ -45,26 +45,14 @@
           <vxe-table class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tableDataListDetail">
             <vxe-column field="userName" :min-width="120" title="员工姓名"></vxe-column>
             <vxe-column field="company" :min-width="120" title="厂商"></vxe-column>
-            <vxe-column field="deptName" :min-width="120" title="部门">
-              <!-- <template #default="{ row }">
-                <span>{{deptCache[row.deptId]}}</span>
-              </template>-->
-            </vxe-column>
-            <!-- <vxe-column field="studyStatus" :min-width="120" title="学习状态3">
-              <template #default="{ row }">
-                <span>{{findText(studyStatusList, "key", row.studyStatus).value}}</span>
-              </template>
-            </vxe-column> -->
+            <vxe-column field="deptName" :min-width="120" title="部门"></vxe-column>
+            <vxe-column field="score" :min-width="120" title="考试成绩"></vxe-column>
             <vxe-column field="testStatus" :min-width="120" title="考试状态">
               <template #default="{ row }">
                 <span>{{findText(testStatusList, "key", row.testStatus).value}}</span>
               </template>
             </vxe-column>
-            <vxe-column field="isQualified" :min-width="120" title="是否合格">
-              <template #default="{ row }">
-                <span>{{findText(testStatusList, "key", row.isQualified).value}}</span>
-              </template>
-            </vxe-column>
+            <vxe-column field="testTime" :min-width="120" title="考试时间"></vxe-column>
             <template #empty>
               <div style="padding:16px 0;">
                 <a-empty />
@@ -80,7 +68,7 @@
   </div>
 </template>
 <script>
-import { deptDict } from "@/services/api.js";
+import { deptDict ,PushInfo } from "@/services/api.js";
 import { ExamDetail, ExamPushInfo, ExamPushCodeInfo } from "@/services/questionmodel.js";
 import { debounce } from 'lodash';
 import cancelLoading from '@/mixin/cancelLoading';
@@ -267,11 +255,12 @@ export default {
     },
     // 获取推送列表
     getDataList() {
-      return PushInfo({
+      return ExamPushInfo({
         ...this.formInline,
         courseId: this.dataMsg.courseId,
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
+        testId: this.dataMsg.testId,
       }).then((res) => {
         this.tableDataList = res.data.list;
         this.page.total = res.data.total;
@@ -327,6 +316,7 @@ export default {
     actionLook(record) {
       this.detailMsg = record;
       this.detailVisible = true;
+      this.formInlineDetail = {}
       this.getDataListDetail(record);
     },
     detailCancle(record) {
@@ -339,12 +329,13 @@ export default {
     getDataListDetail(record) {
       return ExamPushCodeInfo({
         testId: this.dataMsg.testId,
-        pushCode: record.pushCode,
+        // pushCode: record.pushCode,
         time: '',
         userName: '',
         pageSize: this.pageDetail.pageSize,
         corporationId: '',
         pageNo: this.pageDetail.pageNo,
+        ...this.preFormInlineDetail
 
         // courseId: this.dataMsg.courseId,
         // pushCode: this.detailMsg.pushCode,
