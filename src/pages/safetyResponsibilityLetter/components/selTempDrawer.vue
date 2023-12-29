@@ -29,7 +29,7 @@
           </a-form-model>
         </SearchTerm>
 
-        <div class="selTempListContainer" v-loading="boxLoading">
+        <!-- <div class="selTempListContainer" v-loading="boxLoading">
           <ul class="selTempList" v-if="tempShowList.length">
             <li class="selTempItem" v-for="item in tempShowList" :key="item.templateId">
               <div class="selRadioBox">
@@ -52,7 +52,22 @@
             :page-size-options="page.pageSizeOptions ? page.pageSizeOptions : ['8', '16', '24', '32', '40']"
             :total="page.total" :show-total="total => `共 ${total} 条`" showQuickJumper @change="pageNoChange"
             @showSizeChange="onShowSizeChange" />
-        </div>
+        </div> -->
+        <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
+          <vxe-table  ref="table" @checkbox-change="checkboxChange" class="vxe-scrollbar beauty-scroll-fireBox" border show-header-overflow show-overflow align="center" :row-config="{isHover: true}" :data="tempShowList">
+            <vxe-column type="checkbox" width="60"></vxe-column>
+            <vxe-column field="templateTypeName" :min-width="120" title="模版名称"></vxe-column>
+            <vxe-column field="templateClassificationName" :min-width="120" title="模板分类"></vxe-column>
+            <vxe-column field="templateName" :min-width="120" title="模版名称">
+             
+            </vxe-column>
+            <template #empty>
+              <div style="padding:16px 0;">
+                <a-empty />
+              </div>
+            </template>
+          </vxe-table>
+        </CommonTable>
 
       </template>
 
@@ -93,6 +108,7 @@ export default {
     return {
       getDictTarget,
       boxLoading:true,
+      tableSpinning:false,
       tempPreviewModelShow: false,
       formInline: {},
       // 当前选择的模板信息
@@ -101,9 +117,11 @@ export default {
       tempShowList: [],
       // 当前预览模板的信息
       previewData: {},
+      dangerOperate:[],
+      dangerOperateIdList: [],
       page: {
         pageNo: 1,
-        pageSize: 8,
+        pageSize: 10,
         total: 0
       },
     }
@@ -128,7 +146,8 @@ export default {
         pageNo: this.page.pageNo,
         ...this.formInline,
       }
-      this.boxLoading = true
+      // this.boxLoading = true
+      this.tableSpinning = true
       return managementListPage(params)
         .then((res) => {
           let { list: tempShowList, total } = res.data ? res.data : { list: [], total: 0 };
@@ -142,8 +161,18 @@ export default {
         })
         .catch(err => { })
         .finally(()=>{
-          this.boxLoading = false
+          // this.boxLoading = false
+          this.tableSpinning = false
         })
+    },
+    checkboxChange() {
+      const checkedRows = this.$refs.table.getCheckboxRecords()
+      const checkedRowsKeys = checkedRows.map(item => item.templateId)
+      // console.log('单选@@',checkedRows);
+      this.dangerOperate = checkedRows
+      // console.log('单选Key',checkedRowsKeys);
+      this.dangerOperateIdList = checkedRowsKeys
+      console.log(this.dangerOperateIdList,'this.dangerOperateIdList');
     },
     // 选择模板
     selTempFn(tempItem) {
@@ -160,11 +189,14 @@ export default {
     },
     // 确定选择模板
     onSubmitDrawer() {
-      if(this.selTempIds.length == 0){
+      if(this.dangerOperateIdList.length == 0){
         this.$antMessage.warn("请先选择模板");
         return 
+      } else if (this.dangerOperateIdList.length > 1) {
+        this.$antMessage.warn("只能选择一个模板！");
+        return 
       }
-      this.$emit('changeSelTempDrawerList',this.selTempListIng)
+      this.$emit('changeSelTempDrawerList',this.dangerOperate)
       this.cancelFn()
     },
     // 查询
@@ -178,10 +210,11 @@ export default {
     },
     // 重置
     iRest: debounce(function () {
-      this.$refs.commonSearchItem.reset()
+      // this.$refs.commonSearchItem.reset()
+      this.dangerOperateIdList = [];
       this.page = {
         pageNo: 1,
-        pageSize: 8,
+        pageSize: 10,
         total: 0,
       }
       this.formInline = {}
@@ -201,7 +234,8 @@ export default {
     selTempDrawerShow(newVal) {
       if (newVal) {
         this.$nextTick(() => {
-          this.boxLoading = true
+          // this.boxLoading = true
+          this.tableSpinning = true
           this.selTempListIng = cloneDeep(this.selTempList)
           this.iRest()
           this.getDataList()
