@@ -63,7 +63,7 @@
       </div>
     </DashBtn>
     <CommonTable :spinning="tableSpinning" :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
-      <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, selectedRows: choosedArr, onChange: onSelectChange, onSelectAll: onSelectAllSelect }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
+      <a-table :row-selection="{ selectedRowKeys: selectedRowKeys, selectedRows: choosedArr, onSelect: onSelectNew, onChange: onSelectChange, onSelectAll: onSelectAllSelect }" bordered :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return record.id}" :pagination="false">
         <div slot="num" slot-scope="record">{{ record.num }}</div>
         <div slot="templateTypeName" slot-scope="record">{{ record.templateTypeName }}</div>
         <div slot="templateClassificationName" slot-scope="record">{{ record.templateClassificationName }}</div>
@@ -1149,16 +1149,53 @@ export default {
       this.signVisible = false;
       this.editForm = {};
     },
+    onSelectNew(record, selected, selectedRows, nativeEvent){
+      // 选择
+      if (selected) {
+        this.selectedRowKeys.push(record.id)
+        this.choosedArr.push(record)
+      } else {
+        // 取消选中
+        this.selectedRowKeys = this.selectedRowKeys.filter((v) => v !== record.id)
+        this.choosedArr.splice(
+          this.choosedArr.findIndex((x) => x.id === record.id),
+          1
+        )
+      }
+      this.getArray(this.choosedArr)
+    },
     onSelectChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.choosedArr = selectedRows
-      console.log('selectedRowKeys111',selectedRowKeys,'selectedRows222',selectedRows);
+      this.selectedRowKeys = [...new Set(selectedRowKeys)];
+      console.log('selectedRowKeys111SCC',this.selectedRowKeys);
     },
     onSelectAllSelect(selected, selectedRows, changeRows) {
-      this.selectedRowKeys = selectedRows.map((item,index) => {
-        return item.id
-      }) || []
-      this.choosedArr = selectedRows
+      // console.log(selected, selectedRows, changeRows)
+      // 全选
+      if (selected) {
+        changeRows.map((x) => {
+          this.selectedRowKeys.push(x.id) //选中id
+        })
+        this.choosedArr = this.choosedArr.concat(changeRows)
+      } else {
+        // 取消全选
+        changeRows.forEach((item) => {
+          // 去掉选择取消的keyID
+          this.selectedRowKeys = this.selectedRowKeys.filter((v) => v !== item.id)
+        })
+        this.choosedArr = this.choosedArr.filter((x) => !changeRows.find((i) => i.id === x.id))
+      }
+      this.getArray(this.choosedArr)
+    },
+    // 数组去重
+    getArray(selectData) {
+      let map = new Map()
+      for (let item of selectData) {
+        if (!map.has(item.id)) {
+          map.set(item.id, item)
+        }
+      }
+      this.choosedArr = [...map.values()]
+      console.log(this.choosedArr, '数组去重后')
     },
     // 根据列表签署状态转为文字
     getNumStatus(num){
@@ -1175,8 +1212,8 @@ export default {
     // 页码改变
     pageNoChange(page) {
       this.page.pageNo = page
-      this.choosedArr = []
-      this.selectedRowKeys = []
+      // this.choosedArr = []
+      // this.selectedRowKeys = []
       // 获取列表
       this.getDataList()
     },
