@@ -35,6 +35,8 @@ export const exportNoEventTypePieOptionApi = params => postExcel(`${serviceNameL
 
 // 危险作业管理-作业情况总览-查询
 export const getOperationOptionApi = params => post(`${serviceNameList.safe}/api/ehs/safe/data/analysis/operate/statistics/count/bar`, params);
+// 危险作业管理-关联隐患作业情况-查询
+export const getAssociationOptionApi = params => post(`${serviceNameList.safe}/api/ehs/safe/data/analysis/operate/statistics/association/hide/danger/bar`, params);
 // 危险作业管理-作业情况总览-导出
 export const exportOperationOptionApi = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/data/analysis/operate/statistics/count/bar/download`, params);
 // 危险作业管理-作业类别-查询

@@ -112,6 +112,23 @@
       </a-col>
     </a-row>
 
+    <template title="关联隐患作业情况">
+      <div class="injury-box">
+        <div class="title">
+          <div class="title-left">关联隐患作业情况</div>
+          <div class="title-right"></div>
+        </div>
+        <template v-if="associationOption.series && associationOption.series.length">
+          <div class="injury-Echarts">
+            <Echarts :option="associationOption" />
+          </div>
+        </template>
+        <template v-else>
+          <a-empty />
+        </template>
+      </div>
+    </template>
+
     <CompAnalysis />
   </div>
 </template>
@@ -121,7 +138,7 @@ import { cloneDeep, debounce, isEmpty } from "lodash";
 import cancelLoading from "@/mixin/cancelLoading";
 import Echarts from "@/components/echarts/index.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
-import { getOperationOptionApi, exportOperationOptionApi, getJobCategoryOptionApi, exportJobCategoryOptionApi, getJobCategoryPieOptionApi, exportJobCategoryPieOptionApi, getJobTypePieOptionApi, exportJobTypePieOptionApi } from "@/services/dataAnalysis/index.js";
+import { getOperationOptionApi, getAssociationOptionApi, exportOperationOptionApi, getJobCategoryOptionApi, exportJobCategoryOptionApi, getJobCategoryPieOptionApi, exportJobCategoryPieOptionApi, getJobTypePieOptionApi, exportJobTypePieOptionApi } from "@/services/dataAnalysis/index.js";
 import moment from 'moment'
 import dataAnalysis from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
 import { barObj, pieObj } from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
@@ -169,6 +186,51 @@ export default {
           {
             type: 'value',
             name: '未确认率',
+            axisLabel: {
+              formatter: (value) => {
+                // value = value * 100 + '%'
+                value = value + '%'
+                return value
+              }
+            }
+          }
+        ],
+        series: []
+      },
+      associationOption: {
+        tooltip: {
+          ...barObj.tooltip,
+        },
+        toolbox: {
+          emphasis: {
+            ...barObj.emphasis
+          },
+          feature: {},
+        },
+        grid: barObj.grid,
+        dataZoom: [],
+        legend: {
+          data: []
+        },
+        xAxis: [
+          {
+            type: 'category',
+            axisLabel: {
+              ...barObj.xAxis.axisLabel,
+            },
+            axisPointer: {
+              ...barObj.xAxis.axisPointer
+            },
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: '数量',
+          },
+          {
+            type: 'value',
+            name: '整改率',
             axisLabel: {
               formatter: (value) => {
                 // value = value * 100 + '%'
@@ -285,6 +347,13 @@ export default {
           fileName: '作业情况总览',
         }
       })
+      this.associationOption.toolbox.feature = this.getFeatureMixin({
+        refreshFnName: 'getAssociationOptionApiFn',
+        exportFnObj: {
+          apiName: exportOperationOptionApi,
+          fileName: '关联隐患作业情况',
+        }
+      })
       this.propertyLossOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getJobCategoryOptionApiFn',
         exportFnObj: {
@@ -346,6 +415,35 @@ export default {
             this.injuryOption.series = cloneDeep(series)
           } else {
             this.injuryOption.series = []
+          }
+        })
+        .catch(errr => { })
+    },
+    // 关联隐患-api
+    getAssociationOptionApiFn() {
+      let apiData = {
+        ...this.getApiData()
+      }
+      return getAssociationOptionApi(apiData)
+        .then(res => {
+          let ajaxData = res.data || []
+          if (ajaxData && ajaxData.length) {
+            let { xAxisData, series, legendData } = this.barDataHandle(ajaxData, true, true)
+            // console.log(xAxisData, series, legendData);
+            this.associationOption.xAxis[0].data = cloneDeep(xAxisData)
+            this.associationOption.legend.data = cloneDeep(legendData)
+            series.forEach(item => {
+              if (item.type == 'line') {
+                item.tooltip = {
+                  valueFormatter: function (value) {
+                    return value + " %";
+                  }
+                }
+              }
+            })
+            this.associationOption.series = cloneDeep(series)
+          } else {
+            this.associationOption.series = []
           }
         })
         .catch(errr => { })
@@ -420,6 +518,7 @@ export default {
       openLoading && this.handleLoading()
       Promise.all([
         this.getOperationOptionApiFn(),
+        this.getAssociationOptionApiFn(),
         this.getJobCategoryOptionApiFn(),
         this.getJobCategoryPieOptionApiFn(),
         this.getJobTypePieOptionApiFn(),
