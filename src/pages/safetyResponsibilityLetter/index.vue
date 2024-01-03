@@ -25,6 +25,9 @@
         <a-form-model-item label="签署日期">
           <a-range-picker format="YYYY-MM-DD" v-model="formInline.signatureFinalDate" :placeholder="['开始日期','结束日期']"/>
         </a-form-model-item>
+        <a-form-model-item label="年度">
+          <a-date-picker format="YYYY" v-model="formInline.year" mode="year" :placeholder="'请选择'" valueFormat="YYYY" @panelChange="yearChange" />
+        </a-form-model-item>
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -498,10 +501,11 @@ export default {
       title: "所属部门",
       width: 150
     }, true));
-    if (getQueryVariable('deptId') && getQueryVariable('signatureStatus')){
-      console.log('deptid',getQueryVariable('deptId'),'signatureStatus',getQueryVariable('signatureStatus'));
+    if (getQueryVariable('deptId') && getQueryVariable('signatureStatus') && getQueryVariable('year')){
+      console.log('deptid',getQueryVariable('deptId'),'signatureStatus',getQueryVariable('signatureStatus'),'year',getQueryVariable('year'));
       this.$set(this.formInline,"deptId",getQueryVariable('deptId'))
       this.$set(this.formInline,"signatureStatus",getQueryVariable('signatureStatus'))
+      this.$set(this.formInline,"year",getQueryVariable('year'))
     } else {
       console.log('没取到deptId&&signatureStatus');
     }
@@ -551,6 +555,9 @@ export default {
           this.$set(this.storageForm,"phone",this.phoneValue)
         })
       });
+    },
+    yearChange(val) {
+      this.$set(this.formInline, "year", val.format('YYYY'));
     },
     // 关闭弹框
     storageCancle() {
