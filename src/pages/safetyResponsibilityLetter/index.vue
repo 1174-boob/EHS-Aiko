@@ -273,6 +273,7 @@ import '@/utils/dzjm.min.js'
 import dictionary from "@/utils/dictionary";
 import moment from 'moment'
 import { debounce, cloneDeep } from 'lodash'
+import { getQueryVariable } from "@/utils/util.js"
 import html2canvas from 'html2canvas'
 import staffOrDeptPush from "@/components/staffOrDeptPush";
 import SelTempDrawer from "./components/selTempDrawer.vue";
@@ -497,6 +498,13 @@ export default {
       title: "所属部门",
       width: 150
     }, true));
+    if (getQueryVariable('deptId') && getQueryVariable('signatureStatus')){
+      console.log('deptid',getQueryVariable('deptId'),'signatureStatus',getQueryVariable('signatureStatus'));
+      this.$set(this.formInline,"deptId",getQueryVariable('deptId'))
+      this.$set(this.formInline,"signatureStatus",getQueryVariable('signatureStatus'))
+    } else {
+      console.log('没取到deptId&&signatureStatus');
+    }
     this.classificationList = this.getMappingValue(this.dictTypeData, "dictType", "safety_responsibility_statement").dictItem;
     this.init()
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
