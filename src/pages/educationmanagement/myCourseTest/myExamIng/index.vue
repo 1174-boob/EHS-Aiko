@@ -100,6 +100,7 @@ export default {
       // 试卷详情
       paperDetail: {},
       testId: undefined,
+      testPushId: undefined,
       paperId: undefined,
       courseId: undefined,
       // 1通过课程进入 2通过考试进入 
@@ -122,6 +123,7 @@ export default {
     } else {  // 2通过考试进入
       this.testId = this.$route.query.testId
       this.paperId = this.$route.query.paperId
+      this.testPushId = this.$route.query.testPushId
     }
     this.testDate = dayJs(Date.now() + 480 * 60 * 1000)
     this.getDetai()
@@ -178,6 +180,7 @@ export default {
     getMyCourseExamDetailFn() {
       let apiData = {
         testId: this.testId,
+        testPushId: this.testPushId
       }
       return getMyCourseExamDetailApi(apiData)
         .then(res => {
@@ -239,12 +242,13 @@ export default {
       let apiData = {
         // 1通过课程进入 2通过考试进入 
         testId: this.formType == 2 ? this.testId : undefined,
+        testPushId: this.formType == 2 ? this.testPushId : undefined,
         courseId: this.formType == 1 ? this.courseId : undefined,
         testDate: this.testDate,
         accessScore: this.paperDetail.accessScore,
         paperScoreDtoList: paperList,
         coursePushId: this.formType == 1 ? this.paperObj.coursePushId : undefined,
-        testPushId: this.formType == 2 ? this.testObj.testPushId : undefined,
+        // testPushId: this.formType == 2 ? this.testObj.testPushId : undefined,
       }
       // console.log('参数', apiData);
       // return
