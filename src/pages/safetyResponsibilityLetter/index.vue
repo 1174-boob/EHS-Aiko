@@ -1165,8 +1165,8 @@ export default {
       this.getArray(this.choosedArr)
     },
     onSelectChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = [...new Set(selectedRowKeys)];
-      console.log('selectedRowKeys111SCC',this.selectedRowKeys);
+      // this.selectedRowKeys = [...new Set(selectedRowKeys)];
+      // console.log('selectedRowKeys111SCC',this.selectedRowKeys);
     },
     onSelectAllSelect(selected, selectedRows, changeRows) {
       // console.log(selected, selectedRows, changeRows)
@@ -1195,7 +1195,9 @@ export default {
         }
       }
       this.choosedArr = [...map.values()]
+      this.selectedRowKeys = this.choosedArr.map(item => item.id)
       console.log(this.choosedArr, '数组去重后')
+      console.log('selectedRowKeys111SCC',this.selectedRowKeys);
     },
     // 根据列表签署状态转为文字
     getNumStatus(num){
