@@ -71,6 +71,7 @@
         <div slot="templateTypeName" slot-scope="record">{{ record.templateTypeName }}</div>
         <div slot="templateClassificationName" slot-scope="record">{{ record.templateClassificationName }}</div>
         <div slot="signatureUserName" slot-scope="record">{{ record.signatureUserName }}/{{ record.signatureUserJobNumber }}</div>
+        <div slot="managerUserName" slot-scope="record">{{ record.managerUserName }}/{{ record.managerUserJobNumber }}</div>
         <div slot="launchUserName" slot-scope="record">{{ record.launchUserName }}/{{ record.launchUserJobNumber }}</div>
         <div slot="signatureStatus" slot-scope="record">{{ record.signatureStatus }}</div>
         <div slot="entryDate" slot-scope="record">{{ record.entryDate }}</div>
@@ -400,6 +401,11 @@ export default {
         {
           title: '目标责任人',
           scopedSlots: { customRender: 'signatureUserName' },
+          width: 150
+        },
+        {
+          title: '部门责任人',
+          scopedSlots: { customRender: 'managerUserName' },
           width: 150
         },
         {
