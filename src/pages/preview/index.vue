@@ -93,7 +93,7 @@
         
         <div class="grade-box box1">
           <div class="title-content">
-            <div class="title">EHS管理绩效评价 ({{year}}年第{{machChineseLang[quarter]}}季度)</div>
+            <div class="title">EHS管理绩效评价 ({{2023}}年第{{machChineseLang[quarter]}}季度)</div>
           </div>
           <div class="edu-detail">
             <template v-if="performanceAppr.length">
@@ -415,8 +415,8 @@ export default {
     // EHS管理绩效评价
     getPreviewPerformanceAppraisalFn() {
       let apiData = {
-        year: this.year,
-        // year: 2022,
+        // year: this.year,
+        year: '2023',
         quarter: this.quarter,
         // quarter: 3,
       }
