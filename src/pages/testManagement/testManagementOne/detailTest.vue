@@ -72,6 +72,7 @@ import { deptDict ,PushInfo } from "@/services/api.js";
 import { ExamDetail, ExamPushInfo, ExamPushCodeInfo } from "@/services/questionmodel.js";
 import { debounce } from 'lodash';
 import cancelLoading from '@/mixin/cancelLoading';
+import dayJs from "dayjs";
 
 export default {
   mixins: [cancelLoading],
@@ -81,7 +82,7 @@ export default {
       dataMsg: undefined,
       lecturerMsg: {},
       coverImg: "",
-
+      recordData:{},
       formInline: {},
       preFormInline: {},
       page: {
@@ -271,7 +272,9 @@ export default {
     // 查询
     iSearch() {
       console.log(this.formInline.time)
-      this.formInline.time = this.formInline.time ? this.formInline.time.format('YYYY-MM-DD') : "";
+      this.formInline.time = this.formInline.time
+          ? dayJs(this.formInline.time).format("YYYY-MM-DD")
+          : undefined,
       this.preFormInline = { ...this.formInline };
       // 获取列表
       this.getDataList()
@@ -327,9 +330,13 @@ export default {
     },
     // 推送列表-查看
     getDataListDetail(record) {
+      // console.log('record',record);
+      this.recordData = JSON.parse(JSON.stringify(record)) 
+      // console.log('this.recordData',this.recordData);
       return ExamPushCodeInfo({
         testId: this.dataMsg.testId,
         // pushCode: record.pushCode,
+        testPushId: this.recordData.testPushId,
         time: '',
         userName: '',
         pageSize: this.pageDetail.pageSize,
@@ -354,7 +361,7 @@ export default {
       this.preFormInlineDetail = { ...this.formInlineDetail };
       this.handleLoadingTwo()
       // 获取列表
-      this.getDataListDetail()
+      this.getDataListDetail(this.recordData)
         .finally(() => {
           this.cancelLoadingTwo();
         })
@@ -368,18 +375,18 @@ export default {
       }
       this.formInlineDetail = {};
       this.preFormInlineDetail = {};
-      this.getDataListDetail()
+      this.getDataListDetail(this.recordData)
     }, 250, { leading: true, trailing: false }),
     // 页码改变
     pageNoChangeDetail(page) {
       this.pageDetail.pageNo = page;
       // 获取列表
-      this.getDataListDetail();
+      this.getDataListDetail(this.recordData);
     },
     onShowSizeChangeDetail(current, pageSize) {
       this.pageDetail.pageNo = 1;
       this.pageDetail.pageSize = pageSize;
-      this.getDataListDetail();
+      this.getDataListDetail(this.recordData);
     },
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;
