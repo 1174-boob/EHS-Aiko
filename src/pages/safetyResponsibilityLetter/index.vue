@@ -9,6 +9,9 @@
         <a-form-model-item label="签署人">
           <a-input v-model="formInline.signatureUserJobNumberOrName" placeholder="请输入签署人" allowClear></a-input>
         </a-form-model-item>
+        <a-form-model-item label="部门责任人">
+          <a-input v-model="formInline.deptManagerJobNumberOrName" placeholder="请输入部门责任人" allowClear></a-input>
+        </a-form-model-item>
         <a-form-model-item label="签署状态">
           <a-select allowClear show-search v-model="formInline.signatureStatus" placeholder="请选择状态">
             <a-select-option v-for="item in dictionary('signatureStatus2')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
