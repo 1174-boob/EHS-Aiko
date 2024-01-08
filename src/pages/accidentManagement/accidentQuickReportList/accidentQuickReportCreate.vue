@@ -747,7 +747,7 @@ export default {
       if(this.isEdit){
         this.$router.go(-1)
       }else{
-        this.$router.push("/safeManage/emergencyManagement/accidentManagement/accidentList");
+        this.$router.push("/safeManage/emergencyManagement/accidentManagement/accidentQuickReportList");
       }
     },  
     limitNumber(key) {
