@@ -149,6 +149,44 @@
                   }">
                 </div>
               </div>
+              <div v-if="nameLength == '4'" class="testInfoTwo" id="testInfoBorderFour" :style="{'border': '2px dashed grey'}">
+                <div 
+                  id="testEle6"  
+                  class="testItemFour"
+                  :style="{'backgroundImage': 'url(' + sixthImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+                <div 
+                  id="testEle7"
+                  class="testItemFour"
+                  :style="{'backgroundImage': 'url(' + seventhImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+                <div 
+                  id="testEle8"  
+                  class="testItemFour"
+                  :style="{'backgroundImage': 'url(' + eighthImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+                <div 
+                  id="testEle9"
+                  class="testItemFour"
+                  :style="{'backgroundImage': 'url(' + ninthImage + ')',
+                    'backgroundRepeat': 'no-repeat', 
+                    'backgroundPosition': 'center center',
+                    'backgroundSize': '100%'
+                  }">
+                </div>
+              </div>
             </div>
             <!-- <a-button type="primary" class="m-l-15 m-t-10" @click="signUndo">
               撤销
@@ -303,6 +341,10 @@ export default {
       mSign3: null,
       mSign4: null,
       mSign5: null,
+      mSign6: null,
+      mSign7: null,
+      mSign8: null,
+      mSign9: null,
       editForm:{},
       nameLength: '',
       firstImage:'',
@@ -310,8 +352,13 @@ export default {
       thirdImage:'',
       forthImage:'',
       fifthImage:'',
+      sixthImage:'',
+      seventhImage:'',
+      eighthImage:'',
+      ninthImage:'',
       dataWithoutPrefix:'',
       dataWithoutPrefixTwo:'',
+      dataWithoutPrefixFour:'',
       loading:false,
       labelCol: { span: 3 },
       wrapperCol: { span: 21 },
@@ -539,6 +586,12 @@ export default {
         this.nameLength = '2'
         this.forthImage = 'data:image/png;base64,' + res.data[0]
         this.fifthImage = 'data:image/png;base64,' + res.data[1]
+      } else if (res.data.length == 4) {
+        this.nameLength = '4'
+        this.sixthImage = 'data:image/png;base64,' + res.data[0]
+        this.seventhImage = 'data:image/png;base64,' + res.data[1]
+        this.eighthImage = 'data:image/png;base64,' + res.data[2]
+        this.ninthImage = 'data:image/png;base64,' + res.data[3]
       }
     })
   },
@@ -901,7 +954,8 @@ export default {
         return;
       }
       this.initPop()
-      // console.log('批量签署',this.choosedArr);
+      console.log('批量签署',this.choosedArr);
+      // return
       if (!this.choosedArr.length) {
         this.$antMessage.warning('至少选择一条数据！')
         return
@@ -933,6 +987,12 @@ export default {
             this.nameLength = '2'
             this.forthImage = 'data:image/png;base64,' + res.data[0]
             this.fifthImage = 'data:image/png;base64,' + res.data[1]
+          } else if (res.data.length == 4) {
+            this.nameLength = '4'
+            this.sixthImage = 'data:image/png;base64,' + res.data[0]
+            this.seventhImage = 'data:image/png;base64,' + res.data[1]
+            this.eighthImage = 'data:image/png;base64,' + res.data[2]
+            this.ninthImage = 'data:image/png;base64,' + res.data[3]
           }
         })
         if (this.nameLength == '3') {
@@ -967,6 +1027,30 @@ export default {
             this.mSign5.init();
             this.mSign4.moutedEle(document.getElementById("testEle4"))
             this.mSign5.moutedEle(document.getElementById("testEle5"))
+          })
+        } else if (this.nameLength == '4'){
+          this.$nextTick(()=>{
+            //所有功能演示代码
+            this.mSign6 = new EleSign({
+              ele: null
+            });
+            this.mSign7 = new EleSign({
+              ele: null
+            });
+            this.mSign8 = new EleSign({
+              ele: null
+            });
+            this.mSign9 = new EleSign({
+              ele: null
+            });
+            this.mSign6.init();
+            this.mSign7.init();
+            this.mSign8.init();
+            this.mSign9.init();
+            this.mSign6.moutedEle(document.getElementById("testEle6"))
+            this.mSign7.moutedEle(document.getElementById("testEle7"))
+            this.mSign8.moutedEle(document.getElementById("testEle8"))
+            this.mSign9.moutedEle(document.getElementById("testEle9"))
           })
         }
         // console.log(this.selectedRowKeys,'idList999');
@@ -1011,6 +1095,20 @@ export default {
           this.$antMessage.warn('请签署姓名!')
           return
         }
+      } else if (this.nameLength =='4') {
+        if(JSON.parse(this.mSign6.toJson()).data.length > 0 && JSON.parse(this.mSign7.toJson()).data.length > 0 && JSON.parse(this.mSign8.toJson()).data.length > 0 && JSON.parse(this.mSign9.toJson()).data.length > 0) {
+          var baseUrl6 = this.mSign6.toPng();
+          var dataWithoutPrefix6 = baseUrl6.split(',')[1];
+          var baseUrl7 = this.mSign7.toPng();
+          var dataWithoutPrefix7 = baseUrl7.split(',')[1];
+          var baseUrl8 = this.mSign8.toPng();
+          var dataWithoutPrefix8 = baseUrl8.split(',')[1];
+          var baseUrl9 = this.mSign9.toPng();
+          var dataWithoutPrefix9 = baseUrl9.split(',')[1];
+        } else {
+          this.$antMessage.warn('请签署姓名!')
+          return
+        }
       }
       if (!formValidator.formAll(this, "editForm")) return;
       if (this.nameLength == '3'){
@@ -1020,6 +1118,10 @@ export default {
       } else if (this.nameLength == '2'){
         this.paraData = {
           signatureList: [dataWithoutPrefix4,dataWithoutPrefix5],
+        }
+      } else if (this.nameLength == '4'){
+        this.paraData = {
+          signatureList: [dataWithoutPrefix6,dataWithoutPrefix7,dataWithoutPrefix8,dataWithoutPrefix9],
         }
       }
       console.log('paraaaa',this.paraData);
@@ -1140,6 +1242,68 @@ export default {
             });  
           }
         })
+      } else if (this.nameLength == '4'){
+        verifySignature(this.paraData).then((res)=>{
+          console.log('res1111',res);
+          if(res.code == '20000'){ 
+            this.loading = true 
+            const element = document.getElementById('testBody');  
+            const elementInfoBorder = document.getElementById('testInfoBorderFour');
+            const elementSonSixth = document.getElementById('testEle6');
+            const elementSonSeventh = document.getElementById('testEle7');
+            const elementSonEighth = document.getElementById('testEle8');
+            const elementSonNinth = document.getElementById('testEle9');
+            // 获取元素的背景图像并删除它  
+            elementInfoBorder.style.border = 'none'
+            elementSonSixth.style.backgroundImage = 'none';  
+            elementSonSeventh.style.backgroundImage = 'none';  
+            elementSonEighth.style.backgroundImage = 'none';  
+            elementSonNinth.style.backgroundImage = 'none';  
+            // 获取元素的尺寸  
+            const w = element.offsetWidth * 0.9;  
+            const h = element.offsetHeight * 0.9;  
+            const offsetTop = element.offsetTop;  
+            const offsetLeft = element.offsetLeft;  
+            const canvas = document.createElement('canvas');  
+            let abs = 0;  
+            const winI = document.body.clientWidth;  
+            const winO = window.innerWidth;  
+            if (winO > winI) {  
+              abs = (winO - winI) / 2;  
+            }  
+            canvas.width = w * 2;  
+            canvas.height = h * 2;  
+            const context = canvas.getContext('2d');  
+            context.scale(2, 2);  
+            context.translate(-offsetLeft - abs, -offsetTop);  
+            html2canvas(element, {  
+              allowTaint: true,  
+              scale: 1 ,
+            }).then((res) => {  
+              const pageDate = res.toDataURL('image/jpeg', 1.0);  
+              // console.log('我要变强222',pageDate,);  
+              this.dataWithoutPrefixFour = pageDate.split(',')[1]
+              console.log('this.dataWithoutPrefixFour',this.dataWithoutPrefixFour);
+              let params = {
+                idList: this.selectedRowKeys,
+                sealData: this.dataWithoutPrefixFour ,
+              }
+              responsibilitySignBatch(params).then((res)=>{
+                if(res.code == 20000){
+                  this.$antMessage.success("签署成功！");
+                  this.signVisible = false
+                  this.loading = false
+                  this.selectedRowKeys = []
+                  this.choosedArr = []
+                  this.getDataList()
+                }
+              }).catch(()=>{
+                this.signVisible = false
+                this.loading = false
+              })
+            });  
+          }
+        })
       }
       // let params = {
       //   idList: this.selectedRowKeys,
@@ -1166,6 +1330,11 @@ export default {
       } else if (this.nameLength == '2'){
         this.mSign4.clear();
         this.mSign5.clear();
+      } else if (this.nameLength == '4'){
+        this.mSign6.clear();
+        this.mSign7.clear();
+        this.mSign8.clear();
+        this.mSign9.clear();
       }
     },
     // 点击取消按钮
@@ -1523,6 +1692,12 @@ export default {
 .testItemTwo {
   flex: 1;
   width: 50%;
+  height: 100%;
+  // border: 1px solid black;
+}
+.testItemFour {
+  flex: 1;
+  width: 25%;
   height: 100%;
   // border: 1px solid black;
 }
