@@ -78,7 +78,7 @@
           <div slot="action" slot-scope="record">
             <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
             <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">处理</span>
-            <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">编辑</span>
+            <span v-if="record.handleId && record.handleId.indexOf(userId) != -1 || record.approvalStatus == '0'" class="color-0067cc cursor-pointer m-r-15" @click="toEdit(record)">编辑</span>
             <span v-if="record.handleId && (record.approvalStatus == '5' || record.approvalStatus == '6')" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">培训任务</span>
             <span class="color-0067cc cursor-pointer" @click="actionDel(record)">删除</span>
           </div>
@@ -250,6 +250,11 @@ export default {
           this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentResolve", query: {formId: record.formId, isResolve: true}});
         } else {
           this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentCreate", query: {formId: record.formId, isCreate: true}});
+        }
+      },
+      toEdit(record) {
+        if (record.formId) {
+          this.$router.push({path: "/safeManage/emergencyManagement/accidentManagement/accidentEdit", query: {formId: record.formId, isEdit: true}});
         }
       },
       // 导出Excel
