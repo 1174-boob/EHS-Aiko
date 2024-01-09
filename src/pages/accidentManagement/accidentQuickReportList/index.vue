@@ -107,7 +107,7 @@ export default {
         personalInjury: [],
         propertyLoss: [],
         statusList: [],
-
+        chemicalDict: {},
         formInline: {},
         preFormInline: {},
         page: {
@@ -124,6 +124,9 @@ export default {
           {
             title: '事故地点',
             dataIndex: 'accidentLocation',
+            customRender: (text, record, index) => {
+              return this.chemicalDict[text] ? this.chemicalDict[text] : text ? text : "--";
+            },
             width: 200
           },
           // {
@@ -192,6 +195,15 @@ export default {
         ]
       }
     },
+    computed: {
+      chemical() { //从字典组里获取事故地点数据
+        const dict = this.$store.state.setting.dictTypeData;
+        const chemical = dict.find(item => {
+          return item.dictType == 'accidentLocation';
+        });
+        return chemical.dictItem;
+      },
+    },
     created() {
       this.setRouterCode("accidentList");
       this.columns.splice(1, 0, this.addCommonColumnItem(200, true));
@@ -217,6 +229,9 @@ export default {
         this.propertyLoss = this.getDictItemList("accident_level_money");
         this.statusList = dictionary("accidentReportStatus");
         this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
+        this.chemical.forEach(ele => {
+          this.$set(this.chemicalDict, ele.dictValue, ele.dictLabel)
+        });
       },
       corporationChange() {
         this.$set(this.formInline, "deptId", undefined);
