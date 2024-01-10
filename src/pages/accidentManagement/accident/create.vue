@@ -730,6 +730,31 @@ export default {
         }
         this.dataMsg = { ...iForm };
         this.iForm = { ...iForm };
+        // console.log('minorInjuryLossMoney',this.iForm.minorInjuryLossMoney);
+        this.iForm.deathNum = this.iForm.deathNum == null? 0 :this.iForm.deathNum
+        this.iForm.seriousInjuryNum = this.iForm.seriousInjuryNum == null? 0 :this.iForm.seriousInjuryNum
+        this.iForm.minorWoundNum = this.iForm.minorWoundNum == null? 0 :this.iForm.minorWoundNum
+        this.iForm.minorInjuryNum = this.iForm.minorInjuryNum == null? 0 :this.iForm.minorInjuryNum
+        this.iForm.deathLossMoney = this.iForm.deathLossMoney == null? 0 :this.iForm.deathLossMoney
+        this.iForm.seriousInjuryLossMoney = this.iForm.seriousInjuryLossMoney == null? 0 :this.iForm.seriousInjuryLossMoney
+        this.iForm.minorWoundLossMoney = this.iForm.minorWoundLossMoney == null? 0 :this.iForm.minorWoundLossMoney
+        this.iForm.minorInjuryLossMoney = this.iForm.minorInjuryLossMoney == '' ? 0 :this.iForm.minorInjuryLossMoney  // 就这个隔路 
+        this.iForm.deathAccStop = this.iForm.deathAccStop == null? 0 :this.iForm.deathAccStop
+        this.iForm.seriousInjuryAccStop = this.iForm.seriousInjuryAccStop == null? 0 :this.iForm.seriousInjuryAccStop
+        this.iForm.minorWoundAccStop = this.iForm.minorWoundAccStop == null? 0 :this.iForm.minorWoundAccStop
+        this.iForm.minorInjuryAccStop = this.iForm.minorInjuryAccStop == null? 0 :this.iForm.minorInjuryAccStop
+        this.iForm.deathGoverStop = this.iForm.deathGoverStop == null? 0 :this.iForm.deathGoverStop
+        this.iForm.seriousInjuryGoverStop = this.iForm.seriousInjuryGoverStop == null? 0 :this.iForm.seriousInjuryGoverStop
+        this.iForm.minorWoundGoverStop = this.iForm.minorWoundGoverStop == null? 0 :this.iForm.minorWoundGoverStop
+        this.iForm.minorInjuryGoverStop = this.iForm.minorInjuryGoverStop == null? 0 :this.iForm.minorInjuryGoverStop
+        this.iForm.deathEvilOmen = this.iForm.deathEvilOmen == null? 0 :this.iForm.deathEvilOmen
+        this.iForm.seriousInjuryEvilOmen = this.iForm.seriousInjuryEvilOmen == null? 0 :this.iForm.seriousInjuryEvilOmen
+        this.iForm.minorWoundEvilOmen = this.iForm.minorWoundEvilOmen == null? 0 :this.iForm.minorWoundEvilOmen
+        this.iForm.minorInjuryEvilOmen = this.iForm.minorInjuryEvilOmen == null? 0 :this.iForm.minorInjuryEvilOmen
+        this.iForm.deathCabinet = this.iForm.deathCabinet == null? 0 :this.iForm.deathCabinet
+        this.iForm.seriousInjuryCabinet = this.iForm.seriousInjuryCabinet == null? 0 :this.iForm.seriousInjuryCabinet
+        this.iForm.minorWoundCabinet = this.iForm.minorWoundCabinet == null? 0 :this.iForm.minorWoundCabinet
+        this.iForm.minorInjuryCabinet = this.iForm.minorInjuryCabinet == null? 0 :this.iForm.minorInjuryCabinet
         this.$refs.commonDept.corporationChange(this.iForm.corporationId, this.iForm.deptId);
       }).catch(err => {
         console.log(err);

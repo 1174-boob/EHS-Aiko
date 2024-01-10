@@ -326,6 +326,7 @@ export default {
           this.$antMessage.success("操作成功!");
           this.addVisible = false;
           this.editForm = {};
+          this.iSearch()
         }).catch((err)=>{
           console.log(err,'shiabi');
         }).finally(()=>{
