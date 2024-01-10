@@ -38,7 +38,8 @@ export const accidentEventHanderInfo = (params, headers) => post(serviceNameList
 export const accidentEventDownload = (params, headers) => postExcel(serviceNameList.safe + '/api/ehs/accident/event/download', params, headers)
 // 事故事件日志
 export const accidentEventGetLog = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/event/getLog', params, headers)
-
+// 事故事件添加培训任务
+export const accidentUploadFile = (params, headers) => post(serviceNameList.safe + '/api/ehs/accident/event/train/task/upload/file', params, headers)
 
 
 // 事故快报分页查询

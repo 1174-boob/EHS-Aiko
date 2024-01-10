@@ -171,7 +171,7 @@ export default {
           }
           emForm.fileId = fileLists.map(item=>item.id).filter(item=>item).join(",");
           emForm.fileLists = fileLists;
-        };
+        }
         this.emForm = { ...emForm };
         this.spinning = false;
       } else {

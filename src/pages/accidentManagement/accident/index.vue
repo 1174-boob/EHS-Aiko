@@ -79,7 +79,8 @@
             <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
             <span v-if="record.handleId && record.handleId.indexOf(userId) != -1" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">处理</span>
             <span v-if="record.handleId && record.handleId.indexOf(userId) != -1 || record.approvalStatus == '0'" class="color-0067cc cursor-pointer m-r-15" @click="toEdit(record)">编辑</span>
-            <span v-if="record.handleId && (record.approvalStatus == '5' || record.approvalStatus == '6')" class="color-0067cc cursor-pointer m-r-15" @click="toCreate(record)">培训任务</span>
+            <span v-if="record.approvalStatus == '5'" class="color-0067cc cursor-pointer m-r-15" @click="addTasks(record)">培训任务</span>
+            <span v-if="record.approvalStatus == '6'" class="color-0067cc cursor-pointer m-r-15" @click="viewTasks(record)">培训任务</span>
             <span class="color-0067cc cursor-pointer" @click="actionDel(record)">删除</span>
           </div>
           <div slot="accidentType" slot-scope="record">
@@ -96,6 +97,37 @@
           </div>
         </a-table>
       </CommonTable>
+
+      <!-- 新增编辑培训任务弹框 -->
+    <CommonModal :title="'培训任务'" :visible="addVisible" :cancelFn="addCancle">
+      <template slot="form">
+        <a-form-model
+          ref="editForm"
+          :model="editForm"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="见证性材料" prop="fileIdList">
+            <UploadBtnStyle
+              :accept="['.jpg','.png','.jpeg','.pdf']"
+              :fileLists="editForm.echoAttachmentList"
+              :maxSize="20"
+              :limit="20"
+              :onlyShow="!showBtn"
+              @handleSuccess="handleSuccessReferencesAttachment"
+            ></UploadBtnStyle>
+          </a-form-model-item>
+        </a-form-model>
+      </template>
+      <template v-if="showBtn" slot="btn">
+        <a-button @click="addCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" :loading="loading" @click="editConfirm"
+          >确定</a-button
+        >
+      </template>
+    </CommonModal>
     </div>
 </template>
 
@@ -105,15 +137,25 @@ import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from '@/mixin/cancelLoading';
 import { debounce } from 'lodash';
 import dictionary from '@/utils/dictionary'
-import OrganizeLazyTree from '@/components/organizeLazyTree/organizeLazyTree.vue'
-import {  accidentEventPageList, accidentEventDownload, accidentEventDelete } from '@/services/accident';
+import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
+import { accidentEventPageList, accidentEventDownload, accidentEventDelete, accidentUploadFile} from '@/services/accident';
 
 export default {
-    components: { OrganizeLazyTree },
+    components: { UploadBtnStyle },
     mixins: [teableCenterEllipsis, cancelLoading],
     data() {
       return {
         tableSpinning:false,
+        addVisible: false,
+        editForm: {
+          fileIdList: undefined,
+          echoAttachmentList: [],
+        },
+        formIdSolo:'',
+        labelCol: { span: 5 },
+        wrapperCol: { span: 19 },
+        loading: false,
+        showBtn: false,
         accidentLocation: [],
         accidentDateType: [],
         accidentType: [],
@@ -247,6 +289,81 @@ export default {
         this.chemical.forEach(ele => {
           this.$set(this.chemicalDict, ele.dictValue, ele.dictLabel)
         });
+      },
+      // 新增培训任务
+      addTasks(row){
+        console.log('新增培训任务');
+        this.showBtn = true
+        this.addVisible = true;
+        this.formIdSolo = row.formId
+      },
+      // 查看培训任务
+      viewTasks(row){
+        console.log('查看培训任务');
+        this.showBtn = false
+        this.addVisible = true;
+        this.editForm.fileIdList = this.handleFileIdS(row.fileList)
+        this.editForm.echoAttachmentList = this.handleFileRedisplay(row.fileList)
+      },
+      // 点击取消按钮
+      addCancle() {
+        this.addVisible = false;
+        this.editForm = {};
+      },
+      // 点击确定
+      editConfirm(){
+        console.log(this.editForm);
+        if (!this.editForm.fileIdList) {
+          this.$antMessage.warn("请至少上传一条数据!");
+          return
+        }
+        this.loading = true
+        console.log('ddd');
+        let params = {formId:this.formIdSolo,fileIdList: this.editForm.fileIdList}
+        console.log(params,'dd');
+        accidentUploadFile(params).then((res) =>{
+          console.log(res,'haoye');
+          this.$antMessage.success("操作成功!");
+          this.addVisible = false;
+          this.editForm = {};
+        }).catch((err)=>{
+          console.log(err,'shiabi');
+        }).finally(()=>{
+          this.loading = false
+        })
+      },
+      // 证书附件-文件上传
+      handleSuccessReferencesAttachment(fileList) {
+        console.log('打印一下证书附件',fileList);
+        this.editForm.fileIdList = fileList.map(item => {
+          return item.id
+        })
+      },
+      // 处理文件id
+      handleFileIdS(list) {
+        list = list ? list : []
+        let ids = list.map(item => {
+          return item.id
+        })
+        ids = ids ? ids : []
+        return ids
+      },
+      // 处理文件回显
+      handleFileRedisplay(list) {
+        // console.log(888,list);
+        list = list ? list : []
+        let fileList = []
+        list.forEach(item => {
+          let itemObj = {
+            id: item.id,
+            uid: item.id,
+            name: item.sourceFileName,
+            status: 'done',
+            url: item.filePath,
+          }
+          fileList.push(itemObj)
+        })
+        return fileList
       },
       corporationChange() {
         this.$set(this.formInline, "deptId", undefined);
