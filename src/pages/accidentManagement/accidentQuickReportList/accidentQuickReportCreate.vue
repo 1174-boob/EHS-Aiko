@@ -560,6 +560,7 @@ export default {
     // 添加一行
     openAddCasNoModel(row) {
       this.addCasNoModelShow = true;
+      this.checkedTreeNodeFrt = []
     },
     addModalCancle() {
       this.addModleForm = {};
@@ -585,6 +586,7 @@ export default {
     },
     tableRowEdit(row) {
       this.addModleForm = { ...row };
+      this.checkedTreeNodeFrt = [ row.injuredUserId ? row.injuredUserId : '']
       this.addCasNoModelShow = true;
     },
     tableRowDel(row) {

@@ -111,7 +111,7 @@
         >
           <a-form-model-item class="flex" label="见证性材料" prop="fileIdList">
             <UploadBtnStyle
-              :accept="['.jpg','.png','.jpeg','.pdf']"
+              :accept="['.jpg','.png','.jpeg','.pdf','word','.doc', '.docx','.xls','.xlsx','.ppt','pptx']"
               :fileLists="editForm.echoAttachmentList"
               :maxSize="20"
               :limit="20"
