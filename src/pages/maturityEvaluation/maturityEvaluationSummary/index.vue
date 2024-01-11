@@ -87,9 +87,9 @@
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
 import dayJs from "dayjs";
-import { debounce } from "lodash";
+import { cloneDeep, debounce, isEmpty } from "lodash";
 import Echarts from "@/components/echarts/index.vue";
-import { getMaturityEvaDataSumEvaluatResult, getMaturityEvaDataSumDeductPoints } from "@/services/maturityEvaluation.js";
+import { getMaturityEvaDataSumEvaluatResult, getMaturityEvaDataSumDeductPoints, getMonthStatisics, getDepartmentScore } from "@/services/maturityEvaluation.js";
 import EvaluatResult from './evaluatResult.vue'
 import DeductPoints from './deductPoints.vue'
 export default {
@@ -185,11 +185,24 @@ export default {
             }
           }
         },
-        legend: {},
+        grid: {
+          top: '12%',
+          left: '1%',
+          right: '1%',
+          bottom: '2%',
+          containLabel: true
+        },
+        legend: {
+          data: ['上年同月', '已选月']
+        },
+        color:['#ee6666', '#fac858', 'transparent'],
         xAxis: [
           {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel: {
+              rotate: 40
+            },
+            data: [],
             axisPointer: {
               type: 'shadow'
             }
@@ -198,23 +211,43 @@ export default {
         yAxis: [
           {
             type: 'value',
+            name: '数量',
+            min: 0,
+            max: 500,
+            interval: 100,
+          },
+          {
+            type: 'value',
+            name: '整改率',
+            min: 0,
+            max: 100,
+            interval: 20,
+            axisLabel: {
+              formatter: '{value} %'
+            }
           }
         ],
         series: [
           {
-            name: 'Evaporation',
+            name: '上年同月',
             type: 'bar',
-            data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-            ]
+            stack: 'Ad',
+            emphasis: {
+              focus: 'series'
+            },
+            barMaxWidth: 50,
+            data: []
           },
           {
-            name: 'Precipitation',
+            name: '已选月',
             type: 'bar',
-            data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-            ]
-          },
+            stack: 'Ad',
+            emphasis: {
+              focus: 'series'
+            },
+            barMaxWidth: 50,
+            data: []
+          }
         ]
       },
       monthlyOption: {
@@ -227,11 +260,24 @@ export default {
             }
           }
         },
-        legend: {},
+        grid: {
+          top: '12%',
+          left: '1%',
+          right: '1%',
+          bottom: '2%',
+          containLabel: true
+        },
+        legend: {
+          data: ['上年同月', '已选月']
+        },
+        color:['#ee6666', '#fac858'],
         xAxis: [
           {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            axisLabel: {
+              rotate: 40
+            },
+            data: [],
             axisPointer: {
               type: 'shadow'
             }
@@ -240,27 +286,42 @@ export default {
         yAxis: [
           {
             type: 'value',
+            name: '数量',
+            min: 0,
+            max: 500,
+            interval: 100,
           },
+          {
+            type: 'value',
+            name: '平均值',
+            min: 0,
+            max: 100,
+            interval: 20,
+            axisLabel: {
+              formatter: '{value} '
+            }
+          }
         ],
         series: [
           {
-            name: 'Evaporation',
+            name: '上年同月',
             type: 'bar',
-            data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-            ]
+            stack: 'Ad',
+            emphasis: {
+              focus: 'series'
+            },
+            barMaxWidth: 50,
+            data: []
           },
           {
-            name: 'Precipitation',
+            name: '已选月',
             type: 'bar',
-            data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-            ]
-          },
-          {
-            name: 'Temperature',
-            type: 'line',
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+            stack: 'Ad',
+            emphasis: {
+              focus: 'series'
+            },
+            barMaxWidth: 50,
+            data: []
           }
         ]
       },
@@ -269,9 +330,7 @@ export default {
   },
   created() {
     this.setRouterCode("performanceBranchSummary");
-
     this.initFormInline()
-
     this.getPageData()
   },
   methods: {
@@ -286,7 +345,8 @@ export default {
       this.handleLoading()
       Promise.all([
         this.getEvaluatResultData(),
-        // this.getDeductPoints(),
+        this.getMonthStatisics(),
+        this.getDepartmentScore(),
       ])
         .finally(() => {
           this.cancelLoading(200)
@@ -318,6 +378,154 @@ export default {
           this.deductPointsData = res.data || []
         })
         .catch(err => { })
+    },
+    barDataHandle(ajaxData, needStack = false, needMatchXAxis = false, needSearchFormName = 'formInline', sumUpDomn) {
+      // x轴数据
+      let xAxisData = ajaxData.map(item => item.xdata)
+      xAxisData = needMatchXAxis ? this.matchXAxis(xAxisData, needSearchFormName) : xAxisData
+      // series数据
+      let series = []
+      ajaxData[0].list.forEach(item => {
+        let obj = { ...item }
+        obj.name = item.name
+        obj.type = item.type ? item.type : 'bar'
+        if (obj.type == 'line') {
+          obj.yAxisIndex = 1
+        } else if (obj.type == 'bar') {
+          obj.barMaxWidth = 50
+          if (needStack) obj.stack = 'stack'
+        }
+        if(sumUpDomn == 'sumUpDomn' && obj.type == 'line') {
+          obj.label = {
+            show: true, // 显示标注
+            position: 'top', // 标注位置（上、内部等）
+            formatter: '{c|{c}}',
+            backgroundColor: 'rgb(242,242,242)',
+            borderColor: '#aaa',
+            borderRadius: 4,
+            padding: [4, 10],
+            lineHeight: 26,
+            distance: 20,
+            rich: {
+              c: {
+                color: 'blue',
+                textBorderWidth: 1,
+                fontWeight: 'bold',
+                fontSize: 18
+              }
+            },
+          }
+        }
+        series.push(obj)
+      })
+      series.forEach((item, index) => {
+        let data = ajaxData.map(item1 => {
+          return item1.list[index].value || 0
+        })
+        item.data = data
+      })
+      // 图例
+      let legendData = series.map(item => item.name)
+      return {
+        xAxisData,
+        series,
+        legendData
+      }
+    },
+    // 匹配X轴数据
+    matchXAxis(xAxis, needSearchFormName) {
+      let xAxisData = []
+      if (needSearchFormName == 'none') { //带查询但不展示查询-例如总览
+        if (this.formInline.corporationId) { //x轴为部门
+          xAxisData = xAxis.map(item => {
+              let orgName = this.deptCache[item] ? this.deptCache[item] : item
+              return orgName
+          })
+        } else {
+          xAxisData = xAxis.map(item => { //x轴为组织
+            let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+            return orgName ? orgName : item
+          })
+        }
+      } else if (this[needSearchFormName].isSummary) { // 汇总
+        xAxisData = xAxis.map(item => {
+          let orgName = this.getMappingValue(this.setCorporationTree, "corporationCode", item).corporationName
+          return orgName ? orgName : item
+        })
+      } else {
+        if (needSearchFormName == 'formInline') {
+            if (this.formInline.corporationId || !isEmpty(this.corporationIdObj)) { //x轴为部门
+              xAxisData = xAxis.map(item => {
+                let orgAbbrName = this.deptCache[item] ? this.deptCache[item] : item
+                return orgAbbrName
+              })
+            } else {
+              // xAxisData = xAxis.map(item => { //x轴为组织
+              //   let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+              //   return orgName ? orgName : item
+              // })
+              xAxisData = xAxis.map(item => {
+                let orgAbbrName = this.deptCache[item] ? this.deptCache[item] : item
+                return orgAbbrName
+              })
+            }
+        } else {
+          if (this.formInline.corporationId || this.formInlineTwoObj.corporationId || !isEmpty(this.corporationIdObjTwo)) { //x轴为部门
+            xAxisData = xAxis.map(item => {
+              let orgAbbrName = this.deptCache[item] ? this.deptCache[item] : item
+              return orgAbbrName
+            })
+          } else {
+            xAxisData = xAxis.map(item => { //x轴为组织
+              let orgName = this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", item).orgName
+              return orgName ? orgName : item
+            })
+          }
+        }
+      }
+      return xAxisData
+    },
+    async getMonthStatisics() {
+      let para = {
+        ...this.formInline,
+      }
+      const { data } = await getMonthStatisics(para)
+      let ajaxData = data || [];
+      if (ajaxData && ajaxData.length) {
+        let { xAxisData, series, legendData } = this.barDataHandle(
+          ajaxData,
+          false,
+          true,
+          "formInline",
+          "sumUpDomn"
+        );
+        this.propertyLossOption.xAxis[0].data = cloneDeep(xAxisData);
+        this.propertyLossOption.legend.data = cloneDeep(legendData);
+        this.propertyLossOption.series = cloneDeep(series);
+      } else {
+        this.propertyLossOption.series = [];
+      }
+    },
+    async getDepartmentScore() {
+      let para = {
+        ...this.formInline,
+      }
+      const { data } = await getDepartmentScore(para)
+      let ajaxData = data || [];
+      if (ajaxData && ajaxData.length) {
+        let { xAxisData, series, legendData } = this.barDataHandle(
+          ajaxData,
+          false,
+          true,
+          "formInline",
+          "sumUpDomn"
+        );
+        this.monthlyOption.xAxis[0].data = cloneDeep(xAxisData);
+        this.monthlyOption.legend.data = cloneDeep(legendData);
+        this.monthlyOption.series = cloneDeep(series);
+      } else {
+        this.monthlyOption.series = [];
+      }
     },
     // 查询
     iSearch: debounce(
