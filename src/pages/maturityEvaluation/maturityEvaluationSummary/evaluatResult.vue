@@ -165,8 +165,10 @@ export default {
 }
 ::v-deep .cunt-minimum {
   color: #d9001b;
+  height: 120px !important;
 }
 ::v-deep .cunt-highest {
   color: #0067cc;
+  height: 120px !important;
 }
 </style>

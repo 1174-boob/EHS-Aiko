@@ -218,13 +218,10 @@ export default {
           },
           {
             type: 'value',
-            name: '整改率',
-            min: 0,
-            max: 100,
+            name: ' ',
+            min: -Infinity,
+            max: 10000,
             interval: 20,
-            axisLabel: {
-              formatter: '{value} %'
-            }
           }
         ],
         series: [
@@ -403,15 +400,15 @@ export default {
             backgroundColor: 'rgb(242,242,242)',
             borderColor: '#aaa',
             borderRadius: 4,
-            padding: [4, 10],
+            padding: [5, 10],
             lineHeight: 26,
-            distance: 20,
+            distance: 40,
             rich: {
               c: {
                 color: 'blue',
                 textBorderWidth: 1,
                 fontWeight: 'bold',
-                fontSize: 18
+                fontSize: 14
               }
             },
           }
@@ -423,7 +420,11 @@ export default {
           return item1.list[index].value || 0
         })
         item.data = data
+        if(index == 2) {
+          item.name = ''
+        }
       })
+      console.log(series)
       // 图例
       let legendData = series.map(item => item.name)
       return {
