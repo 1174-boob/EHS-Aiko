@@ -184,7 +184,7 @@ export default {
     },
     // 最终得分
     finalScore() {
-      return rmDuplicatesByKey(this.reportData, 'pointsDeductionFinalScore')  // maybe 出问题 原来的typeAndProject
+      return rmDuplicatesByKey(this.reportData, 'maturityEvaluationIndexId')  // maybe 出问题 原来的typeAndProject
         .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionFinalScore).toString(), 0)
     },
     // 分档
@@ -264,7 +264,7 @@ export default {
           if (columnIndex === 0) {
             return '最终得分'
           }
-          if (['typeAndProject'].includes(column.property)) {
+          if (['maturityEvaluationIndexId'].includes(column.property)) {
             return this.finalScore
           }
           return null
@@ -276,7 +276,7 @@ export default {
             if (columnIndex === 0) {
               return '分档'
             }
-            if (['typeAndProject'].includes(column.property)) {
+            if (['maturityEvaluationIndexId'].includes(column.property)) {
               return this.subGear
             }
             return null
