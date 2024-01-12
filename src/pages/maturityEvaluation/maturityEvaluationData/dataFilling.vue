@@ -44,7 +44,7 @@
             <vxe-column field="maturityEvaluationIndexId" title="定义" min-width="200">
                <template #default="{ row }">{{row.definition}}</template>
             </vxe-column>
-            <vxe-column field="score" title="分值" width="100">
+            <vxe-column field="maturityEvaluationIndexId" title="分值" width="100">
               <template #default="{ row }">{{row.score}}</template>
             </vxe-column>
             <vxe-column field="maturityEvaluationIndexId" title="得分" width="100">
@@ -203,7 +203,7 @@ export default {
     }
   },
   methods: {
-    rowspanMethod: rowspanMethod(['maturityEvaluationReportType', 'typeAndProject','maturityEvaluationIndexId','score','maturityEvaluationIndexItemId']),
+    rowspanMethod: rowspanMethod(['maturityEvaluationReportType', 'typeAndProject','maturityEvaluationIndexId','maturityEvaluationIndexItemId']),
     // 获取详情
     getDetals() {
       const apiData = {
