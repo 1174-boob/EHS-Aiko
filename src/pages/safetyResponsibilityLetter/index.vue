@@ -79,7 +79,7 @@
         <div slot="signatureUserName" slot-scope="record">{{ record.signatureUserName }}/{{ record.signatureUserJobNumber }}</div>
         <div slot="managerUserName" slot-scope="record">{{ record.managerUserName }}/{{ record.managerUserJobNumber }}</div>
         <div slot="launchUserName" slot-scope="record">{{ record.launchUserName }}/{{ record.launchUserJobNumber }}</div>
-        <div slot="handlerUserName" slot-scope="record">{{ record.handlerUserName }}/{{ record.handlerUserJobNumber }}</div>
+        <div slot="signatoriesHandlerUserId" slot-scope="record">{{ record.signatoriesHandlerUserName }}/{{ record.signatoriesHandlerUserJobNumber }}</div>
         <div slot="signatureStatus" slot-scope="record">{{ record.signatureStatus }}</div>
         <div slot="entryDate" slot-scope="record">{{ record.entryDate }}</div>
         <div slot="signatureRecordList" slot-scope="record">{{ record.signatureRecordList }}</div>
@@ -469,7 +469,7 @@ export default {
         },
         {
           title: '处理人',
-          scopedSlots: { customRender: 'handlerUserName' },
+          scopedSlots: { customRender: 'signatoriesHandlerUserId' },
           width: 150
         },
         {
