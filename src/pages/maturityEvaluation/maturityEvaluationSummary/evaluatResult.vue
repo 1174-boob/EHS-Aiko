@@ -14,7 +14,7 @@
   >
     <vxe-column field="maturityEvaluationReportType" title="维度" width="120">
       <template #default="{ row }">
-        <template v-if="row.isEnd">合计</template>
+        <template v-if="row.isEnd"><span style="fontWeight:800;">合计</span></template>
 
         <template v-else>
           {{dimensionMatch[row.maturityEvaluationReportType]}}
@@ -113,6 +113,8 @@ export default {
           return 'cunt-highest'
         } else if (row[column.field] == min) {
           return 'cunt-minimum'
+        } else {
+          return 'cunt-middle'
         }
       }
       return null
@@ -165,10 +167,14 @@ export default {
 }
 ::v-deep .cunt-minimum {
   color: #d9001b;
-  height: 120px !important;
+  font-weight: 700 !important;
 }
 ::v-deep .cunt-highest {
   color: #0067cc;
-  height: 120px !important;
+  font-weight: 700 !important;
 }
+::v-deep .cunt-middle {
+  font-weight: 700 !important;
+}
+
 </style>

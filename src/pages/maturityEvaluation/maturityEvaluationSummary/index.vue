@@ -211,10 +211,10 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '数量',
+            name: '得分',
             min: 0,
-            max: 500,
-            interval: 100,
+            max: 150,  // 
+            // interval: 100,
           },
           {
             type: 'value',
@@ -283,10 +283,10 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '数量',
+            name: '得分',
             min: 0,
-            max: 500,
-            interval: 100,
+            max: 150,
+            // interval: 10,
           },
           {
             type: 'value',
@@ -402,7 +402,7 @@ export default {
             borderRadius: 4,
             padding: [5, 10],
             lineHeight: 26,
-            distance: 40,
+            distance: 180,
             rich: {
               c: {
                 color: 'blue',
@@ -424,7 +424,64 @@ export default {
           item.name = ''
         }
       })
-      console.log(series)
+      // console.log(series)
+      // 图例
+      let legendData = series.map(item => item.name)
+      return {
+        xAxisData,
+        series,
+        legendData
+      }
+    },
+    barDataHandleChange(ajaxData, needStack = false, needMatchXAxis = false, needSearchFormName = 'formInline', sumUpDomn) {
+      // x轴数据
+      let xAxisData = ajaxData.map(item => item.xdata)
+      xAxisData = needMatchXAxis ? this.matchXAxis(xAxisData, needSearchFormName) : xAxisData
+      // series数据
+      let series = []
+      ajaxData[0].list.forEach(item => {
+        let obj = { ...item }
+        obj.name = item.name
+        obj.type = item.type ? item.type : 'bar'
+        if (obj.type == 'line') {
+          obj.yAxisIndex = 1
+        } else if (obj.type == 'bar') {
+          obj.barMaxWidth = 50
+          if (needStack) obj.stack = 'stack'
+        }
+        if(sumUpDomn == 'sumUpDomn' && obj.type == 'line') {
+          obj.label = {
+            show: true, // 显示标注
+            position: 'top', // 标注位置（上、内部等）
+            formatter: '{c|{c}}',
+            backgroundColor: 'rgb(242,242,242)',
+            borderColor: '#aaa',
+            borderRadius: 4,
+            padding: [5, 10],
+            lineHeight: 26,
+            distance: 40,
+            rich: {
+              c: {
+                color: 'blue',
+                textBorderWidth: 1,
+                fontWeight: 'bold',
+                fontSize: 14
+              }
+            },
+          }
+        }
+        series.push(obj)
+      })
+      series.forEach((item, index) => {
+        let data = ajaxData.map(item1 => {
+          return item1.list[index].value || 0
+        })
+        item.data = data
+        if(index == 2) {
+          item.name = '平均值'
+        }
+      })
+      // console.log(series)
       // 图例
       let legendData = series.map(item => item.name)
       return {
@@ -514,7 +571,7 @@ export default {
       const { data } = await getDepartmentScore(para)
       let ajaxData = data || [];
       if (ajaxData && ajaxData.length) {
-        let { xAxisData, series, legendData } = this.barDataHandle(
+        let { xAxisData, series, legendData } = this.barDataHandleChange(
           ajaxData,
           false,
           true,
