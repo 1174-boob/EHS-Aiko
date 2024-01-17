@@ -14,6 +14,7 @@ export const getTokenApi = (params, headers) => get(serviceNameList.authehs + '/
 export const getDevCompany = (params, headers) => get(serviceNameList.customer + '/api/userRoleRel/getCompany', params, headers);
 export const getDevMessage = (params, headers) => post(serviceNameList.authehs + '/api/token/getUserMessage', params, headers);
 export const getDevMessageBOE = (params, headers) => post('ehs-customer/api/user/getUserInfo', params, headers);
+export const getUserEditPhone = (params, headers) => post('ehs-customer/api/user/editPhone ', params, headers);
 export const logout = (params, headers) => get(serviceNameList.auth + '/api/auth/logout', params, headers);
 export const checkToken = (params, headers) => post(serviceNameList.auth + '/oauth/check_token', params, headers);
 export const checkTokenEHS = (params, headers) => post(serviceNameList.authehs + '/api/token/checkToken', params, headers);
