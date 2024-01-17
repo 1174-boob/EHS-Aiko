@@ -40,7 +40,7 @@
 
          <a-spin :spinning="loading" wrapperClassName="a-spin">
           <div class="table-container">
-            <DeductPoints :deductPointsData="deductPointsData"/>
+            <DeductPoints :deductPointsData="deductPointsData" :monthData="formInline.month"/>
           </div>
         </a-spin>
         <div style="height: 40px"></div>
@@ -342,6 +342,7 @@ export default {
       this.handleLoading()
       Promise.all([
         this.getEvaluatResultData(),
+        this.getDeductPoints(),
         this.getMonthStatisics(),
         this.getDepartmentScore(),
       ])
