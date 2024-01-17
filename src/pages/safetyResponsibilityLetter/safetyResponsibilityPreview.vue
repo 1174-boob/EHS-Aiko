@@ -183,7 +183,9 @@
               </div>
             </a-form-model-item>
             <a-form-model-item class="flex" :label-col="labelColSpec" :wrapper-col="wrapperColSpec" label="发送短信手机号">
-              <span style="font-Size:24px">{{userPhone?userPhone:'--'}}</span>
+              <a-input style="width: 180px; margin-right: 20px" v-if="phoneNumberBtn == '确认'" v-model="formInline.phone" placeholder="请输入手机号" :maxLength="11"></a-input>
+              <span v-if="phoneNumberBtn == '修改'" style="font-Size:24px; margin-right: 20px">{{userPhone?userPhone:'--'}}</span>
+              <a-button @click="changeNumber" style="flex:1 ;minWidth:'90px';">{{phoneNumberBtn}}</a-button>
             </a-form-model-item>
             <a-form-model-item class="flex" :label-col="labelCol" :wrapper-col="wrapperCol" label="验证码" prop="code">
               <a-input allowClear :maxLength="8" style="width: 220px; margin-right: 15px" v-model="editForm.code" placeholder="请输入验证码"></a-input>
@@ -235,7 +237,7 @@ import { formValidator } from "@/utils/clx-form-validator.js"
 import SendCodeButton from '@/components/sendCodeButton/index.vue'
 import FixedBottom from "@/components/commonTpl/fixedBottom";
 import html2canvas from 'html2canvas'
-import { responsibilityDetail,responsibilitySendCode,responsibilitySign,getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js";
+import { responsibilityDetail,responsibilitySendCode,responsibilitySign,getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage,getUserEditPhone,getDevMessageBOE} from "@/services/api.js";
 import '@/utils/dzjm.min.js'
 import pdf from "vue-pdf";
 import { getQueryVariable } from "@/utils/util.js";
@@ -256,6 +258,10 @@ export default {
       pageScale: 0.8,
       // 遮罩
       boxLoading: true,
+      phoneNumberBtn:'修改',
+      formInline: {
+        phone:''
+      },
       nameLength: '',
       firstImage:'',
       secondImage:'',
@@ -357,6 +363,41 @@ export default {
   mounted() {
   },
   methods: {
+    changeNumber(){
+      if (this.phoneNumberBtn == '修改'){
+        this.phoneNumberBtn = '确认'
+      } else {
+        if (!this.validatePhoneNumber(this.formInline.phone)) { 
+          this.$antMessage.warn('请输入正确格式的手机号！')
+          return
+        }
+        getUserEditPhone({phone:this.formInline.phone}).then(()=>{
+          this.$antMessage.success("操作成功！");
+          this.formInline.phone = ''
+          getDevMessageBOE({}).then((res) =>{
+            sessionStorage.setItem('zconsole_userInfo', JSON.stringify(res.data));
+            sessionStorage.setItem('userName', res.data.user.name);
+            sessionStorage.setItem('userId', res.data.user.userId);
+            let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
+            this.userInfoData = zconsole_userInfo.other
+            // console.log('this.userInfoData.phoneSCCCC',this.userInfoData);
+            this.$nextTick(()=>{
+              this.$set(this,"userPhone",this.userInfoData.phone)
+            })
+          });
+        }).catch((err)=>{
+          console.log(err);
+        }).finally(() => {
+          
+        })
+        this.phoneNumberBtn = '修改'  
+      }
+    },
+    // 手机号校验
+    validatePhoneNumber(phoneNumber) {
+      const regex = /^1[3456789]\d{9}$/; // 手机号正则表达式
+      return regex.test(phoneNumber); // 验证通过为true 不通过为false
+    },
     initPop(){
       let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
       this.userInfoData = zconsole_userInfo.other
@@ -494,6 +535,7 @@ export default {
     sign(){
       console.log('点击签署按钮');
       this.signVisible = true
+      this.phoneNumberBtn = '修改'
       let para = {
         totalHeight: '150',
         totalWidth: '500'
