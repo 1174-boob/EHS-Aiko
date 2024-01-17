@@ -14,16 +14,16 @@
       </template>
     </vxe-column>
     <vxe-column field="deptName" title="部门" min-width="120"></vxe-column>
-    <vxe-column field="nowScore" :title="`${month-1}月得分`" min-width="100">
+    <vxe-column field="previousScore" :title="`${month-1}月得分`" min-width="100">
       <template #default="{ row }">
-        <span>{{row.nowScore ? row.nowScore : '--'}}</span>
-      </template>
-    </vxe-column>
-    <vxe-column field="previousScore" :title="`${month}月得分`" min-width="100">
-      <template #default="{ row }">
-        <span style="fontWeight: 700;">{{row.previousScore ? row.previousScore : '--'}}</span>
+        <span>{{row.previousScore ? row.previousScore : '--'}}</span>
       </template>
     </vxe-column> 
+    <vxe-column field="nowScore" :title="`${month}月得分`" min-width="100">
+      <template #default="{ row }">
+        <span style="fontWeight: 700;">{{row.nowScore ? row.nowScore : '--'}}</span>
+      </template>
+    </vxe-column>
     <vxe-column field="ringComparison" title="环比" min-width="100">
       <template #default="{ row }">
         <span v-if="row.ringComparison < 0" style="color: #d9001b;">{{ row.ringComparison ? row.ringComparison : '--'}}</span>
