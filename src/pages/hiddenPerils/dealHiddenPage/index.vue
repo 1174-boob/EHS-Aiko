@@ -372,7 +372,7 @@ export default {
             this.closeStatus = false
           }
           if(res.data.processStatus == 'rectification' && res.data.fourPass == true ){
-            this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/dealFour", query: { hideDangerId: this.routeObj.hideDangerId } });
+            this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/dealIsFour", query: { hideDangerId: this.routeObj.hideDangerId } });
           }
           if(res.data.processStatus == 'rectification' && res.data.fourPass == false ){
             this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/dealNoFour", query: { hideDangerId: this.routeObj.hideDangerId } });
