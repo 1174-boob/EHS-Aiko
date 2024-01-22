@@ -276,7 +276,7 @@ export default {
             },
             data: [],
             axisPointer: {
-              type: 'shadow'
+              type: 'line'
             }
           }
         ],
@@ -478,7 +478,7 @@ export default {
           return item1.list[index].value || 0
         })
         item.data = data
-        if(index == 2) {
+        if(index == item.length - 1) {
           item.name = '平均值'
         }
       })

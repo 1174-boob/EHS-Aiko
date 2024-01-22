@@ -14,7 +14,7 @@
       </template>
     </vxe-column>
     <vxe-column field="deptName" title="部门" min-width="120"></vxe-column>
-    <vxe-column field="previousScore" :title="`${month-1}月得分`" min-width="100">
+    <vxe-column field="previousScore" :title="`${month-1 == 0 ? '12' :month-1}月得分`" min-width="100">
       <template #default="{ row }">
         <span>{{row.previousScore ? row.previousScore : '--'}}</span>
       </template>
@@ -41,23 +41,23 @@
         </div>
       </template>
     </vxe-column>
-    <vxe-column field="pointsDeductionFinalScore" title="总分" min-width="100">
+    <vxe-column field="score" title="总分" min-width="100">
       <template #default="{ row }">
         <div v-if="row.ringComparison < 0 || row.ringComparison == null" style="color: #d9001b;">
-          <p v-for="item_, index in row.list">{{item_.pointsDeductionFinalScore}}</p>
+          <p v-for="item_, index in row.list">{{item_.score}}</p>
         </div>
         <div v-if="row.ringComparison > 0" style="color: #0067cc;">
-          <p v-for="item_, index in row.list">{{item_.pointsDeductionFinalScore}}</p>
+          <p v-for="item_, index in row.list">{{item_.score}}</p>
         </div>
       </template>
     </vxe-column>
-    <vxe-column field="score" title="得分" min-width="100">
+    <vxe-column field="pointsDeductionFinalScore" title="得分" min-width="100">
       <template #default="{ row }">
         <div v-if="row.ringComparison < 0 || row.ringComparison == null" style="color: #d9001b;">
-          <p v-for="item_, index in row.list">{{item_.score}}</p>
+          <p v-for="item_, index in row.list">{{item_.pointsDeductionFinalScore}}</p>
         </div>
         <div v-if="row.ringComparison > 0" style="color: #0067cc;">
-          <p v-for="item_, index in row.list">{{item_.score}}</p>
+          <p v-for="item_, index in row.list">{{item_.pointsDeductionFinalScore}}</p>
         </div>
       </template>
     </vxe-column>
