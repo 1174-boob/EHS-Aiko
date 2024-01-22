@@ -267,7 +267,7 @@ export default {
         legend: {
           data: ['上年同月', '已选月']
         },
-        color:['#ee6666', '#fac858'],
+        color:['#ee6666', '#fac858', '#5470c6', '#91cc75', '#73c0de'],
         xAxis: [
           {
             type: 'category',

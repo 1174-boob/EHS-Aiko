@@ -21,13 +21,23 @@
           <a-table :columns="columns" bordered :scroll="{ x: 800 }" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
             <div slot="action" slot-scope="record">
               <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
-              <span class="color-0067cc cursor-pointer" @click="actionExport(record)">导出</span>
+              <span class="color-0067cc cursor-pointer m-r-15" @click="actionExport(record)">导出</span>
+              <span class="color-0067cc cursor-pointer" @click="downloadCode(record)">二维码</span>
             </div>
           </a-table>
         </CommonTable>
       </div>
     </div>
-
+    <CommonModal :title="'二维码'" :visible="QRcodeModelShow" :cancelFn="closeModel" class="principal-dialog">
+      <div class="model-main" >
+        <div class="qrcode" ref="imageWrapper">
+          <img :src="coverImg" alt />
+        </div>
+      </div>
+      <template slot="btn">
+        <a-button class="m-l-15" type="primary" :loading="loading" @click="downloadBtn">下载</a-button>
+      </template>
+    </CommonModal>
     <CommonDrawer title="学习情况查看" :visible="detailVisible" :cancelFn="detailCancle" :width="'80vw'" :zIndex="2000">
       <template>
         <SearchTerm>
@@ -69,7 +79,8 @@
 </template>
 <script>
 import { deptDict ,PushInfo } from "@/services/api.js";
-import { ExamDetail, ExamPushInfo, ExamPushCodeInfo } from "@/services/questionmodel.js";
+import { ExamDetail, ExamPushInfo, ExamPushCodeInfo,GetQrCode } from "@/services/questionmodel.js";
+import html2canvas from 'html2canvas'
 import { debounce } from 'lodash';
 import cancelLoading from '@/mixin/cancelLoading';
 import dayJs from "dayjs";
@@ -80,6 +91,7 @@ export default {
     return {
       activeKey: "1",
       dataMsg: undefined,
+      QRcodeModelShow: false,
       lecturerMsg: {},
       coverImg: "",
       recordData:{},
@@ -93,27 +105,32 @@ export default {
       columns: [
         {
           title: '推送批次',
+          align: 'center',
           dataIndex: 'pushCode',
           key: "pushCode",
           width:200
         },
         {
           title: '推送人数',
+          align: 'center',
           dataIndex: 'pushUser',
           key: "pushUser"
         },
         {
           title: '考试人数',
+          align: 'center',
           dataIndex: 'testUser',
           key: "testUser"
         },
         {
           title: '合格人数',
+          align: 'center',
           dataIndex: 'qualifiedUser',
           key: "qualifiedUser"
         },
         {
           title: '不合格人数',
+          align: 'center',
           dataIndex: 'unQualifiedUser',
           key: "unQualifiedUser"
         },
@@ -121,8 +138,9 @@ export default {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           key: "action",
+          align: 'center',
           fixed: 'right', // 固定操作列
-          width: 150 // 宽度根据操作自定义设置
+          width: 180 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
@@ -269,6 +287,31 @@ export default {
         console.log(err);
       })
     },
+    downloadCode(record) {
+      GetQrCode({ examId: this.dataMsg.testId, testPushId: record.testPushId }).then((res) => {
+        this.QRcodeModelShow = true;
+        this.coverImg = res.data;
+      }).catch((err) => {
+        console.log(err);
+      }).finally(()=>{
+        
+      })
+    },
+    closeModel() {
+      this.QRcodeModelShow = false;
+    },
+    downloadBtn() {
+      // return
+      html2canvas(this.$refs.imageWrapper).then((canvas) => {
+				let dataURL = canvas.toDataURL('image/png')
+				this.imgUrl = dataURL
+				var a = document.createElement('a') // 生成一个a元素
+				var event = new MouseEvent('click') // 创建一个单击事件
+				a.download = name || 'qrcode' // 设置图片名称
+				a.href = dataURL // 将生成的URL设置为a.href属性
+				a.dispatchEvent(event) // 触发a的单击事件
+			})
+    },
     // 查询
     iSearch() {
       console.log(this.formInline.time)
@@ -407,6 +450,37 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.principal-dialog {
+  ::v-deep .ant-modal {
+    width: 600px !important;
+    padding-bottom: 0px !important;
+  }
+}
+.model-main {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  .qrcode {
+    width: 240px;
+    padding: 20px;
+    background: #fff;
+    #qrcode {
+      margin:0 auto;
+      width:200px;
+      height: 200px;
+    }
+  }
+  
+}
+@media screen and (max-width: 1367px) {
+  margin-bottom: 0px;
+  .model-main {
+    min-height: 320px;
+    .model-main-qr-img {
+      width: 70%;
+    }
+  }
+}
 .course-info {
   img {
     width: 160px;
