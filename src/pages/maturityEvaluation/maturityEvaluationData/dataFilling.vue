@@ -41,13 +41,13 @@
             <vxe-column field="typeAndProject" title="项目" min-width="200">
               <template #default="{ row }">{{row.project}}</template>
             </vxe-column>
-            <vxe-column field="maturityEvaluationIndexId" title="定义" min-width="200">
+            <vxe-column field="typeAndProject" title="定义" min-width="200">
                <template #default="{ row }">{{row.definition}}</template>
             </vxe-column>
-            <vxe-column field="maturityEvaluationIndexId" title="分值" width="100">
+            <vxe-column field="typeAndProject" title="分值" width="100">
               <template #default="{ row }">{{row.score}}</template>
             </vxe-column>
-            <vxe-column field="maturityEvaluationIndexId" title="得分" width="100">
+            <vxe-column field="typeAndProject" title="得分" width="100">
               <template #default="{ row }">{{row.pointsDeductionFinalScore}}</template>
             </vxe-column>
             <vxe-column field="calculationDetails" title="计算明细" min-width="240" :show-overflow="false"></vxe-column>
@@ -184,7 +184,7 @@ export default {
     },
     // 最终得分
     finalScore() {
-      return rmDuplicatesByKey(this.reportData, 'maturityEvaluationIndexId')  // maybe 出问题 原来的typeAndProject
+      return rmDuplicatesByKey(this.reportData, 'typeAndProject')  // maybe 出问题 原来的typeAndProject
         .reduce((acc, curr) => BigNumber(acc).plus(curr.pointsDeductionFinalScore).toString(), 0)
     },
     // 分档
@@ -216,7 +216,7 @@ export default {
           this.reportData = (resData.itemList || []).map(item => {
             return {
               ...item,
-              typeAndProject: `${item.maturityEvaluationReportType}_${item.project}`,
+              typeAndProject: `${item.maturityEvaluationReportType}_${item.maturityEvaluationIndexId}`,
               dataSourceStr: this.dataSourceList.find(dSItem => dSItem.sourceKey == item.dataSource)?.sourceLable,
               _fileListShow: (item.gatherFileList || []).map(fileItem => {
                 return {
@@ -264,7 +264,7 @@ export default {
           if (columnIndex === 0) {
             return '最终得分'
           }
-          if (['maturityEvaluationIndexId'].includes(column.property)) {
+          if (['typeAndProject'].includes(column.property)) {
             return this.finalScore
           }
           return null
