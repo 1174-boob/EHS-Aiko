@@ -645,7 +645,7 @@ export default {
       }
       let apiData = {
         phone:this.storageForm.phone,
-        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumberValue:this.storageForm.idNumber,
+        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
       }
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;

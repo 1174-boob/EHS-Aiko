@@ -216,10 +216,15 @@
             labelAlign="left"
           >
             <a-form-model-item class="flex" label="手机号" prop="phone">
-              <a-input :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
+              <a-input :disabled="showBtn" :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
             </a-form-model-item>
             <a-form-model-item class="flex" label="身份证号" prop="idNumber">
-              <a-input v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+              <a-input :disabled="showBtn" v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+            </a-form-model-item>
+            <a-form-model-item class="flex" label="验证码" prop="code">
+              <a-input allowClear :maxLength="6" style="width: 220px; margin-right: 15px" v-model="storageForm.code" placeholder="请输入验证码"></a-input>
+              <!-- <SendCodeButton/> -->
+              <a-button type="default" @click="sendFnCode" :disabled="countdownNumber !== 60" style="flex:1; minWidth:'90px',">{{ countdownNumber !== 60 ? countdownNumber + "s" : "发送短信" }}</a-button>
             </a-form-model-item>
           </a-form-model>
         </template>
@@ -237,7 +242,18 @@ import { formValidator } from "@/utils/clx-form-validator.js"
 import SendCodeButton from '@/components/sendCodeButton/index.vue'
 import FixedBottom from "@/components/commonTpl/fixedBottom";
 import html2canvas from 'html2canvas'
-import { responsibilityDetail,responsibilitySendCode,responsibilitySign,getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage,getUserEditPhone,getDevMessageBOE} from "@/services/api.js";
+import { 
+  responsibilityDetail,
+  responsibilitySendCode,
+  getAuthCodeByPhoneAndIdNumber,
+  resendVerificationCode,
+  responsibilitySign,
+  getCheckPhoneAndIdNumberExist,
+  getEditPhoneAndIdNumber,
+  verifySignature,
+  getSignatureImage,
+  getUserEditPhone,
+  getDevMessageBOE } from "@/services/api.js";
 import '@/utils/dzjm.min.js'
 import pdf from "vue-pdf";
 import { getQueryVariable } from "@/utils/util.js";
@@ -246,7 +262,7 @@ import CMapReaderFactory from "vue-pdf-signature/src/CMapReaderFactory.js";
 import { debounce } from "lodash";
 
 export default {
-  components: { FixedBottom, pdf,SendCodeButton },
+  components: { FixedBottom, pdf, SendCodeButton },
   data() {
     this.sendCode = debounce(this.sendCode, 800);
     return {
@@ -295,14 +311,26 @@ export default {
       activeKey:'',
       userInfoData:{},
       storageVisible: false,
-      storageForm: {},
+      storageForm: {
+        idNumber:'',
+        phone:'',
+        code:''
+      },
+      countdownNumber: 60,
+      countdownTimer: null,
+      showBtn: false, 
+      startCountDown: false, // 开始倒计时
+      endCountDown: false, // 结束倒计时
       tankFormRules: {
         phone: [
           { required: true, validator: formValidator.texTphoneNumber, trigger: "blur" },
         ],
         idNumber: [
           { required: true, validator: formValidator.texTidCard, trigger: 'blur', },
-        ]
+        ],
+        code: [
+          { required: true, message: "验证码不能为空", trigger: "change" },
+        ],
       },
       phoneValue:'',
       idNumberValue:'',
@@ -326,6 +354,14 @@ export default {
   },
   activated() {
     console.log('activated钩子函数被调用');
+  },
+  watch:{
+    startCountDown(newVal){
+      newVal && this.countDown()
+    },
+    endCountDown(newVal){
+      newVal && this.clearTimer()
+    },
   },
   created() {
     let para = {
@@ -421,6 +457,53 @@ export default {
       this.storageForm = {};
       this.back()
     },
+    // 发送验证码
+    sendFnCode: debounce(function () {
+      if (this.$listeners.sendCode) {
+        this.$emit('sendCode')
+        console.log('this.$listeners.sendCode');
+      } else {
+        let apiData = {
+          phone:this.storageForm.phone,
+          idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
+        }
+        if (this.showBtn == false) {
+          getAuthCodeByPhoneAndIdNumber(apiData)
+            .then((res) => {
+              this.showBtn = true
+              this.countDown()
+              this.$antMessage.success("发送成功！");
+            })
+            .catch((err) => { })
+        } else {
+           resendVerificationCode(apiData)
+            .then((res) => {
+              this.showBtn = true
+              this.countDown()
+              this.$antMessage.success("发送成功！");
+            })
+            .catch((err) => { })
+        }
+      }
+    }, 300, { leading: true, trailing: false }),
+
+    // 开始倒计时
+    countDown() {
+      this.countdownNumber = 59;
+      this.countdownTimer && window.clearInterval(this.countdownTimer);
+      this.countdownTimer = setInterval(() => {
+        this.countdownNumber--;
+        if (this.countdownNumber === 0) {
+          this.clearTimer();
+        }
+      }, 1000);
+    },
+
+    // 清除倒计时
+    clearTimer() {
+      this.countdownNumber = 60;
+      this.countdownTimer && window.clearInterval(this.countdownTimer);
+    },
     // 弹框确定
     storageConfirm() {
       if (this.storageForm.idNumber != this.userInfoData.idNumber) {
@@ -428,10 +511,14 @@ export default {
           return;
         }
       }
+      formValidator.formItemValidate(this, 'code', 'storageForm');
       let apiData = {
         phone:this.storageForm.phone,
-        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumberValue:this.storageForm.idNumber,
+        idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
+        authCode:this.storageForm.code,
       }
+      // console.log(apiData,'apiData');
+      // return
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
         this.storageForm = {};
