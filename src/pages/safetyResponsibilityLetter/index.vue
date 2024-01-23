@@ -1821,4 +1821,17 @@ export default {
     z-index: 1001;
   }
 }
+@media screen and (max-width: 1000px) {
+  ::v-deep .ant-modal-content {
+    .model-content-form {
+      padding: 0 5px 0 5px !important;
+    }
+  }
+  ::v-deep .ant-col-21 {
+    width:96% !important;
+  }
+  ::v-deep .ant-col-3 {
+    width:4% !important;
+  }
+}
 </style>
