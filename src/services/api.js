@@ -769,6 +769,10 @@ export const responsibilityInitiateBatch = params => post(`${serviceNameList.hea
 export const getCheckPhoneAndIdNumberExist = params =>  post(`ehs-customer/api/user/checkPhoneAndIdNumberExist`, params)
 //用户信息-更新当前登录的用户的手机号和身份证号
 export const getEditPhoneAndIdNumber = params =>  post(`ehs-customer/api/user/editPhoneAndIdNumber`, params)
+//用户信息-通过手机号，身份证号获取对应的短信验证码
+export const getAuthCodeByPhoneAndIdNumber = params =>  post(`ehs-customer/api/user/getAuthCodeByPhoneAndIdNumber`, params)
+//用户信息-重新获取手机号验证码
+export const resendVerificationCode = params =>  post(`ehs-customer/api/user/resendVerificationCode`, params)
 
 // 签名校验  
 export const verifySignature = params =>  post(`${serviceNameList.health}/api/ehs/security/education/verify/signature`, params)
