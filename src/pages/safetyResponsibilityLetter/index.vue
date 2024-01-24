@@ -217,8 +217,8 @@
             ref="storageForm"
             :model="storageForm"
             :rules="tankFormRules"
-            :label-col="{ style: { width: '90px' } }"
-            :wrapper-col="{ style: { width: 'calc(100% - 90px)' } }"
+            :label-col="{ span: 5 }"
+            :wrapper-col="{ span: 19 }"
             :colon="false"
             labelAlign="left"
           >
