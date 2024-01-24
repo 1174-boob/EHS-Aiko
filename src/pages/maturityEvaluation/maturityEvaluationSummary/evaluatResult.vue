@@ -119,11 +119,22 @@ export default {
       }
       return null
     },
+    sortByMaturityEvaluationReportType(data) {
+      return data.sort((a, b) => {
+        const order = {
+          prior: 1,
+          inTheMatter: 2,
+          afterTeFact: 3,
+        };
+        return order[a.maturityEvaluationReportType] - order[b.maturityEvaluationReportType];
+      });
+    },
     // 处理数据
     handleTableData() {
       this.isRender = false
-      const { deptIdList, deptMap, list, scoreMap } = this.evaluatResultData
-
+      const { deptIdList, deptMap, scoreMap } = this.evaluatResultData
+      let newList = JSON.parse(JSON.stringify((this.evaluatResultData.list)))
+      newList = this.sortByMaturityEvaluationReportType(newList)
       this.deptColumn = deptIdList.map(item => {
         return {
           columnField: item + '',
@@ -131,7 +142,7 @@ export default {
         }
       })
       this.dataSource = [
-        ...list,
+        ...newList,
         {
           ...scoreMap,
           isEnd: true,
