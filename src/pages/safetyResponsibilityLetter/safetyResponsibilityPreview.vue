@@ -389,11 +389,13 @@ export default {
         this.ninthImage = 'data:image/png;base64,' + res.data[3]
       }
     })
-    this.initPop()
     this.activeKey = this.$route.query.activeKey
     console.log(this.activeKey,9999);
     this.id = this.$route.query.id != undefined ?this.$route.query.id:getQueryVariable('id')
     this.filePreview = this.$route.query.filePreview
+    if(!this.filePreview) {
+      this.initPop()
+    }
     this.getPaperUrl()
   },
   mounted() {

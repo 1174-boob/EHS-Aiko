@@ -223,10 +223,14 @@
             labelAlign="left"
           >
             <a-form-model-item class="flex" label="手机号" prop="phone">
-              <a-input :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
+              <a-input :disabled="showBtn" :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
             </a-form-model-item>
             <a-form-model-item class="flex" label="身份证号" prop="idNumber">
-              <a-input v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+              <a-input :disabled="showBtn" v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+            </a-form-model-item>
+             <a-form-model-item class="flex" label="验证码" prop="code">
+              <a-input allowClear :maxLength="6" style="width: 220px; margin-right: 15px" v-model="storageForm.code" placeholder="请输入验证码"></a-input>
+              <a-button type="default" @click="sendFnCode" :disabled="countdownNumber !== 60" style="flex:1; minWidth:'90px',">{{ countdownNumber !== 60 ? countdownNumber + "s" : "发送短信" }}</a-button>
             </a-form-model-item>
           </a-form-model>
         </template>
@@ -328,7 +332,7 @@ import staffOrDeptPush from "@/components/staffOrDeptPush";
 import SelTempDrawer from "./components/selTempDrawer.vue";
 import TempPreviewModel from './components/tempPreviewModel.vue';
 import serviceNameList from '@/config/default/service.config.js'
-import {getResponsibilityCount, getResponsibilityList, pushResponsibility,pushResponsibilityExport, responsibilityDelete, responsibilitySignBatch,responsibilityInitiateBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage} from "@/services/api.js"
+import {getResponsibilityCount, getResponsibilityList, pushResponsibility,pushResponsibilityExport, responsibilityDelete, responsibilitySignBatch,responsibilityInitiateBatch, getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,verifySignature,getSignatureImage,getAuthCodeByPhoneAndIdNumber,resendVerificationCode} from "@/services/api.js"
 import optionsMixin from '@/pages/occupationHealth/physicalExam/mixin/optionsMixin'
 import postOptionsMixin from '@/pages/occupationHealth/physicalExam/mixin/postOptions'
 
@@ -418,14 +422,26 @@ export default {
       importVisible: false,
       userInfoData:{},
       storageVisible: false,
-      storageForm: {},
+      storageForm: {
+        idNumber:'',
+        phone:'',
+        code:''
+      },
+      countdownNumber: 60,
+      countdownTimer: null,
+      showBtn: false, 
+      startCountDown: false, // 开始倒计时
+      endCountDown: false, // 结束倒计时
       tankFormRules: {
         phone: [
           { required: true, validator: formValidator.texTphoneNumber, trigger: "blur" },
         ],
         idNumber: [
           { required: true, validator: formValidator.texTidCard, trigger: 'blur', },
-        ]
+        ],
+        code: [
+          { required: true, message: "验证码不能为空", trigger: "change" },
+        ],
       },
       phoneValue:'',
       idNumberValue:'',
@@ -560,6 +576,14 @@ export default {
       downLoading: false,
     }
   },
+  watch:{
+    startCountDown(newVal){
+      newVal && this.countDown()
+    },
+    endCountDown(newVal){
+      newVal && this.clearTimer()
+    },
+  },
   created() {
     this.columns.splice(1, 0, this.addCommonColumnItem(150, true));
     this.columns.splice(2, 0, this.addCommonColumnDepartment({
@@ -636,6 +660,53 @@ export default {
       this.signVisible = false
       this.storageForm = {};
     },
+    // 发送验证码
+    sendFnCode: debounce(function () {
+      if (this.$listeners.sendCode) {
+        this.$emit('sendCode')
+        console.log('this.$listeners.sendCode');
+      } else {
+        let apiData = {
+          phone:this.storageForm.phone,
+          idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
+        }
+        if (this.showBtn == false) {
+          getAuthCodeByPhoneAndIdNumber(apiData)
+            .then((res) => {
+              this.showBtn = true
+              this.countDown()
+              this.$antMessage.success("发送成功！");
+            })
+            .catch((err) => { })
+        } else {
+           resendVerificationCode(apiData)
+            .then((res) => {
+              this.showBtn = true
+              this.countDown()
+              this.$antMessage.success("发送成功！");
+            })
+            .catch((err) => { })
+        }
+      }
+    }, 300, { leading: true, trailing: false }),
+
+    // 开始倒计时
+    countDown() {
+      this.countdownNumber = 59;
+      this.countdownTimer && window.clearInterval(this.countdownTimer);
+      this.countdownTimer = setInterval(() => {
+        this.countdownNumber--;
+        if (this.countdownNumber === 0) {
+          this.clearTimer();
+        }
+      }, 1000);
+    },
+
+    // 清除倒计时
+    clearTimer() {
+      this.countdownNumber = 60;
+      this.countdownTimer && window.clearInterval(this.countdownTimer);
+    },
     // 弹框确定
     storageConfirm() {
       if (this.storageForm.idNumber != this.userInfoData.idNumber) {
@@ -643,9 +714,11 @@ export default {
           return;
         }
       }
+      formValidator.formItemValidate(this, 'code', 'storageForm');
       let apiData = {
         phone:this.storageForm.phone,
         idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
+        authCode:this.storageForm.code,
       }
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
@@ -962,7 +1035,6 @@ export default {
       if (!this.canClickBtnMixin("responsibilityBatchSign")) {
         return;
       }
-      this.initPop()
       console.log('批量签署',this.choosedArr);
       // return
       if (!this.choosedArr.length) {
@@ -977,6 +1049,7 @@ export default {
         this.$antMessage.warning('请正确选择签署文件！')
         return;
       } else {
+        this.initPop()
         this.signVisible = true
         let para = {
           totalHeight: '150',
