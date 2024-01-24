@@ -326,11 +326,11 @@ export default {
     }).catch((err) => {
       console.log(err);
     })
-    deptDict().then(res1 => {
-      this.organizationObj = res1.data.idList;
-    }).catch((err) => {
-      console.log(err);
-    })
+    // deptDict().then(res1 => {
+    //   this.organizationObj = res1.data.idList;
+    // }).catch((err) => {
+    //   console.log(err);
+    // })
     this.getDataList();
   },
   methods: {
