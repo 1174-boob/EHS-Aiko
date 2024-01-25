@@ -180,7 +180,9 @@ export default {
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
         this.storageForm = {};
-        this.signModalShow = true
+        if(res.code == '20000'){
+          this.signModalShow = true
+        }
       }).catch((err) =>{
         console.log(err);
       }).finally(()=>{
