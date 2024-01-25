@@ -28,16 +28,20 @@
           labelAlign="left"
         >
           <a-form-model-item class="flex" label="手机号" prop="phone">
-            <a-input :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
+            <a-input :disabled="showBtn" :maxLength="11" v-model="storageForm.phone" placeholder="请输入手机号" />
           </a-form-model-item>
           <a-form-model-item class="flex" label="身份证号" prop="idNumber">
-            <a-input v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+            <a-input :disabled="showBtn" v-model="storageForm.idNumber" placeholder="请输入身份证号"/>
+          </a-form-model-item>
+          <a-form-model-item class="flex" label="验证码" prop="code">
+            <a-input allowClear :maxLength="6" style="width: 220px; margin-right: 15px" v-model="storageForm.code" placeholder="请输入验证码"></a-input>
+            <a-button type="default" @click="sendFnCode" :disabled="countdownNumber !== 60" style="flex:1; minWidth:'90px',">{{ countdownNumber !== 60 ? countdownNumber + "s" : "发送短信" }}</a-button>
           </a-form-model-item>
         </a-form-model>
       </template>
       <template slot="btn">
         <a-button @click="storageCancle">取消</a-button>
-        <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
+        <a-button type="primary" class="m-l-15" :loading='loadingSure' @click="storageConfirm">确定</a-button>
       </template>
     </CommonModal>
 
@@ -48,14 +52,16 @@
 
 <script>
 import { formValidator } from "@/utils/clx-form-validator.js"
-import { getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,} from "@/services/api.js";
+import { getCheckPhoneAndIdNumberExist,getEditPhoneAndIdNumber,getAuthCodeByPhoneAndIdNumber,resendVerificationCode} from "@/services/api.js";
 import cancelLoading from '@/mixin/cancelLoading'
 import { getSignManagementDataApi,rmSignManagementDataApi } from "@/services/safetyEduArchives"
 import SignModal from './components/signModal.vue'
+import { debounce } from "lodash";
 export default {
   components: { SignModal },
   mixins: [cancelLoading],
   data() {
+    this.storageConfirm = debounce(this.storageConfirm, 1000);
     return {
       pageSpinning: false,
       signModalShow: false,
@@ -63,15 +69,28 @@ export default {
       signUrl: '',
       sealDataId:undefined,
       userInfoData:{},
+      loadingSure:false,
+      storageForm: {
+        idNumber:'',
+        phone:'',
+        code:''
+      },
+      countdownNumber: 60,
+      countdownTimer: null,
+      showBtn: false, 
+      startCountDown: false, // 开始倒计时
+      endCountDown: false, // 结束倒计时
       storageVisible: false,
-      storageForm: {},
       tankFormRules: {
         phone: [
           { required: true, validator: formValidator.texTphoneNumber, trigger: "blur" },
         ],
         idNumber: [
           { required: true, validator: formValidator.texTidCard, trigger: 'blur', },
-        ]
+        ],
+        code: [
+          { required: true, message: "验证码不能为空", trigger: "change" },
+        ],
       },
       phoneValue:'',
       idNumberValue:'',
@@ -81,6 +100,14 @@ export default {
     this.getDataList()
     let zconsole_userInfo = JSON.parse(sessionStorage.getItem("zconsole_userInfo"))
     this.userId = zconsole_userInfo.user.userId
+  },
+  watch:{
+    startCountDown(newVal){
+      newVal && this.countDown()
+    },
+    endCountDown(newVal){
+      newVal && this.clearTimer()
+    },
   },
   methods: {
     getDataList() {
@@ -143,16 +170,20 @@ export default {
           return;
         }
       }
+      formValidator.formItemValidate(this, 'code', 'storageForm');
       let apiData = {
         phone:this.storageForm.phone,
         idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
+        authCode:this.storageForm.code,
       }
+      this.loadingSure = true
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
         this.storageForm = {};
       }).catch((err) =>{
         console.log(err);
       }).finally(()=>{
+        this.loadingSure = false
       })
       this.signModalShow = true
 
@@ -176,7 +207,54 @@ export default {
           this.getDataList()
         }
       })
-    }
+    },
+    // 发送验证码
+    sendFnCode: debounce(function () {
+      if (this.$listeners.sendCode) {
+        this.$emit('sendCode')
+        console.log('this.$listeners.sendCode');
+      } else {
+        let apiData = {
+          phone:this.storageForm.phone,
+          idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
+        }
+        if (this.showBtn == false) {
+          getAuthCodeByPhoneAndIdNumber(apiData)
+            .then((res) => {
+              this.showBtn = true
+              this.countDown()
+              this.$antMessage.success("发送成功！");
+            })
+            .catch((err) => { })
+        } else {
+           resendVerificationCode(apiData)
+            .then((res) => {
+              this.showBtn = true
+              this.countDown()
+              this.$antMessage.success("发送成功！");
+            })
+            .catch((err) => { })
+        }
+      }
+    }, 300, { leading: true, trailing: false }),
+
+    // 开始倒计时
+    countDown() {
+      this.countdownNumber = 59;
+      this.countdownTimer && window.clearInterval(this.countdownTimer);
+      this.countdownTimer = setInterval(() => {
+        this.countdownNumber--;
+        if (this.countdownNumber === 0) {
+          this.clearTimer();
+        }
+      }, 1000);
+    },
+
+    // 清除倒计时
+    clearTimer() {
+      this.countdownNumber = 60;
+      this.countdownTimer && window.clearInterval(this.countdownTimer);
+    },
   }
 }
 </script>
