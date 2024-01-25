@@ -180,13 +180,12 @@ export default {
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
         this.storageForm = {};
+        this.signModalShow = true
       }).catch((err) =>{
         console.log(err);
       }).finally(()=>{
         this.loadingSure = false
       })
-      this.signModalShow = true
-
     },
     // 批量签署-弹窗提交成功
     signOnOk() {
