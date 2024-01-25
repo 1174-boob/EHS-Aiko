@@ -189,7 +189,7 @@
         </template>
         <template slot="btn">
           <a-button @click="storageCancle">取消</a-button>
-          <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
+          <a-button type="primary" class="m-l-15" :loading='loadingSure' @click="storageConfirm">确定</a-button>
         </template>
       </CommonModal>
     </div>
@@ -213,6 +213,7 @@ export default {
   components: { FixedBottom, pdf,SendCodeButton },
   data() {
     this.sendCode = debounce(this.sendCode, 800);
+    this.storageConfirm = debounce(this.storageConfirm, 1000);
     return {
       // 总页数
       pageTotal: 0,
@@ -230,6 +231,7 @@ export default {
       fifthImage:'',
       dataWithoutPrefix:'',
       dataWithoutPrefixTwo:'',
+      loadingSure:false,
       loading:false,
       pageChangeTimer: null,
       spinning: true,
@@ -412,9 +414,14 @@ export default {
         idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
         authCode:this.storageForm.code,
       }
+      this.loadingSure = true
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
         this.storageForm = {};
+      }).catch((err) =>{
+        console.log(err);
+      }).finally(()=>{
+        this.loadingSure = false
       })
     },
     // 获取到pdf总页数时触发 会传入总页数

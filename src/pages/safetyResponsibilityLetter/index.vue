@@ -236,7 +236,7 @@
         </template>
         <template slot="btn">
           <a-button @click="storageCancle">取消</a-button>
-          <a-button type="primary" class="m-l-15" @click="storageConfirm">确定</a-button>
+          <a-button type="primary" class="m-l-15" :loading='loadingSure' @click="storageConfirm">确定</a-button>
         </template>
       </CommonModal>
 
@@ -340,6 +340,7 @@ export default {
   mixins: [teableCenterEllipsis, cancelLoading, optionsMixin, postOptionsMixin],
   components: { Upload, staffOrDeptPush, TempPreviewModel, SelTempDrawer },
   data() {
+    this.storageConfirm = debounce(this.storageConfirm, 1000);
     return {
       dictionary,
       signVisible: false,
@@ -367,6 +368,7 @@ export default {
       dataWithoutPrefix:'',
       dataWithoutPrefixTwo:'',
       dataWithoutPrefixFour:'',
+      loadingSure:false,
       loading:false,
       labelCol: { span: 3 },
       wrapperCol: { span: 21 },
@@ -720,9 +722,14 @@ export default {
         idNumber:this.storageForm.idNumber == this.userInfoData.idNumber?this.userInfoData.realIdNumber:this.storageForm.idNumber,
         authCode:this.storageForm.code,
       }
+      this.loadingSure = true
       getEditPhoneAndIdNumber(apiData).then((res) =>{
         this.storageVisible = false;
         this.storageForm = {};
+      }).catch((err) =>{
+        console.log(err);
+      }).finally(()=>{
+        this.loadingSure = false
       })
     },
     async init() {
