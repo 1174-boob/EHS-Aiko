@@ -371,6 +371,12 @@ export default {
           if(res.data.processStatus == 'close'){
             this.closeStatus = false
           }
+          if(res.data.processStatus == 'rectification' && res.data.fourPass == true ){
+            this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/dealIsFourAssociation", query: { hideDangerId: this.routeObj.hideDangerId } });
+          }
+          if(res.data.processStatus == 'rectification' && res.data.fourPass == false ){
+            this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/dealNoFourAssociation", query: { hideDangerId: this.routeObj.hideDangerId } });
+          }
           //查看情况
           if (this.routeObj.type && this.routeObj.type == "look") {
             this.hideDangerForm.processStatus = "close";
