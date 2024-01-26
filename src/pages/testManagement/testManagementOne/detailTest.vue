@@ -380,7 +380,7 @@ export default {
         testId: this.dataMsg.testId,
         // pushCode: record.pushCode,
         testPushId: this.recordData.testPushId,
-        time: '',
+        pushCode: this.detailMsg.pushCode,
         userName: '',
         pageSize: this.pageDetail.pageSize,
         corporationId: '',

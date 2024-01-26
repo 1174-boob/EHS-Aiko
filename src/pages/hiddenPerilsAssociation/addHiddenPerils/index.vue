@@ -474,6 +474,7 @@ export default {
         draftPersonJobNumber: this.userObjSession.jobNumber,
         findTime,
         rectificationTime,
+        dangerOperateIdList: this.$route.query.dangerOperateIdList,
         dangerPhotoList: this.dealIdList(this.hideDangerForm.dangerPhotoList || []),
       };
       //判断是新增还是编辑

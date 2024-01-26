@@ -465,7 +465,7 @@ export default {
 
     //草稿箱
     toDraft() {
-      this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/draftBoxListAssociation" });
+      this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/draftBoxListAssociation",query:{ dangerOperateId: this.$route.query.dangerOperateId}, });
     },
 
     //获取列表
@@ -480,6 +480,7 @@ export default {
           : undefined;
       let params = {
         ...this.formInline,
+        dangerOperateId:this.$route.query.dangerOperateId,
         draftStatus: "unDraft",
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,

@@ -199,6 +199,7 @@ export default {
     getDataList() {
       let params = {
         ...this.formInline,
+        dangerOperateId:this.$route.query.dangerOperateId,
         draftStatus: "draft",
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,

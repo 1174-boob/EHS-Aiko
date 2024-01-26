@@ -503,7 +503,7 @@ export default {
       console.log('隐患情况单挑数据',row);
       this.$router.push({
         path:"/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation",
-        query:{ dangerOperateId: row.dangerOperateId },
+        query:{ dangerOperateId: row.operateId },
       } );
     },
     checkboxChange() {
@@ -522,6 +522,10 @@ export default {
     },
     relatedHazards(){
       console.log('dangerOperateIdList',this.dangerOperateIdList);
+      if(this.dangerOperateIdList.length == 0) {
+        this.$antMessage.warn('至少选择一条数据！');
+        return
+      }
       this.$router.push({
         path: "/safeManage/workManage/dangerWorkStatic/addHiddenPerilsAssociation",
         query: { dangerOperateIdList: this.dangerOperateIdList },
