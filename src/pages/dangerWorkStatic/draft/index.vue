@@ -101,7 +101,7 @@ export default {
           title: "作业级别",
           disabled: true,
           isDefault: true,
-          props: 'operateLevelText',
+          props: 'operateLevel', // operateLevelText
         },
         {
           id: 7,

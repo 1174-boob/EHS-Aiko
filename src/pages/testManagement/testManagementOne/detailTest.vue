@@ -288,7 +288,7 @@ export default {
       })
     },
     downloadCode(record) {
-      GetQrCode({ examId: this.dataMsg.testId, testPushId: record.testPushId }).then((res) => {
+      GetQrCode({ examId: this.dataMsg.testId, pushCode: record.pushCode }).then((res) => {
         this.QRcodeModelShow = true;
         this.coverImg = res.data;
       }).catch((err) => {
