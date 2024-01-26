@@ -9,9 +9,10 @@
               <div>
                 <div class="m-t-20 border-b-e7 has-right-btn">
                   <PageTitle>值班基本信息</PageTitle>
-                  <template v-if="isShowPage">
+                  <div style="display:inlineBlock;" v-if="isShowPage">
                     <a-button type="primary" v-show="showPrintPdfBtn" @click="reactPrint">导出PDF</a-button>
-                  </template>
+                    <a-button style="margin-left:20px;" type="primary" v-show="showPrintPdfBtn" :loading="downLoading" @click="reactPrintExcel">导出Excel</a-button>
+                  </div>
                 </div>
                 <div class="m-t-20"></div>
               </div>
@@ -362,6 +363,7 @@ import RoomDataModel from './comp/roomDataModel.vue'
 import { getDictConfigData } from "@/utils/dictionary.js";
 import dictionary from "@/utils/dictionary.js";
 import dayJs from "dayjs";
+import { dutyDownloadExport} from "@/services/api.js";
 import StaffOrDept from "@/components/staffOrDept";
 import ondutyMixin from '@/pages/networkControl/onduty/mixin/ondutyMixin.js'
 export default {
@@ -380,6 +382,7 @@ export default {
       otherList: [],
       spanCol: 12,
       spinning: true,
+      downLoading: false,
       labelCol: { span: 4 },
       wrapperCol: { span: 19 },
       iFrom: {
@@ -612,6 +615,27 @@ export default {
         callback();
       }
     },
+    // 导出
+    async reactPrintExcel() {
+      this.downLoading = true;
+      let para = {}
+      para.dutyId = this.dutyId
+      let res = await dutyDownloadExport(para);
+      if(res){
+        const name = '值班管理导出';
+        const blob = new Blob([res], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+        const downloadElement = document.createElement('a')
+        const href = URL.createObjectURL(blob) //创建下载链接
+        downloadElement.href = href
+        downloadElement.download = name + '.xlsx'
+        document.body.appendChild(downloadElement)
+        downloadElement.click()
+        document.body.removeChild(downloadElement)// 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+        this.$antMessage.success("导出成功");
+      }
+      this.downLoading = false;
+    },
     // pdf导出
     reactPrint() {
       const elLoading = this.$loading({
@@ -729,6 +753,7 @@ export default {
       let apiData = {
         ...this.iFrom
       }
+      apiData.dutyUserNameList = apiData.dutyUserNameList ? apiData.dutyUserNameList.split(",") : []
       this.handleLoading();
       Promise.all([ondutyTableUpdateApi(apiData)])
         .then(res => {
