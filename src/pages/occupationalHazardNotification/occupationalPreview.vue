@@ -185,6 +185,7 @@
               <a-input allowClear :maxLength="6" style="width: 220px; margin-right: 15px" v-model="storageForm.code" placeholder="请输入验证码"></a-input>
               <a-button type="default" @click="sendFnCode" :disabled="countdownNumber !== 60" style="flex:1; minWidth:'90px',">{{ countdownNumber !== 60 ? countdownNumber + "s" : "发送短信" }}</a-button>
             </a-form-model-item>
+            <h3>注:手机号开户对应的身份信息与当前信息一致，单日认证上限次数5次</h3>
           </a-form-model>
         </template>
         <template slot="btn">
