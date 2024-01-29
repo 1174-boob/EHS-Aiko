@@ -78,6 +78,7 @@ import cancelLoading from "@/mixin/cancelLoading";
 // import { formValidator } from "@/utils/clx-form-validator.js";
 // import html2canvas from 'html2canvas'
 import { debounce, cloneDeep } from "lodash";
+import { getInsidePeopleInfoApi } from "@/services/api.js";
 import {
   TestListPage,
   TestDelete,
@@ -214,16 +215,24 @@ export default {
       for (let i = 0; i < this.checkedUserTitle.length; i++) {
         this.checkedUserTitle[i].deptName = this.findDeptName(this.userTreeData, this.checkedUserTitle[i].deptId);
       }
-      let userList1 = [];
-      for (let i = 0; i < this.checkedUserTitle.length; i++) {
-        userList1.push({
-          userId: this.checkedUserTitle[i].key,
-          userName: this.checkedUserTitle[i].name,
-          deptName: this.checkedUserTitle[i].deptName,
-          deptId: this.checkedUserTitle[i].deptId,
-          workNum: this.checkedUserTitle[i].workNum,
-        });
-      }
+      // 内部
+      let userList1 = cloneDeep(this.$refs.pushModal.checkedUserTitle);
+      console.log('userListScc',userList1);
+      userList1.forEach(item => {
+        item.userId = item.key
+        item.userName = item.name
+        item.userCode = item.workNum
+      })
+      // let userList1 = [];
+      // for (let i = 0; i < this.checkedUserTitle.length; i++) {
+      //   userList1.push({
+      //     userId: this.checkedUserTitle[i].key,
+      //     userName: this.checkedUserTitle[i].name,
+      //     deptName: this.checkedUserTitle[i].deptName,
+      //     deptId: this.checkedUserTitle[i].deptId,
+      //     workNum: this.checkedUserTitle[i].workNum,
+      //   });
+      // }
       let companyList1 = [{
         companyId: this.companyId,
         companyName: this.companyName,
@@ -253,18 +262,47 @@ export default {
         this.$antMessage.error("您还未选择推送人员");
         return;
       }
-      ExamPush({
-        examId: this.currentPushMsg.testId,
-        companyList: [
-          ...companyList1,
-          ...companyList2
-        ]
-      }).then((res) => {
-        this.$antMessage.success("推送成功");
-        this.pushCancle();
-      }).catch((err) => {
-        console.log(err);
-      })
+      if (companyList1.length && companyList1[0].userList && companyList1[0].userList.length) {
+        let apiData = {
+          companyId: companyList1[0].companyId,
+          userIdList: companyList1[0].userList.map(item => item.userId).filter(item => item)
+        }
+        getInsidePeopleInfoApi(apiData)
+          .then(res => {
+            let deptIdRes = res.data || {}
+            console.log('companyList1[0].userList',companyList1[0].userList);
+            companyList1[0].userList.forEach(item => {
+              item.deptId = deptIdRes[item.userId]?.deptId
+            })
+            ExamPush({
+              examId: this.currentPushMsg.testId,
+              companyList: [
+                ...companyList1,
+                ...companyList2
+              ]
+            }).then((res) => {
+              this.$antMessage.success("推送成功");
+              this.pushCancle();
+            }).catch((err) => {
+              console.log(err);
+            })
+          })
+          .catch(err => {
+            console.log(err);
+            ExamPush({
+              examId: this.currentPushMsg.testId,
+              companyList: [
+                ...companyList1,
+                ...companyList2
+              ]
+            }).then((res) => {
+              this.$antMessage.success("推送成功");
+              this.pushCancle();
+            }).catch((err) => {
+              console.log(err);
+            })
+          })
+      }
     },
     findDeptName(userTreeData, deptId) {
       console.log(userTreeData, deptId)
