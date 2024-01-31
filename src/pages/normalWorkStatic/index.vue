@@ -120,7 +120,7 @@
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
-import { exportDangerWorkStaticApi, operateInfoListPag, operateInfoDelete } from "@/services/dangerWorkStatic.js";
+import { operateInfoExport, operateInfoListPag, operateInfoDelete } from "@/services/dangerWorkStatic.js";
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
 import serviceNameList from '@/config/default/service.config.js'
@@ -464,7 +464,7 @@ export default {
         isDraft: 2,
         ...this.formInline
       }
-      exportDangerWorkStaticApi(apiData)
+      operateInfoExport(apiData)
         .then(res => {
           this.spreadSheetExcel(res, '一般作业台账导出')
         })
