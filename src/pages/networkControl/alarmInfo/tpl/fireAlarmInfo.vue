@@ -550,6 +550,7 @@ export default {
         name: "火灾处理查看",
         params: { idList: this.selectedRowKeys, type: "deal" },
       });
+      this.selectedRowKeys = []
     },
 
     // 处理

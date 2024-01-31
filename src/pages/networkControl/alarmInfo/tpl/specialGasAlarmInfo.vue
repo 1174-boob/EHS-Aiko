@@ -503,6 +503,7 @@ export default {
         name: "特气处理查看",
         params: { idList: this.selectedRowKeys, type: "deal" },
       });
+      this.selectedRowKeys = []
     },
 
     getCheckboxProps(record) {
