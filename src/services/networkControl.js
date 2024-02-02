@@ -52,6 +52,9 @@ export const GetMonitoringList = params => post(danger + '/api/ehs/duty/table/du
 //值班导出
 export const ExoprCortExel = params => postExcel(danger + '/api/ehs/duty/table/export', params);
 
+//值班导出 新版 2024-2-1
+export const ExoprCortExelNew = params => postExcel(danger + '/api/ehs/duty/table/download/out', params);
+
 //配置管理：
 //配置管理分页查询
 export const GetConfigList = params => post(danger + '/api/ehs/config/page/list', params);

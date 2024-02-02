@@ -92,24 +92,54 @@
         </div>
       </a-table>
     </CommonTable>
+
+    <CommonModal class="pre-test" title="导出值班记录" :visible="alarmTestVisible" :cancelFn="alarmTestCancle">
+      <template slot="form">
+        <a-form-model
+          ref="alarmTest"
+          :model="alarmTestForm"
+          :rules="alarmTestFormRules"
+          :label-col="{ style: { width: '80px' } }"
+          :wrapper-col="{ style: { width: 'calc(100% - 80px)' } }"
+          :colon="false"
+          labelAlign="left"
+        >
+          <a-form-model-item class="flex" label="选择时间" prop="preDateTime">
+            <a-range-picker
+              format="YYYY/MM/DD"
+              v-model="alarmTestForm.preDateTime"
+            >
+              <a-icon slot="suffixIcon" type="calendar" />
+            </a-range-picker>
+          </a-form-model-item>
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="alarmTestCancle">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="alarmTestConfirm">确定</a-button>
+      </template>
+    </CommonModal>
   </div>
 </template>
 <script>
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import cancelLoading from "@/mixin/cancelLoading";
 import dictionary from "@/utils/dictionary";
+import { formValidator } from "@/utils/clx-form-validator.js";
+import dayJs from "dayjs";
 import moment from "moment";
 import { debounce } from "lodash";
 import {
   DownloadGasProcess,
   GetDutyList,
   GetClassesListNoPage,
-  ExoprCortExel,
+  ExoprCortExelNew,
 } from "@/services/networkControl.js";
 
 export default {
   mixins: [teableCenterEllipsis, cancelLoading],
   data() {
+    this.alarmTestConfirm = debounce(this.alarmTestConfirm, 800);
     return {
       tableSpinning:false,
       formInline: {},
@@ -117,6 +147,13 @@ export default {
         pageNo: 1,
         pageSize: 10,
         total: 0,
+      },
+      alarmTestVisible: false,
+      alarmTestForm: {},
+      alarmTestFormRules: {
+        preDateTime: [
+          { required: true, message: "时间不能为空", trigger: "change" },
+        ],
       },
       columns: [
         {
@@ -327,32 +364,44 @@ export default {
       250,
       { leading: true, trailing: false }
     ),
-
-    // 导出excel
-    async exportExcel() {
-      let params = {
-        ...this.formInline,
-        // pageSize: this.page.pageSize,
-        // pageNo: this.page.pageNo,
-        dutyStartTime:
-          this.formInline.timeArr && this.formInline.timeArr[0]
-            ? this.formInline.timeArr[0]
-            : undefined,
-        dutyEndTime:
-          this.formInline.timeArr && this.formInline.timeArr[1]
-            ? this.formInline.timeArr[1]
-            : undefined,
-        dutyDate: this.formInline.dutyDate
-          ? this.formInline.dutyDate.format("YYYY-MM-DD")
-          : undefined,
-        timeArr: undefined,
-        planName: undefined,
-      };
-      const res = await ExoprCortExel(params);
-      // console.log(res, "..res");
-      if (res) {
-        this.spreadSheetExcel(res, "值班记录");
+    exportExcel(){
+      this.alarmTestVisible = true;
+    },
+    alarmTestCancle() {
+      console.log("取消");
+      this.alarmTestForm = {};
+      this.alarmTestVisible = false;
+    },
+    alarmTestConfirm() {
+      console.log("确定");
+      if (!formValidator.formAll(this, 'alarmTest')) {
+        return;
       }
+      let startTime = this.alarmTestForm.preDateTime[0] ? dayJs(this.alarmTestForm.preDateTime[0]).format('YYYY-MM-DD') : '';
+      let endTime = this.alarmTestForm.preDateTime[1] ? dayJs(this.alarmTestForm.preDateTime[1]).format('YYYY-MM-DD') : '';
+      let params = {
+        startDate: startTime,
+        endDate:endTime,
+      }
+      ExoprCortExelNew(params).then((res) => {
+        const name = '值班记录'
+        const blob = new Blob([res],{ type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+        const downloadElement = document.createElement('a')
+        const href = URL.createObjectURL(blob) //创建下载链接
+        downloadElement.href = href
+        downloadElement.download = name + '.xlsx'
+        document.body.appendChild(downloadElement)
+        downloadElement.click()
+        document.body.removeChild(downloadElement)// 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+        this.alarmTestForm = {};
+        this.alarmTestVisible = false;
+        this.$antMessage.success(`${'操作成功！'}`);
+      }).catch((err)=>{
+        this.$antMessage.warn(`${err.message}`);
+      }).finally(()=>{
+
+      })
     },
 
     // 处理
