@@ -43,7 +43,7 @@
       <a-table bordered :columns="columns" :scroll="{ x: 800 }" :data-source="tableDataList" :rowKey="(record, index)=>{return record.checkId}" :pagination="false">
         <div slot="checkNum" slot-scope="record">{{ record.checkNum }}</div>
         <div slot="checkDate" slot-scope="record">{{ record.checkDate }}</div>
-        <div slot="checkUserId" slot-scope="record"> {{ equipmentType != '4' ? record.checkUserName == null ? '' : (record.checkUserName + '/'+ record.checkUserJobNumber == null ? '' : record.checkUserJobNumber) : (record.checkUser == null ? '/' : record.checkUser) }}</div>
+        <div slot="checkUserId" slot-scope="record"> {{ equipmentType != '4' ? record.checkUserName == null ? '' : ((record.checkUserName == null ? '' :record.checkUserName) + '/'+ (record.checkUserJobNumber == null ? '' : record.checkUserJobNumber)) : (record.checkUser == null ? '/' : record.checkUser) }}</div>
         <div slot="status" slot-scope="record">{{ getStatus(record.status) }}</div>
         <div slot="createTime" slot-scope="record">{{ record.createTime }}</div>
         <div class="specDiv" slot="action" slot-scope="record">

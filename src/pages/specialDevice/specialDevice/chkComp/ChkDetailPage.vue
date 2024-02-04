@@ -24,6 +24,7 @@
       border 
       align="center"
       ref="xTable" 
+      class="vxe-scrollbar beauty-scroll-fireBox"
       :span-method="rowspanMethod"
       :seq-config="{startIndex: 0}" 
       show-overflow :column-config="{resizable: true}"
