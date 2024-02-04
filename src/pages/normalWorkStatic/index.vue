@@ -47,7 +47,6 @@
         </a-button>
         <template v-if="allButtonCodeList.includes('normalWorkStaticAddAndChange')">
           <UploadBtnStyle
-            :action="action"
             :showAcceptText="false"
             :accept="['.xlsx', '.xls',]"
             :showUploadList="false"
@@ -120,7 +119,7 @@
 <script>
 import cancelLoading from "@/mixin/cancelLoading";
 import { cloneDeep, debounce } from "lodash";
-import { operateInfoExport, operateInfoListPag, operateInfoDelete } from "@/services/dangerWorkStatic.js";
+import { operateInfoExport, operateInfoListPag, operateInfoDelete ,infoImportFile} from "@/services/dangerWorkStatic.js";
 import UploadBtnStyle from "@/components/upload/uploadBtnStyle.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
 import serviceNameList from '@/config/default/service.config.js'
@@ -137,7 +136,7 @@ export default {
       selectShowList: [],
       dictionary,
       // 导入文件地址
-      action: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/general/operate/info/importFile`:`${serviceNameList.safe}/api/ehs/safe/general/operate/info/importFile`,
+      // action: window.location.host.indexOf('localhost') < 0 ?`${process.env.VUE_APP_API_PROXY_TARGET}${serviceNameList.safe}/api/ehs/safe/general/operate/info/importFile`:`${serviceNameList.safe}/api/ehs/safe/general/operate/info/importFile`,
       page: {
         pageNo: 1,
         pageSize: 10,
@@ -225,6 +224,9 @@ export default {
       // 表头本地的名称
       setColumLocalStorageName: 'ehs_dangerWorkStatic_tableColumn',
       columnsIng: [],
+      addForm: {
+        fileListExel: [],
+      },
       outOrganizeTreeList: [],
       // 制造/施工内容下拉
       hazardLevelList: [],
@@ -450,7 +452,13 @@ export default {
     },
     // 批量导入成功
     handleSuccess(fileList) {
-      this.getTableList()
+      infoImportFile({fileId: fileList[0].id}).then((res)=>{
+        console.log(res);
+      }).catch((err)=>{
+        console.log(err);
+      }).finally(()=>{
+        this.getTableList()
+      })
     },
     // 下载模板
     downloadTem() {

@@ -46,5 +46,7 @@ export const operateInfoGetLogClose = params => post(`${serviceNameList.safe}/ap
 export const operateInfoGetLogWithdraw = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/withdraw`, params);
 // 一般作业台账-处理-通过
 export const operateInfoGetLogHanderInfo = params => post(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/handerInfo`, params);
+// 一般作业台账 批量导入 
+export const infoImportFile = (params, headers) => post(serviceNameList.safe + '/api/ehs/safe/general/operate/info/importFile', params, headers)
 // 危险作业台账-列表数据-导出
 export const operateInfoExport = params => postExcel(`${serviceNameList.safe}/api/ehs/safe/general/operate/info/export`, params);

@@ -530,6 +530,7 @@ export default {
         path: "/safeManage/workManage/dangerWorkStatic/addHiddenPerilsAssociation",
         query: { dangerOperateIdList: this.dangerOperateIdList },
       });
+      this.dangerOperateIdList = []
       this.$refs.table.clearCheckboxRow()//清除之前已选的复选框
     },
     // 重置
