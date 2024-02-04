@@ -79,14 +79,15 @@
     <!-- 编辑字典选项弹框中添加选项弹框 -->
     <CommonModal :title="dictItemTitle" :visible="itemVisible" :cancelFn="cancelItem">
       <template slot="form">
-        <a-form-model ref="itemForm" :model="itemForm" :rules="itemRules" :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false" labelAlign="left">
-          <a-form-model-item label="字典项编码" prop="dictValue">
+        <a-form-model ref="itemForm" :model="itemForm" :rules="itemRules" :colon="false">
+          <CommonSearchItem ref="commonSearchItem" :notTablePage="true" :label-col="labelCol" :wrapper-col="wrapperCol" :CommonFormInline="itemForm" :disabled="dictItemDisabled" :hasDepartment="false"></CommonSearchItem>
+          <a-form-model-item :label-col="labelCol" :wrapper-col="wrapperCol" label="字典项编码" prop="dictValue">
             <a-input class="form-input" v-model.trim="itemForm.dictValue" placeholder="请输入" :disabled="dictItemDisabled" />
           </a-form-model-item>
-          <a-form-model-item label="字典项名称" prop="dictLabel">
+          <a-form-model-item :label-col="labelCol" :wrapper-col="wrapperCol" label="字典项名称" prop="dictLabel">
             <a-input class="form-input" v-model.trim="itemForm.dictLabel" placeholder="请输入" />
           </a-form-model-item>
-          <a-form-model-item label="排序号" prop="dictSort">
+          <a-form-model-item :label-col="labelCol" :wrapper-col="wrapperCol" label="排序号" prop="dictSort">
             <a-input class="form-input" v-model="itemForm.dictSort" placeholder="请输入" />
           </a-form-model-item>
         </a-form-model>
@@ -211,6 +212,15 @@ export default {
         }
       ],
       dictTypeColumns: [
+        {
+          title: "所属组织",
+          dataIndex: 'corporationId',
+          key: "corporationId",
+          customRender: (text) => {
+            return (text ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", text).orgName : '');
+          },
+          align: "center",
+        },
         {
           title: '字典项编码',
           dataIndex: 'dictValue',
@@ -435,7 +445,9 @@ export default {
       this.itemForm = {
         dictValue: record.dictValue, //字典标签
         dictLabel: record.dictLabel, //字典项名称
-        dictSort: record.dictSort //排序号
+        dictSort: record.dictSort,//排序号
+        corporationId: record.corporationId,//2024-2-4 新增的所属组织
+        corporationName: record.corporationName //2024-2-4 新增的所属组织
       };
     },
     // 启用禁用
