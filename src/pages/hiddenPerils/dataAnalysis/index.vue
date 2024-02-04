@@ -3,7 +3,7 @@
   <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll bg-fff">
     <SearchTerm>
       <a-form-model layout="inline" :model="formInline" :colon="false">
-        <CommonSearchItem ref="commonSearchItem" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <CommonSearchItem ref="commonSearchItem" deptLabel="责任部门" :CommonFormInline="formInline" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
         <!-- <CommonDept
           ref="commonSearchItem"
           :CommonFormInline="formInline"
@@ -92,7 +92,7 @@
 
     <SearchTerm>
       <a-form-model layout="inline" :model="formInlineTwoObj" :colon="false">
-        <CommonSearchItem ref="commonSearchItemTwo" :CommonFormInline="formInlineTwoObj" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
+        <CommonSearchItem ref="commonSearchItemTwo" deptLabel="责任部门" :CommonFormInline="formInlineTwoObj" :needDeptName="true" :hasDepartment="true"></CommonSearchItem>
         <!-- <CommonDept
           ref="commonSearchItemTwo"
           :CommonFormInline="formInlineTwoObj"
