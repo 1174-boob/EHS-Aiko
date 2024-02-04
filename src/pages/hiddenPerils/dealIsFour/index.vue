@@ -547,6 +547,7 @@ export default {
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
+          this.setKeepalive(true)
           this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList" });
         }).catch((err)=>{
           console.log(err);
@@ -556,6 +557,7 @@ export default {
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
+          this.setKeepalive(true)
           this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList" });
         }).catch((err)=>{
           console.log(err);

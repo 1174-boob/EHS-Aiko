@@ -254,7 +254,8 @@ export default {
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
-          this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          this.$router.go(-1)
         }).catch((err)=>{
           console.log(err);
         })
@@ -263,7 +264,8 @@ export default {
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
-          this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          this.$router.go(-1)
         }).catch((err)=>{
           console.log(err);
         })
@@ -324,7 +326,8 @@ export default {
             }
             this.loading = false;
             this.$antMessage.success(`通过成功`);
-            this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+            // this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+            this.$router.go(-1)
           })
           .catch((err) => {
             this.loading = false;
@@ -336,7 +339,8 @@ export default {
         this.typeModel = false;
       } else if (type == "cancel") {
         // this.setKeepalive(true)
-        this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+        this.$router.go(-1)
+        // this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
       } else {
         //打开退回起草人弹窗
         this.backFlag = true;
@@ -371,10 +375,10 @@ export default {
           if(res.data.processStatus == 'close'){
             this.closeStatus = false
           }
-          if(res.data.processStatus == 'rectification' && res.data.fourPass == true ){
+          if((res.data.processStatus == 'rectification' || res.data.processStatus == 'hdreview' || res.data.processStatus == 'hdclose' || res.data.processStatus == 'close') && res.data.fourPass == true ){
             this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/dealIsFourAssociation", query: { hideDangerId: this.routeObj.hideDangerId } });
           }
-          if(res.data.processStatus == 'rectification' && res.data.fourPass == false ){
+          if((res.data.processStatus == 'rectification' || res.data.processStatus == 'hdreview' || res.data.processStatus == 'hdclose' || res.data.processStatus == 'close')  && res.data.fourPass == false ){
             this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/dealNoFourAssociation", query: { hideDangerId: this.routeObj.hideDangerId } });
           }
           //查看情况
@@ -427,7 +431,8 @@ export default {
           this.$antMessage.success(
             `${this.typeModel ? "延期成功" : "驳回成功"}`
           );
-          this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+          // this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+          this.$router.go(-1)
           this.setKeepalive(true)
         })
         .catch((err) => {
@@ -445,7 +450,8 @@ export default {
           .then((res) => {
             this.loading = false;
             this.$antMessage.success(`退回起草人成功`);
-            this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+            // this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+            this.$router.go(-1)
           })
           .catch((err) => {
             this.loading = false;
@@ -493,9 +499,10 @@ export default {
                 }
                 this.loading = false;
                 this.$antMessage.success(`分配担当成功`);
-                this.$router.push({
-                  path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation",
-                });
+                // this.$router.push({
+                //   path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation",
+                // });
+                this.$router.go(-1)
                 this.setKeepalive(true)
               })
           })

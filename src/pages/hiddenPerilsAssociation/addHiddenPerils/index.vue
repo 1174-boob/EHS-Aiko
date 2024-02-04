@@ -300,7 +300,7 @@ export default {
     this.drafterMsg = `${this.userObjSession.name}${this.userObjSession.jobNumber ? "/" + this.userObjSession.jobNumber : ""
       }`;
     this.checkType = this.getChemicalDictList("checkType");
-
+    console.log('this.$route.query',this.$route.query);
     this.routerObj = this.$route.query;
     this.routerObj.hideDangerId =
       this.routerObj.hideDangerId || getQueryVariable("hideDangerId");

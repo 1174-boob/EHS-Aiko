@@ -254,6 +254,7 @@ export default {
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
+          this.setKeepalive(true)
           this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList" });
         }).catch((err)=>{
           console.log(err);
@@ -263,6 +264,7 @@ export default {
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
+          this.setKeepalive(true)
           this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/hiddenPerilsList" });
         }).catch((err)=>{
           console.log(err);
@@ -371,10 +373,10 @@ export default {
           if(res.data.processStatus == 'close'){
             this.closeStatus = false
           }
-          if(res.data.processStatus == 'rectification' && res.data.fourPass == true ){
+          if((res.data.processStatus == 'rectification' || res.data.processStatus == 'hdreview' || res.data.processStatus == 'hdclose' || res.data.processStatus == 'close') && res.data.fourPass == true ){
             this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/dealIsFour", query: { hideDangerId: this.routeObj.hideDangerId } });
           }
-          if(res.data.processStatus == 'rectification' && res.data.fourPass == false ){
+          if((res.data.processStatus == 'rectification' || res.data.processStatus == 'hdreview' || res.data.processStatus == 'hdclose' || res.data.processStatus == 'close') && res.data.fourPass == false ){
             this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/dealNoFour", query: { hideDangerId: this.routeObj.hideDangerId } });
           }
           //查看情况

@@ -331,7 +331,7 @@
     <div slot="fixedBottom">
       <FixedBottom>
         <!-- rectification：待整改 -->
-        <a-button class="m-r-10" @click="submit('submit')" v-show="hideDangerForm.processStatus == 'rectification'" :loading="loading" type="primary">提交</a-button>
+        <a-button class="m-r-10" @click="submit('submit')" v-show="hideDangerForm.processStatus == 'rectification' && userId == hideDangerForm.handerId" :loading="loading" type="primary">提交</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'rectification'">取消</a-button>
         <!-- hdreview：待复核 -->
         <a-button class="m-r-10" @click="submit('pass')" v-show="hideDangerForm.processStatus == 'hdreview'" :loading="loading" type="primary">通过</a-button>
@@ -416,6 +416,7 @@ export default {
       closeBtn:false,
       draftPersonBtn: false,
       lookBtn:false,
+      userId: "",
       currentUserId: sessionStorage.getItem('zconsole_userInfo') ? JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.jobNumber : '',
       addFormRules: {
         dangerCauseAnalysis: [
@@ -480,6 +481,7 @@ export default {
       this.routeObj.hideDangerId || getQueryVariable("hideDangerId");
     this.getDetail(); //获取详情
     this.getLogList();
+    this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
     if (!this.canShowModalMixin("closeTheHiddenDangerDirectly")) {
       this.closeBtn = false;
     } else {
@@ -547,7 +549,8 @@ export default {
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
-          this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          this.$router.go(-1)
         }).catch((err)=>{
           console.log(err);
         })
@@ -556,7 +559,8 @@ export default {
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
-          this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+          this.$router.go(-1)
         }).catch((err)=>{
           console.log(err);
         })
@@ -706,7 +710,8 @@ export default {
             this.infoPush("/safeManage/workManage/dangerWorkStatic/dealIsFourAssociation");
             this.loading = false;
             this.$antMessage.success(`提交成功`);
-            this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+            // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+            this.$router.go(-1)
           })
           .catch((err) => {
             this.loading = false;
@@ -715,7 +720,8 @@ export default {
       } else if (type == "cancel") {
         this.setKeepalive(true)
         //跳转列表
-        this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+        this.$router.go(-1)
+        // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
       } else if (type == "pass" || type == "close") {
         //通过、关闭
         this.loading = true;
@@ -727,7 +733,8 @@ export default {
             this.$antMessage.success(
               `${type == "pass" ? "通过成功" : "关闭成功"}`
             );
-            this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+            // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+            this.$router.go(-1)
           })
           .catch((err) => {
             this.loading = false;
@@ -922,7 +929,8 @@ export default {
             this.loading = false;
             this.$antMessage.success(`驳回成功`);
             this.setKeepalive(true)
-            this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+            // this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
+            this.$router.go(-1)
           })
           .catch((err) => {
             this.loading = false;

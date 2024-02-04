@@ -583,6 +583,7 @@ export default {
       let apiData = {
         ...this.formInline,
         timeArr: undefined,
+        dangerOperateId:this.$route.query.dangerOperateId,
         startTime,
         endTime,
       }
