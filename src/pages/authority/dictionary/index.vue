@@ -217,7 +217,7 @@ export default {
           dataIndex: 'corporationId',
           key: "corporationId",
           customRender: (text) => {
-            return (text ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", text).orgName : '');
+            return (text ? this.getMappingValue(this.getCommonAddOrgnizeListAll, "orgId", text).orgName : '全部基地');
           },
           align: "center",
         },

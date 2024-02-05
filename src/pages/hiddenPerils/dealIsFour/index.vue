@@ -331,13 +331,14 @@
     <div slot="fixedBottom">
       <FixedBottom>
         <!-- rectification：待整改 -->
-        <a-button class="m-r-10" @click="submit('submit')" v-show="hideDangerForm.processStatus == 'rectification'" :loading="loading" type="primary">提交</a-button>
+        <a-button class="m-r-10" @click="submit('submit')" v-show="hideDangerForm.processStatus == 'rectification' && userId == hideDangerForm.handerId" :loading="loading" type="primary">提交</a-button>
         <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'rectification'">取消</a-button>
         <!-- hdreview：待复核 -->
-        <a-button class="m-r-10" @click="submit('pass')" v-show="hideDangerForm.processStatus == 'hdreview'" :loading="loading" type="primary">通过</a-button>
+        <a-button class="m-r-10" @click="submit('pass')" v-show="hideDangerForm.processStatus == 'hdreview' && userId == hideDangerForm.handerId" :loading="loading" type="primary">通过</a-button>
         <a-button class="m-r-10" @click="submit('back')" v-show="
-            hideDangerForm.processStatus == 'hdreview' ||
-            hideDangerForm.processStatus == 'hdclose'
+            (hideDangerForm.processStatus == 'hdreview' ||
+            hideDangerForm.processStatus == 'hdclose')
+            && userId == hideDangerForm.handerId
           ">驳回</a-button>
         <!-- hdclose：待关闭 -->
         <a-button class="m-r-10" @click="submit('close')" v-show="hideDangerForm.processStatus == 'hdclose'">关闭</a-button>
@@ -467,6 +468,7 @@ export default {
           },
         ],
       },
+      userId: "",
       type: 3, //1待整改 2待复核 3待关闭 4已关闭
       people: 2,
       isPersonLevel: false, //员工身份并且有上级 为true
@@ -480,6 +482,7 @@ export default {
       this.routeObj.hideDangerId || getQueryVariable("hideDangerId");
     this.getDetail(); //获取详情
     this.getLogList();
+    this.userId = JSON.parse(sessionStorage.getItem('zconsole_userInfo')).user.userId
     if (!this.canShowModalMixin("closeTheHiddenDangerDirectly")) {
       this.closeBtn = false;
     } else {
