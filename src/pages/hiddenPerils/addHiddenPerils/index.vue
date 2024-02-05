@@ -40,6 +40,8 @@
                 treePlaceholder="请选择"
               />
             </a-col>
+            <a-col :span="12"></a-col>
+
             <a-col :span="12">
               <a-form-model-item label="发现时间" prop="findTime">
                 <a-date-picker v-model="hideDangerForm.findTime" @change="changeFindTime" />
@@ -54,11 +56,12 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="隐患位置" prop="dangerLocation">
-                <a-input v-model.trim="hideDangerForm.dangerLocation" :maxLength="50" placeholder="请输入" allowClear />
+              <a-form-model-item label="隐患类别" prop="dangerCategory">
+                <a-select v-model="hideDangerForm.dangerCategory" placeholder="请选择隐患类别">
+                  <a-select-option v-for="item in troubleList" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
-
             <a-col :span="12">
               <a-form-model-item label="隐患简述" prop="dangerSketch">
                 <a-textarea placeholder="请输入" v-model="hideDangerForm.dangerSketch" allowClear :maxLength="50" />
@@ -69,22 +72,19 @@
                 <a-textarea placeholder="请输入" v-model="hideDangerForm.dangerDetail" allowClear :maxLength="500" />
               </a-form-model-item>
             </a-col>
-
             <a-col :span="12">
-              <a-form-model-item label="隐患类别" prop="dangerCategory">
-                <a-select v-model="hideDangerForm.dangerCategory" placeholder="请选择隐患类别">
-                  <a-select-option v-for="item in troubleList" :key="item.dictValue" :value="item.dictValue">{{item.dictLabel}}</a-select-option>
+              <a-form-model-item label="隐患区域所在建筑" prop="constructionOfHiddenDangersTypeId">
+                <a-select :disabled="HiddenDangersTypeShow" v-model="hideDangerForm.constructionOfHiddenDangersTypeId" placeholder="隐患区域所在建筑">
+                  <a-select-option v-for="item in constructionOfHiddenDangersTypeListFilter" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
+            <a-col :span="12"></a-col>
             <a-col :span="12">
-              <a-form-model-item label="隐患级别" prop="dangerLevel">
-                <a-select v-model="hideDangerForm.dangerLevel" placeholder="请选择隐患类别">
-                  <a-select-option v-for="item in troubleClassList" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
-                </a-select>
+              <a-form-model-item label="隐患位置" prop="dangerLocation">
+                <a-input v-model.trim="hideDangerForm.dangerLocation" :maxLength="50" placeholder="请输入" allowClear />
               </a-form-model-item>
             </a-col>
-
             <a-col :span="12">
               <a-form-model-item label="责任部门" prop="responsibilityDeptId">
                 <a-tree-select
@@ -139,6 +139,13 @@
             </a-col>
           </a-row>
           <a-row>
+            <a-col :span="12">
+              <a-form-model-item label="隐患级别" prop="dangerLevel">
+                <a-select v-model="hideDangerForm.dangerLevel" placeholder="请选择隐患类别">
+                  <a-select-option v-for="item in troubleClassList" :key="item.dictValue" :value="item.dictValue">{{ item.dictLabel }}</a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
             <a-col :span="12">
               <a-form-model-item label="整改建议" prop="rectificationSuggestions">
                 <a-textarea placeholder="请输入" v-model="hideDangerForm.rectificationSuggestions" allowClear :maxLength="500" />
@@ -210,6 +217,9 @@ export default {
         note: "beizhu",
       },
       checkList: [], //检查类型*
+      HiddenDangersTypeShow: true,
+      constructionOfHiddenDangersTypeList:[], //隐患区域所在建筑
+      constructionOfHiddenDangersTypeListFilter:[],
       troubleList: [], //隐患类别*
       troubleClassList: [], //隐患级别*
       userTreeFields: { value: "key" },
@@ -243,6 +253,9 @@ export default {
         ],
         dangerLocation: [
           { required: true, message: "隐患位置不能为空", trigger: "blur" },
+        ],
+        constructionOfHiddenDangersTypeId: [
+          { required: true, message: "隐患区域所在建筑不能为空", trigger: "blur" },
         ],
         dangerSketch: [
           { required: true, message: "隐患详述不能为空", trigger: "blur" },
@@ -290,8 +303,11 @@ export default {
       this.deptNameList = adminDeptName
     }
     this.checkList = this.getChemicalDictList('checkType')
+    this.constructionOfHiddenDangersTypeList = this.getChemicalDictList('construction_of_hidden_dangers')
+    this.constructionOfHiddenDangersTypeListFilter = this.getChemicalDictList('construction_of_hidden_dangers')
     this.troubleList = this.getChemicalDictList('httype')
     this.troubleClassList = this.getChemicalDictList('htlevel')
+    console.log('this.troubleClassList',this.troubleClassList);
     this.userObjSession = JSON.parse(
       sessionStorage.getItem("zconsole_userInfo")
     ).user;
@@ -321,6 +337,15 @@ export default {
     },
     // 组织机构-改变
     corporationChange(val, corporationDeptId) {
+
+      console.log('基地Id',val);
+      console.log('总体的',this.constructionOfHiddenDangersTypeList);
+      const originalArray = this.constructionOfHiddenDangersTypeList.slice();
+      const processedArray = originalArray.slice();
+      const filteredArray = processedArray.filter(item => item.corporationId == null || item.corporationId == val);
+      // console.log(filteredArray,'过滤'); 
+      // console.log(originalArray,'原始'); 
+      this.constructionOfHiddenDangersTypeListFilter = filteredArray
       let apiData = {
         companyId: JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyId,
         companyName: JSON.parse(sessionStorage.getItem("zconsole_userInfo")).company.companyName,
@@ -348,7 +373,9 @@ export default {
     },
     // 所属组织-获取部门
     corporationDeptChange(treeData) {
-      console.log(treeData)
+      if(treeData[0]){
+        this.HiddenDangersTypeShow = false
+      }
       this.outOrganizeTreeList = treeData;
     },
 
@@ -462,6 +489,11 @@ export default {
       let findTime = this.hideDangerForm.findTime ? dayJs(this.hideDangerForm.findTime).format("YYYY-MM-DD") : undefined;
       let rectificationTime = this.hideDangerForm.rectificationTime ? dayJs(this.hideDangerForm.rectificationTime).format("YYYY-MM-DD") : undefined;
 
+      (this.constructionOfHiddenDangersTypeListFilter || []).map(item => {
+        if (this.hideDangerForm.constructionOfHiddenDangersTypeId == item.dictValue)
+          this.$set(this.hideDangerForm, 'constructionOfHiddenDangersTypeName', item.dictLabel)
+      })
+
       let obj = {
         ...this.hideDangerForm,
         submitType: type,
@@ -471,6 +503,8 @@ export default {
         draftDeptId: this.hideDangerForm.draftDeptId ? this.hideDangerForm.draftDeptId : this.deptIdList[0],
         draftDeptName:this.hideDangerForm.draftDeptName ? this.hideDangerForm.draftDeptName: this.deptNameList,
         draftPersonJobNumber: this.userObjSession.jobNumber,
+        constructionOfHiddenDangersTypeId: this.hideDangerForm.constructionOfHiddenDangersTypeId ? this.hideDangerForm.constructionOfHiddenDangersTypeId:'',
+        constructionOfHiddenDangersTypeName: this.hideDangerForm.constructionOfHiddenDangersTypeName ? this.hideDangerForm.constructionOfHiddenDangersTypeName:'',
         findTime,
         rectificationTime,
         dangerPhotoList: this.dealIdList(this.hideDangerForm.dangerPhotoList || []),

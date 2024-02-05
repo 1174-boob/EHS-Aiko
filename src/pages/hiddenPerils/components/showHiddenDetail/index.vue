@@ -43,7 +43,16 @@
             <div>{{ hideDangerForm.findTime || "--" }}</div>
             </a-form-model-item>
           </a-col>
-         
+          <a-col :span="12">
+            <a-form-model-item label="隐患区域所在建筑">
+              <div>{{ hideDangerForm.constructionOfHiddenDangersTypeName || "--" }}</div>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="隐患位置">
+              <div>{{ hideDangerForm.dangerLocation || "--" }}</div>
+            </a-form-model-item>
+          </a-col>
           <a-col :span="12">
             <a-form-model-item label="检查类型">
               <div>
@@ -55,12 +64,6 @@
               </div>
             </a-form-model-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-model-item label="隐患位置">
-              <div>{{ hideDangerForm.dangerLocation || "--" }}</div>
-            </a-form-model-item>
-          </a-col>
-
           <a-col :span="24">
             <a-form-model-item label="隐患简述" :label-col="labelColO" :wrapper-col="wrapperColO">
               <div>{{ hideDangerForm.dangerSketch || "--" }}</div>
