@@ -93,10 +93,10 @@
         </template>
       </a-col>
       <a-col :span="12">
-        <template title="作业类型">
+        <template title="作业日类型">
           <div class="injury-box">
             <div class="title">
-              <div class="title-left">作业类型</div>
+              <div class="title-left">作业日类型</div>
               <div class="title-right"></div>
             </div>
             <template v-if="eventLevelOption.series[0].data && eventLevelOption.series[0].data.length">
@@ -301,7 +301,7 @@ export default {
           }
         ]
       },
-      // 作业类型
+      // 作业日类型
       eventLevelOption: {
         toolbox: {
           emphasis: {
@@ -316,7 +316,7 @@ export default {
         series: [
           {
             radius: pieObj.radius,
-            name: '作业类型',
+            name: '作业日类型',
             type: 'pie',
             label: {
               formatter: "{b}: {d}%",
@@ -372,7 +372,7 @@ export default {
         refreshFnName: 'getJobTypePieOptionApiFn',
         exportFnObj: {
           apiName: exportJobTypePieOptionApi,
-          fileName: '作业类型',
+          fileName: '作业日类型',
         }
       })
     },
@@ -480,7 +480,7 @@ export default {
         })
         .catch(errr => { })
     },
-    // 作业类型-饼图-api
+    // 作业日类型-饼图-api
     getJobTypePieOptionApiFn() {
       let apiData = {
         ...this.getApiData()

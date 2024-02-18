@@ -137,6 +137,7 @@ export default {
         afterTeFact: '事后',
       },
       reportData: [],
+      loadingTwo: false,
       dataSourceList: [
         {
           sourceKey: '1',
@@ -241,6 +242,7 @@ export default {
       let apiData = {
         maturityEvaluationDataId: this.baseIfo.maturityEvaluationDataId,
       }
+      this.loadingTwo = true
       this.handleLoadingTwo()
       exportMaturityEvaDataConfigData(apiData)
         .then(res => {
@@ -249,6 +251,7 @@ export default {
         .catch(err => { })
         .finally(() => {
           this.cancelLoadingTwo(300)
+          this.loadingTwo = false
         })
     },
 
