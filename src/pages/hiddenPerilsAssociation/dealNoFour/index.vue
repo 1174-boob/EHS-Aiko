@@ -90,7 +90,7 @@
         <a-button class="m-r-10" @click="submit('close')" v-show="hideDangerForm.processStatus == 'hdclose'">关闭</a-button>
         <!-- <a-button class="m-r-10" @click="withdraw" v-show="(routeObj.type && routeObj.type == 'look') && showStatus && (hideDangerForm.draftPersonId && hideDangerForm.draftPersonId.indexOf(currentUserId) > -1)">撤回</a-button> -->
         <a-button class="m-r-10" @click="shutDown" v-show="lookBtn && (draftPersonBtn || closeBtn)">直接关闭</a-button>
-        <a-button class="m-r-10" @click="submit('cancel')" v-show="hideDangerForm.processStatus == 'close' ">返回</a-button>
+        <a-button class="m-r-10" @click="submit('goBack')" v-show="hideDangerForm.processStatus == 'close' ">返回</a-button>
       </FixedBottom>
     </div>
     <!-- 撤回，直接关闭弹框 -->
@@ -324,7 +324,8 @@ export default {
             this.$antMessage.success(`驳回成功`);
             this.setKeepalive(true)
             // this.$router.push("/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation");
-            this.$router.go(-1)
+            // this.$router.go(-1)
+            this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" ,query: {dangerOperateId:this.hideDangerForm.dangerOperateIdList[0]}});
           })
           .catch((err) => {
             this.loading = false;
@@ -369,8 +370,9 @@ export default {
           this.$antMessage.success('撤回成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
+          this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" ,query: {dangerOperateId:this.hideDangerForm.dangerOperateIdList[0]}});
           // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
-          this.$router.go(-1)
+          // this.$router.go(-1)
         }).catch((err)=>{
           console.log(err);
         })
@@ -379,8 +381,9 @@ export default {
           this.$antMessage.success('关闭成功')
           this.withdrawOrDownVisible = false
           this.withdForm = {}
+          this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" ,query: {dangerOperateId:this.hideDangerForm.dangerOperateIdList[0]}});
           // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
-          this.$router.go(-1)
+          // this.$router.go(-1)
         }).catch((err)=>{
           console.log(err);
         })
@@ -424,8 +427,13 @@ export default {
       } else if (type == "cancel") {
         this.setKeepalive(true)
         //跳转列表
-        this.$router.go(-1)
+        // this.$router.go(-1)
+        this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" ,query: {dangerOperateId:this.hideDangerForm.dangerOperateIdList[0]}});
         // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
+      } else if (type == "goBack") {
+        this.setKeepalive(true)
+        //跳转列表
+        this.$router.go(-1)
       } else if (type == "pass" || type == "close") {
         //通过、关闭
         this.loading = true;
@@ -438,7 +446,8 @@ export default {
               `${type == "pass" ? "通过成功" : "关闭成功"}`
             );
             // this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" });
-            this.$router.go(-1)
+            // this.$router.go(-1)
+            this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/hiddenPerilsListAssociation" ,query: {dangerOperateId:this.hideDangerForm.dangerOperateIdList[0]}});
           })
           .catch((err) => {
             this.loading = false;

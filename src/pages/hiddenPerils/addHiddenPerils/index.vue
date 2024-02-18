@@ -339,6 +339,9 @@ export default {
     corporationChange(val, corporationDeptId) {
 
       console.log('基地Id',val);
+      if(val){
+        this.HiddenDangersTypeShow = false
+      }
       console.log('总体的',this.constructionOfHiddenDangersTypeList);
       const originalArray = this.constructionOfHiddenDangersTypeList.slice();
       const processedArray = originalArray.slice();

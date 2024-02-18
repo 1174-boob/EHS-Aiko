@@ -229,6 +229,7 @@ import dayJs from "dayjs";
 import { formValidator } from "@/utils/clx-form-validator.js"
 import StaffOrDept from "@/components/staffOrDept";
 import { cloneDeep, debounce } from "lodash";
+import { getQueryVariable } from "@/utils/util.js"
 import SelTable from "@/pages/dangerWorkStatic/components/selTable.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
 export default {
@@ -393,6 +394,7 @@ export default {
     this.setRouterCode('hiddenPerilsListAssociation')
     this.getDataList(); //获取列表
     console.log('query.dangerOperateId@@@@@SCC',this.$route.query.dangerOperateId);
+    console.log('created地址栏取',getQueryVariable('dangerOperateId'));
   },
   activated() {
     setTimeout(() => {
@@ -465,7 +467,7 @@ export default {
 
     //草稿箱
     toDraft() {
-      this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/draftBoxListAssociation",query:{ dangerOperateId: this.$route.query.dangerOperateId}, });
+      this.$router.push({ path: "/safeManage/workManage/dangerWorkStatic/draftBoxListAssociation",query:{ dangerOperateId: this.$route.query.dangerOperateId || getQueryVariable("dangerOperateId")}, });
     },
 
     //获取列表
@@ -480,7 +482,7 @@ export default {
           : undefined;
       let params = {
         ...this.formInline,
-        dangerOperateId:this.$route.query.dangerOperateId,
+        dangerOperateId:this.$route.query.dangerOperateId  || getQueryVariable("dangerOperateId"),
         draftStatus: "unDraft",
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
@@ -583,7 +585,7 @@ export default {
       let apiData = {
         ...this.formInline,
         timeArr: undefined,
-        dangerOperateId:this.$route.query.dangerOperateId,
+        dangerOperateId:this.$route.query.dangerOperateId || getQueryVariable("dangerOperateId"),
         startTime,
         endTime,
       }
