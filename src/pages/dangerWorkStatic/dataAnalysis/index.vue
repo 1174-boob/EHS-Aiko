@@ -138,7 +138,7 @@ import { cloneDeep, debounce, isEmpty } from "lodash";
 import cancelLoading from "@/mixin/cancelLoading";
 import Echarts from "@/components/echarts/index.vue";
 import chemicalDict from "@/mixin/chemicalDict.js";
-import { getOperationOptionApi, getAssociationOptionApi, exportOperationOptionApi, getJobCategoryOptionApi, exportJobCategoryOptionApi, getJobCategoryPieOptionApi, exportJobCategoryPieOptionApi, getJobTypePieOptionApi, exportJobTypePieOptionApi } from "@/services/dataAnalysis/index.js";
+import { getOperationOptionApi, getAssociationOptionApi, exportOperationOptionApi,exportHideDangerOptionApi, getJobCategoryOptionApi, exportJobCategoryOptionApi, getJobCategoryPieOptionApi, exportJobCategoryPieOptionApi, getJobTypePieOptionApi, exportJobTypePieOptionApi } from "@/services/dataAnalysis/index.js";
 import moment from 'moment'
 import dataAnalysis from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
 import { barObj, pieObj } from '@/pages/accidentManagement/dataAnalysis/mixin/dataAnalysis.js'
@@ -350,7 +350,7 @@ export default {
       this.associationOption.toolbox.feature = this.getFeatureMixin({
         refreshFnName: 'getAssociationOptionApiFn',
         exportFnObj: {
-          apiName: exportOperationOptionApi,
+          apiName: exportHideDangerOptionApi,
           fileName: '关联隐患作业情况',
         }
       })
