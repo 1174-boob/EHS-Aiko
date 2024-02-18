@@ -301,11 +301,11 @@ export default {
     circleFn(row) {
       let className = ''
       // 1正常关闭 2作业前直接关闭 3作业后自动关闭 4/作业前过期自动关闭
-      if (row.closeType == '2') {
+      if (row.processStatus == 'Closed__auto3') {
         className = 'blue-circle'
-      } else if (row.closeType == '3') {
+      } else if (row.processStatus == 'Closed__auto1') {
         className = 'red-circle'
-      } else if (row.closeType == '4') {
+      } else if (row.processStatus == 'Closed__auto2') {
         className = 'yellow-circle'
       }
       return className
