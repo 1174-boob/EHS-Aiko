@@ -511,7 +511,7 @@ export default {
     },
     getPeDateA() {
       if (!this.formInlineA.validityPeriod || !this.formInlineA.validityPeriod.length) {
-        this.peDateA = new Date().getFullYear() + '.' + (new Date().getMonth() + 1) + '.' + String(new Date().getDate()-1).padStart(2, '0')
+        this.peDateA = new Date().getFullYear() + '.' + String(new Date().getMonth() + 1).padStart(2, '0') + '.' + String(new Date().getDate()-1).padStart(2, '0')
       } else {
         let startDay = String(new Date(this.formInlineA.validityPeriod[0]).getDate()).padStart(2, '0')
         let startMonth = new Date(this.formInlineA.validityPeriod[0]).getMonth() + 1
@@ -524,7 +524,7 @@ export default {
     },
     getPeDateB() {
       if (!this.formInlineB.validityPeriod || !this.formInlineB.validityPeriod.length) {
-        this.peDateB = new Date().getFullYear() + '.' + (new Date().getMonth() + 1) + '.' + String(new Date().getDate()-1).padStart(2, '0')
+        this.peDateB = new Date().getFullYear() + '.' + String(new Date().getMonth() + 1).padStart(2, '0') + '.' + String(new Date().getDate()-1).padStart(2, '0')
       } else {
         let startDay = String(new Date(this.formInlineB.validityPeriod[0]).getDate()).padStart(2, '0')
         let startMonth = new Date(this.formInlineB.validityPeriod[0]).getMonth() + 1
@@ -537,7 +537,7 @@ export default {
     },
     getPeDateC() {
       if (!this.formInlineC.validityPeriod || !this.formInlineC.validityPeriod.length) {
-        this.peDateC = new Date().getFullYear() + '.' + (new Date().getMonth() + 1) + '.' + String(new Date().getDate()-1).padStart(2, '0')
+        this.peDateC = new Date().getFullYear() + '.' + String(new Date().getMonth() + 1).padStart(2, '0') + '.' + String(new Date().getDate()-1).padStart(2, '0')
       } else {
         let startDay = String(new Date(this.formInlineC.validityPeriod[0]).getDate()).padStart(2, '0')
         let startMonth = new Date(this.formInlineC.validityPeriod[0]).getMonth() + 1
@@ -550,7 +550,7 @@ export default {
     },
     getPeDateD() {
       if (!this.formInlineD.validityPeriod || !this.formInlineD.validityPeriod.length) {
-        this.peDateD = new Date().getFullYear() + '.' + (new Date().getMonth() + 1) + '.' + String(new Date().getDate()-1).padStart(2, '0')
+        this.peDateD = new Date().getFullYear() + '.' + String(new Date().getMonth() + 1).padStart(2, '0') + '.' + String(new Date().getDate()-1).padStart(2, '0')
       } else {
         let startDay = String(new Date(this.formInlineD.validityPeriod[0]).getDate()).padStart(2, '0')
         let startMonth = new Date(this.formInlineD.validityPeriod[0]).getMonth() + 1
@@ -576,7 +576,7 @@ export default {
     },
     getPeDateF() {
       if (!this.formInlineF.validityPeriod || !this.formInlineF.validityPeriod.length) {
-        this.peDateF = new Date().getFullYear() + '.' + (new Date().getMonth() + 1) + '.' + String(new Date().getDate()-1).padStart(2, '0')
+        this.peDateF = new Date().getFullYear() + '.' + String(new Date().getMonth() + 1).padStart(2, '0') + '.' + String(new Date().getDate()-1).padStart(2, '0')
       } else {
         let startDay = String(new Date(this.formInlineF.validityPeriod[0]).getDate()).padStart(2, '0')
         let startMonth = new Date(this.formInlineF.validityPeriod[0]).getMonth() + 1
@@ -674,8 +674,8 @@ export default {
         endTime: validityPeriodEnd,
       }
       if(params.validityPeriod.length == 0){
-        params.startTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
-        params.endTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.startTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.endTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
       }
       reportSummary(params).then((res)=>{
         this.dataSourceA = res.data ? res.data : []
@@ -692,8 +692,8 @@ export default {
         endTime: validityPeriodEnd,
       }
       if(params.validityPeriod.length == 0){
-        params.startTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
-        params.endTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.startTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.endTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
       }
       hazardNotification(params).then((res)=>{
         this.dataSourceB = res.data ? res.data : []
@@ -710,8 +710,8 @@ export default {
         endTime: validityPeriodEnd,
       }
       if(params.validityPeriod.length == 0){
-        params.startTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
-        params.endTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.startTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.endTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
       }
       responsibilityStatement(params).then((res)=>{
         this.dataSourceC = res.data ? res.data : []
@@ -728,8 +728,8 @@ export default {
         endTime: validityPeriodEnd,
       }
       if(params.validityPeriod.length == 0){
-        params.startTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
-        params.endTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.startTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.endTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
       }
       reportRecords(params).then((res)=>{
         this.dataSourceD = res.data ? res.data : []
@@ -768,8 +768,8 @@ export default {
         endTime: validityPeriodEnd,
       }
       if(params.validityPeriod.length == 0){
-        params.startTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
-        params.endTime = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.startTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
+        params.endTime = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()-1).padStart(2, '0')
       }
       params.inOutType = this.inOutValue
       securityCertificate(params).then((res)=>{
