@@ -319,7 +319,7 @@ export default {
     this.routerObj = this.$route.query;
     this.routerObj.hideDangerId =
       this.routerObj.hideDangerId || getQueryVariable("hideDangerId");
-    if (this.routerObj.hideDangerId) {
+    if (this.routerObj.hideDangerId && !this.routerObj.isCreated) {
       this.getDetail(); //获取详情
     } else {
       this.spinning = false

@@ -265,7 +265,7 @@ export default {
     // 编辑
     actionEdit(record) {
       let path = "/safeManage/workManage/dangerWorkStatic/addHiddenPerilsAssociation";
-      this.$router.push({ path, query: { hideDangerId: record.hideDangerId } });
+      this.$router.push({ path, query: { hideDangerId: record.hideDangerId, isCreated: false} });
     },
 
     // 删除

@@ -619,7 +619,7 @@ export default {
 
     // 分类配置
     earlyWarningTest() {
-      this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/addHiddenPerils" });
+      this.$router.push({ path: "/safeManage/dualControlManage/hiddenPerils/addHiddenPerils",query:{ isCreated: true} });
     },
     //获取name
     getName(list) {

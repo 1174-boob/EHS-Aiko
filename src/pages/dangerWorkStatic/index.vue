@@ -528,7 +528,7 @@ export default {
       }
       this.$router.push({
         path: "/safeManage/workManage/dangerWorkStatic/addHiddenPerilsAssociation",
-        query: { dangerOperateIdList: this.dangerOperateIdList },
+        query: { dangerOperateIdList: this.dangerOperateIdList , isCreated: true},
       });
       this.dangerOperateIdList = []
       this.$refs.table.clearCheckboxRow()//清除之前已选的复选框

@@ -264,7 +264,7 @@ export default {
     // 编辑
     actionEdit(record) {
       let path = "/safeManage/dualControlManage/hiddenPerils/addHiddenPerils";
-      this.$router.push({ path, query: { hideDangerId: record.hideDangerId } });
+      this.$router.push({ path, query: { hideDangerId: record.hideDangerId, query:{ isCreated: false}} });
     },
 
     // 删除
