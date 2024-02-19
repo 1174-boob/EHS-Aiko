@@ -400,13 +400,13 @@ export default {
       return operateInfoGetLogHanderInfo(apiData)
         .then(res => {
           // 代办推送
-          let title = ''
-          if (this.step == 1) {
-            title = '一般作业前二次确认'
-          } else if (this.step == 2) {
-            title = '一般作业中处理'
-          }
-          this.pushTask(securityUser, title);
+          // let title = ''
+          // if (this.step == 1) {
+          //   title = '一般作业前二次确认'
+          // } else if (this.step == 2) {
+          //   title = '一般作业中处理'
+          // }
+          // this.pushTask(securityUser, title);
           this.$antMessage.success('提交成功');
           // 跳转列表页
           this.$router.push({ path: '/safeManage/workManage/normalWorkStatic/normalWorkStaticAccount' })
