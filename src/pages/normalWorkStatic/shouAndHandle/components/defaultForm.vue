@@ -238,6 +238,7 @@ import { PushTask } from '@/services/api'
 import deptAndUser from '../../mixin/deptAndUser.js'
 import moment from 'moment';
 import StaffOrDept from "@/components/staffOrDept";
+import { getQueryVariable } from "@/utils/util.js";
 import dayJs from "dayjs";
 export default {
   components: { FixedBottom, StaffOrDept },
@@ -425,7 +426,12 @@ export default {
     }
   },
   created() {
-    this.generalOperateId = this.$route.query.generalOperateId + '' || undefined
+    // console.log('SCCNB',getQueryVariable('generalOperateId'));
+    // console.log('@@@!!',this.$route.query.generalOperateId);
+    // this.generalOperateId = this.$route.query.generalOperateId + '' || getQueryVariable('generalOperateId') || undefined 
+    this.generalOperateId = this.$route.query.generalOperateId || getQueryVariable('generalOperateId') 
+    console.log('this.generalOperateIdScc2',this.generalOperateId);
+    this.getPageDetail()
   },
   computed: {
     // 当前页面是否为新增
@@ -566,7 +572,7 @@ export default {
     },
     // 获取页面详情
     getPageDetail() {
-      let generalOperateId = this.generalOperateId
+      let generalOperateId = this.generalOperateId || getQueryVariable('generalOperateId')
       let apiData = { generalOperateId }
       return new Promise((resove, rej) => {
         operateInfoDetail(apiData)
