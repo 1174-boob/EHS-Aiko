@@ -49,7 +49,8 @@
       </vxe-column>
       <vxe-column v-for="(day, index) in titleListData" :key="index" width="75" :field="day" :title="isNaN(Number(day.split('-')[2])+'')? Number(day)+'':Number(day.split('-')[2])+''" align="center">
         <template #default="{ row }">
-          <span >{{row[day] == '1' ? '√':row[day] == '0'?'x':row[day]}}</span>
+          <div v-if="highLightColume == day" style="backgroundColor: #9CDBAF; ">{{row[day] == '1' ? '√':row[day] == '0'?'x':row[day]}}</div>
+          <span v-else>{{row[day] == '1' ? '√':row[day] == '0'?'x':row[day]}}</span>
         </template>
       </vxe-column>
       <vxe-column v-if="queryData.checkType=='3'" field="checkContent" title="检查结果" width="600">
@@ -191,6 +192,7 @@ export default {
       editForm: {},
       allData: {},
       titleListData: [],
+      highLightColume:'',
       checkTime:'',
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
@@ -230,7 +232,7 @@ export default {
           let splitArr = resultObj.checkDate.split("-");
           let checkYear = splitArr[0]; // 年
           let checkMonth = splitArr[1];// 月
-
+          this.highLightColume = resultObj.checkDate
           if(resultObj.checkType == '1'){
             this.checkTime = checkYear+'年'+checkMonth+'月'
             this.$nextTick(()=>{
