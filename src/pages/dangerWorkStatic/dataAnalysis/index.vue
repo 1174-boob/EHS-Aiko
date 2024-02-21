@@ -458,10 +458,43 @@ export default {
           let ajaxData = res.data || []
           if (ajaxData && ajaxData.length) {
             let { xAxisData, series, legendData } = this.barDataHandle(ajaxData, true, true)
-            // console.log(xAxisData, series, legendData);
             this.propertyLossOption.xAxis[0].data = cloneDeep(xAxisData)
-            this.propertyLossOption.legend.data = cloneDeep(legendData)
-            this.propertyLossOption.series = cloneDeep(series)
+            this.propertyLossOption.legend.data = cloneDeep(legendData.filter(item => item != '总数'))
+            console.log(series,'seriesseriesseriesseries')
+            const list = cloneDeep(series.filter(item => item.name != '总数'))
+            this.propertyLossOption.series = list || []
+            // this.propertyLossOption.series[6].data[0] = 99
+            this.propertyLossOption.tooltip.className = 'echarts-tooltip-diy'
+            this.propertyLossOption.tooltip.formatter = (parmas) => {
+              const num=parmas[0].data+parmas[1].data+parmas[2].data+parmas[3].data+parmas[4].data+parmas[5].data+parmas[6].data+parmas[7].data+parmas[8].data+parmas[9].data
+              let str = `<div><span class='echartsTipTitle'>${parmas[0].axisValue}</span><span>总数:    ${num}</span></div>`
+              parmas?.forEach((item) => {
+                if (item.seriesName != '总数') {
+                  if (item.seriesName == '动火作业') {
+                    str += `<div class='diyItem'><span class='itemRadio dh'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '高处作业') {
+                    str += `<div class='diyItem'><span class='itemRadio gk'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '起重作业') {
+                    str += `<div class='diyItem'><span class='itemRadio dz'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '有限空间作业') {
+                    str += `<div class='diyItem'><span class='itemRadio yx'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '临时用电') {
+                    str += `<div class='diyItem'><span class='itemRadio ls'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '动土作业') {
+                    str += `<div class='diyItem'><span class='itemRadio dt'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '其他') {
+                    str += `<div class='diyItem'><span class='itemRadio qt'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '重装备作业') {
+                    str += `<div class='diyItem'><span class='itemRadio zz'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '盲板抽堵') {
+                    str += `<div class='diyItem'><span class='itemRadio mb'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  } else if (item.seriesName == '断路作业') {
+                    str += `<div class='diyItem'><span class='itemRadio dl'></span><span class='itemName'>${item.seriesName}</span><span>${item.data}</span></div>`
+                  }
+                }
+              })
+              return str
+            }
           } else {
             this.propertyLossOption.series = []
           }
@@ -593,5 +626,62 @@ export default {
 }
 ::v-deep .ant-calendar-range-picker-separator {
   transform: translateY(2px);
+}
+::v-deep .echarts-tooltip-diy {
+  // background-color: red !important;
+  width: 150px;
+}
+
+::v-deep .diyItem {
+  width: 100%;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+}
+
+::v-deep .echartsTipTitle {
+  margin-right: 10px;
+}
+
+::v-deep .itemRadio {
+  width: 10px;
+  height: 10px;
+  // background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+::v-deep .dh{
+  background-color: #5470c6;
+}
+::v-deep .gk{
+  background-color: #91cc75;
+}
+::v-deep .dz{
+  background-color: #fac858;
+}
+::v-deep .yx{
+  background-color: #ee6666;
+}
+::v-deep .ls{
+  background-color: #73c0de;
+}
+::v-deep .dt{
+  background-color: #3ba272;
+}
+::v-deep .qt{
+  background-color: #FC8453 ;
+}
+::v-deep .zz{
+  background-color: #9A60B4 ;
+}
+::v-deep .mb{
+  background-color: #EA7CCC ;
+}
+::v-deep .dl{
+  background-color: #5470C6 ;
+}
+::v-deep .itemName {
+  width: 100px;
 }
 </style>
