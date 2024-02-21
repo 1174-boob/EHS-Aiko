@@ -31,6 +31,9 @@
         <a-button type="dashed" @click="addPollutant">
           <a-icon type="plus" />新增
         </a-button>
+        <a-button type="dashed" @click="pushAlarm">
+          报警推送
+        </a-button>
       </div>
     </DashBtn>
     <a-tabs default-active-key="1" @change="tabChange">
@@ -114,6 +117,53 @@
         <a-button v-if="!disabled" type="primary" class="m-l-15" @click="gasConfirm">确定</a-button>
       </template>
     </CommonModal>
+    <!-- 报警推送弹框 -->
+    <CommonModal :title="'报警推送'" :visible="pushVisible" :cancelFn="cancelPushVisible" class="waste-gas-modal">
+      <template slot="form">
+        <a-form-model ref="pushForm" :model="pushForm" :rules="pushRules" :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false" labelAlign="left">
+          <CommonDept
+            ref="commonSearchItem"
+            :CommonFormInline="pushForm"
+            :rules="pushRules"
+            :labelAlign="'left'"
+            :notTablePage="true"
+            :hasDepartment="false"
+            :labelCol="labelCol"
+            :wrapperCol="wrapperCol"
+            @corporationChange="pushCorporationChange"
+          ></CommonDept>
+          <StaffOrDept
+            :treeType="'user'"
+            :propKey="'oneList'"
+            :treeRoles="pushRules"
+            :labelTitle="'一级报警'"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol"
+            @getTreeData="personThingOne"
+            :checkedTreeNode="pushForm.oneList"
+            :deptTreeId="pushForm.deptId"
+          />
+          <span class="ecertificateFileId-main-tishi">一级报警推送规则：发生报警立即推送</span>
+          <StaffOrDept
+            :treeType="'user'"
+            :propKey="'twoList'"
+            :treeRoles="pushRules"
+            :labelTitle="'二级报警'"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol"
+            @getTreeData="personThingTwo"
+            :checkedTreeNode="pushForm.twoList"
+            :deptTreeId="pushForm.deptId"
+          />
+          <span class="ecertificateFileId-main-tishi">二级报警推送规则：发生报警24h仍未处理后推送</span>
+        </a-form-model>
+      </template>
+      <template slot="btn">
+        <a-button @click="cancelPushVisible">取消</a-button>
+        <a-button type="primary" class="m-l-15" @click="pushConfirm">确定</a-button>
+      </template>
+    </CommonModal>
+
     <CommonModal :title="title" :visible="waterVisible" :cancelFn="cancelWaterVisible" class="waste-water-modal">
       <template slot="form">
         <a-form-model ref="waterForm" :model="waterForm" :rules="waterRules" :label-col="labelCol1" :wrapper-col="wrapperCol1" :colon="false" labelAlign="left">
@@ -201,11 +251,14 @@ import {
   waterConfigAdd,
   waterConfigUpdate,
   waterConfigDelete,
+  monitorConfigAddandEdit,
+  monitorConfigDetail
 } from "@/services/api.js";
 import { mapActions } from 'vuex'
 import chemicalDict from "@/mixin/chemicalDict.js";
+import StaffOrDept from "@/components/staffOrDept";
 export default {
-  components: { AlarmWarnTable },
+  components: { AlarmWarnTable , StaffOrDept},
   mixins: [chemicalDict],
   data() {
     return {
@@ -240,6 +293,11 @@ export default {
       },
       formData: {},
       gasForm: { constantAlarmTime: '20' },
+      pushForm: {},
+      pushVisible:false,
+      dataSourceReturn:{},
+      changePeopleOne:false,
+      changePeopleTwo:false,
       waterForm: {},
       dataSource: {
         list: [],
@@ -253,6 +311,17 @@ export default {
         requireConcentration: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
         // requireRate: [{ required: true, validator: this.numValidator, trigger: ['blur', 'change'] },],
         constantAlarmTime: [{ required: true, message: "不能为空", trigger: ['blur', 'change'] },],
+      },
+      pushRules: {
+        corporationId: [
+          { required: true, message: "组织不能为空", trigger: "change" }
+        ],
+        oneList: [
+          { required: true, message: "一级报警不能为空", trigger: "change" },
+        ],
+        twoList: [
+          { required: true, message: "二级报警不能为空", trigger: "change" },
+        ],
       },
       waterRules: {
         standardDown: [{ required: true, validator: this.standardDownValidator, trigger: ['blur', 'change'] },],
@@ -327,6 +396,25 @@ export default {
       this.wasteGasModalArr = this.pollutantOptions.filter(item => {
         return item.corporationId == corporationId && item.numberPickInstrumentType == 'gas';
       })
+    },
+    // 组织机构-改变
+    pushCorporationChange(val, corporationDeptId) {
+      console.log('基地Id',val);
+      this.changePeopleOne = false
+      this.changePeopleTwo = false
+      if(val){
+        console.log(this.pushForm.corporationId,this.pushForm.corporationName);
+        monitorConfigDetail(this.pushForm).then((res)=>{
+          console.log('res',res.data);
+          this.dataSourceReturn = JSON.parse(JSON.stringify(res.data))   
+          this.pushForm = res.data
+          this.pushForm.oneList = this.pushForm.oneList.map(item => item.userId)
+          this.pushForm.twoList = this.pushForm.twoList.map(item => item.userId)
+        }).catch((err)=>{
+          console.log(err);
+        }).finally(()=>{
+        })
+      }
     },
     waterCorporationChange(corporationId, deptId) {
       this.$set(this.waterForm, 'instrumentPollutantRelId', undefined);
@@ -494,6 +582,95 @@ export default {
         this.PH_Pollutant = false;
       }
     },
+    pushAlarm(){
+      this.pushVisible = true
+      this.pushForm = {}
+    },
+    cancelPushVisible(){
+      this.pushVisible = false
+    },
+    pushConfirm() {
+      if (!formValidator.formAll(this, 'pushForm')) {
+        return;
+      }
+      console.log('this.dataSourceReturn',this.dataSourceReturn);
+
+      if (this.changePeopleOne && !this.changePeopleTwo){  // 一级改了 二级没改 应该是取二级的
+        this.pushForm.twoList = this.dataSourceReturn.twoList
+      } 
+      if (!this.changePeopleOne && this.changePeopleTwo){  // 二级改了 一级没改 应该是取一级的
+        this.pushForm.oneList = this.dataSourceReturn.oneList
+      }
+      if (!this.changePeopleOne && !this.changePeopleTwo){  // 两个都没改
+        this.pushForm.oneList = this.dataSourceReturn.oneList
+        this.pushForm.twoList = this.dataSourceReturn.twoList
+      }
+      // if (!this.changePeopleTwo){
+      //   this.pushForm.twoList = this.dataSourceReturn.twoList
+      // } 
+      console.log('涨钱',this.pushForm);
+      monitorConfigAddandEdit(this.pushForm).then((res)=>{
+        console.log('res',res);
+        this.$antMessage.success("操作成功!");
+        this.pushVisible = false
+      }).catch((err)=>{
+        console.log(err);
+      }).finally(()=>{
+
+      })
+    },
+    //一级报警
+    personThingOne(data) {
+      console.log('1111');
+      this.changePeopleOne = true
+      let arr = data.treeNameAndCodeList || [];
+      let brr = [];
+      for (let i = 0; i < arr.length; i++) {
+        brr.push({
+          userId: arr[i].id,
+          userName: arr[i].treeName,
+          userJobNumber: arr[i].treeCode,
+        });
+      }
+      this.pushForm.oneList = [...brr]; // 传给后端得数据
+    },
+    //二级报警
+    personThingTwo(data) {
+      console.log('2222');
+      this.changePeopleTwo = true
+      let arr = data.treeNameAndCodeList || [];
+      let brr = [];
+      // console.log('obj.treeNameAndCodeList@SH',data.treeNameAndCodeList);
+      for (let i = 0; i < arr.length; i++) {
+        // console.log('arr[i]',arr[i]);
+        brr.push({
+          userId: arr[i].id,
+          userName: arr[i].treeName,
+          userJobNumber: arr[i].treeCode,
+        });
+      }
+      this.pushForm.twoList = [...brr]; // 传给后端得数据
+    },
+    //获取name
+    getName(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeName);
+        }
+      }
+      return listName;
+    },
+    //获取工号
+    getWorkNum(list) {
+      let listName = [];
+      if (list.length) {
+        for (var i = 0; i < list.length; i++) {
+          listName.push(list[i].treeCode);
+        }
+      }
+      return listName;
+    },
     cancelVisible() {
       this.visible = false;
       this.edit = false;
@@ -611,10 +788,19 @@ export default {
 .waste-gas-modal {
   ::v-deep .ant-modal-content {
     .model-content-form {
-      padding: 0 60px !important;
+      padding: 0 80px !important;
     }
   }
 }
+.ecertificateFileId-main-tishi {
+    font-size: 12px;
+    color: #999;
+    display: block;
+    line-height: 16px;
+    margin-top: -18px;
+    margin-bottom: 12px;
+    margin-left: 163px;
+  }
 .waste-water-modal {
   ::v-deep .ant-modal-content {
     .model-content-form {

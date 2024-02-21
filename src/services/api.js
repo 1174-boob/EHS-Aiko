@@ -1066,6 +1066,11 @@ export const gasConfigPageList = params => post(`${serviceNameList.monitor}/api/
 export const gasConfigUpdate = params => post(`${serviceNameList.monitor}/api/ehs/monitor/gas/config/update`, params);
 // 废气预警/报警管理-删除
 export const gasConfigDelete = params => post(`${serviceNameList.monitor}/api/ehs/monitor/gas/config/delete`, params);
+// 废气预警/报警管理-报警推送-编辑
+export const monitorConfigAddandEdit = params => post(`${serviceNameList.monitor}/api/ehs/monitor/push/edit`, params);
+// 废气预警/报警管理-报警推送-详情
+export const monitorConfigDetail = params => post(`${serviceNameList.monitor}/api/ehs/monitor/push/detail`, params);
+
 
 // 气象站实时数据
 export const getWeatherStation = params => get(`${serviceNameList.monitor}/api/ehs/monitor/weather/station/now`, params);
