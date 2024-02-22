@@ -798,7 +798,7 @@ export const educationDetail = params => post(`${serviceNameList.health}/api/ehs
 export const getEducationListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/list/page`, params);
 // 三级安全教育管理-三级安全教育管理详情子集查询
 export const getEducationUserListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/records/user/list/page`, params);
-// 三级安全教育管理-成绩纠错
+// 三级安全教育管理-成绩录入
 export const educationCorrect = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/correct`, params);
 // 三级安全教育管理-成绩确认
 export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);

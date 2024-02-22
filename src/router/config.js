@@ -1548,9 +1548,9 @@ const options = {
                 },
                 {
                   path: 'safetyEduCorrectionGrades',
-                  name: '三级安全教育管理成绩纠错',
+                  name: '三级安全教育管理成绩录入',
                   meta: {
-                    title: '成绩纠错',
+                    title: '成绩录入',
                     routerCode:'safetyEduCorrectionGrades',
                     isPage: true,
                     invisible: true,
