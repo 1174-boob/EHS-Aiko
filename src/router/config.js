@@ -83,16 +83,6 @@ const options = {
               },
               component: resolve => require(['@/pages/preview'], resolve),
             },
-            {
-              path: 'toDo',
-              name: '待办',
-              meta: {
-                title: '待办',
-                isPage: true,
-                invisible: true,
-              },
-              component: resolve => require(['@/pages/toDo'], resolve),
-            },
           ]
         },
         {
@@ -127,6 +117,17 @@ const options = {
                 invisible: true,
               },
               component: resolve => require(['@/pages/notice/addEdit.vue'], resolve)
+            },
+            {
+              path: 'toDo',
+              name: '待办',
+              meta: {
+                title: '待办',
+                isPage: true,
+                routerCode:'systemNotice',
+                invisible: true,
+              },
+              component: resolve => require(['@/pages/notice/toDo.vue'], resolve),
             },
             {
               path: 'noticePreview',

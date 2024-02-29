@@ -469,7 +469,7 @@ export default {
 
     // 待办查看更多
     moreToDo() {
-      this.$router.push("/overview/toDo");
+      this.$router.push("/notice/toDo");
     },
     // 预览-通知公告
     noticePreview(id) {

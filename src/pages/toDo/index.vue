@@ -1,6 +1,5 @@
 <template>
   <div class="searchtable-wrapper clx-show-scroll clx-flex-1 beauty-scroll">
-    <PageTitle><span style="color:#666; margin-left: 20px; font-size: 14px;">首页&nbsp;/&nbsp;</span><span style="color:#999;font-size: 14px;">待办</span></PageTitle>
     <SearchTerm>
       <!-- :colon="false"可以统一label值不带冒号： -->
       <a-form-model layout="inline" :model="formInline" :colon="false">
