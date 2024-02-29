@@ -83,6 +83,16 @@ const options = {
               },
               component: resolve => require(['@/pages/preview'], resolve),
             },
+            {
+              path: 'toDo',
+              name: '待办',
+              meta: {
+                title: '待办',
+                isPage: true,
+                invisible: true,
+              },
+              component: resolve => require(['@/pages/toDo'], resolve),
+            },
           ]
         },
         {

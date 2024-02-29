@@ -324,6 +324,8 @@ export const DeleteProcess = params => post(`${serviceNameList.danger}/api/ehs/p
 
 // 消息管理
 export const messageSelectPage = params => post(`${serviceNameList.message}/api/message/selectPage`, params);
+// 首页-代办
+export const messageListPage = params => post(`${serviceNameList.message}/api/message/list/page`, params);
 // 编辑消息
 export const messageUpdate = params => post(`${serviceNameList.message}/api/message/updateManagement`, params);
 // 讲师管理
