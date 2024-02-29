@@ -129,7 +129,7 @@
           <a-popover v-else autoAdjustOverflow title="签署人">
             <ul slot="content">
               <li v-for="item in text" :key="item.id">
-                <div>{{item.signatoriesNodeStatus ? getDictTarget('s', 'securityEducationNodeStatus', item.signatoriesNodeStatus) : '--'}}：</div>
+                <div>{{item.signatoriesNodeStatus ? getTeachers(item.signatoriesNodeStatus) : '--'}}：</div>
                 <p>{{item.signatoriesName}}/{{item.signatoriesJobNumber}}&nbsp;&nbsp;&nbsp;{{dayJs(item.signatoriesTime).format('YYYY-MM-DD') }}</p>
               </li>
             </ul>
@@ -495,6 +495,17 @@ export default {
       this.getDataList()
       this.getCertCount()
     },
+    getTeachers(data){
+      if (data == 'to_be_imported_by_company_level_lecturer'){
+        return '公司级讲师'
+      } else if (data == 'to_be_imported_by_dept_level_lecturer'){
+        return '车间(部门)级讲师'
+      } else if (data == 'to_be_imported_by_group_level_lecturer'){
+        return '班组级讲师'
+      } else if (data == 'userToBeSigned'){
+        return '员工签署'
+      }
+    },
 
     // 批量推送（状态为进行中的可以推送）
     async batchPush() {
@@ -507,7 +518,8 @@ export default {
         return
       }
       const condition = (item) => {
-        return item.signatureStatus != 0;
+        // return item.signatureStatus != 0; // 原版
+        return item.nodeStatus != 'userToBeSigned';
       };
       const canNotSign = this.choosedArr.some(condition);
       if (canNotSign) {

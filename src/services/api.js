@@ -802,6 +802,8 @@ export const getEducationListPage = params => post(`${serviceNameList.health}/ap
 export const getEducationUserListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/records/user/list/page`, params);
 // 三级安全教育管理-成绩录入
 export const educationCorrect = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/correct`, params);
+// 三级安全教育管理-成绩导入
+export const educationImport = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/import`, params);
 // 三级安全教育管理-成绩确认
 export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
 // 三级安全教育管理-重新分配
