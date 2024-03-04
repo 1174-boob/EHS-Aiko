@@ -37,6 +37,7 @@
         </div>
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" @click="toDoDetail(record)">详情</span>
+          <span class="color-ff4d4f cursor-pointer" @click="newlyDelete(record.id)">删除</span>
         </div>
       </a-table>
     </CommonTable>
@@ -51,7 +52,7 @@ import cancelLoading from '@/mixin/cancelLoading';
 // 可伸缩表格
 import dragTable from "@/mixin/dragTable.js"
 import { debounce } from 'lodash';
-import { messageListPage, } from "@/services/api.js";
+import { messageListPage, messageProcessing} from "@/services/api.js";
 import dayJs from 'dayjs';
 import dictionary from "@/utils/dictionary.js";
 
@@ -131,6 +132,26 @@ export default {
       .finally(()=>{
         this.tableSpinning = false
       })
+    },
+    // 删除
+    newlyDelete(id) {
+      const _this = this;
+      this.$antConfirm({
+        title: `确定删除吗？`,
+        onOk() {
+          messageProcessing({id}).then(res=>{
+            if(res.code == 20000) {
+              _this.$antMessage.success("删除成功");
+              _this.getPolicylawList();
+            }
+          }).catch(err=>{
+            console.log(err);
+          })
+        },
+        onCancel() {
+          _this.$antMessage.info('取消删除');
+        },
+      });
     },
     // 查询
     iSearch() {

@@ -326,6 +326,8 @@ export const DeleteProcess = params => post(`${serviceNameList.danger}/api/ehs/p
 export const messageSelectPage = params => post(`${serviceNameList.message}/api/message/selectPage`, params);
 // 首页-代办
 export const messageListPage = params => post(`${serviceNameList.message}/api/message/list/page`, params);
+// 首页-代办删除
+export const messageProcessing = params => post(`${serviceNameList.message}/api/message/manual/processing`, params);
 // 编辑消息
 export const messageUpdate = params => post(`${serviceNameList.message}/api/message/updateManagement`, params);
 // 讲师管理
@@ -382,6 +384,10 @@ export const CourseDetail = params => post(`${serviceNameList.course}/api/course
 export const PushCourse = params => post(`${serviceNameList.course}/api/push/course/push`, params);
 // 推送详情列表
 export const PushInfo = params => post(`${serviceNameList.course}/api/push/course/pushInfo`, params);
+// 课程推送-总计
+export const PushInfoTotal = params => post(`${serviceNameList.course}/api/push/course/pushInfo/total`, params);
+// 课程推送-累计学习时长
+export const PushInfoSyudyTime = params => post(`${serviceNameList.course}/api/push/course/pushInfo/study/time`, params);
 export const PushCodeInfo = params => post(`${serviceNameList.course}/api/push/course/pushCodeInfo`, params);
 // 查看课程-导出
 export const courseManagementDetailCourseDowloadApi = params => post(`${serviceNameList.course}/api/push/paper/export`, params);

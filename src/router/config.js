@@ -124,10 +124,9 @@ const options = {
               meta: {
                 title: '待办',
                 isPage: true,
-                routerCode:'systemNotice',
                 invisible: true,
               },
-              component: resolve => require(['@/pages/notice/toDo.vue'], resolve),
+              component: resolve => require(['@/pages/toDo'], resolve),
             },
             {
               path: 'noticePreview',

@@ -75,6 +75,9 @@
           <a-form-model-item class="flex modal-form-text" label="上传人">
             <div>{{currentMsg.createUserName}}</div>
           </a-form-model-item>
+          <a-form-model-item class="flex modal-form-text" label="最低学习时长">
+            <div style="margin-left: 10px">{{currentMsg.length?currentMsg.length + '秒':'--'}}</div>
+          </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="上传时间">
             <div>{{currentMsg.createTime}}</div>
           </a-form-model-item>
@@ -109,6 +112,9 @@
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="课件大小">
             <div>{{changeM(editForm.size)}}</div>
+          </a-form-model-item>
+          <a-form-model-item class="flex modal-form-text" label="最低学习时长">
+            <a-input :disabled="(findText(fileTypeList, 'key', editForm.type).value) !== '图文'" type="number" v-model="editForm.length" placeholder="请输入" allowClear/>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="上传人">
             <div>{{editForm.createUserName}}</div>
@@ -186,6 +192,9 @@
           </div>
           <div slot="size" slot-scope="record">{{changeM(record.size)}}</div>
           <div slot="type" slot-scope="record">{{findFileType(record.type)}}</div>
+          <div slot="length" slot-scope="record">
+            <a-input :disabled="findFileType(record.type) != '图文'" v-model="record.length" placeholder="请输入" allowClear/>
+          </div>
           <div slot="action" slot-scope="record">
             <span class="color-0067cc cursor-pointer" @click="FileDelete(record)">删除</span>
           </div>
@@ -239,7 +248,7 @@ export default {
 
       detailVisible: false,
       currentMsg: {},
-
+      isPict: false,
       editForm: {},
       editVisible: false,
 
@@ -318,6 +327,11 @@ export default {
           key: "size"
         },
         {
+          title: '最低学习时长(单位/秒)',
+          scopedSlots: { customRender: 'length' },
+          key: "length"
+        },
+        {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           key: "action",
@@ -380,7 +394,9 @@ export default {
       //   size: file.size
       // }
       // return
-      this.addFileList.push({ ...this.newFile });
+      // this.addFileList.push({ ...this.newFile }); // 这个是从厂务拉下来的代码，是个bug 下行给改好了
+      // this.addFileList = res
+      this.$set(this, 'addFileList', res)
     },
     // 文件上传失败的回调
     globalUploadFileError(file) {
@@ -529,6 +545,7 @@ export default {
         coursewareId: this.editForm.coursewareId,
         name: this.editForm.name,
         subjectId: this.editForm.subjectId,
+        length: this.editForm.length,
       }).then(() => {
         this.$antMessage.success("编辑成功");
         this.getDataList();
@@ -556,9 +573,11 @@ export default {
       }
       for (let i = 0; i < this.addFileList.length; i++) {
         if (!this.addFileList[i].subjectId) {
-          this.$antMessage.error("每个课件必须选择对应科目");
+          this.$antMessage.warn("每个课件必须选择对应科目");
           return;
         }
+        // 添加 最低学习时长 校验，图文必填，非图文禁用
+
       }
       if (!formValidator.formAll(this, 'addForm')) {
         return;
@@ -566,11 +585,23 @@ export default {
       for (let i = 0; i < this.addFileList.length; i++) {
         this.addFileList[i].type = this.findText(this.fileTypeList, "value", this.findFileType(this.addFileList[i].type)).key;
         this.addFileList[i].fileId = this.addFileList[i].id
+        if (this.addFileList[i].type == '3'){
+          if (!this.addFileList[i].length) {
+            this.$antMessage.warn("图文课件必须填写最低学习时长");
+            return;
+          }
+          if (/\D+/g.test(this.addFileList[i].length)) {
+            this.$antMessage.warn("最低学习时长必须为正整数");
+            return;
+          }
+        }
       }
       let param = {
         coursewareList: this.addFileList,
         ...this.addForm
       };
+      console.log('param.coursewareListSCC',param.coursewareList)
+      // return
       this.addLoading = true;
       InsertCourseware(param).then(() => {
         this.$antMessage.success("新增成功");
