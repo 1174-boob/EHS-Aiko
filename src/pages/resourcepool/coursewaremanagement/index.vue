@@ -76,7 +76,7 @@
             <div>{{currentMsg.createUserName}}</div>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="最低学习时长">
-            <div style="margin-left: 10px">{{currentMsg.length?currentMsg.length + '秒':'--'}}</div>
+            <div style="margin-left: 10px">{{currentMsg.minMinute?currentMsg.minMinute + '分':'--'}}</div>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="上传时间">
             <div>{{currentMsg.createTime}}</div>
@@ -114,7 +114,7 @@
             <div>{{changeM(editForm.size)}}</div>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="最低学习时长">
-            <a-input :disabled="(findText(fileTypeList, 'key', editForm.type).value) !== '图文'" type="number" v-model="editForm.length" placeholder="请输入" allowClear/>
+            <a-input :disabled="(findText(fileTypeList, 'key', editForm.type).value) !== '图文'" type="number" v-model="editForm.minMinute" placeholder="请输入" allowClear/>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="上传人">
             <div>{{editForm.createUserName}}</div>
@@ -192,8 +192,8 @@
           </div>
           <div slot="size" slot-scope="record">{{changeM(record.size)}}</div>
           <div slot="type" slot-scope="record">{{findFileType(record.type)}}</div>
-          <div slot="length" slot-scope="record">
-            <a-input :disabled="findFileType(record.type) != '图文'" v-model="record.length" placeholder="请输入" allowClear/>
+          <div slot="minMinute" slot-scope="record">
+            <a-input :disabled="findFileType(record.type) != '图文'" v-model="record.minMinute" placeholder="请输入" allowClear/>
           </div>
           <div slot="action" slot-scope="record">
             <span class="color-0067cc cursor-pointer" @click="FileDelete(record)">删除</span>
@@ -327,9 +327,9 @@ export default {
           key: "size"
         },
         {
-          title: '最低学习时长(单位/秒)',
-          scopedSlots: { customRender: 'length' },
-          key: "length"
+          title: '最低学习时长(单位/分)',
+          scopedSlots: { customRender: 'minMinute' },
+          key: "minMinute"
         },
         {
           title: '操作',
@@ -540,12 +540,20 @@ export default {
       this.editForm = {};
     },
     editConfirm() {
+      if (!this.editForm.minMinute) {
+        this.$antMessage.warn("图文课件必须填写最低学习时长");
+        return;
+      }   
+      if (!/^[+]?(\d+(\.\d{1})?)$/.test(this.editForm.minMinute)) {
+        this.$antMessage.warn("最低学习时长必须为正数或小数，小数点后只能保留一位");
+        return;
+      }
       this.editLoading = true;
       UpdateCourseware({
         coursewareId: this.editForm.coursewareId,
         name: this.editForm.name,
         subjectId: this.editForm.subjectId,
-        length: this.editForm.length,
+        minMinute: this.editForm.minMinute,
       }).then(() => {
         this.$antMessage.success("编辑成功");
         this.getDataList();
@@ -586,12 +594,12 @@ export default {
         this.addFileList[i].type = this.findText(this.fileTypeList, "value", this.findFileType(this.addFileList[i].type)).key;
         this.addFileList[i].fileId = this.addFileList[i].id
         if (this.addFileList[i].type == '3'){
-          if (!this.addFileList[i].length) {
+          if (!this.addFileList[i].minMinute) {
             this.$antMessage.warn("图文课件必须填写最低学习时长");
             return;
           }
-          if (/\D+/g.test(this.addFileList[i].length)) {
-            this.$antMessage.warn("最低学习时长必须为正整数");
+          if (!/^[+]?(\d+(\.\d{1})?)$/.test(this.addFileList[i].minMinute)) {
+            this.$antMessage.warn("最低学习时长必须为正数或小数，小数点后只能保留一位");
             return;
           }
         }
