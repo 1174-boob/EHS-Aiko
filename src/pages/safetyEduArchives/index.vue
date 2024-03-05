@@ -11,11 +11,11 @@
             <a-select-option v-for="item in getDictTarget('s','employeeType')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="数据筛选">
+        <!-- <a-form-model-item label="数据筛选">
           <a-select allowClear show-search v-model="formInline.dealWithStatus" placeholder="请选择数据筛选">
             <a-select-option v-for="item in getDictTarget('s','bossOperateStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="状态">
           <a-select allowClear show-search v-model="formInline.status" placeholder="请选择状态">
             <a-select-option v-for="item in getDictTarget('s','educationStatus')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
@@ -32,11 +32,11 @@
             <a-select-option v-for="item in getDictTarget('s','educationScore')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="上岗意见">
+        <!-- <a-form-model-item label="上岗意见">
           <a-select allowClear show-search v-model="formInline.bossOpinions" placeholder="请选择上岗意见">
             <a-select-option v-for="item in getDictTarget('s','bossOpinion')" :key="item.key" :value="item.key">{{item.value}}</a-select-option>
           </a-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <!-- 搜索栏按钮需要加固定的float-right类名 -->
         <a-form-model-item class="float-right">
           <a-button type="primary" :loading="loading" @click="iSearch">查询</a-button>
@@ -83,7 +83,7 @@
     <DashBtn>
       <div>
         <a-button type="dashed" @click="batchPush">批量推送</a-button>
-        <a-button type="dashed" @click="openUpdateOpinionModel()">批量更新意见</a-button>
+        <!-- <a-button type="dashed" @click="openUpdateOpinionModel()">批量更新意见</a-button> -->
         <!-- 班组级、成绩、上岗意见都存在 -->
         <!-- <a-button type="dashed" @click="batchSign()">批量签署</a-button> -->
         <!-- 无限制 -->
@@ -129,7 +129,7 @@
           <a-popover v-else autoAdjustOverflow title="签署人">
             <ul slot="content">
               <li v-for="item in text" :key="item.id">
-                <div>{{item.signatoriesNodeStatus ? getDictTarget('s', 'securityEducationNodeStatus', item.signatoriesNodeStatus) : '--'}}：</div>
+                <div>{{item.signatoriesNodeStatus ? getTeachers(item.signatoriesNodeStatus) : '--'}}：</div>
                 <p>{{item.signatoriesName}}/{{item.signatoriesJobNumber}}&nbsp;&nbsp;&nbsp;{{dayJs(item.signatoriesTime).format('YYYY-MM-DD') }}</p>
               </li>
             </ul>
@@ -139,7 +139,7 @@
 
         <div slot="action" slot-scope="record">
           <span class="color-0067cc cursor-pointer" v-if="record.status == '1'" @click="stopSafetyEduItem(record)">中止</span>
-          <span class="color-0067cc cursor-pointer" v-if="record.canUpdateOpinion" @click="openUpdateOpinionModel(record)">上岗意见</span>
+          <!-- <span class="color-0067cc cursor-pointer" v-if="record.canUpdateOpinion" @click="openUpdateOpinionModel(record)">上岗意见</span> -->
           <!-- 签署：非完成状态、存在上岗意见、本人 -->
           <span class="color-0067cc cursor-pointer" v-if="record.status != 2 && record.deptBossOpinion && record.userId == userId" @click="batchSign(record)">签署</span>
           <span class="color-0067cc cursor-pointer" @click="viewFile(record)">预览</span>
@@ -152,7 +152,7 @@
     <SignModal v-model="signModalShow" :signTargetData="signTargetData" @signOnOk="signOnOk" />
 
     <!-- 更新上岗意见 -->
-    <UpdateOpinionModel v-model="updateOpinionModelShow" :updateOpinionModelData="updateOpinionModelData" @updateOnOk="updateOnOk" />
+    <!-- <UpdateOpinionModel v-model="updateOpinionModelShow" :updateOpinionModelData="updateOpinionModelData" @updateOnOk="updateOnOk" /> -->
   </div>
 </template>
 
@@ -368,22 +368,22 @@ export default {
             );
           },
         },
-        {
-          title: '上岗意见',
-          dataIndex: 'deptBossOpinion',
-          width: 150,
-          customRender: (text) => {
-            text = text ? getDictTarget('s', 'bossOpinion', text) : '--'
-            return (
-              <a-popover autoAdjustOverflow>
-                <div slot="content">
-                  <p>{{ text }}</p>
-                </div>
-                <span>{{ text }}</span>
-              </a-popover>
-            );
-          },
-        },
+        // {
+        //   title: '上岗意见',
+        //   dataIndex: 'deptBossOpinion',
+        //   width: 150,
+        //   customRender: (text) => {
+        //     text = text ? getDictTarget('s', 'bossOpinion', text) : '--'
+        //     return (
+        //       <a-popover autoAdjustOverflow>
+        //         <div slot="content">
+        //           <p>{{ text }}</p>
+        //         </div>
+        //         <span>{{ text }}</span>
+        //       </a-popover>
+        //     );
+        //   },
+        // },
         {
           title: '签署记录',
           dataIndex: 'securitySignRecordList',
@@ -394,7 +394,7 @@ export default {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           fixed: 'right', // 固定操作列
-          width: 240 // 宽度根据操作自定义设置
+          width: 200 // 宽度根据操作自定义设置
         }
       ],
       tableDataList: [],
@@ -467,7 +467,7 @@ export default {
           this.tableDataList = (tableDataList || []).map(item => {
             return {
               ...item,
-              canUpdateOpinion: this.getCanUpdateOpinion(item)
+              // canUpdateOpinion: this.getCanUpdateOpinion(item)
             }
           })
           this.page.total = total;
@@ -495,6 +495,17 @@ export default {
       this.getDataList()
       this.getCertCount()
     },
+    getTeachers(data){
+      if (data == 'to_be_imported_by_company_level_lecturer'){
+        return '公司级讲师'
+      } else if (data == 'to_be_imported_by_dept_level_lecturer'){
+        return '车间(部门)级讲师'
+      } else if (data == 'to_be_imported_by_group_level_lecturer'){
+        return '班组级讲师'
+      } else if (data == 'userToBeSigned'){
+        return '员工签署'
+      }
+    },
 
     // 批量推送（状态为进行中的可以推送）
     async batchPush() {
@@ -507,7 +518,8 @@ export default {
         return
       }
       const condition = (item) => {
-        return item.signatureStatus != 0;
+        // return item.signatureStatus != 0; // 原版
+        return item.nodeStatus != 'userToBeSigned';
       };
       const canNotSign = this.choosedArr.some(condition);
       if (canNotSign) {
@@ -532,45 +544,45 @@ export default {
     },
 
     // 获取是否能更新上岗意见（当前人员的部门经理、班组级、有成绩的结果，未填写意见）
-    getCanUpdateOpinion(targetItem) {
-      // 班组级 currentLevel 1公司级别  2车间部门级 3班组级
-      return this.userId == targetItem.bossUserId && targetItem.currentLevel == 3 && targetItem.currentScoreStatus && !targetItem.deptBossOpinion
-    },
+    // getCanUpdateOpinion(targetItem) {
+    //   // 班组级 currentLevel 1公司级别  2车间部门级 3班组级
+    //   return this.userId == targetItem.bossUserId && targetItem.currentLevel == 3 && targetItem.currentScoreStatus && !targetItem.deptBossOpinion
+    // },
     // 上岗意见（班组级、有成绩的结果，未填写意见）
-    openUpdateOpinionModel(targetItem) {
-      if (targetItem) {
-        if (!this.canClickBtnMixin("safetyEduArchivesSingleUpdateOpinion")) {
-          return;
-        }
-        this.updateOpinionModelData = targetItem
-      } else {
-        if (!this.canClickBtnMixin("safetyEduArchivesMoreUpdateOpinion")) {
-          return;
-        }
+    // openUpdateOpinionModel(targetItem) {
+    //   if (targetItem) {
+    //     if (!this.canClickBtnMixin("safetyEduArchivesSingleUpdateOpinion")) {
+    //       return;
+    //     }
+    //     this.updateOpinionModelData = targetItem
+    //   } else {
+    //     if (!this.canClickBtnMixin("safetyEduArchivesMoreUpdateOpinion")) {
+    //       return;
+    //     }
 
-        if (!this.choosedArr.length) {
-          this.$antMessage.warning('请选择要更新意见的人员！')
-          return
-        }
+    //     if (!this.choosedArr.length) {
+    //       this.$antMessage.warning('请选择要更新意见的人员！')
+    //       return
+    //     }
 
-        // 是否能更新上岗意见
-        let canUpdate = this.choosedArr.every(item => this.getCanUpdateOpinion(item));
+    //     // 是否能更新上岗意见
+    //     let canUpdate = this.choosedArr.every(item => this.getCanUpdateOpinion(item));
 
-        if (!canUpdate) {
-          this.$antMessage.warning('请正确选择要更新意见的人员！')
-          return;
-        }
-        this.updateOpinionModelData = this.choosedArr
-      }
-      this.updateOpinionModelShow = true
-    },
+    //     if (!canUpdate) {
+    //       this.$antMessage.warning('请正确选择要更新意见的人员！')
+    //       return;
+    //     }
+    //     this.updateOpinionModelData = this.choosedArr
+    //   }
+    //   this.updateOpinionModelShow = true
+    // },
     // 上岗意见-弹窗提交成功
-    updateOnOk() {
-      this.selectedRowKeys = []
-      this.choosedArr = []
-      this.getDataList()
-      this.getCertCount()
-    },
+    // updateOnOk() {
+    //   this.selectedRowKeys = []
+    //   this.choosedArr = []
+    //   this.getDataList()
+    //   this.getCertCount()
+    // },
 
     // 批量签署-打开弹窗
     async batchSign(targetItem) {

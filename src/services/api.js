@@ -324,6 +324,10 @@ export const DeleteProcess = params => post(`${serviceNameList.danger}/api/ehs/p
 
 // 消息管理
 export const messageSelectPage = params => post(`${serviceNameList.message}/api/message/selectPage`, params);
+// 首页-代办
+export const messageListPage = params => post(`${serviceNameList.message}/api/message/list/page`, params);
+// 首页-代办删除
+export const messageProcessing = params => post(`${serviceNameList.message}/api/message/manual/processing`, params);
 // 编辑消息
 export const messageUpdate = params => post(`${serviceNameList.message}/api/message/updateManagement`, params);
 // 讲师管理
@@ -380,6 +384,10 @@ export const CourseDetail = params => post(`${serviceNameList.course}/api/course
 export const PushCourse = params => post(`${serviceNameList.course}/api/push/course/push`, params);
 // 推送详情列表
 export const PushInfo = params => post(`${serviceNameList.course}/api/push/course/pushInfo`, params);
+// 课程推送-总计
+export const PushInfoTotal = params => post(`${serviceNameList.course}/api/push/course/pushInfo/total`, params);
+// 课程推送-累计学习时长
+export const PushInfoSyudyTime = params => post(`${serviceNameList.course}/api/push/course/pushInfo/study/time`, params);
 export const PushCodeInfo = params => post(`${serviceNameList.course}/api/push/course/pushCodeInfo`, params);
 // 查看课程-导出
 export const courseManagementDetailCourseDowloadApi = params => post(`${serviceNameList.course}/api/push/paper/export`, params);
@@ -798,8 +806,10 @@ export const educationDetail = params => post(`${serviceNameList.health}/api/ehs
 export const getEducationListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/list/page`, params);
 // 三级安全教育管理-三级安全教育管理详情子集查询
 export const getEducationUserListPage = params => post(`${serviceNameList.health}/api/ehs/security/education/records/user/list/page`, params);
-// 三级安全教育管理-成绩纠错
+// 三级安全教育管理-成绩录入
 export const educationCorrect = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/correct`, params);
+// 三级安全教育管理-成绩导入
+export const educationImport = params => post(`${serviceNameList.health}/api/ehs/security/education/records/score/import`, params);
 // 三级安全教育管理-成绩确认
 export const educationRecognition = params => post(`${serviceNameList.health}/api/ehs/security/education/score/recognition`, params);
 // 三级安全教育管理-重新分配

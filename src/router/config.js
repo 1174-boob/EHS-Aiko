@@ -119,6 +119,16 @@ const options = {
               component: resolve => require(['@/pages/notice/addEdit.vue'], resolve)
             },
             {
+              path: 'toDo',
+              name: '待办',
+              meta: {
+                title: '待办',
+                isPage: true,
+                invisible: true,
+              },
+              component: resolve => require(['@/pages/toDo'], resolve),
+            },
+            {
               path: 'noticePreview',
               name: '预览',
               meta: {
@@ -1548,9 +1558,9 @@ const options = {
                 },
                 {
                   path: 'safetyEduCorrectionGrades',
-                  name: '三级安全教育管理成绩纠错',
+                  name: '三级安全教育管理成绩录入',
                   meta: {
-                    title: '成绩纠错',
+                    title: '成绩录入',
                     routerCode:'safetyEduCorrectionGrades',
                     isPage: true,
                     invisible: true,

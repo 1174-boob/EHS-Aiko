@@ -243,7 +243,7 @@
             <span v-else>{{row.deptId ? deptCache[row.deptId] : "--"}}</span>
           </template>
         </vxe-column>
-        <vxe-column field="total" title="应签署" :title-help="{message: '应签署=未签署+员工已填写成绩但讲师仍未确认纠错成绩+培训通过+培训未通过', icon: 'vxe-icon-question-circle-fill'}">
+        <vxe-column field="total" title="应签署" :title-help="{message: '应签署=未签署+培训通过+培训未通过', icon: 'vxe-icon-question-circle-fill'}">
           <template #default="{ row }">
             <span>{{ row.total ? row.total : '--' }}</span>
           </template>
@@ -253,17 +253,17 @@
             <span>{{ row.signingComplete ? row.signingComplete : '--' }}</span>
           </template>
         </vxe-column>
-        <vxe-column field="pass" title="培训通过" :title-help="{message: '在查询时间范围内，最新一次培训讲师纠错后的成绩达到80分的数据', icon: 'vxe-icon-question-circle-fill'}">
+        <vxe-column field="pass" title="培训通过" :title-help="{message: '在查询时间范围内，最新一次培训讲师纠录入成绩达到80分的数据（包括签署完成的数据与当前处于公司级培训通过状态和当前处于车间（部门）级培训通过状态的数据）', icon: 'vxe-icon-question-circle-fill'}">
           <template #default="{ row }">
             <span>{{ row.pass ? row.pass : '--' }}</span>
           </template>
         </vxe-column>
-        <vxe-column field="noPass" title="培训未通过" :title-help="{message: '在查询时间范围内，最新一次培训讲师纠错后的成绩未达到80分的数据', icon: 'vxe-icon-question-circle-fill'}">
+        <vxe-column field="noPass" title="培训未通过" :title-help="{message: '在查询时间范围内，最新一次培训讲师录入成绩未达到80分的数据', icon: 'vxe-icon-question-circle-fill'}">
           <template #default="{ row }">
             <span>{{ row.noPass ? row.noPass : '--' }}</span>
           </template>
         </vxe-column>      
-        <vxe-column field="toBeSigned" title="未签署" :title-help="{message: '目前仍未进入签署流程的数据，即三级安全教育已发起，员工仍未开始填写成绩的全部数据', icon: 'vxe-icon-question-circle-fill'}">
+        <vxe-column field="toBeSigned" title="未签署" :title-help="{message: '目前仍未进入签署流程的数据，即三级安全教育已发起，讲师仍未开始录入培训员工培训成绩的全部数据', icon: 'vxe-icon-question-circle-fill'}">
           <template #default="{ row }">
             <span>{{ row.toBeSigned ? row.toBeSigned : '--' }}</span>
           </template>

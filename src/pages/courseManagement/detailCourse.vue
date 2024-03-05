@@ -70,11 +70,18 @@
             </a-form-model-item>
           </a-form-model>
         </SearchTerm>
+        <div style="margin: 20px; font-weight:700; display:flex; flex-direction: row-reverse;">
+          累计学习时长：{{totalStudyTime}}
+        </div>
+
         <CommonTable :page="page" :pageNoChange="pageNoChange" :showSizeChange="onShowSizeChange">
           <a-table :columns="columns" :scroll="{ x: 800 }" :locale="{emptyText: emptyText}" :data-source="tableDataList" :rowKey="(record, index)=>{return index}" :pagination="false">
             <div slot="action" slot-scope="record">
-              <span class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
+              <span v-if="record.pushCode != '总计'" class="color-0067cc cursor-pointer m-r-15" @click="actionLook(record)">查看</span>
               <!-- <span class="color-0067cc cursor-pointer" @click="actionExport(record)">导出</span> -->
+            </div>
+            <div slot="qualifiedRate" slot-scope="record">
+              <span>{{record.qualifiedRate?record.qualifiedRate+'%':'--'}}</span>
             </div>
           </a-table>
         </CommonTable>
@@ -133,7 +140,7 @@
   </div>
 </template>
 <script>
-import { GetSubjectlist, CourseDetail, PushInfo, PushCodeInfo, deptDict, courseManagementDetailCourseDowloadApi } from "@/services/api.js";
+import { GetSubjectlist, CourseDetail, PushInfo, PushInfoTotal, PushInfoSyudyTime,PushCodeInfo, deptDict, courseManagementDetailCourseDowloadApi } from "@/services/api.js";
 import teableCenterEllipsis from "@/mixin/teableCenterEllipsis";
 import { debounce } from 'lodash';
 import cancelLoading from '@/mixin/cancelLoading';
@@ -187,6 +194,11 @@ export default {
           key: "unQualifiedUser"
         },
         {
+          title: '合格率',
+          scopedSlots: { customRender: 'qualifiedRate' },
+          key: "qualifiedRate"
+        },
+        {
           title: '操作',
           scopedSlots: { customRender: 'action' },
           key: "action",
@@ -195,7 +207,7 @@ export default {
         }
       ],
       tableDataList: [],
-
+      totalData: {},
       detailVisible: false,
       detailMsg: {},
       formInlineDetail: {},
@@ -285,7 +297,7 @@ export default {
           value: "不合格"
         },
       ],
-
+      totalStudyTime:'',
       subjectList: [],
       lecturerList: [],
       moduleList: [],
@@ -305,6 +317,7 @@ export default {
       this.$router.push("/ehsGerneralManage/educationmanagement/coursemanagement");
       return;
     }
+    this.getTotal()
     GetSubjectlist({
       pageNo: "",
       pageSize: ""
@@ -347,8 +360,32 @@ export default {
         pageSize: this.page.pageSize,
         pageNo: this.page.pageNo,
       }).then((res) => {
+        this.getTotal()
+        this.getStudyTime()
         this.tableDataList = res.data.list;
+        this.$nextTick(()=>{
+          this.totalData.pushCode = '总计'
+          this.tableDataList.push(this.totalData)
+        })  
         this.page.total = res.data.total;
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    getTotal(){
+      return PushInfoTotal({
+        courseId: this.dataMsg.courseId,
+      }).then((res) => {
+        this.totalData = res.data
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    getStudyTime(){
+      return PushInfoSyudyTime({
+        courseId: this.dataMsg.courseId,
+      }).then((res) => {
+        this.totalStudyTime = res.data
       }).catch((err) => {
         console.log(err);
       })

@@ -11,23 +11,36 @@
         </div>
       </a-col>
       <a-col :span="rowObj.colRightSpan">
+        <!-- <div class="grade-box box1">
+          <div class="title-content">
+            <div class="title">EHS管理绩效评价 ({{2023}}年第{{machChineseLang[quarter]}}季度)</div>
+          </div>
+          <div class="edu-detail">
+            <template v-if="performanceAppr.length">
+              <Grade v-for="item in performanceAppr" :key="item.guid" :gaugeData="item" />
+            </template>
+            <a-empty v-else class="echarts-empty" />
+          </div>
+        </div> -->
         <div class="notice1 box1">
           <div class="title-content">
-            <div class="title">通知公告</div>
+            <div class="title">待办 <span v-if="toDoList.length > 0" style="color:#ff4d4f">(数量： {{toDoList.length}})</span></div>
             <div class="more">
-              <span @click="getNoticeList">刷新</span>
-              <span @click="moreNotice">查看更多</span>
+              <span @click="getToDoList">刷新</span>
+              <span @click="moreToDo">查看更多</span>
             </div>
           </div>
-          <div class="list-detail">
+          <div class="list-detail-toDo">
             <div class="list-title">
-              <div>公告名称</div>
-              <div>创建时间</div>
+              <div>标题名称</div>
+              <div style="position: absolute; right:197px;">起草人</div>
+              <div>接收时间</div>
             </div>
-            <ul v-if="noticeList.length > 0">
-              <li v-for="item of noticeList" :key="item.id" @click="noticePreview(item.id)">
-                <div class="title" :title="item.policyLawSubject">{{ item.policyLawSubject }}</div>
-                <div class="time">{{ item.releaseTime ? item.releaseTime.split(" ")[0] : "--" }}</div>
+            <ul v-if="toDoList.length > 0">
+              <li v-for="item of toDoList" :key="item.id" @click="toDoPreview(item.url)">
+                <div class="title" :title="item.todoTitle">{{ item.todoTitle }}</div>
+                <div class="userName">{{ item.docUserName + '/' +item.docUserId }}</div>
+                <div class="time">{{ item.startTime ? item.startTime.split(" ")[0] : "--" }}</div>
               </li>
             </ul>
           </div>
@@ -41,64 +54,6 @@
           <div class="title">危险作业情况</div>
           <div class="casualties">
             <Echarts v-if="optionDanger.series.length" :option="optionDanger" />
-            <a-empty v-else class="echarts-empty" />
-          </div>
-        </div>
-      </a-col>
-      <a-col :span="rowObj.colRightSpan">
-        <div class="policy box1">
-          <div class="title-content">
-            <div class="title">政策法规</div>
-            <div class="more">
-              <span @click="getPolicyList()">刷新</span>
-              <span @click="morePolicy">查看更多</span>
-            </div>
-          </div>
-          <div class="list-detail">
-            <div>
-              <a-tabs default-active-key="1">
-                <a-tab-pane v-for="item of policyTabs" :key="item.id" :tab="item.name">
-                  <div class="list-title">
-                    <div>标题</div>
-                    <div>施行日期</div>
-                  </div>
-                  <ul>
-                    <li v-for="value of item.policyList" :key="value.id" @click="policyPreview(value.id)">
-                      <div class="title" :title="value.title">{{ value.title ? value.title : "--" }}</div>
-                      <div class="time">{{ value.releaseTime ? value.releaseTime.split(" ")[0] : "--" }}</div>
-                    </li>
-                  </ul>
-                </a-tab-pane>
-              </a-tabs>
-            </div>
-          </div>
-        </div>
-      </a-col>
-    </a-row>
-
-    <a-row :gutter="rowObj.gutter">
-      <a-col :span="rowObj.colLeftSpan">
-        <!-- <div class="box box1">
-          <div class="title">{{`各现地电耗统计(${dateStr})`}}</div>
-          <div class="casualties">
-            <ElectricQuantity :dateStr="dateStr" />
-          </div>
-        </div>
-        <div class="box box1">
-          <div class="title">{{`各现地废弃物统计(${dateStr})`}}</div>
-          <div class="casualties">
-            <Rubbish :dateStr="dateStr" />
-          </div>
-        </div> -->
-        
-        <div class="grade-box box1">
-          <div class="title-content">
-            <div class="title">EHS管理绩效评价 ({{2023}}年第{{machChineseLang[quarter]}}季度)</div>
-          </div>
-          <div class="edu-detail">
-            <template v-if="performanceAppr.length">
-              <Grade v-for="item in performanceAppr" :key="item.guid" :gaugeData="item" />
-            </template>
             <a-empty v-else class="echarts-empty" />
           </div>
         </div>
@@ -165,13 +120,80 @@
             </router-link>
           </div>
         </div>
+      </a-col> 
+    </a-row>
+
+    <a-row :gutter="rowObj.gutter">
+      <a-col :span="rowObj.colLeftSpan">
+        <!-- <div class="box box1">
+          <div class="title">{{`各现地电耗统计(${dateStr})`}}</div>
+          <div class="casualties">
+            <ElectricQuantity :dateStr="dateStr" />
+          </div>
+        </div>
+        <div class="box box1">
+          <div class="title">{{`各现地废弃物统计(${dateStr})`}}</div>
+          <div class="casualties">
+            <Rubbish :dateStr="dateStr" />
+          </div>
+        </div> -->
+        <div class="policy box1">
+          <div class="title-content">
+            <div class="title">政策法规</div>
+            <div class="more">
+              <span @click="getPolicyList()">刷新</span>
+              <span @click="morePolicy">查看更多</span>
+            </div>
+          </div>
+          <div class="list-detail">
+            <div>
+              <a-tabs default-active-key="1">
+                <a-tab-pane v-for="item of policyTabs" :key="item.id" :tab="item.name">
+                  <div class="list-title">
+                    <div>标题</div>
+                    <div>施行日期</div>
+                  </div>
+                  <ul>
+                    <li v-for="value of item.policyList" :key="value.id" @click="policyPreview(value.id)">
+                      <div class="title" :title="value.title">{{ value.title ? value.title : "--" }}</div>
+                      <div class="time">{{ value.releaseTime ? value.releaseTime.split(" ")[0] : "--" }}</div>
+                    </li>
+                  </ul>
+                </a-tab-pane>
+              </a-tabs>
+            </div>
+          </div>
+        </div> 
+      </a-col>
+      <a-col :span="rowObj.colRightSpan">
+        <div class="notice1 box1">
+          <div class="title-content">
+            <div class="title">通知公告</div>
+            <div class="more">
+              <span @click="getNoticeList">刷新</span>
+              <span @click="moreNotice">查看更多</span>
+            </div>
+          </div>
+          <div class="list-detail">
+            <div class="list-title">
+              <div>公告名称</div>
+              <div>创建时间</div>
+            </div>
+            <ul v-if="noticeList.length > 0">
+              <li v-for="item of noticeList" :key="item.id" @click="noticePreview(item.id)">
+                <div class="title" :title="item.policyLawSubject">{{ item.policyLawSubject }}</div>
+                <div class="time">{{ item.releaseTime ? item.releaseTime.split(" ")[0] : "--" }}</div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </a-col>
     </a-row>
   </div>
 </template>
 
 <script>
-import { SelectPolicylaw, selectPolicy, getPreviewPerformanceAppraisalApi } from "@/services/api.js";
+import { SelectPolicylaw, selectPolicy, getPreviewPerformanceAppraisalApi ,messageListPage} from "@/services/api.js";
 import {
   GetCategoryChartsList,
   GetChartsList,
@@ -325,6 +347,7 @@ export default {
       year: dayJs().format('YYYY'),
 
       noticeList: [],
+      toDoList: [],
       policyTabs: [],
       formInline: {
         centerId: undefined,
@@ -346,6 +369,7 @@ export default {
 
     this.setRouterCode("preview");
     this.getNoticeList(); //通知公告列表
+    this.getToDoList(); //待办列表
     this.getPolicyList(); //政策法规
     this.getChartsList(); //隐患数量统计
     this.getDangerList(); //危险作业情况
@@ -443,6 +467,10 @@ export default {
       this.$router.push("/notice/systemNotice");
     },
 
+    // 待办查看更多
+    moreToDo() {
+      this.$router.push("/notice/toDo");
+    },
     // 预览-通知公告
     noticePreview(id) {
       this.$router.push({
@@ -451,6 +479,9 @@ export default {
       });
     },
 
+    toDoPreview(url) {
+      window.open(url, "_blank");
+    },
     // 政策法规查看更多
     morePolicy() {
       this.$router.push("/safeManage/securityThinkTank/policy");
@@ -478,6 +509,24 @@ export default {
       SelectPolicylaw(params)
         .then(res => {
           this.noticeList = res.data.list;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
+    // 待办列表
+    getToDoList() {
+      const params = {
+        todoTitle: "",
+        startDate: "",
+        endDate: "",
+        pageNo: 1,
+        pageSize: 6,
+      };
+      messageListPage(params)
+        .then(res => {
+          this.toDoList = res.data.list;
         })
         .catch(err => {
           console.log(err);
@@ -582,6 +631,62 @@ export default {
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+          }
+          .time {
+            width: 100px;
+            text-align: box;
+          }
+          &:hover {
+            color: #0067cc;
+            background: #ddd;
+          }
+        }
+      }
+    }
+    .list-detail-toDo {
+      ::v-deep .ant-tabs {
+        .ant-tabs-bar {
+          padding: 0 10px;
+        }
+        .ant-tabs-tab {
+          margin: 0;
+        }
+        .list-title {
+          margin: 0;
+        }
+        ul {
+          li {
+            padding: 1.5px 10px;
+          }
+        }
+      }
+      .list-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin: 10px 0 15px;
+        padding: 0 10px;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+      }
+      ul {
+        li {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 10px;
+          padding: 5px 10px;
+          font-size: 16px;
+          cursor: pointer;
+          .title {
+            flex: 1;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          .userName {
+            width: 150px;
+            text-align: box;
           }
           .time {
             width: 100px;
