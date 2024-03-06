@@ -75,7 +75,7 @@
           <a-form-model-item class="flex modal-form-text" label="上传人">
             <div>{{currentMsg.createUserName}}</div>
           </a-form-model-item>
-          <a-form-model-item class="flex modal-form-text" label="最低学习时长">
+          <a-form-model-item class="flex modal-form-text" label="时长限制(分)">
             <div style="margin-left: 10px">{{currentMsg.minMinute?currentMsg.minMinute + '分':'--'}}</div>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="上传时间">
@@ -113,7 +113,7 @@
           <a-form-model-item class="flex modal-form-text" label="课件大小">
             <div>{{changeM(editForm.size)}}</div>
           </a-form-model-item>
-          <a-form-model-item class="flex modal-form-text" label="最低学习时长">
+          <a-form-model-item class="flex modal-form-text" label="时长限制(分)">
             <a-input :disabled="(findText(fileTypeList, 'key', editForm.type).value) !== '图文'" type="number" v-model="editForm.minMinute" placeholder="请输入" allowClear/>
           </a-form-model-item>
           <a-form-model-item class="flex modal-form-text" label="上传人">
@@ -327,7 +327,7 @@ export default {
           key: "size"
         },
         {
-          title: '最低学习时长(单位/分)',
+          title: '时长限制(分)',
           scopedSlots: { customRender: 'minMinute' },
           key: "minMinute"
         },
@@ -541,11 +541,11 @@ export default {
     },
     editConfirm() {
       if (!this.editForm.minMinute) {
-        this.$antMessage.warn("图文课件必须填写最低学习时长");
+        this.$antMessage.warn("图文课件必须填写时长限制");
         return;
       }   
       if (!/^[+]?(\d+(\.\d{1})?)$/.test(this.editForm.minMinute)) {
-        this.$antMessage.warn("最低学习时长必须为正数或小数，小数点后只能保留一位");
+        this.$antMessage.warn("时长限制必须为正数或小数，小数点后只能保留一位");
         return;
       }
       this.editLoading = true;
@@ -584,7 +584,7 @@ export default {
           this.$antMessage.warn("每个课件必须选择对应科目");
           return;
         }
-        // 添加 最低学习时长 校验，图文必填，非图文禁用
+        // 添加 时长限制(分) 校验，图文必填，非图文禁用
 
       }
       if (!formValidator.formAll(this, 'addForm')) {
@@ -595,11 +595,11 @@ export default {
         this.addFileList[i].fileId = this.addFileList[i].id
         if (this.addFileList[i].type == '3'){
           if (!this.addFileList[i].minMinute) {
-            this.$antMessage.warn("图文课件必须填写最低学习时长");
+            this.$antMessage.warn("图文课件必须填写时长限制");
             return;
           }
           if (!/^[+]?(\d+(\.\d{1})?)$/.test(this.addFileList[i].minMinute)) {
-            this.$antMessage.warn("最低学习时长必须为正数或小数，小数点后只能保留一位");
+            this.$antMessage.warn("时长限制必须为正数或小数，小数点后只能保留一位");
             return;
           }
         }
