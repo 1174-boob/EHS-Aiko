@@ -85,7 +85,7 @@
         <div class="access-detail">
           <span>化学品名称: {{ chemicalDict[accessName] }}</span>
           <span>设计存量: {{designStock}}</span>
-          <span>当前数量: {{currentQuantity}}</span>
+          <span>当前存量: {{currentQuantity}}</span>
         </div>
         <CommonTable>
           <a-table
@@ -216,7 +216,7 @@ export default {
           align:"center"
         },
         {
-          title: "当前数量",
+          title: "当前存量",
           scopedSlots: { customRender: 'currentQuantity' },
           key: "currentQuantity",
           align:"center"
